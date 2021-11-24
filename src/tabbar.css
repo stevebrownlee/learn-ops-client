@@ -1,0 +1,129 @@
+.radius {
+    border-radius: 5px;
+}
+
+.radius .tab:active::before {
+    border-radius: 5px !important;
+}
+
+.border .tab {
+    border: 1px solid #5fef8d;
+    border-right: none;
+}
+
+.border .tab:last-child {
+    border-right: 1px solid #5fef8d;
+    border-top-right-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+
+.border .tab:first-child {
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+}
+
+.border .tab:active::before {
+    border-radius: inherit !important;
+}
+
+.tab-bar {
+    background-color: white;
+    padding: 0.5rem 0 1rem 0;
+    /* box-shadow: 1px 4px 20px rgba(0, 0, 0, 0.2); */
+    display: flex;
+    margin: 10px;
+    color: black;
+}
+
+.tab-bar .tab {
+    box-sizing: border-box;
+    text-decoration: none;
+    color: inherit;
+    /* width: 70px;
+    height: 70px; */
+    min-height: 3rem;
+    min-width: 7rem;
+    background: inherit;
+    padding: 5px;
+    display: inherit;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.tab-bar .tab::before {
+    position: absolute;
+    content: "";
+    width: 26%;
+    height: 13%;
+    border-top-left-radius: 200px;
+    border-top-right-radius: 200px;
+    border-bottom: none;
+    background-color: #607D8B;
+    bottom: -8px;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.tab-bar .tab:active::before {
+    width: 100%;
+    height: 100%;
+    background-color: #5fef8d;
+    border-radius: 0;
+}
+
+.tab-bar .tab:hover::before {
+    opacity: 1;
+    bottom: 0px;
+}
+
+.tab-bar .tab::after {
+    content: attr(data-text);
+    position: absolute;
+    top: -2rem;
+    width: 100%;
+    text-align: center;
+    color: inherit;
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.tab-bar .tab:hover {
+    padding-top: 1px;
+}
+
+.tab-bar .tab:hover::after {
+    opacity: 1;
+    top: -1rem;
+}
+
+.tab-bar .tab.selected {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: inherit;
+    padding-top: 15px;
+}
+
+.tab-bar .tab.selected::after {
+    opacity: 1;
+    top: -2rem;
+}
+
+.tab-bar .tab.selected::before {
+    opacity: 1;
+    bottom: 0px;
+}
+
+.tab-bar .tab .icon {
+    color: inherit;
+    z-index: 10;
+    font-size: 24px;
+    display: inherit;
+}
+
+.tab-bar .tab .icon img {
+    margin: auto;
+    height: 24px;
+}

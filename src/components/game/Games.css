@@ -1,0 +1,22 @@
+.titlebar {
+    display: flex;
+    flex-direction: row;
+}
+
+.games {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 3rem;
+}
+
+.game {
+    flex-basis: 25%;
+    border: 1px dotted chocolate;
+    padding: 1rem;
+}
+
+.game__datetime {
+    font-size: smaller;
+}
