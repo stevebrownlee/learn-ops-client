@@ -8,3 +8,8 @@
     flex-basis: 20%;
     list-style-type: none;
 }
+
+.navbar__logo {
+    width: 5rem;
+    height: 5rem;
+}

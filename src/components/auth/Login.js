@@ -1,16 +1,43 @@
-import React, { useContext, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
-import { AppContext } from "../ApplicationStateProvider.js"
+import useSimpleAuth from "./useSimpleAuth"
+import Settings from "../Settings"
 import "./Auth.css"
 
 export const Login = () => {
     const invalidDialog = useRef()
     const [c, set] = useState({ username: "me@me.com", password: "Admin8*" })
     const history = useHistory()
-    const { authenticate } = useContext(AppContext)
+    const [token, setToken] = useState(null)
+    const [profile, updateProfile] = useState({})
+    const { login, storeCurrentUser, logout } = useSimpleAuth()
+
+    useEffect(() => {
+        if (token) {
+            fetch(`${Settings.apiHost}/profile`, {
+                method: "GET",
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+                .then(res => res.json())
+                .then(updateProfile)
+        }
+        else {
+            logout()
+        }
+    }, [token])
+
+    useEffect(() => {
+        if ("person" in profile) {
+            storeCurrentUser(token, profile)
+            history.push("/")
+        }
+    }, [profile])
+
 
     const cycle = e => {
-        const copy = {...c}
+        const copy = { ...c }
         copy[e.target.name] = e.target.value
         set(copy)
     }
@@ -18,13 +45,12 @@ export const Login = () => {
     const handleLogin = (e) => {
         e.preventDefault()
 
-        authenticate(c)
-            .then(success => {
-                if (!success) {
-                    invalidDialog.current.showModal()
-                } else {
-                    history.push("/")
+        login(c.username, c.password)
+            .then(res => {
+                if ("token" in res) {
+                    setToken(res.token)
                 }
+                invalidDialog.current.showModal()
             })
     }
 
@@ -41,22 +67,22 @@ export const Login = () => {
                     <fieldset>
                         <label htmlFor="inputEmail"> Email address </label>
                         <input type="email" name="username"
-                               className="form-control"
-                               defaultValue={c.username}
-                               placeholder="Email address"
-                               required autoFocus
-                               onChange={cycle} />
+                            className="form-control"
+                            defaultValue={c.username}
+                            placeholder="Email address"
+                            required autoFocus
+                            onChange={cycle} />
                     </fieldset>
                     <fieldset>
                         <label htmlFor="inputPassword"> Password </label>
                         <input type="password" name="password"
-                               className="form-control"
-                               defaultValue={c.password}
-                               placeholder="Password" required
-                               onChange={cycle} />
+                            className="form-control"
+                            defaultValue={c.password}
+                            placeholder="Password" required
+                            onChange={cycle} />
                     </fieldset>
                     <fieldset style={{
-                        textAlign:"center"
+                        textAlign: "center"
                     }}>
                         <button className="btn btn-1 btn-sep icon-send" type="submit">Sign In</button>
                     </fieldset>

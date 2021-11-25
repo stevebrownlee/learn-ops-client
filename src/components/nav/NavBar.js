@@ -1,50 +1,42 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
+import Logo from "./learnops.png"
+import useSimpleAuth from "../auth/useSimpleAuth"
 import "./NavBar.css"
-import Logo from "./levelup.png"
-import { AppContext } from "../ApplicationStateProvider.js"
 
 export const NavBar = () => {
     const history = useHistory()
-    const { getUserInfo } = useContext(AppContext)
     const [ name, setName ] = useState("Unknown")
+    const { getCurrentUser, logout } = useSimpleAuth()
 
     useEffect(
         () => {
-            const info = getUserInfo()
-
-            if ("name" in info && info.name !== null) {
-                setName(info.name)
-            }
-            else if (localStorage.getItem("lu_name") !== null) {
-                setName(localStorage.getItem("lu_name"))
-            }
-        },
-        []
+            const user = getCurrentUser()
+            setName(user.profile.person.first_name)
+        }, []
     )
 
 
     return (
         <ul className="navbar">
             <li className="navbar__item">
-                <img src={Logo} />
+                <img class="navbar__logo" src={Logo} />
             </li>
             <li className="navbar__item">
-                <Link className="navbar__link" to="/">Games</Link>
+                <Link className="navbar__link" to="/">Overview</Link>
             </li>
             <li className="navbar__item">
-                <Link className="navbar__link" to="/events">Events</Link>
+                <Link className="navbar__link" to="/students">Students</Link>
             </li>
             <li className="navbar__item">
-                <Link className="navbar__link" to="/profile">Profile</Link>
+                <Link className="navbar__link" to="/candidates">Candidates</Link>
             </li>
             {
                 (localStorage.getItem("nss_token") !== null) ?
                     <li className="nav-item">
                         <button className="nav-link fakeLink"
                             onClick={() => {
-                                localStorage.removeItem("nss_token")
-                                localStorage.removeItem("lu_name")
+                                logout()
                                 history.push({ pathname: "/" })
                             }}
                         >Logout { name }

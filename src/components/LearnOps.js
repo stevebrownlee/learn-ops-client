@@ -4,30 +4,34 @@ import { ApplicationViews } from "./ApplicationViews"
 import { NavBar } from "./nav/NavBar"
 import { Login } from "./auth/Login"
 import { Register } from "./auth/Register"
-import { AppProvider } from "./ApplicationStateProvider.js"
+import useSimpleAuth from "./auth/useSimpleAuth"
 
-export const LevelUp = () => (
-    <AppProvider>
-        <Route render={() => {
-            if (localStorage.getItem("nss_token")) {
-                return <>
-                    <Route>
-                        <NavBar />
-                        <ApplicationViews />
-                    </Route>
-                </>
-            } else {
-                return <Redirect to="/login" />
-            }
-        }} />
+export const LearnOps = () => {
+    const { isAuthenticated } = useSimpleAuth()
 
-        <Route path="/login">
-            <Login />
-        </Route>
+    return (
+        <>
+            <Route render={() => {
+                if (isAuthenticated()) {
+                    return <>
+                        <Route>
+                            <NavBar />
+                            <ApplicationViews />
+                        </Route>
+                    </>
+                } else {
+                    return <Redirect to="/login" />
+                }
+            }} />
 
-        <Route path="/register">
-            <Register />
-        </Route>
+            <Route path="/login">
+                <Login />
+            </Route>
 
-    </AppProvider>
-)
+            <Route path="/register">
+                <Register />
+            </Route>
+
+        </>
+    )
+}
