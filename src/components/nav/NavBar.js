@@ -6,8 +6,8 @@ import "./NavBar.css"
 
 export const NavBar = () => {
     const history = useHistory()
-    const [ name, setName ] = useState("Unknown")
-    const { getCurrentUser, logout } = useSimpleAuth()
+    const [name, setName] = useState("Unknown")
+    const { getCurrentUser, logout, isAuthenticated } = useSimpleAuth()
 
     useEffect(
         () => {
@@ -32,17 +32,17 @@ export const NavBar = () => {
                 <Link className="navbar__link" to="/candidates">Candidates</Link>
             </li>
             {
-                (localStorage.getItem("nss_token") !== null) ?
-                    <li className="nav-item">
+                isAuthenticated()
+                    ? <li className="nav-item">
                         <button className="nav-link fakeLink"
                             onClick={() => {
                                 logout()
                                 history.push({ pathname: "/" })
                             }}
-                        >Logout { name }
+                        >Logout {name}
                         </button>
-                    </li> :
-                    <>
+                    </li>
+                    : <>
                         <li className="nav-item">
                             <Link className="nav-link" to="/login">Login</Link>
                         </li>
