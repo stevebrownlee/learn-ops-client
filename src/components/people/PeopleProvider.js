@@ -19,9 +19,18 @@ export const PeopleProvider = (props) => {
             .then(data => setStudents(data))
     }
 
+    const findStudent = (q) => {
+        return fetch(`${Settings.apiHost}/students?q=${q}`, {
+            headers:{
+                "Authorization": `Token ${user.token}`
+            }
+        })
+            .then(response => response.json())
+    }
+
     return (
         <PeopleContext.Provider value={{
-            getStudents, students
+            getStudents, students, findStudent
         }} >
             { props.children }
         </PeopleContext.Provider>
