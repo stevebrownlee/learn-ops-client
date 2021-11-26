@@ -20,7 +20,7 @@ export const NavBar = () => {
     return (
         <ul className="navbar">
             <li className="navbar__item">
-                <img class="navbar__logo" src={Logo} />
+                <img className="navbar__logo" src={Logo} />
             </li>
             <li className="navbar__item">
                 <Link className="navbar__link" to="/">Overview</Link>

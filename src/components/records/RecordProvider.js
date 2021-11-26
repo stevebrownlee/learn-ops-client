@@ -8,10 +8,9 @@ export const RecordProvider = (props) => {
     const [ records, setRecords ] = useState([])
     const [ weights, setWeights ] = useState([])
     const { getCurrentUser } = useSimpleAuth()
+    const user = getCurrentUser()
 
     const getWeights = () => {
-        const user = getCurrentUser()
-
         return fetch(`${Settings.apiHost}/weights`, {
             headers:{
                 "Authorization": `Token ${user.token}`
@@ -21,24 +20,32 @@ export const RecordProvider = (props) => {
             .then(data => setWeights(data.results))
     }
 
-    const createWeight = weight => {
-        const user = getCurrentUser()
+    const getRecords = () => {
+        return fetch(`${Settings.apiHost}/records`, {
+            headers:{
+                "Authorization": `Token ${user.token}`
+            }
+        })
+            .then(response => response.json())
+            .then(data => setRecords(data.results))
+    }
 
-        return fetch(`${Settings.apiHost}/weights`, {
+    const createRecord = record => {
+        return fetch(`${Settings.apiHost}/records`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Token ${user.token}`
             },
-            body: JSON.stringify(weight)
+            body: JSON.stringify(record)
         })
             .then(response => response.json())
-            .then(getWeights)
+            .then(getRecords)
     }
 
     return (
         <RecordContext.Provider value={{
-            getWeights, createWeight, weights
+            getWeights, getRecords, weights, records, createRecord
         }} >
             { props.children }
         </RecordContext.Provider>

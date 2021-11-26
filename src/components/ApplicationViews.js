@@ -1,6 +1,8 @@
 
 import React from "react"
 import { Route } from "react-router-dom"
+import { PeopleProvider } from "./people/PeopleProvider"
+import { RecordForm } from "./records/RecordForm"
 import { RecordList } from "./records/RecordList"
 import { RecordProvider } from "./records/RecordProvider"
 
@@ -10,11 +12,17 @@ export const ApplicationViews = () => {
             margin: "2rem 2rem",
             lineHeight: "1.75rem"
         }}>
-            <Route exact path="/">
-                <RecordProvider>
+            <RecordProvider>
+                <Route exact path="/">
                     <RecordList />
-                </RecordProvider>
-            </Route>
+                </Route>
+
+                <Route exact path="/records/new">
+                    <PeopleProvider>
+                        <RecordForm />
+                    </PeopleProvider>
+                </Route>
+            </RecordProvider>
 
         </main>
     </>

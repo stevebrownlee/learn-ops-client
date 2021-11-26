@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react"
-import { GameContext } from "../game/GameProvider";
+import { GameContext } from "../records/RecordProvider";
 import { EventContext } from "./EventProvider";
 import { useHistory } from 'react-router-dom'
 

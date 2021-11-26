@@ -6,7 +6,7 @@ import "./Auth.css"
 
 export const Login = () => {
     const invalidDialog = useRef()
-    const [c, set] = useState({ username: "me@me.com", password: "Admin8*" })
+    const [c, set] = useState({ username: "steve@stevebrownlee.com", password: "Admin8*" })
     const history = useHistory()
     const [token, setToken] = useState(null)
     const [profile, updateProfile] = useState({})

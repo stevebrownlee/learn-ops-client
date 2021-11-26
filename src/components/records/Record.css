@@ -1,22 +1,90 @@
 .titlebar {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
-.games {
+.recordWeights {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     flex-direction: row;
+}
+.records {
+    flex: 3;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: 3rem;
+}
+
+.record {
+    border: 1px dashed chocolate;
+    padding: 1rem;
+    margin: 0.5rem 1rem;
+    color: darkslategray;
+}
+
+.record__separator {
+    border-top: 1px dotted slateblue;
+    margin: 0 5rem 0 1rem;
+}
+
+.record__header {
+    font-weight: bold;
+}
+
+.record__score {
+    color: brown;
+    font-size: smaller;
+}
+
+.record__date {
+    font-size: smaller;
+    margin-top: 0.5rem;
+    color: lightslategray;
+}
+
+.record__entry {
+    margin: 1rem 0 0 1rem;
+}
+
+.weights {
+    flex: 1;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
     justify-content: space-evenly;
     margin-top: 3rem;
 }
 
-.game {
+.weight {
     flex-basis: 25%;
-    border: 1px dotted chocolate;
+    border: 1px dashed chocolate;
     padding: 1rem;
+    margin: 0.5rem 1rem;
+    font-size: small;
 }
 
-.game__datetime {
+.weight__datetime {
     font-size: smaller;
+}
+
+.container--recordForm {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.recordForm {
+    z-index: 1;
+    min-height: 25rem;
+    min-width: 50%;
+    max-width: 70%;
+    padding: 0 5rem;
+    background-color: hsla(0,0%,100%,0.75);
+    background-blend-mode: overlay;
+    background-repeat: no-repeat;
 }
