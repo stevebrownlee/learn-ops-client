@@ -40,6 +40,10 @@ code {
     font-weight: bold;
 }
 
+.small {
+	font-size: smaller;
+}
+
 .nav-item {
     list-style-type: none;
 }

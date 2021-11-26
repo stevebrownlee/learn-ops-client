@@ -98,8 +98,7 @@ export const RecordForm = () => {
                 <button type="submit"
                     onClick={evt => {
                         evt.preventDefault()
-                        createRecord(newRecord)
-                            // .then(() => history.push("/games"))
+                        createRecord(newRecord).then(() => history.push("/"))
                     }}
                     className="btn btn-primary">Create</button>
 

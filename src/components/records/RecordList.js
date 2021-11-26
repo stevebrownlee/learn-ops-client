@@ -6,10 +6,10 @@ import "./Record.css"
 
 export const RecordList = () => {
     const history = useHistory()
-    const { getWeights, weights, getRecords, records } = useContext(RecordContext)
+    const { getRecords, records } = useContext(RecordContext)
 
     useEffect(() => {
-        getWeights().then(getRecords)
+        getRecords()
     }, [])
 
     return (
@@ -17,43 +17,49 @@ export const RecordList = () => {
             <header>
                 <div className="titlebar">
                     <h1>Learning Records</h1>
-                    <button className="btn btn-2 btn-sep icon-create"
-                        onClick={() => {
-                            history.push({ pathname: "/records/new" })
-                        }}
-                    >New Record</button>
                 </div>
+                <button className="btn btn-2 btn-sep icon-create"
+                    onClick={() => {
+                        history.push({ pathname: "/records/new" })
+                    }}
+                >New Record</button>
             </header>
             <article className="recordWeights">
                 <section className="records">
-                    {
-                        records.map(record => {
-                            return <div key={`record--${record.id}`} className="record">
-                                <header className="record__header">
-                                    {record.student.name} {record.description}
-                                </header>
-                                <div className="record__details">
-                                    <div className="record__separator"></div>
-                                    {
-                                        record.weights.map(w => <div key={`recordweight--${w.id}`} className="record__entry">
-                                            <div className="record__score">{w.label} for {w.score} points</div>
+                {
+                    records.map(record => {
+                        return <div key={`record--${record.id}`} className="record">
+                            <header className="record__header">
+                                {record.student.name} {record.description}
+
+                                <span className="record__addto fakeLink small" onClick={() => {
+                                    history.push({ pathname: "/records/new" })
+                                }}
+                                >Add to Record</span>
+                            </header>
+                            <div className="record__details">
+                            {
+                                record.weights.map(w => (
+                                    <React.Fragment key={`recordweight--${w.id}`}>
+                                        <div  className="record__entry">
+                                            <div className="record__score">
+                                                {w.label} for {w.score} points
+                                                <span className="record__delete fakeLink small" onClick={() => {
+
+                                                }}
+                                                >Delete</span>
+                                            </div>
                                             <div className="record__note">{w.note}</div>
-                                            <div className="record__date">Recorded on {w.recorded_on} by {w.instructor.name}</div>
-                                        </div>)
-                                    }
-                                </div>
+                                            <div className="record__date">Recorded on <HumanDate date={w.recorded_on} /> by {w.instructor.name}</div>
+                                        </div>
+                                        <div className="record__separator"></div>
+                                    </React.Fragment>
+                                ))
+                            }
                             </div>
-                        })
-                    }
-                </section>
-                <section className="weights">
-                    {
-                        weights.map(weight => {
-                            return <div key={`weight--${weight.id}`} className="weight">
-                                {weight.label} {weight.weight}
-                            </div>
-                        })
-                    }
+                        </div>
+                    })
+                }
                 </section>
             </article>
         </>
