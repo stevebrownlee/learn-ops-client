@@ -6,7 +6,7 @@ import "./Record.css"
 
 export const RecordList = () => {
     const history = useHistory()
-    const { getRecords, records } = useContext(RecordContext)
+    const { getRecords, records, deleteRecordEntry } = useContext(RecordContext)
 
     useEffect(() => {
         getRecords()
@@ -45,7 +45,7 @@ export const RecordList = () => {
                                             <div className="record__score">
                                                 {w.label} for {w.score} points
                                                 <span className="record__delete fakeLink small" onClick={() => {
-
+                                                    deleteRecordEntry(w.id)
                                                 }}
                                                 >Delete</span>
                                             </div>

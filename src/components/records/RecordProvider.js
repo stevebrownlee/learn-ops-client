@@ -27,7 +27,36 @@ export const RecordProvider = (props) => {
             }
         })
             .then(response => response.json())
-            .then(data => setRecords(data.results))
+            .then(data => setRecords(data))
+    }
+
+    const deleteRecord = (id) => {
+        return fetch(`${Settings.apiHost}/records/${id}`, {
+            method: "DELETE",
+            headers:{
+                "Authorization": `Token ${user.token}`
+            }
+        })
+            .then(response => response.json())
+    }
+
+    const deleteRecordEntry = (id) => {
+        return fetch(`${Settings.apiHost}/records/entries/${id}`, {
+            method: "DELETE",
+            headers:{
+                "Authorization": `Token ${user.token}`
+            }
+        })
+            .then(getRecords)
+    }
+
+    const getRecord = (id) => {
+        return fetch(`${Settings.apiHost}/records/${id}`, {
+            headers:{
+                "Authorization": `Token ${user.token}`
+            }
+        })
+            .then(response => response.json())
     }
 
     const createRecord = record => {
@@ -45,7 +74,7 @@ export const RecordProvider = (props) => {
 
     return (
         <RecordContext.Provider value={{
-            getWeights, getRecords, weights, records, createRecord
+            getWeights, getRecords, weights, records, createRecord, deleteRecordEntry
         }} >
             { props.children }
         </RecordContext.Provider>
