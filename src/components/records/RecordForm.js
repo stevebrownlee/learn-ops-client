@@ -52,6 +52,15 @@ export const RecordForm = () => {
                 </fieldset>
                 <fieldset>
                     <div className="form-group">
+                        <label htmlFor="description">Description:</label>
+                        <input type="text" id="description" required className="form-control"
+                            value={newRecord.description}
+                            onChange={updateState}
+                        />
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div className="form-group">
                         <select id="weight" className="form-control"
                             value={newRecord.weight}
                             onChange={updateState}>
@@ -62,15 +71,6 @@ export const RecordForm = () => {
                                 ))
                             }
                         </select>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div className="form-group">
-                        <label htmlFor="description">Description:</label>
-                        <input type="text" id="description" required className="form-control"
-                            value={newRecord.description}
-                            onChange={updateState}
-                        />
                     </div>
                 </fieldset>
                 <fieldset>

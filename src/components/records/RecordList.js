@@ -33,7 +33,7 @@ export const RecordList = () => {
                                 {record.student.name} {record.description}
 
                                 <span className="record__addto fakeLink small" onClick={() => {
-                                    history.push({ pathname: "/records/new" })
+                                    history.push({ pathname: `/record/${record.id}/entries/new` })
                                 }}
                                 >Add to Record</span>
                             </header>

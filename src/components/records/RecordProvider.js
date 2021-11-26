@@ -50,6 +50,18 @@ export const RecordProvider = (props) => {
             .then(getRecords)
     }
 
+    const createRecordEntry = (record) => {
+        return fetch(`${Settings.apiHost}/records/entries`, {
+            method: "POST",
+            headers:{
+                "Authorization": `Token ${user.token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(record)
+        })
+            .then(getRecords)
+    }
+
     const getRecord = (id) => {
         return fetch(`${Settings.apiHost}/records/${id}`, {
             headers:{
@@ -74,7 +86,7 @@ export const RecordProvider = (props) => {
 
     return (
         <RecordContext.Provider value={{
-            getWeights, getRecords, weights, records, createRecord, deleteRecordEntry
+            getWeights, getRecords, weights, records, createRecord, deleteRecordEntry, getRecord, createRecordEntry
         }} >
             { props.children }
         </RecordContext.Provider>
