@@ -6,6 +6,7 @@ export const PeopleContext = React.createContext()
 
 export const PeopleProvider = (props) => {
     const [ students, setStudents ] = useState([])
+    const [ activeStudent, activateStudent ] = useState({})
     const { getCurrentUser } = useSimpleAuth()
     const user = getCurrentUser()
 
@@ -19,6 +20,16 @@ export const PeopleProvider = (props) => {
             .then(data => setStudents(data))
     }
 
+    const getStudent = (id) => {
+        return fetch(`${Settings.apiHost}/students/${id}`, {
+            headers:{
+                "Authorization": `Token ${user.token}`
+            }
+        })
+            .then(response => response.json())
+            .then(activateStudent)
+    }
+
     const findStudent = (q) => {
         return fetch(`${Settings.apiHost}/students?q=${q}`, {
             headers:{
@@ -30,7 +41,8 @@ export const PeopleProvider = (props) => {
 
     return (
         <PeopleContext.Provider value={{
-            getStudents, students, findStudent
+            getStudents, students, findStudent, getStudent,
+            activeStudent, activateStudent
         }} >
             { props.children }
         </PeopleContext.Provider>

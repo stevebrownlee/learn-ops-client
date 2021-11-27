@@ -1,8 +1,8 @@
 
 import React from "react"
 import { Route } from "react-router-dom"
+import { Dashboard } from "./dashboard/Dashboard"
 import { PeopleProvider } from "./people/PeopleProvider"
-import { StudentSearch } from "./people/StudentSearch"
 import { RecordEntryForm } from "./records/RecordEntryForm"
 import { RecordForm } from "./records/RecordForm"
 import { RecordList } from "./records/RecordList"
@@ -24,7 +24,7 @@ export const ApplicationViews = () => {
                         <RecordForm />
                     </Route>
                     <Route exact path="/">
-                        <StudentSearch />
+                        <Dashboard />
                     </Route>
                 </PeopleProvider>
 

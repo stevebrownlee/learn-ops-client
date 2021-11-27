@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { PeopleContext } from "./PeopleProvider.js"
 import { StudentResults } from "./StudentResults.js"
+import "./Search.css"
 
 export const StudentSearch = () => {
     const history = useHistory()
@@ -12,6 +13,9 @@ export const StudentSearch = () => {
     useEffect(() => {
         if (terms !== "") {
             findStudent(terms).then(setStudents)
+        }
+        else {
+            setStudents([])
         }
     }, [terms])
 
@@ -27,21 +31,23 @@ export const StudentSearch = () => {
         <>
             <header>
                 <div className="titlebar">
-                    <h1>Find Student</h1>
+                    <h3>Find Student</h3>
                 </div>
-                <input id="searchTerms"
-                        onKeyUp={search}
-                        onChange={e => {
-                            setTerms(e.target.value)
-                        }}
-                        value={terms}
-                        className="form-control w-100"
-                        type="search"
-                        placeholder="Search"
-                        aria-label="Search" />
             </header>
+            <div className="search">
+                <input id="search__terms"
+                    onKeyUp={search}
+                    onChange={e => {
+                        setTerms(e.target.value)
+                    }}
+                    value={terms}
+                    className="form-control w-100"
+                    type="search"
+                    placeholder="Search"
+                    aria-label="Search" />
 
-            <StudentResults students={students} />
+                <StudentResults students={students} setTerms={setTerms} />
+            </div>
         </>
     )
 }
