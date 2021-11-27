@@ -10,6 +10,7 @@ export const RecordEntryForm = () => {
     const { recordId } = useParams()
 
     const { getRecord, getWeights, weights, createRecordEntry } = useContext(RecordContext)
+    const { getStudent } = useContext(PeopleContext)
 
     const [record, storeRecord] = useState({
         student: {},
@@ -97,7 +98,9 @@ export const RecordEntryForm = () => {
                             note: record.note,
                             weight: record.weight
                         }
-                        createRecordEntry(newEntry).then(() => history.push("/"))
+                        createRecordEntry(newEntry)
+                            .then(() => getStudent(record.student.id))
+                            .then(() => history.push("/"))
                     }}
                     className="btn btn-primary">Create</button>
 

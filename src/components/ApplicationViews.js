@@ -26,11 +26,11 @@ export const ApplicationViews = () => {
                     <Route exact path="/">
                         <Dashboard />
                     </Route>
-                </PeopleProvider>
 
-                <Route exact path="/record/:recordId/entries/new">
-                    <RecordEntryForm />
-                </Route>
+                    <Route exact path="/record/:recordId/entries/new">
+                        <RecordEntryForm />
+                    </Route>
+                </PeopleProvider>
             </RecordProvider>
 
         </main>

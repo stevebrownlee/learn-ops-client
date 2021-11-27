@@ -6,7 +6,7 @@ import "./Search.css"
 
 export const StudentSearch = () => {
     const history = useHistory()
-    const { findStudent } = useContext(PeopleContext)
+    const { findStudent, getStudent } = useContext(PeopleContext)
     const [terms, setTerms] = useState("")
     const [students, setStudents] = useState([])
 
@@ -22,7 +22,8 @@ export const StudentSearch = () => {
     const search = (e) => {
         if (e.keyCode === 13) {
             if (students.length === 1) {
-                console.log(students[0])
+                getStudent(students[0].id)
+                setTerms("")
             }
         }
     }
@@ -40,6 +41,7 @@ export const StudentSearch = () => {
                     onChange={e => {
                         setTerms(e.target.value)
                     }}
+                    autoFocus
                     value={terms}
                     className="form-control w-100"
                     type="search"

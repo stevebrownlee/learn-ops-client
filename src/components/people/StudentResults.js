@@ -10,7 +10,6 @@ export const StudentResults = ({ students, setTerms }) => {
                 students.map(student => {
                     return <div key={`student--${student.id}`} className="student--results"
                         onClick={() => {
-                            console.log("Get student")
                             getStudent(student.id)
                             setTerms("")
                         }}
