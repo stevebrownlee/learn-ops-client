@@ -36,7 +36,12 @@ export const StudentOverview = () => {
 
                         <button className="btn btn-2 btn-sep icon-create"
                             onClick={() => {
-                                history.push({ pathname: "/records/new" })
+                                history.push({
+                                    pathname: "/records/new",
+                                    state: {
+                                        studentId: student.id
+                                    }
+                                })
                             }}
                         >New Record</button>
                         <section className="records--overview">
@@ -47,7 +52,6 @@ export const StudentOverview = () => {
                             }
                         </section>
                     </div>
-                    <a href="#" className="btn btn-primary">Go somewhere</a>
                 </div>
             </div>
             : <div></div>

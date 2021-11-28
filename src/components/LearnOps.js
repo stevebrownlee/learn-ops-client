@@ -5,6 +5,7 @@ import { NavBar } from "./nav/NavBar"
 import { Login } from "./auth/Login"
 import { Register } from "./auth/Register"
 import useSimpleAuth from "./auth/useSimpleAuth"
+import { CohortProvider } from "./cohorts/CohortProvider"
 
 export const LearnOps = () => {
     const { isAuthenticated } = useSimpleAuth()
@@ -28,9 +29,11 @@ export const LearnOps = () => {
                 <Login />
             </Route>
 
-            <Route path="/register">
-                <Register />
-            </Route>
+            <CohortProvider>
+                <Route path="/register">
+                    <Register />
+                </Route>
+            </CohortProvider>
 
         </>
     )

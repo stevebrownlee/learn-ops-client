@@ -3,10 +3,12 @@ import { RecordContext } from "./RecordProvider.js"
 import { useParams, useHistory } from 'react-router-dom'
 import { PeopleContext } from "../people/PeopleProvider.js"
 import useSimpleAuth from "../auth/useSimpleAuth.js"
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min"
 
 
 export const RecordForm = () => {
     const history = useHistory()
+    const location = useLocation()
 
     const { createRecord, getWeights, weights } = useContext(RecordContext)
     const { getStudents, students } = useContext(PeopleContext)
@@ -24,6 +26,12 @@ export const RecordForm = () => {
         getWeights().then(getStudents)
     }, [])
 
+    useEffect(() => {
+       const copy = {...newRecord}
+       copy.student = location?.state?.studentId
+       storeRecord(copy)
+    }, [location])
+
 
     const updateState = (event) => {
         const copy = { ...newRecord }
@@ -39,12 +47,16 @@ export const RecordForm = () => {
                     <div className="form-group">
                         <select id="student" className="form-control"
                             autoFocus
+                            disabled={location?.state?.studentId}
                             value={newRecord.student}
                             onChange={updateState}>
                             <option value="0">Select a student</option>
                             {
                                 students.map(student => (
-                                    <option key={student.id} value={student.id}> {student?.name} </option>
+                                    <option key={student.id}
+                                        value={student.id}>
+                                        {student?.name}
+                                    </option>
                                 ))
                             }
                         </select>
