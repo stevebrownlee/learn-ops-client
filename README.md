@@ -1,68 +1,87 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# NSS Learning Platform
 
-## Available Scripts
+## Automatic Deploys
 
-In the project directory, you can run:
+This walkthrough is for auto-deploying a React application to a Digital Ocean droplet.
 
-### `yarn start`
+### Repository Setup
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Create `.github/workflows/main.yml` file in your project directory.
+1. Paste the following text.
+    ```yml
+    # This is a basic workflow to help you get started with Actions
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+    name: Deploy Learning Platform Client
 
-### `yarn test`
+    # Controls when the workflow will run
+    on:
+    # Triggers the workflow on push or pull request events but only for the main branch
+    push:
+        branches: [ main ]
+    pull_request:
+        branches: [ main ]
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
 
-### `yarn build`
+    # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    jobs:
+    # This workflow contains a single job called "build"
+    build:
+        # The type of runner that the job will run on
+        runs-on: self-hosted
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+        # Steps represent a sequence of tasks that will be executed as part of the job
+        steps:
+        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+        - uses: actions/checkout@v2
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+        # Runs a set of commands using the runners shell
+        - name: Run a multi-line script
+            run: |
+            npm install
+            npm run build --if-present
+    ```
+1. Commit and push that to Github.
+1. Go to the Settings tab of your Github repo.
+1. Go to Actions tab on left.
+1. Click on Runners in the new General nav item that appears.
+1. Click button to create new self-hosted runner.
+1. Click the Linux radio button.
+1. Follow the steps and accept all the defaults when asked.
+1. When you get to `# Last step, run it!`, do not run the command listed. Instead of executing `./run.sh`, you will execute `sudo ./svc.sh install`.
+1. Then execute `sudo ./svc.sh start`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Trigger Action
 
-### `yarn eject`
+Now your droplet will be the runner for building your application.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+1. Go to your project directory and make some trivial change.
+1. Commit and push change to Github.
+1. You can watch the process by clicking on the Actions tab on Github and watch your app be built for production.
+1. Once the Action is complete, go back to the terminal where you are in your droplet.
+1. `cd ./_work/{project name}/{project name}`
+1. Run `ls` and you'll see your project. It will also have a `build` directory since your Action ran `npm run build`.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Server Setup
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+1. Create the new DNS entry in the Networking tab on Digital Ocean. Point it to the droplet you are configuring.
+1. Install nginx and git on your droplet.
+1. `cd /etc/nginx/sites-available`
+1. `sudo vim react-app`
+1. Paste the following text:
+    ```
+    server {
+        server_name learning.nss.team;
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+        root /home/chortlehoort/actions-runner/_work/learn-ops-client/learn-ops-client/build;
 
-## Learn More
+        index index.html index.htm;
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+        location / {
+            try_files $uri $uri/ /index.html$is_args$args;
+        }
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+        access_log /var/log/nginx/client.log;
+    }
+    ```
