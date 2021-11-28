@@ -4,6 +4,12 @@
 
 This walkthrough is for auto-deploying a React application to a Digital Ocean droplet.
 
+### Initial Setup
+
+1. Create the new DNS entry in the Networking tab on Digital Ocean. Point it to the droplet you are configuring.
+1. SSH into your server in a new terminal.
+1. `sudo apt install nginx git curl wget`
+
 ### Repository Setup
 
 1. Create `.github/workflows/main.yml` file in your project directory.
@@ -11,7 +17,7 @@ This walkthrough is for auto-deploying a React application to a Digital Ocean dr
     ```yml
     # This is a basic workflow to help you get started with Actions
 
-    name: Deploy Learning Platform Client
+    name: Continuous Deploy
 
     # Controls when the workflow will run
     on:
@@ -61,20 +67,21 @@ Now your droplet will be the runner for building your application.
 1. You can watch the process by clicking on the Actions tab on Github and watch your app be built for production.
 1. Once the Action is complete, go back to the terminal where you are in your droplet.
 1. `cd ./_work/{project name}/{project name}`
+1. Stay in this directory. You'll need to run `pwd` later.
 1. Run `ls` and you'll see your project. It will also have a `build` directory since your Action ran `npm run build`.
 
 ### Server Setup
 
-1. Create the new DNS entry in the Networking tab on Digital Ocean. Point it to the droplet you are configuring.
-1. Install nginx and git on your droplet.
 1. `cd /etc/nginx/sites-available`
 1. `sudo vim react-app`
-1. Paste the following text:
+1. Go back to the other terminal where you are in the directory that the Github Action created for you.
+1. Run `pwd` and copy the path.
+1. Put the following text into the `react-app` file. Replace everthing inside `{}` with the appropriate value.
     ```
     server {
-        server_name learning.nss.team;
+        server_name {your DNS entry - e.g. app.domain.com};
 
-        root /home/chortlehoort/actions-runner/_work/learn-ops-client/learn-ops-client/build;
+        root {paste what you copied in the previous step}/build;
 
         index index.html index.htm;
 
@@ -85,3 +92,7 @@ Now your droplet will be the runner for building your application.
         access_log /var/log/nginx/client.log;
     }
     ```
+1. Save and exit.
+1. `sudo ln -s /etc/nginx/sites-available/react-app /etc/nginx/sites-enabled/react-app`
+1. `sudo systemctl daemon-reload`
+1. `sudo service nginx reload`
