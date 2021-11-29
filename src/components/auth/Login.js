@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import useSimpleAuth from "./useSimpleAuth"
 import Settings from "../Settings"
@@ -12,7 +12,7 @@ export const Login = () => {
     const [profile, updateProfile] = useState({})
     const { login, storeCurrentUser, logout } = useSimpleAuth()
 
-    useEffect(() => {
+    const getProfile = useCallback((token) => {
         if (token) {
             fetch(`${Settings.apiHost}/profile`, {
                 method: "GET",
@@ -26,14 +26,24 @@ export const Login = () => {
         else {
             logout()
         }
+    }, [logout, updateProfile]);
+
+    const storeProfile = useCallback((profile) => {
+        storeCurrentUser(token, profile)
+        history.push("/")
+    }, [history, storeCurrentUser, token]);
+
+
+    useEffect(() => {
+        getProfile(token)
     }, [token])
+
 
     useEffect(() => {
         if ("person" in profile) {
-            storeCurrentUser(token, profile)
-            history.push("/")
+            storeProfile(profile)
         }
-    }, [profile])
+    }, [profile, storeProfile])
 
 
     const cycle = e => {

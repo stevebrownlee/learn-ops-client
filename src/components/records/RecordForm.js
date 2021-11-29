@@ -1,8 +1,7 @@
-import React, { useContext, useState, useEffect } from "react"
+import React, { useContext, useState, useEffect, useCallback } from "react"
 import { RecordContext } from "./RecordProvider.js"
-import { useParams, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { PeopleContext } from "../people/PeopleProvider.js"
-import useSimpleAuth from "../auth/useSimpleAuth.js"
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min"
 
 
@@ -12,7 +11,6 @@ export const RecordForm = () => {
 
     const { createRecord, getWeights, weights } = useContext(RecordContext)
     const { getStudents, students } = useContext(PeopleContext)
-    const { getCurrentUser } = useSimpleAuth()
 
     const [newRecord, storeRecord] = useState({
         student: 0,
@@ -22,15 +20,27 @@ export const RecordForm = () => {
         note: ""
     })
 
-    useEffect(() => {
+    const getData = useCallback(() => {
         getWeights().then(getStudents)
-    }, [])
+
+    }, [getWeights, getStudents])
 
     useEffect(() => {
-       const copy = {...newRecord}
-       copy.student = location?.state?.studentId
-       storeRecord(copy)
-    }, [location])
+        getData()
+    }, [])
+
+
+    useEffect(() => {
+        const updateStudent = (location) => {
+            const copy = { ...newRecord }
+            copy.student = location?.state?.studentId
+            storeRecord(copy)
+        }
+
+        if (newRecord.student !== location?.state?.studentId) {
+            updateStudent(location)
+        }
+    }, [location, newRecord])
 
 
     const updateState = (event) => {

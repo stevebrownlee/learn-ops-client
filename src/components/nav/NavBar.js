@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import Logo from "./learnops.png"
 import useSimpleAuth from "../auth/useSimpleAuth"
@@ -13,14 +13,13 @@ export const NavBar = () => {
         () => {
             const user = getCurrentUser()
             setName(user.profile.person.first_name)
-        }, []
+        }, [getCurrentUser]
     )
-
 
     return (
         <ul className="navbar">
             <li className="navbar__item">
-                <img className="navbar__logo" src={Logo} />
+                <img alt="Project logo" className="navbar__logo" src={Logo} />
             </li>
             <li className="navbar__item">
                 <Link className="navbar__link" to="/">Overview</Link>
@@ -34,7 +33,7 @@ export const NavBar = () => {
             {
                 isAuthenticated()
                     ? <li className="nav-item">
-                        <button className="nav-link fakeLink"
+                        <button className="navbar__link fakeLink"
                             onClick={() => {
                                 logout()
                                 history.push({ pathname: "/" })

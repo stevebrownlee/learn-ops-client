@@ -13,3 +13,7 @@
     width: 5rem;
     height: 5rem;
 }
+
+.navbar__link {
+    background-color: inherit;
+}

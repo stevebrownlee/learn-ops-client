@@ -1,0 +1,22 @@
+.container {
+    margin: 2rem 2rem;
+    line-height: 1.75rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.dashboard__component {
+
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+.dashboard__cohorts {
+}
+
+.dashboard__students {
+    margin: 0 0 0 5rem;
+}

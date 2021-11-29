@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from "react"
-import { useHistory } from "react-router-dom"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { PeopleContext } from "./PeopleProvider.js"
 import { StudentResults } from "./StudentResults.js"
 import "./Search.css"
 
 export const StudentSearch = () => {
-    const history = useHistory()
     const { findStudent, getStudent } = useContext(PeopleContext)
     const [terms, setTerms] = useState("")
     const [students, setStudents] = useState([])
@@ -17,13 +15,30 @@ export const StudentSearch = () => {
         else {
             setStudents([])
         }
-    }, [terms])
+    }, [terms, findStudent])
+
+    useEffect(() => {
+       document.addEventListener("keypress", handleSearchKey)
+
+       return () => document.removeEventListener("keypress",handleSearchKey)
+    }, [])
+
+    const handleSearchKey = (evt) => {
+        if (evt.keyCode === 47) {
+            evt.preventDefault()
+            document.getElementById("search__terms").focus()
+        }
+    }
+
+    const selectStudent = useCallback((student) => {
+        getStudent(student.id)
+        setTerms("")
+    }, [getStudent ])
 
     const search = (e) => {
         if (e.keyCode === 13) {
             if (students.length === 1) {
-                getStudent(students[0].id)
-                setTerms("")
+                selectStudent(students[0])
             }
         }
     }
@@ -48,7 +63,7 @@ export const StudentSearch = () => {
                     placeholder="Search"
                     aria-label="Search" />
 
-                <StudentResults students={students} setTerms={setTerms} />
+                <StudentResults students={students} selectStudent={selectStudent} />
             </div>
         </>
     )

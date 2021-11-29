@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import { CohortContext } from "../cohorts/CohortProvider.js"
@@ -18,7 +18,7 @@ export const Register = (props) => {
         slackHandle: "",
         githubHandle: ""
     })
-    const {getCohorts, cohorts} = useContext(CohortContext)
+    const { getCohorts, cohorts } = useContext(CohortContext)
     const history = useHistory()
     const { storeCurrentUser } = useSimpleAuth()
     const [token, setToken] = useState(null)
@@ -27,15 +27,19 @@ export const Register = (props) => {
     const passwordDialog = React.createRef()
 
     useEffect(() => {
-       getCohorts()
+        getCohorts()
     }, [])
+
+    const storeProfile = useCallback((profile) => {
+        storeCurrentUser(token, profile)
+        history.push("/")
+    }, [history, storeCurrentUser, token]);
 
     useEffect(() => {
         if ("person" in profile) {
-            storeCurrentUser(token, profile)
-            history.push("/")
+            storeProfile(profile)
         }
-    }, [profile])
+    }, [profile, storeProfile])
 
     useEffect(() => {
         if (token) {
@@ -66,7 +70,9 @@ export const Register = (props) => {
                 last_name: user.lastName,
                 email: user.email,
                 password: user.password,
-                cohort: user.cohort
+                cohort: user.cohort,
+                slackHandle: user.slackHandle,
+                githubHandle: user.githubHandle
             }
 
             return fetch(`${Settings.apiHost}/accounts`, {

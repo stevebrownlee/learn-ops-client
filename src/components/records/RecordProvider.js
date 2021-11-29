@@ -30,16 +30,6 @@ export const RecordProvider = (props) => {
             .then(data => setRecords(data))
     }
 
-    const deleteRecord = (id) => {
-        return fetch(`${Settings.apiHost}/records/${id}`, {
-            method: "DELETE",
-            headers:{
-                "Authorization": `Token ${user.token}`
-            }
-        })
-            .then(response => response.json())
-    }
-
     const deleteRecordEntry = (id) => {
         return fetch(`${Settings.apiHost}/records/entries/${id}`, {
             method: "DELETE",
@@ -86,7 +76,8 @@ export const RecordProvider = (props) => {
 
     return (
         <RecordContext.Provider value={{
-            getWeights, getRecords, weights, records, createRecord, deleteRecordEntry, getRecord, createRecordEntry
+            getWeights, getRecords, weights, records,
+            createRecord, deleteRecordEntry, getRecord, createRecordEntry
         }} >
             { props.children }
         </RecordContext.Provider>

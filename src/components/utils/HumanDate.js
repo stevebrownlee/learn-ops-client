@@ -1,4 +1,5 @@
 export const HumanDate = ({ date }) => {
+    //eslint-disable-next-line
     return new Date(date.replace(/-/g, '\/')).toLocaleDateString("en-US",
     {
         weekday: 'long',

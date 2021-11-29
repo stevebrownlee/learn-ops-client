@@ -1,5 +1,8 @@
 @import url("https://fonts.googleapis.com/css?family=Comfortaa|Patua+One");
 @import './tabbar.css';
+@import './table.css';
+@import './icons.css';
+@import './buttons.css';
 
 /*Typography
 --------------------------------------------------------------*/
@@ -60,7 +63,6 @@ code {
     color: -webkit-link;
     cursor: pointer;
     text-decoration: underline;
-    background: none!important;
     border: none;
     cursor: pointer;
 }

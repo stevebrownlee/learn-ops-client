@@ -14,7 +14,7 @@ export const StudentOverview = () => {
             const learningScore = student.records.reduce(
                 (total, current) => {
                     return total + current.weights.reduce(
-                        (tot, curr) =>  tot + curr.score, 0
+                        (tot, curr) => tot + curr.score, 0
                     )
                 }, 0
             )
@@ -34,7 +34,7 @@ export const StudentOverview = () => {
                                 {`https://www.github.com/${student.github_handle}`}</a>
                         </div>
 
-                        <button className="btn btn-2 btn-sep icon-create"
+                        <button className="button button--isi button--border-thick button--round-l button--size-s"
                             onClick={() => {
                                 history.push({
                                     pathname: "/records/new",
@@ -43,7 +43,11 @@ export const StudentOverview = () => {
                                     }
                                 })
                             }}
-                        >New Record</button>
+                        >
+                            <i className="button__icon icon icon-book"></i>
+                            <span>New Record</span>
+                        </button>
+
                         <section className="records--overview">
                             {
                                 student.records.map(record => {

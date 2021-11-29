@@ -1,0 +1,23 @@
+.table {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    border: 1px dotted gainsboro;
+}
+
+.table--students {
+    margin: 1rem 0 0 0;
+}
+
+.cell--centered {
+    text-align: center;
+}
+
+.table>div {
+    margin: 0.05rem;
+    background: powderblue;
+    padding: 0.25rem 0.5rem;
+}
+
+.table>div:nth-child(2n+2) {
+    background: lemonchiffon;
+}

@@ -1,17 +1,13 @@
-import React, { useContext, useEffect, useState } from "react"
-import { PeopleContext } from "./PeopleProvider"
+import React from "react"
 
-export const StudentResults = ({ students, setTerms }) => {
-    const { getStudent } = useContext(PeopleContext)
-
+export const StudentResults = ({ students, selectStudent }) => {
     return (
         <article className={`search__results ${students.length ? "" : "hidden"}`}>
             {
                 students.map(student => {
                     return <div key={`student--${student.id}`} className="student--results"
                         onClick={() => {
-                            getStudent(student.id)
-                            setTerms("")
+                            selectStudent(student)
                         }}
                     >
                         { student.name }

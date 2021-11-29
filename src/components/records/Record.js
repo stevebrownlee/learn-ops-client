@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext } from "react"
 import { useHistory } from "react-router-dom"
 import { HumanDate } from "../utils/HumanDate.js"
 import { RecordContext } from "./RecordProvider"
@@ -12,7 +12,7 @@ export const Record = ({ record }) => {
         <>
             <div key={`record--${record.id}`} className="record">
                 <header className="record__header">
-                    {record.student.name} {record.description}
+                    {record.description}
 
                     <span className="record__addto fakeLink small" onClick={() => {
                         history.push({ pathname: `/record/${record.id}/entries/new` })

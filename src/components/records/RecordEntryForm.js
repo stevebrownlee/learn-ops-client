@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react"
+import React, { useContext, useState, useEffect, useCallback } from "react"
 import { RecordContext } from "./RecordProvider.js"
 import { useHistory } from 'react-router-dom'
 import { PeopleContext } from "../people/PeopleProvider.js"
@@ -20,9 +20,13 @@ export const RecordEntryForm = () => {
         note: ""
     })
 
-    useEffect(() => {
+    const getData = useCallback((recordId) => {
         getWeights().then(() => getRecord(recordId)).then(data => storeRecord(data))
-    }, [recordId])
+    }, [getWeights, getRecord, storeRecord])
+
+    useEffect(() => {
+        getData(recordId)
+    }, [recordId, getData])
 
 
     const updateState = (event) => {
@@ -42,6 +46,8 @@ export const RecordEntryForm = () => {
                 break;
             case "SCORE":
                 source = "Google assessment score"
+                break;
+            default:
                 break;
         }
 
