@@ -1,3 +1,37 @@
 .student {
     margin: 2rem 0 0 0;
 }
+
+.student__header {
+    display: grid;
+    grid-template-columns: 6fr 1fr;
+}
+
+.student__info {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-bottom: 0;
+}
+
+.student__score {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: firebrick;
+    color: rgb(255, 209, 209);
+    padding: 0 1rem;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.button--record {
+    margin: 1rem 0;
+}
+
+.student__github {
+    font-size: 0.7rem;
+}
+
+.student__details {
+    margin-top: 1rem;
+}

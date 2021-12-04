@@ -11,28 +11,25 @@ import { RecordProvider } from "./records/RecordProvider"
 
 export const ApplicationViews = () => {
     return <>
-        <main className="container">
-            <RecordProvider>
-                <Route exact path="/records">
-                    <RecordList />
-                </Route>
-
+        <RecordProvider>
+            <CohortProvider>
                 <PeopleProvider>
-                    <CohortProvider>
-                        <Route exact path="/records/new">
-                            <RecordForm />
-                        </Route>
-                        <Route exact path="/">
-                            <Dashboard />
-                        </Route>
-                    </CohortProvider>
+                    <Route exact path="/">
+                        <Dashboard />
+                    </Route>
 
+                    <Route exact path="/records">
+                        <RecordList />
+                    </Route>
+                    <Route exact path="/records/new">
+                        <RecordForm />
+                    </Route>
                     <Route exact path="/record/:recordId/entries/new">
                         <RecordEntryForm />
                     </Route>
-                </PeopleProvider>
-            </RecordProvider>
 
-        </main>
+                </PeopleProvider>
+            </CohortProvider>
+        </RecordProvider>
     </>
 }

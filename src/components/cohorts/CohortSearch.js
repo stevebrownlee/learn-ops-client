@@ -3,7 +3,6 @@ import { PeopleContext } from "../people/PeopleProvider.js"
 import { Student } from "../people/Student.js"
 import { CohortContext } from "./CohortProvider.js"
 import { CohortResults } from "./CohortResults.js"
-// import "./Search.css"
 
 export const CohortSearch = () => {
     const { findCohort, getCohort } = useContext(CohortContext)

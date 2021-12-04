@@ -3,6 +3,7 @@ import { RecordContext } from "./RecordProvider.js"
 import { useHistory } from 'react-router-dom'
 import { PeopleContext } from "../people/PeopleProvider.js"
 import { useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { CohortContext } from "../cohorts/CohortProvider.js"
 
 
 export const RecordEntryForm = () => {
@@ -11,6 +12,7 @@ export const RecordEntryForm = () => {
 
     const { getRecord, getWeights, weights, createRecordEntry } = useContext(RecordContext)
     const { getStudent } = useContext(PeopleContext)
+    const { getCohort, activeCohort } = useContext(CohortContext)
 
     const [record, storeRecord] = useState({
         student: {},
@@ -106,6 +108,11 @@ export const RecordEntryForm = () => {
                         }
                         createRecordEntry(newEntry)
                             .then(() => getStudent(record.student.id))
+                            .then(() => {
+                                if ("id" in activeCohort) {
+                                    getCohort(activeCohort.id)
+                                }
+                            })
                             .then(() => history.push("/"))
                     }}
                     className="btn btn-primary">Create</button>

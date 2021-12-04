@@ -26,35 +26,41 @@ export const StudentOverview = () => {
         "id" in student
             ? <div className="card student">
                 <div className="card-body">
-                    <h2 className="card-title">{student.name} ({student.cohorts.map(c => c.name).join(", ")})</h2>
-                    <h3 className="card-title">Learning progress: {score}</h3>
+                    <header className="student__header">
+                        <h2 className="card-title student__info">{student.name} ({student.cohorts.map(c => c.name).join(", ")})</h2>
+                        <div className="student__score">
+                            {score}
+                        </div>
+                    </header>
                     <div className="card-text">
-                        <div>
+                        <div className="student__github">
                             Github: <a href={`https://www.github.com/${student.github_handle}`}>
                                 {`https://www.github.com/${student.github_handle}`}</a>
                         </div>
 
-                        <button className="button button--isi button--border-thick button--round-l button--size-s"
-                            onClick={() => {
-                                history.push({
-                                    pathname: "/records/new",
-                                    state: {
-                                        studentId: student.id
-                                    }
-                                })
-                            }}
-                        >
-                            <i className="button__icon icon icon-book"></i>
-                            <span>New Record</span>
-                        </button>
+                        <details className="student__details">
+                            <button className="button button--isi button--border-thick button--round-l button--size-s button--record"
+                                onClick={() => {
+                                    history.push({
+                                        pathname: "/records/new",
+                                        state: {
+                                            studentId: student.id
+                                        }
+                                    })
+                                }}
+                            >
+                                <i className="button__icon icon icon-book"></i>
+                                <span>New Record</span>
+                            </button>
 
-                        <section className="records--overview">
-                            {
-                                student.records.map(record => {
-                                    return <Record key={`record--${record.id}`} record={record} />
-                                })
-                            }
-                        </section>
+                            <section className="records--overview">
+                                {
+                                    student.records.map(record => {
+                                        return <Record key={`record--${record.id}`} record={record} />
+                                    })
+                                }
+                            </section>
+                        </details>
                     </div>
                 </div>
             </div>
