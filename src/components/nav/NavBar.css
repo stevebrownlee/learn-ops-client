@@ -18,6 +18,23 @@
     list-style-type: none;
 }
 
+.img--logout {
+    width: 2rem;
+    height: 2rem;
+}
+
+.navbar__logout {
+    cursor: pointer;
+}
+
+@media (min-width: 768px) {
+    .navbar__logout {
+        cursor: pointer;
+        margin-left: auto;
+        padding: 0 1rem 0 0;
+    }
+}
+
 .navbar__logo {
     width: 5rem;
     height: 5rem;
