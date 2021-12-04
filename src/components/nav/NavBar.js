@@ -19,9 +19,6 @@ export const NavBar = () => {
     return (
         <ul className="navbar">
             <li className="navbar__item">
-                <img alt="Project logo" className="navbar__logo" src={Logo} />
-            </li>
-            <li className="navbar__item">
                 <Link className="navbar__link" to="/">Overview</Link>
             </li>
             <li className="navbar__item">
@@ -33,7 +30,7 @@ export const NavBar = () => {
             {
                 isAuthenticated()
                     ? <li className="nav-item">
-                        <button className="navbar__link fakeLink"
+                        <button className="navbar__link  fakeLink"
                             onClick={() => {
                                 logout()
                                 history.push({ pathname: "/" })

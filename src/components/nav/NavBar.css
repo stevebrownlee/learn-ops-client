@@ -1,7 +1,16 @@
 .navbar {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: left;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 2rem);
+}
+
+@media (min-width: 768px) {
+    .navbar {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: left;
+    }
 }
 
 .navbar__item {

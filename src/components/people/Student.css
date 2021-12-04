@@ -19,9 +19,12 @@
     justify-content: center;
     background-color: firebrick;
     color: rgb(255, 209, 209);
-    padding: 0 1rem;
+    padding: 0.5rem 1.25rem;
     font-size: 1.3rem;
     text-align: center;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
 }
 
 .button--record {
