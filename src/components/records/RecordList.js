@@ -15,9 +15,6 @@ export const RecordList = () => {
     return (
         <>
             <header>
-                <div className="titlebar">
-                    <h1>Learning Records</h1>
-                </div>
                 <button className="btn btn-2 btn-sep icon-create"
                     onClick={() => {
                         history.push({ pathname: "/records/new" })

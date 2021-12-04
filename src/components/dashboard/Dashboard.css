@@ -1,6 +1,6 @@
 .dashboard {
     display: block;
-    padding: 3rem;
+    padding: 0 3rem;
 }
 
 @media (min-width: 768px) {
@@ -8,7 +8,7 @@
         display: grid;
         grid-template-columns: 1fr 3fr;
         grid-column-gap: 3rem;
-        padding: 3rem;
+        padding: 0 3rem;
         grid-auto-flow: column;
     }
 }
