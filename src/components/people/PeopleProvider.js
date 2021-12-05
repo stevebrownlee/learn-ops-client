@@ -49,6 +49,16 @@ export const PeopleProvider = (props) => {
             .then(activateStudent)
     }, [user])
 
+    const getStudentRepos = useCallback(() => {
+        return fetch(`${activeStudent.github.repos}?sort=updated&direction=desc`, {
+            headers:{
+                "Authorization": `Token ${user.token}`
+            }
+        })
+            .then(response => response.json())
+            .then(activateStudent)
+    }, [user])
+
     const findStudent = useCallback((q) => {
         return fetch(`${Settings.apiHost}/students?q=${q}`, {
             headers:{

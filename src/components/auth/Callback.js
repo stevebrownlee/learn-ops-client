@@ -12,7 +12,7 @@ export const Callback = () => {
     const { storeCurrentUser } = useSimpleAuth()
 
     const fetchUser = () => {
-        fetch("http://localhost:8000/auth/user/", {
+        fetch(`${Settings.apiHost}/profile`, {
             method: "GET",
             headers: {
                 "Authorization": `Token ${token}`,
@@ -27,7 +27,7 @@ export const Callback = () => {
     }
 
     const fetchTokenWithCode = (accessCode) => {
-        return fetch(`http://localhost:8000/auth/github`, {
+        return fetch(`${Settings.apiHost}/auth/github`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
