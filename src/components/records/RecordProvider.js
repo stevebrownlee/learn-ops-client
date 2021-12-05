@@ -26,8 +26,16 @@ export const RecordProvider = (props) => {
                 "Authorization": `Token ${user.token}`
             }
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                else {
+                    throw new Error(`HTTP status ${response.status}`)
+                }
+            })
             .then(data => setRecords(data))
+            .catch(error => console.error(error))
     }
 
     const deleteRecordEntry = (id) => {

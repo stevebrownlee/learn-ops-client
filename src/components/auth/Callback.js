@@ -1,22 +1,29 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import Settings from "../Settings"
 import "./Auth.css"
-import { useLocation, useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { useHistory, useLocation, useParams } from "react-router-dom/cjs/react-router-dom.min"
+import useSimpleAuth from "./useSimpleAuth"
 
 export const Callback = () => {
     const [code, set] = useState("")
+    const [token, storeToken] = useState("")
     const location = useLocation()
+    const history = useHistory()
+    const { storeCurrentUser } = useSimpleAuth()
 
-    const fetchUser = (res) => {
+    const fetchUser = () => {
         fetch("http://localhost:8000/auth/user/", {
             method: "GET",
             headers: {
-                "Authorization": `Token ${res.key}`,
+                "Authorization": `Token ${token}`,
                 "Accept": "application/json"
             }
         })
             .then(response => response.json())
-            .then(console.log)
+            .then((profile) => {
+                storeCurrentUser(token, profile)
+                history.push("/")
+            })
     }
 
     const fetchTokenWithCode = (accessCode) => {
@@ -28,6 +35,9 @@ export const Callback = () => {
             body: new URLSearchParams({ code: accessCode })
         })
             .then(response => response.json())
+            .then(res => {
+                storeToken(res.key)
+            })
     }
 
     useEffect(() => {
@@ -40,9 +50,14 @@ export const Callback = () => {
     }, [])
 
     useEffect(() => {
+        if (token) {
+            fetchUser()
+        }
+    }, [token])
+
+    useEffect(() => {
         if (code) {
             fetchTokenWithCode(code)
-                .then(fetchUser)
         }
     }, [code])
 

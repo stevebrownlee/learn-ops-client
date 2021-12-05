@@ -17,8 +17,16 @@ export const PeopleProvider = (props) => {
                 "Authorization": `Token ${user.token}`
             }
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                else {
+                    throw new Error(`HTTP status ${response.status}`)
+                }
+            })
             .then(data => setStudents(data))
+            .catch(console.error)
     }, [user])
 
     const getCohortStudents = useCallback((cohortId) => {
@@ -47,7 +55,15 @@ export const PeopleProvider = (props) => {
                 "Authorization": `Token ${user.token}`
             }
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json()
+                }
+                else {
+                    throw new Error(`HTTP status ${response.status}`)
+                }
+            })
+            .catch(console.error)
     }, [user])
 
     return (

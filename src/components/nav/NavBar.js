@@ -16,11 +16,11 @@ export const NavBar = () => {
     return (
         <nav className="navbar">
             <ul className="nav-links">
-                <input type="checkbox" checked={checked} onClick={() => checked ? setChecked("") : setChecked("checked")} id="checkbox_toggle" />
-                <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+                <input type="checkbox" checked={checked} onChange={() => checked ? setChecked("") : setChecked("checked")} id="checkbox_toggle" />
+                <label htmlFor="checkbox_toggle" className="hamburger">&#9776;</label>
 
 
-                <div class="menu">
+                <div className="menu">
                     <li className="navbar__item">
                         {makeLink("/", "Overview")}
                     </li>
