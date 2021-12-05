@@ -7,6 +7,29 @@ export const Callback = () => {
     const [code, set] = useState("")
     const location = useLocation()
 
+    const fetchUser = (res) => {
+        fetch("http://localhost:8000/auth/user/", {
+            method: "GET",
+            headers: {
+                "Authorization": `Token ${res.key}`,
+                "Accept": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(console.log)
+    }
+
+    const fetchTokenWithCode = (accessCode) => {
+        return fetch(`http://localhost:8000/auth/github`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({ code: accessCode })
+        })
+            .then(response => response.json())
+    }
+
     useEffect(() => {
         const params = new URLSearchParams(location.search)
         const accessCode = params.get("code")
@@ -18,17 +41,8 @@ export const Callback = () => {
 
     useEffect(() => {
         if (code) {
-            fetch(`http://localhost:8000/auth/github`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: new URLSearchParams({ code })
-            })
-                .then(response => response.json())
-                .then((res) => {
-                    console.log(res)
-                })
+            fetchTokenWithCode(code)
+                .then(fetchUser)
         }
     }, [code])
 
