@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
-import { Link, useHistory } from "react-router-dom"
+import React, { useRef, useState } from "react"
+import { useHistory } from "react-router-dom"
 import useSimpleAuth from "./useSimpleAuth"
 import Settings from "../Settings"
 import "./Auth.css"
@@ -15,7 +15,7 @@ export const Login = () => {
     return (
         <article className="container--login">
             <h1>NSS Learn Ops</h1>
-            <a href="http://localhost:8000/auth/github/url" className="button bg-2 button--size-l button--round-m button--border-medium btn-github ">
+            <a href={`http://${Settings.apiHost}/auth/github/url`} className="button bg-2 button--size-l button--round-m button--border-medium btn-github ">
                 <i className="fa fa-github"></i> Sign in with Github
             </a>
         </article>
