@@ -15,7 +15,7 @@ export const Login = () => {
     return (
         <article className="container--login">
             <h1>NSS Learn Ops</h1>
-            <a href={`http://${Settings.apiHost}/auth/github/url`} className="button bg-2 button--size-l button--round-m button--border-medium btn-github ">
+            <a href={`${Settings.apiHost}/auth/github/url`} className="button bg-2 button--size-l button--round-m button--border-medium btn-github ">
                 <i className="fa fa-github"></i> Sign in with Github
             </a>
         </article>
