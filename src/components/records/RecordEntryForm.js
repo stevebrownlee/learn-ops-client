@@ -87,10 +87,11 @@ export const RecordEntryForm = () => {
                 <fieldset>
                     <div className="form-group">
                         <label htmlFor="note">Note:</label>
-                        <input type="text" id="note" required className="form-control"
+                        <textarea id="note"
+                            required className="form-control"
                             value={record.note}
                             onChange={updateState}
-                        />
+                        ></textarea>
                     </div>
                 </fieldset>
                 <fieldset>

@@ -34,8 +34,8 @@ export const StudentOverview = () => {
                     </header>
                     <div className="card-text">
                         <div className="student__github">
-                            Github: <a href={`https://www.github.com/${student.github_handle}`}>
-                                {`https://www.github.com/${student.github_handle}`}</a>
+                            Github: <a href={`https://www.github.com/${student.github}`}>
+                                {`https://www.github.com/${student.github}`}</a>
                         </div>
 
                         <details className="student__details">

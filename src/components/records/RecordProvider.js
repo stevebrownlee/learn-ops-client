@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useCallback, useState } from "react"
 import useSimpleAuth from "../auth/useSimpleAuth.js"
 import Settings from "../Settings.js"
 
@@ -10,7 +10,7 @@ export const RecordProvider = (props) => {
     const { getCurrentUser } = useSimpleAuth()
     const user = getCurrentUser()
 
-    const getWeights = () => {
+    const getWeights = useCallback( () => {
         return fetch(`${Settings.apiHost}/weights`, {
             headers:{
                 "Authorization": `Token ${user.token}`
@@ -18,7 +18,7 @@ export const RecordProvider = (props) => {
         })
             .then(response => response.json())
             .then(data => setWeights(data.results))
-    }
+    }, [])
 
     const getRecords = () => {
         return fetch(`${Settings.apiHost}/records`, {
@@ -60,14 +60,14 @@ export const RecordProvider = (props) => {
             .then(getRecords)
     }
 
-    const getRecord = (id) => {
+    const getRecord = useCallback((id) => {
         return fetch(`${Settings.apiHost}/records/${id}`, {
             headers:{
                 "Authorization": `Token ${user.token}`
             }
         })
             .then(response => response.json())
-    }
+    }, [])
 
     const createRecord = record => {
         return fetch(`${Settings.apiHost}/records`, {

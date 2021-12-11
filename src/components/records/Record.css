@@ -117,3 +117,7 @@
     background-blend-mode: overlay;
     background-repeat: no-repeat;
 }
+
+#note {
+    min-height: 10rem;
+}
