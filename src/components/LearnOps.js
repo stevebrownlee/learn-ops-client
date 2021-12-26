@@ -9,6 +9,7 @@ import { CohortProvider } from "./cohorts/CohortProvider"
 import { Callback } from "./auth/Callback"
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min"
 import { StudentViews } from "./StudentViews"
+import { StudentNavBar } from "./nav/StudentNavBar"
 
 export const LearnOps = () => {
     const { isAuthenticated, getCurrentUser } = useSimpleAuth()
@@ -18,7 +19,11 @@ export const LearnOps = () => {
         <>
             <Route render={() => {
                 if (isAuthenticated()) {
-                    if (getCurrentUser().staff) {
+                    const user = getCurrentUser()
+                    console.log(user)
+
+                    if (user.profile.staff) {
+
                         return <>
                             <NavBar />
                             <ApplicationViews />
@@ -27,7 +32,7 @@ export const LearnOps = () => {
                     }
                     else {
                         return <>
-                            <NavBar />
+                            <StudentNavBar />
                             <StudentViews />
                         </>
                     }

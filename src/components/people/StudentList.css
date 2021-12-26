@@ -1,0 +1,13 @@
+.studentList {
+    margin: 1rem 3rem;
+}
+
+.studentList__student {
+    display: grid;
+    grid-template-columns: 1fr 5fr 3fr;
+    margin-bottom: 0.33rem;
+}
+
+.studentList__options {
+    margin-bottom: 2rem;
+}

@@ -31,6 +31,10 @@ code {
     monospace;
 }
 
+.text--mini {
+    font-size: small;
+}
+
 .fakeLink {
     color: -webkit-link;
     cursor: pointer;

@@ -3,6 +3,11 @@
     padding: 0 3rem;
 }
 
+.dashboard--student {
+    display: block;
+    padding: 3rem 3rem;
+}
+
 @media (min-width: 768px) {
     .dashboard {
         display: grid;
@@ -20,3 +25,14 @@
 .dashboard__cohorts {}
 
 .dashboard__students {}
+
+.feedback {
+    border: 1px dotted cadetblue;
+    padding: 1rem;
+    background-color: rgb(218, 230, 247);
+}
+
+.feedback__author {
+    font-size: x-small;
+    padding-top: 0.5rem;
+}
