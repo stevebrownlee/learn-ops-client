@@ -8,21 +8,29 @@ import useSimpleAuth from "./auth/useSimpleAuth"
 import { CohortProvider } from "./cohorts/CohortProvider"
 import { Callback } from "./auth/Callback"
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min"
+import { StudentViews } from "./StudentViews"
 
 export const LearnOps = () => {
-    const { isAuthenticated } = useSimpleAuth()
+    const { isAuthenticated, getCurrentUser } = useSimpleAuth()
     const location = useLocation()
 
     return (
         <>
             <Route render={() => {
                 if (isAuthenticated()) {
-                    return <>
-                        <Route>
+                    if (getCurrentUser().staff) {
+                        return <>
                             <NavBar />
                             <ApplicationViews />
-                        </Route>
-                    </>
+                        </>
+
+                    }
+                    else {
+                        return <>
+                            <NavBar />
+                            <StudentViews />
+                        </>
+                    }
                 } else {
                     if (location.pathname !== "/auth/github") {
                         return <Redirect to="/login" />

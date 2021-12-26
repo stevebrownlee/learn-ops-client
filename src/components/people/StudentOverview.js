@@ -4,10 +4,17 @@ import { Record } from "../records/Record.js"
 import { PeopleContext } from "./PeopleProvider.js"
 import "./Student.css"
 
-export const StudentOverview = () => {
-    const { activeStudent: student } = useContext(PeopleContext)
+export const StudentOverview = ({ currentStudent }) => {
+    const { activeStudent } = useContext(PeopleContext)
     const [score, updateScore] = useState(0)
+    const [ student, setStudent ] = useState({})
     const history = useHistory()
+
+    useEffect(() => {
+        if ("id" in activeStudent) {
+            setStudent(activeStudent)
+        }
+    }, [activeStudent])
 
     useEffect(() => {
         if ("id" in student) {
@@ -21,6 +28,12 @@ export const StudentOverview = () => {
             updateScore(learningScore)
         }
     }, [student])
+
+    useEffect(() => {
+        if (currentStudent) {
+            setStudent(currentStudent)
+        }
+    }, [ currentStudent ])
 
     return (
         "id" in student
