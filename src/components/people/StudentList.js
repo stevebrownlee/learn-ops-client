@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import useSimpleAuth from "../auth/useSimpleAuth"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { PeopleContext } from "./PeopleProvider"
@@ -11,7 +12,7 @@ export const StudentList = () => {
     const { students, getStudents } = useContext(PeopleContext)
     const { getCohorts, cohorts } = useContext(CohortContext)
     const { getCurrentUser } = useSimpleAuth()
-
+    const history = useHistory()
 
     useEffect(() => {
         getStudents()
@@ -22,38 +23,37 @@ export const StudentList = () => {
         <div className="studentList">
             <h2>Student List</h2>
             <div className="studentList__options">
-                <div>
-                    <select value={chosenCohort} onChange={e => setCohort(e.target.value)}>
-                        <option value="0">Assign to cohort...</option>
-                        {
-                            cohorts.map(cohort => {
-                                return <option key={`cohort--${cohort.id}`} value={cohort.id}>{cohort.name}</option>
-                            })
-                        }
-                    </select>
-                    <button className="button--commit"
-                        onClick={() => {
-                            const fetches = []
+                <select value={chosenCohort} onChange={e => setCohort(e.target.value)}>
+                    <option value="0">Assign to cohort...</option>
+                    {
+                        cohorts.map(cohort => {
+                            return <option key={`cohort--${cohort.id}`} value={cohort.id}>{cohort.name}</option>
+                        })
+                    }
+                </select>
+                <button className="studentList__commit button--commit"
+                    onClick={() => {
+                        const fetches = []
 
-                            const students = [...chosenStudents]
-                            students.forEach(s => fetches.push(
-                                fetch(`http://localhost:8000/cohorts/${chosenCohort}/assign`, {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                        Authorization: `Token ${getCurrentUser().token}`
-                                    },
-                                    body: JSON.stringify({
-                                        person_id: parseInt(s)
-                                    })
+                        const students = [...chosenStudents]
+                        students.forEach(s => fetches.push(
+                            fetch(`http://localhost:8000/cohorts/${chosenCohort}/assign`, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: `Token ${getCurrentUser().token}`
+                                },
+                                body: JSON.stringify({
+                                    person_id: parseInt(s)
                                 })
-                            ))
+                            })
+                        ))
 
-                            Promise.all(fetches).then(getStudents)
+                        Promise.all(fetches).then(getStudents)
+                    }}
+                >Commit Change</button>
 
-                        }}
-                    >Commit Change</button>
-                </div>
+                <button onClick={()=>history.push("/cohorts/new")} className="studentList__createCohort">Create New Cohort</button>
             </div>
             {
                 students.map(student => {

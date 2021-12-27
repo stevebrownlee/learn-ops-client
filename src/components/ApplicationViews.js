@@ -1,6 +1,7 @@
 
 import React from "react"
 import { Route } from "react-router-dom"
+import { CohortForm } from "./cohorts/CohortForm"
 import { CohortProvider } from "./cohorts/CohortProvider"
 import { Dashboard } from "./dashboard/Dashboard"
 import { PeopleProvider } from "./people/PeopleProvider"
@@ -21,6 +22,9 @@ export const ApplicationViews = () => {
 
                     <Route exact path="/students">
                         <StudentList />
+                    </Route>
+                    <Route exact path="/cohorts/new">
+                        <CohortForm />
                     </Route>
                     <Route exact path="/records">
                         <RecordList />

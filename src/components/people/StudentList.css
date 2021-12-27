@@ -10,6 +10,12 @@
 
 .studentList__options {
     margin-bottom: 2rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.studentList__createCohort {
+    margin-left: auto;
 }
 
 .button--commit {
