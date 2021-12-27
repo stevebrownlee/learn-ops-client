@@ -11,3 +11,7 @@
 .studentList__options {
     margin-bottom: 2rem;
 }
+
+.button--commit {
+    margin: 0 0 0 1rem;
+}

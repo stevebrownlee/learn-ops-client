@@ -18,17 +18,16 @@ export const LearnOps = () => {
     return (
         <>
             <Route render={() => {
+
+                // Is authenticated
                 if (isAuthenticated()) {
                     const user = getCurrentUser()
-                    console.log(user)
 
                     if (user.profile.staff) {
-
                         return <>
                             <NavBar />
                             <ApplicationViews />
                         </>
-
                     }
                     else {
                         return <>
@@ -36,6 +35,8 @@ export const LearnOps = () => {
                             <StudentViews />
                         </>
                     }
+
+                // Not authenticated yet
                 } else {
                     if (location.pathname !== "/auth/github") {
                         return <Redirect to="/login" />

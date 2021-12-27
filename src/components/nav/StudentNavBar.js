@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import Logout from "./logout.png"
 import useSimpleAuth from "../auth/useSimpleAuth"
@@ -28,7 +28,7 @@ export const StudentNavBar = () => {
                         {makeLink("/repos", "My Repos")}
                     </li>
                     <li className="navbar__item">
-                        {makeLink("/studentinfo", "Information")}
+                        {makeLink("/assessment", "Final Evaluation")}
                     </li>
                     {
                         isAuthenticated()

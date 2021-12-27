@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
+import useSimpleAuth from "../auth/useSimpleAuth"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { PeopleContext } from "./PeopleProvider"
 import "./StudentList.css"
@@ -9,6 +10,8 @@ export const StudentList = () => {
     const [chosenStudents, updateStudents] = useState(new Set())
     const { students, getStudents } = useContext(PeopleContext)
     const { getCohorts, cohorts } = useContext(CohortContext)
+    const { getCurrentUser } = useSimpleAuth()
+
 
     useEffect(() => {
         getStudents()
@@ -28,6 +31,28 @@ export const StudentList = () => {
                             })
                         }
                     </select>
+                    <button className="button--commit"
+                        onClick={() => {
+                            const fetches = []
+
+                            const students = [...chosenStudents]
+                            students.forEach(s => fetches.push(
+                                fetch(`http://localhost:8000/cohorts/${chosenCohort}/assign`, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        Authorization: `Token ${getCurrentUser().token}`
+                                    },
+                                    body: JSON.stringify({
+                                        person_id: parseInt(s)
+                                    })
+                                })
+                            ))
+
+                            Promise.all(fetches).then(getStudents)
+
+                        }}
+                    >Commit Change</button>
                 </div>
             </div>
             {
