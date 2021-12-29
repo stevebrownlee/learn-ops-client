@@ -12,13 +12,12 @@ export const fetchIt = (url, method = "GET", body = null) => {
     const parsed = JSON.parse(unencoded)
     const bare = Object.assign(Object.create(null), parsed)
 
+    options.headers.Authorization = `Token ${bare.token}`
+
     switch (method) {
         case "POST":
         case "PUT":
-            options.headers = {
-                "Content-Type": "application/json",
-                "Authorization": `Token ${bare.token}`
-            }
+            options.headers["Content-Type"] = "application/json"
             break;
         default:
             break;

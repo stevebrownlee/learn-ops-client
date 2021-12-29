@@ -66,6 +66,20 @@ export const StudentOverview = ({ currentStudent }) => {
                                 <span>New Record</span>
                             </button>
 
+                            <button className="button button--isi button--border-thick button--round-l button--size-s button--record"
+                                onClick={() => {
+                                    history.push({
+                                        pathname: "/feedback/new",
+                                        state: {
+                                            studentId: student.id
+                                        }
+                                    })
+                                }}
+                            >
+                                <i className="button__icon icon icon-write"></i>
+                                <span>Send Feedback</span>
+                            </button>
+
                             <section className="records--overview">
                                 {
                                     student.records.map(record => {

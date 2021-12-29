@@ -4,6 +4,7 @@ import { Route } from "react-router-dom"
 import { CohortForm } from "./cohorts/CohortForm"
 import { CohortProvider } from "./cohorts/CohortProvider"
 import { Dashboard } from "./dashboard/Dashboard"
+import { FeedbackForm } from "./people/FeedbackForm"
 import { PeopleProvider } from "./people/PeopleProvider"
 import { StudentList } from "./people/StudentList"
 import { RecordEntryForm } from "./records/RecordEntryForm"
@@ -22,6 +23,9 @@ export const ApplicationViews = () => {
 
                     <Route exact path="/students">
                         <StudentList />
+                    </Route>
+                    <Route exact path="/feedback/new">
+                        <FeedbackForm />
                     </Route>
                     <Route exact path="/cohorts/new">
                         <CohortForm />

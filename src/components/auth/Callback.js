@@ -1,29 +1,19 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useEffect, useState } from "react"
+import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom.min"
+import useSimpleAuth from "./useSimpleAuth"
+import { fetchIt } from "../utils/Fetch"
 import Settings from "../Settings"
 import "./Auth.css"
-import { useHistory, useLocation, useParams } from "react-router-dom/cjs/react-router-dom.min"
-import useSimpleAuth from "./useSimpleAuth"
 
 export const Callback = () => {
     const [code, set] = useState("")
     const [token, storeToken] = useState("")
     const location = useLocation()
     const history = useHistory()
-    const { storeCurrentUser } = useSimpleAuth()
+    const { getProfile } = useSimpleAuth()
 
     const fetchUser = () => {
-        fetch(`${Settings.apiHost}/profile`, {
-            method: "GET",
-            headers: {
-                "Authorization": `Token ${token}`,
-                "Accept": "application/json"
-            }
-        })
-            .then(response => response.json())
-            .then((profile) => {
-                storeCurrentUser(token, profile)
-                history.push("/")
-            })
+        getProfile(token).then(() => history.push("/"))
     }
 
     const fetchTokenWithCode = (accessCode) => {

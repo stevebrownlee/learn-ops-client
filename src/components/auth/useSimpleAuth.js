@@ -1,9 +1,17 @@
 import Settings from "../Settings"
+import { fetchIt } from "../utils/Fetch"
 
 
 const useSimpleAuth = () => {
     const isAuthenticated = () => sessionStorage.getItem("nss_token") !== null
 
+    const getProfile = (token=null) => {
+        if (token === null) {
+            token = getCurrentUser().token
+        }
+        return fetchIt(`${Settings.apiHost}/profile`)
+            .then(profile => storeCurrentUser(token, profile))
+    }
 
     const register = (user) => {
         return fetch(`${Settings.remoteURL}/users`, {
@@ -50,7 +58,10 @@ const useSimpleAuth = () => {
         return {}
     }
 
-    return { isAuthenticated, logout, login, register, getCurrentUser, storeCurrentUser }
+    return {
+        isAuthenticated, logout, login, register,
+        getCurrentUser, storeCurrentUser, getProfile
+    }
 }
 
 export default useSimpleAuth
