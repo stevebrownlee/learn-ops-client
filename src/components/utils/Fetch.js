@@ -8,11 +8,14 @@ export const fetchIt = (url, method = "GET", body = null) => {
     }
 
     const encoded = sessionStorage.getItem("nss_token")
-    const unencoded = Buffer.from(encoded, "base64").toString("utf8")
-    const parsed = JSON.parse(unencoded)
-    const bare = Object.assign(Object.create(null), parsed)
+    if (encoded !== null) {
+        const unencoded = Buffer.from(encoded, "base64").toString("utf8")
+        const parsed = JSON.parse(unencoded)
+        const bare = Object.assign(Object.create(null), parsed)
 
-    options.headers.Authorization = `Token ${bare.token}`
+        options.headers.Authorization = `Token ${bare.token}`
+    }
+
 
     switch (method) {
         case "POST":
