@@ -18,7 +18,7 @@ export const StudentDashboard = () => {
 
         {
             user.profile?.cohorts.map(cohort => {
-                return <p>You are in {cohort.name} which starts on {new Date(cohort.start_date).toLocaleDateString()} and ends on {new Date(cohort.end_date).toLocaleDateString()}</p>
+                return <p key={`cohort--${cohort.id}`}>You are in {cohort.name} which starts on {new Date(cohort.start_date).toLocaleDateString()} and ends on {new Date(cohort.end_date).toLocaleDateString()}</p>
             })
         }
 

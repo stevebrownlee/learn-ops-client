@@ -17,7 +17,7 @@ export const CohortForm = () => {
     const history = useHistory()
 
     const constructNewCohort = () => {
-        fetchIt(`${Settings.apiHost}/cohorts`, "POST", JSON.stringify(cohort))
+        fetchIt(`${Settings.apiHost}/cohorts`, { method: "POST", body: JSON.stringify(cohort)})
             .then(() => history.push("/students"))
     }
 

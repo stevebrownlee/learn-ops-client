@@ -9,7 +9,7 @@ const useSimpleAuth = () => {
         if (token === null) {
             token = getCurrentUser().token
         }
-        return fetchIt(`${Settings.apiHost}/profile`)
+        return fetchIt(`${Settings.apiHost}/profile`, {token})
             .then(profile => storeCurrentUser(token, profile))
     }
 

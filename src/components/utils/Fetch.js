@@ -1,33 +1,36 @@
-import useSimpleAuth from "../auth/useSimpleAuth";
-
-export const fetchIt = (url, method = "GET", body = null) => {
-
-    let options = {
-        "method": method,
-        "headers": {}
+export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }) => {
+    const options = {
+        headers: {}
     }
 
-    const encoded = sessionStorage.getItem("nss_token")
-    if (encoded !== null) {
-        const unencoded = Buffer.from(encoded, "base64").toString("utf8")
-        const parsed = JSON.parse(unencoded)
-        const bare = Object.assign(Object.create(null), parsed)
+    options.method = kwargs.method ?? "GET"
 
-        options.headers.Authorization = `Token ${bare.token}`
+    if ("token" in options) {
+        options.headers.Authorization = `Token ${options.token}`
+    }
+    else {
+        try {
+            const encoded = sessionStorage.getItem("nss_token")
+            const unencoded = Buffer.from(encoded, "base64").toString("utf8")
+            const parsed = JSON.parse(unencoded)
+            const bare = Object.assign(Object.create(null), parsed)
+
+            options.headers.Authorization = `Token ${bare.token}`
+
+        } catch (error) {
+            options.headers.Authorization = `Token none`
+        }
     }
 
 
-    switch (method) {
+    switch (options.method) {
         case "POST":
         case "PUT":
+            options.body = kwargs.body
             options.headers["Content-Type"] = "application/json"
             break;
         default:
             break;
-    }
-
-    if (body !== null) {
-        options.body = body
     }
 
     return fetch(url, options).then(r => r.json())
