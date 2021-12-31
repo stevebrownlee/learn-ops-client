@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import useSimpleAuth from "../auth/useSimpleAuth"
 import { CohortContext } from "../cohorts/CohortProvider"
+import Settings from "../Settings"
 import { PeopleContext } from "./PeopleProvider"
 import "./StudentList.css"
 
@@ -37,7 +38,7 @@ export const StudentList = () => {
 
                         const students = [...chosenStudents]
                         students.forEach(s => fetches.push(
-                            fetch(`http://localhost:8000/cohorts/${chosenCohort}/assign`, {
+                            fetch(`${Settings.apiHost}/cohorts/${chosenCohort}/assign`, {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
