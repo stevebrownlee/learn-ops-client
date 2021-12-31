@@ -6,7 +6,7 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }
     options.method = kwargs.method ?? "GET"
 
     if ("token" in kwargs) {
-        options.headers.Authorization = `Token ${options.token}`
+        options.headers.Authorization = `Token ${kwargs.token}`
     }
     else {
         try {
