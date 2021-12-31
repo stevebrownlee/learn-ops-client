@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom.min"
 import useSimpleAuth from "./useSimpleAuth"
-import { fetchIt } from "../utils/Fetch"
 import Settings from "../Settings"
 import "./Auth.css"
 

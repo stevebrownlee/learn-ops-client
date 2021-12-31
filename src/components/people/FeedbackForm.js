@@ -24,9 +24,12 @@ export const FeedbackForm = () => {
     }, [location])
 
     const sendFeedback = () => {
-        fetchIt(`${Settings.apiHost}/students/${feedback.studentId}/status`, "POST", JSON.stringify({
-            notes: feedback.text
-        }))
+        fetchIt(`${Settings.apiHost}/students/${feedback.studentId}/status`, {
+            method: "POST",
+            body: JSON.stringify({
+                notes: feedback.text
+            })
+        })
             .then(() => history.push("/"))
     }
 
