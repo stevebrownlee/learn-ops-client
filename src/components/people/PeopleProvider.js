@@ -40,13 +40,17 @@ export const PeopleProvider = (props) => {
     }, [user])
 
     const getStudent = useCallback((id = null) => {
-        if (!id && !("id" in activeStudent)) {
+        let studentId = 0
+        if (id) {
+            studentId = id
+        }
+        else if (!id && !("id" in activeStudent)) {
             throw "No active student"
         }
         else if ("id" in activeStudent) {
-            id = activeStudent.id
+            studentId = activeStudent.id
         }
-        return fetch(`${Settings.apiHost}/students/${id}`, {
+        return fetch(`${Settings.apiHost}/students/${studentId}`, {
             headers: {
                 "Authorization": `Token ${user.token}`
             }
