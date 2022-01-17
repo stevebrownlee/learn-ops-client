@@ -21,6 +21,7 @@ export const CohortSearch = () => {
 
     const selectCohort = useCallback((cohort) => {
         getCohortStudents(cohort.id)
+        getCohort(cohort.id)
         setTerms("")
     }, [getCohort])
 

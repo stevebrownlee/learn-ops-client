@@ -7,7 +7,7 @@ import "./Student.css"
 export const StudentOverview = ({ currentStudent }) => {
     const { activeStudent } = useContext(PeopleContext)
     const [score, updateScore] = useState(0)
-    const [ student, setStudent ] = useState({})
+    const [student, setStudent] = useState({})
     const history = useHistory()
 
     useEffect(() => {
@@ -33,7 +33,7 @@ export const StudentOverview = ({ currentStudent }) => {
         if (currentStudent) {
             setStudent(currentStudent)
         }
-    }, [ currentStudent ])
+    }, [currentStudent])
 
     return (
         "id" in student
@@ -51,34 +51,34 @@ export const StudentOverview = ({ currentStudent }) => {
                                 {`https://www.github.com/${student.github}`}</a>
                         </div>
 
-                        <details className="student__details">
-                            <button className="button button--isi button--border-thick button--round-l button--size-s button--record"
-                                onClick={() => {
-                                    history.push({
-                                        pathname: "/records/new",
-                                        state: {
-                                            studentId: student.id
-                                        }
-                                    })
-                                }}
-                            >
-                                <i className="button__icon icon icon-book"></i>
-                                <span>New Record</span>
-                            </button>
+                        <button className="button button--isi button--border-thick button--round-l button--size-s button--record"
+                            onClick={() => {
+                                history.push({
+                                    pathname: "/records/new",
+                                    state: {
+                                        studentId: student.id
+                                    }
+                                })
+                            }}
+                        >
+                            <i className="button__icon icon icon-book"></i>
+                            <span>New Record</span>
+                        </button>
 
-                            <button className="button button--isi button--border-thick button--round-l button--size-s button--record"
-                                onClick={() => {
-                                    history.push({
-                                        pathname: "/feedback/new",
-                                        state: {
-                                            studentId: student.id
-                                        }
-                                    })
-                                }}
-                            >
-                                <i className="button__icon icon icon-write"></i>
-                                <span>Send Feedback</span>
-                            </button>
+                        <button className="button button--isi button--border-thick button--round-l button--size-s button--record"
+                            onClick={() => {
+                                history.push({
+                                    pathname: "/feedback/new",
+                                    state: {
+                                        studentId: student.id
+                                    }
+                                })
+                            }}
+                        >
+                            <i className="button__icon icon icon-write"></i>
+                            <span>Send Feedback</span>
+                        </button>
+                        <details className="student__details">
 
                             <section className="records--overview">
                                 {

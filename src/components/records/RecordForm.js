@@ -18,8 +18,8 @@ export const RecordForm = () => {
     const location = useLocation()
 
     const { createRecord, getWeights, weights } = useContext(RecordContext)
-    const { getStudents, students, getStudent } = useContext(PeopleContext)
-    const { getCohort, activeCohort } = useContext(CohortContext)
+    const { getCohortStudents, getStudents, students, getStudent } = useContext(PeopleContext)
+    const { activeCohort } = useContext(CohortContext)
 
     const [newRecord, storeRecord] = useState(defaultRecordState)
 
@@ -58,7 +58,7 @@ export const RecordForm = () => {
             .then(() => getStudent())
             .then(() => {
                 if ("id" in activeCohort) {
-                    getCohort(activeCohort.id)
+                    getCohortStudents(activeCohort.id)
                 }
             })
     }

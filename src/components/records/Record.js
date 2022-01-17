@@ -3,12 +3,14 @@ import { useHistory } from "react-router-dom"
 import { HumanDate } from "../utils/HumanDate.js"
 import { RecordContext } from "./RecordProvider"
 import { PeopleContext } from "../people/PeopleProvider.js"
+import { CohortContext } from "../cohorts/CohortProvider.js"
 import "./Record.css"
 
 export const Record = ({ record }) => {
     const history = useHistory()
     const { deleteRecordEntry } = useContext(RecordContext)
-    const { getStudent } = useContext(PeopleContext)
+    const { activeCohort } = useContext(CohortContext)
+    const { getStudent, getCohortStudents } = useContext(PeopleContext)
 
     return (
         <>
@@ -30,6 +32,11 @@ export const Record = ({ record }) => {
                                         {w.label} for {w.score} points
                                         <span className="record__delete fakeLink small" onClick={() => {
                                             deleteRecordEntry(w.id).then(getStudent)
+                                                .then(() => {
+                                                    if ("id" in activeCohort) {
+                                                        getCohortStudents(activeCohort.id)
+                                                    }
+                                                })
                                         }}
                                         >Delete</span>
                                     </div>
