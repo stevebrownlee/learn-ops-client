@@ -2,11 +2,13 @@ import React, { useContext } from "react"
 import { useHistory } from "react-router-dom"
 import { HumanDate } from "../utils/HumanDate.js"
 import { RecordContext } from "./RecordProvider"
+import { PeopleContext } from "../people/PeopleProvider.js"
 import "./Record.css"
 
 export const Record = ({ record }) => {
     const history = useHistory()
     const { deleteRecordEntry } = useContext(RecordContext)
+    const { getStudent } = useContext(PeopleContext)
 
     return (
         <>
@@ -27,7 +29,7 @@ export const Record = ({ record }) => {
                                     <div className="record__score">
                                         {w.label} for {w.score} points
                                         <span className="record__delete fakeLink small" onClick={() => {
-                                            deleteRecordEntry(w.id)
+                                            deleteRecordEntry(w.id).then(getStudent)
                                         }}
                                         >Delete</span>
                                     </div>

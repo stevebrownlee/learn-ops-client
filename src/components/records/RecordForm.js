@@ -7,6 +7,13 @@ import { CohortContext } from "../cohorts/CohortProvider.js"
 
 
 export const RecordForm = () => {
+    const defaultRecordState = {
+        student: 0,
+        description: "",
+        obtained_from: "ONEON",
+        weight: 0,
+        note: ""
+    }
     const history = useHistory()
     const location = useLocation()
 
@@ -14,13 +21,7 @@ export const RecordForm = () => {
     const { getStudents, students, getStudent } = useContext(PeopleContext)
     const { getCohort, activeCohort } = useContext(CohortContext)
 
-    const [newRecord, storeRecord] = useState({
-        student: 0,
-        description: "",
-        obtained_from: "",
-        weight: 0,
-        note: ""
-    })
+    const [newRecord, storeRecord] = useState(defaultRecordState)
 
     const getData = useCallback(() => {
         getWeights().then(getStudents)
@@ -49,6 +50,17 @@ export const RecordForm = () => {
         const copy = { ...newRecord }
         copy[event.target.id] = event.target.value
         storeRecord(copy)
+    }
+
+    const create = (evt) => {
+        evt.preventDefault()
+        return createRecord(newRecord)
+            .then(() => getStudent())
+            .then(() => {
+                if ("id" in activeCohort) {
+                    getCohort(activeCohort.id)
+                }
+            })
     }
 
     return (
@@ -106,34 +118,20 @@ export const RecordForm = () => {
                         ></textarea>
                     </div>
                 </fieldset>
-                <fieldset>
-                    <label htmlFor="obtained_from">Source:</label>
-                    <div className="form-group">
-                        <input onChange={updateState} type="radio" value="ONEON" name="obtained_from" id="obtained_from" /> One on one
-                    </div>
-                    <div className="form-group">
-                        <input onChange={updateState} type="radio" value="CLASS" name="obtained_from" id="obtained_from" /> Github classroom
-                    </div>
-                    <div className="form-group">
-                        <input onChange={updateState} type="radio" value="SCORE" name="obtained_from" id="obtained_from" /> Assessment score
-                    </div>
-                </fieldset>
 
-                <button type="submit"
-                    onClick={evt => {
-                        evt.preventDefault()
-                        createRecord(newRecord)
-                            .then(() => getStudent(newRecord.student))
-                            .then(() => {
-                                if ("id" in activeCohort) {
-                                    getCohort(activeCohort.id)
-                                }
-                            })
-                            .then(() => history.push("/"))
-                    }}
-                    className="btn btn-primary">Create</button>
+                <div className="recordFormButtons">
+                    <button type="submit"
+                        onClick={evt => create(evt).then(() => history.push("/")) }
+                        className="btn btn-primary">Create</button>
 
-            </form>
-        </article>
+                    <button type="submit"
+                        onClick={evt => create(evt).then(() => {
+                            storeRecord(defaultRecordState)
+                        })}
+                        className="btn btn-primary">Create and Add Another</button>
+            </div>
+
+        </form>
+        </article >
     )
 }

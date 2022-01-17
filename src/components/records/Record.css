@@ -77,6 +77,11 @@
     display: inline;
 }
 
+.recordFormButtons {
+    display: flex;
+    justify-content: space-around;
+}
+
 
 .weights {
     flex: 1;

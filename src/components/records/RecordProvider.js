@@ -17,7 +17,10 @@ export const RecordProvider = (props) => {
             }
         })
             .then(response => response.json())
-            .then(data => setWeights(data.results))
+            .then(data => {
+                const sorted = data.results.sort( (c,n) => c.label > n.label && 1 || -1 )
+                setWeights(sorted)
+            })
     }, [])
 
     const getRecords = () => {
@@ -45,7 +48,6 @@ export const RecordProvider = (props) => {
                 "Authorization": `Token ${user.token}`
             }
         })
-            .then(getRecords)
     }
 
     const createRecordEntry = (record) => {
@@ -57,7 +59,6 @@ export const RecordProvider = (props) => {
             },
             body: JSON.stringify(record)
         })
-            .then(getRecords)
     }
 
     const getRecord = useCallback((id) => {
@@ -79,7 +80,6 @@ export const RecordProvider = (props) => {
             body: JSON.stringify(record)
         })
             .then(response => response.json())
-            .then(getRecords)
     }
 
     return (
