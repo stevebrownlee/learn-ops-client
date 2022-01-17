@@ -103,7 +103,7 @@ export const RecordForm = () => {
                             <option value="0">Select a weight</option>
                             {
                                 weights.map(weight => (
-                                    <option key={weight.id} value={weight.id}> {weight.label} </option>
+                                    <option key={weight.id} value={weight.id}> {weight.label} [{weight.weight} pts] </option>
                                 ))
                             }
                         </select>
