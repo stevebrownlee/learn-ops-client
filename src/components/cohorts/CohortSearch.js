@@ -71,27 +71,32 @@ export const CohortSearch = () => {
 
 
             {
-                cohortStudents.length
-                    ? <div className="table table--students">
-                        {cohortStudents
-                            .map(student => {
-                                const learningScore = student.records.reduce(
-                                    (total, current) => {
-                                        return total + current.weights.reduce(
-                                            (tot, curr) => tot + curr.score, 0
-                                        )
-                                    }, 0
-                                )
-                                student.score = learningScore
-                                return student
-                            })
-                            .sort((prev, curr) => curr.score - prev.score)
-                            .map(student => (
+                cohortStudents.count > 0
+                    ?
+                    <section>
+                        <div>{cohortStudents.count} students</div>
+                        <div className="table table--students">
 
-                                <Student key={`student--${student.id}`} student={student} />
-                            ))
-                        }
-                    </div>
+                            {cohortStudents.results
+                                .map(student => {
+                                    const learningScore = student.records.reduce(
+                                        (total, current) => {
+                                            return total + current.weights.reduce(
+                                                (tot, curr) => tot + curr.score, 0
+                                            )
+                                        }, 0
+                                    )
+                                    student.score = learningScore
+                                    return student
+                                })
+                                .sort((prev, curr) => curr.score - prev.score)
+                                .map(student => (
+
+                                    <Student key={`student--${student.id}`} student={student} />
+                                ))
+                            }
+                        </div>
+                    </section>
                     : ""
             }
 

@@ -11,8 +11,8 @@ export const PeopleProvider = (props) => {
     const { getCurrentUser } = useSimpleAuth()
     const user = getCurrentUser()
 
-    const getStudents = useCallback(() => {
-        return fetch(`${Settings.apiHost}/students`, {
+    const getStudents = useCallback((status = "") => {
+        return fetch(`${Settings.apiHost}/students${status !== "" ? `?status=${status}` : ""}`, {
             headers: {
                 "Authorization": `Token ${user.token}`
             }
@@ -25,7 +25,7 @@ export const PeopleProvider = (props) => {
                     throw new Error(`HTTP status ${response.status}`)
                 }
             })
-            .then(data => setStudents(data))
+            .then(data => setStudents(data.results))
             .catch(console.error)
     }, [user])
 

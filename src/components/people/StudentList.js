@@ -16,7 +16,7 @@ export const StudentList = () => {
     const history = useHistory()
 
     useEffect(() => {
-        getStudents()
+        getStudents("unassigned")
         getCohorts()
     }, [])
 
@@ -57,31 +57,33 @@ export const StudentList = () => {
                 <button onClick={()=>history.push("/cohorts/new")} className="studentList__createCohort">Create New Cohort</button>
             </div>
             {
-                students.map(student => {
-                    return <div className="studentList__student" key={`student--${student.id}`}>
-                        <input type="checkbox" value={student.id}
-                            onChange={(e) => {
-                                const copy = new Set(chosenStudents)
+                students.count > 0
+                    ? students.map(student => {
+                        return <div className="studentList__student" key={`student--${student.id}`}>
+                            <input type="checkbox" value={student.id}
+                                onChange={(e) => {
+                                    const copy = new Set(chosenStudents)
 
-                                copy.has(e.target.value)
-                                    ? copy.delete(e.target.value)
-                                    : copy.add(e.target.value)
+                                    copy.has(e.target.value)
+                                        ? copy.delete(e.target.value)
+                                        : copy.add(e.target.value)
 
-                                updateStudents(copy)
-                            }}
-                        />
-                        <div>
-                            {student.name}
+                                    updateStudents(copy)
+                                }}
+                            />
+                            <div>
+                                {student.name}
+                            </div>
+                            <div>
+                                {
+                                    student.cohorts.length > 0
+                                        ? student.cohorts[0].name
+                                        : "Not assigned"
+                                }
+                            </div>
                         </div>
-                        <div>
-                            {
-                                student.cohorts.length > 0
-                                    ? student.cohorts[0].name
-                                    : "Not assigned"
-                            }
-                        </div>
-                    </div>
-                })
+                    })
+                    : `No unassigned students`
             }
         </div>
     )

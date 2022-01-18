@@ -9,7 +9,7 @@ export const StudentSearch = () => {
     const [students, setStudents] = useState([])
 
     useEffect(() => {
-        if (terms !== "") {
+        if (terms !== "" && terms.length > 3) {
             findStudent(terms).then(setStudents)
         }
         else {
