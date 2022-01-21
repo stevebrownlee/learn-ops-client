@@ -69,37 +69,19 @@ export const CohortSearch = () => {
                 <CohortResults cohorts={cohorts} selectCohort={selectCohort} />
             </div>
 
-
             {
                 cohortStudents.count > 0
-                    ?
-                    <section>
+                    ? <section>
                         <div>{cohortStudents.count} students</div>
                         <div className="table table--students">
-
                             {cohortStudents.results
-                                .map(student => {
-                                    const learningScore = student.records.reduce(
-                                        (total, current) => {
-                                            return total + current.weights.reduce(
-                                                (tot, curr) => tot + curr.score, 0
-                                            )
-                                        }, 0
-                                    )
-                                    student.score = learningScore
-                                    return student
-                                })
                                 .sort((prev, curr) => curr.score - prev.score)
-                                .map(student => (
-
-                                    <Student key={`student--${student.id}`} student={student} />
-                                ))
+                                .map( student => <Student key={`student--${student.id}`} student={student} /> )
                             }
                         </div>
                     </section>
                     : ""
             }
-
         </>
     )
 }

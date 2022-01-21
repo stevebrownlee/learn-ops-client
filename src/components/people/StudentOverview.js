@@ -6,7 +6,6 @@ import "./Student.css"
 
 export const StudentOverview = ({ currentStudent }) => {
     const { activeStudent } = useContext(PeopleContext)
-    const [score, updateScore] = useState(0)
     const [student, setStudent] = useState({})
     const history = useHistory()
 
@@ -15,19 +14,6 @@ export const StudentOverview = ({ currentStudent }) => {
             setStudent(activeStudent)
         }
     }, [activeStudent])
-
-    useEffect(() => {
-        if ("id" in student) {
-            const learningScore = student.records.reduce(
-                (total, current) => {
-                    return total + current.weights.reduce(
-                        (tot, curr) => tot + curr.score, 0
-                    )
-                }, 0
-            )
-            updateScore(learningScore)
-        }
-    }, [student])
 
     useEffect(() => {
         if (currentStudent) {
@@ -42,7 +28,7 @@ export const StudentOverview = ({ currentStudent }) => {
                     <header className="student__header">
                         <h2 className="card-title student__info">{student.name} ({student.cohorts.map(c => c.name).join(", ")})</h2>
                         <div className="student__score">
-                            {score}
+                            {student.score}
                         </div>
                     </header>
                     <div className="card-text">

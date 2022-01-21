@@ -25,25 +25,24 @@ export const Record = ({ record }) => {
                 </header>
                 <div className="record__details">
                     {
-                        record.weights.map(w => (
-                            <React.Fragment key={`recordweight--${w.id}`}>
-                                <div className="record__entry">
-                                    <div className="record__score">
-                                        {w.label} for {w.score} points
-                                        <span className="record__delete fakeLink small" onClick={() => {
-                                            deleteRecordEntry(w.id).then(getStudent)
-                                                .then(() => {
-                                                    if ("id" in activeCohort) {
-                                                        getCohortStudents(activeCohort.id)
-                                                    }
-                                                })
-                                        }}
-                                        >Delete</span>
+                        record.entries.map(entry => (
+                            <React.Fragment key={`entry--${entry.id}`}>
+                                <div className="entry">
+                                    <div className="entry__note"> {entry.note} </div>
+                                    <div className="entry__date">
+                                        Recorded on <HumanDate date={entry.recorded_on} /> by {entry.instructor}
+                                        <span className="entry__delete small" onClick={() => {
+                                                deleteRecordEntry(entry.id).then(getStudent)
+                                                    .then(() => {
+                                                        if ("id" in activeCohort) {
+                                                            getCohortStudents(activeCohort.id)
+                                                        }
+                                                    })
+                                            }}
+                                            >🚫</span>
                                     </div>
-                                    <div className="record__note">{w.note}</div>
-                                    <div className="record__date">Recorded on <HumanDate date={w.recorded_on} /> by {w.instructor.name}</div>
                                 </div>
-                                <div className="record__separator"></div>
+                                <div className="entry__separator"></div>
                             </React.Fragment>
                         ))
                     }

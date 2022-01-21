@@ -88,19 +88,10 @@ export const RecordForm = () => {
                 </fieldset>
                 <fieldset>
                     <div className="form-group">
-                        <label htmlFor="description">Description:</label>
-                        <input type="text" id="description" required className="form-control"
-                            value={newRecord.description}
-                            onChange={updateState}
-                        />
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <div className="form-group">
                         <select id="weight" className="form-control"
                             value={newRecord.weight}
                             onChange={updateState}>
-                            <option value="0">Select a weight</option>
+                            <option value="0">Select a learning objective</option>
                             {
                                 weights.map(weight => (
                                     <option key={weight.id} value={weight.id}> {weight.label} [{weight.weight} pts] </option>
@@ -113,6 +104,7 @@ export const RecordForm = () => {
                     <div className="form-group">
                         <label htmlFor="note">Note:</label>
                         <textarea id="note" required className="form-control"
+                            placeholder="Provide comprehensive notes supporting your assessment"
                             value={newRecord.note}
                             onChange={updateState}
                         ></textarea>

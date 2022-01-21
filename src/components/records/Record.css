@@ -30,9 +30,9 @@
     color: darkslategray;
 }
 
-.record__separator {
+.entry__separator {
     border-top: 1px dotted slateblue;
-    margin: 0 5rem 0 1rem;
+    margin: 0 1rem 0 1rem;
 }
 
 .record__header {
@@ -44,18 +44,18 @@
     font-size: smaller;
 }
 
-.record__date {
+.entry__date {
     font-size: smaller;
     margin-top: 0.5rem;
     color: rgb(136, 155, 173);
 }
 
-.record__entry {
+.entry {
     margin: 1rem 0 0 1rem;
     padding: 0.5rem;
 }
 
-.record__entry:hover {
+.entry:hover {
     background-color: rgb(247, 224, 208);
 }
 
@@ -64,24 +64,14 @@
     display: none;
 }
 
-.record__delete {
-    display: none;
+.entry__delete {
     margin: 0 0 0 2rem;
-}
-
-.record__score:hover > .record__delete {
-    display: inline;
-}
-
-.record__header:hover > .record__addto {
-    display: inline;
 }
 
 .recordFormButtons {
     display: flex;
     justify-content: space-around;
 }
-
 
 .weights {
     flex: 1;
