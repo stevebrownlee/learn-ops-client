@@ -15,23 +15,29 @@ export const Record = ({ record }) => {
     return (
         <>
             <div key={`record--${record.id}`} className="record">
+                <div className={`record__status ${record.achieved ? "status--achieved" : "status--incomplete"}`}>
+                    {
+                        record.achieved ? "Achieved" : "In Progress"
+                    }
+                </div>
                 <header className="record__header">
-                    {record.description}
+                    <h3>Learning objective: {record.objective}</h3>
 
-                    <span className="record__addto fakeLink small" onClick={() => {
+                    <div className="record__addto fakeLink small" onClick={() => {
                         history.push({ pathname: `/record/${record.id}/entries/new` })
                     }}
-                    >Add to Record</span>
+                    >Add to Record</div>
                 </header>
-                <div className="record__details">
-                    {
-                        record.entries.map(entry => (
-                            <React.Fragment key={`entry--${entry.id}`}>
-                                <div className="entry">
-                                    <div className="entry__note"> {entry.note} </div>
-                                    <div className="entry__date">
-                                        Recorded on <HumanDate date={entry.recorded_on} /> by {entry.instructor}
-                                        <span className="entry__delete small" onClick={() => {
+                <details>
+                    <div className="record__details">
+                        {
+                            record.entries.map(entry => (
+                                <React.Fragment key={`entry--${entry.id}`}>
+                                    <div className="entry">
+                                        <div className="entry__note"> {entry.note} </div>
+                                        <div className="entry__date">
+                                            Recorded on <HumanDate date={entry.recorded_on} /> by {entry.instructor}
+                                            <span className="entry__delete small" onClick={() => {
                                                 deleteRecordEntry(entry.id).then(getStudent)
                                                     .then(() => {
                                                         if ("id" in activeCohort) {
@@ -40,13 +46,14 @@ export const Record = ({ record }) => {
                                                     })
                                             }}
                                             >🚫</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="entry__separator"></div>
-                            </React.Fragment>
-                        ))
-                    }
-                </div>
+                                    <div className="entry__separator"></div>
+                                </React.Fragment>
+                            ))
+                        }
+                    </div>
+                </details>
             </div>
         </>
     )

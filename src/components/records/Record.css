@@ -28,6 +28,22 @@
     padding: 1rem;
     margin: 0.5rem 1rem;
     color: darkslategray;
+    position: relative;
+}
+
+.record__status {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    padding: 0.33rem;
+}
+
+.status--achieved {
+    background-color: greenyellow;
+}
+
+.status--incomplete {
+    background-color: rgb(228, 174, 174);
 }
 
 .entry__separator {
@@ -60,8 +76,7 @@
 }
 
 .record__addto {
-    margin: 0 0 0 2rem;
-    display: none;
+    margin: 0 0 2rem 0;
 }
 
 .entry__delete {

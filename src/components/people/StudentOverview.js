@@ -64,16 +64,14 @@ export const StudentOverview = ({ currentStudent }) => {
                             <i className="button__icon icon icon-write"></i>
                             <span>Send Feedback</span>
                         </button>
-                        <details className="student__details">
 
-                            <section className="records--overview">
-                                {
-                                    student.records.map(record => {
-                                        return <Record key={`record--${record.id}`} record={record} />
-                                    })
-                                }
-                            </section>
-                        </details>
+                        <section className="records--overview">
+                            {
+                                student.records.map(record => {
+                                    return <Record key={`record--${record.id}`} record={record} />
+                                })
+                            }
+                        </section>
                     </div>
                 </div>
             </div>
