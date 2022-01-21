@@ -9,8 +9,7 @@ import { CohortContext } from "../cohorts/CohortProvider.js"
 export const RecordForm = () => {
     const defaultRecordState = {
         student: 0,
-        description: "",
-        obtained_from: "ONEON",
+        achieved: false,
         weight: 0,
         note: ""
     }
@@ -48,7 +47,14 @@ export const RecordForm = () => {
 
     const updateState = (event) => {
         const copy = { ...newRecord }
-        copy[event.target.id] = event.target.value
+
+        const newValue = {
+            "string": event.target.value,
+            "boolean": event.target.checked ? true : false,
+            "number": parseInt(event.target.value)
+        }[event.target.attributes.controltype.value]
+
+        copy[event.target.id] = newValue
         storeRecord(copy)
     }
 
@@ -71,6 +77,7 @@ export const RecordForm = () => {
                     <div className="form-group">
                         <select id="student" className="form-control"
                             autoFocus
+                            controltype="number"
                             disabled={location?.state?.studentId}
                             value={newRecord.student}
                             onChange={updateState}>
@@ -90,6 +97,7 @@ export const RecordForm = () => {
                     <div className="form-group">
                         <select id="weight" className="form-control"
                             value={newRecord.weight}
+                            controltype="number"
                             onChange={updateState}>
                             <option value="0">Select a learning objective</option>
                             {
@@ -100,10 +108,21 @@ export const RecordForm = () => {
                         </select>
                     </div>
                 </fieldset>
+
+                <fieldset>
+                    <div className="form-group">
+                    <label htmlFor="note">Objective achieved:</label>
+                    <input id="achieved" type="checkbox" value={newRecord.achieved}
+                        controltype="boolean"
+                        onChange={updateState} />
+                    </div>
+                </fieldset>
+
                 <fieldset>
                     <div className="form-group">
                         <label htmlFor="note">Note:</label>
                         <textarea id="note" required className="form-control"
+                            controltype="string"
                             placeholder="Provide comprehensive notes supporting your assessment"
                             value={newRecord.note}
                             onChange={updateState}
