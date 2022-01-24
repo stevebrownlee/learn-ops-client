@@ -84,9 +84,20 @@ export const RecordProvider = (props) => {
             .then(response => response.json())
     }
 
+    const updateRecord = record => {
+        return fetch(`${Settings.apiHost}/records/${record.id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${user.token}`
+            },
+            body: JSON.stringify(record)
+        })
+    }
+
     return (
         <RecordContext.Provider value={{
-            getWeights, getRecords, weights, records,
+            getWeights, getRecords, weights, records, updateRecord,
             createRecord, deleteRecordEntry, getRecord, createRecordEntry
         }} >
             { props.children }

@@ -16,8 +16,7 @@ export const RecordEntryForm = () => {
 
     const [record, storeRecord] = useState({
         student: {},
-        description: "",
-        obtained_from: "ONEON",
+        achieved: false,
         weight: 0,
         note: ""
     })
@@ -59,17 +58,14 @@ export const RecordEntryForm = () => {
     return (
         <article className="container--recordForm">
             <form className="recordForm">
-                <h2 className="recordForm__title">New Learning Record</h2>
+                <h2 className="recordForm__title">New Learning Record Entry</h2>
+
                 <fieldset>
                     <div className="form-group">
                         { record.student.name }
                     </div>
                 </fieldset>
-                <fieldset>
-                    <div className="form-group">
-                        { record.description }
-                    </div>
-                </fieldset>
+
                 <fieldset>
                     <div className="form-group">
                         <select id="weight" className="form-control"
@@ -93,10 +89,6 @@ export const RecordEntryForm = () => {
                             onChange={updateState}
                         ></textarea>
                     </div>
-                </fieldset>
-                <fieldset>
-                    <label htmlFor="obtained_from">Source: </label>
-                    { displaySource() }
                 </fieldset>
 
                 <button type="submit"

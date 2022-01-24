@@ -75,8 +75,7 @@ export const RecordForm = () => {
                 <h2 className="recordForm__title">New Learning Record</h2>
                 <fieldset>
                     <div className="form-group">
-                        <select id="student" className="form-control"
-                            autoFocus
+                        <select id="student" className="form-control" autoFocus
                             controltype="number"
                             disabled={location?.state?.studentId}
                             value={newRecord.student}

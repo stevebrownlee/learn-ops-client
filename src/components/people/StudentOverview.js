@@ -48,7 +48,7 @@ export const StudentOverview = ({ currentStudent }) => {
                             }}
                         >
                             <i className="button__icon icon icon-book"></i>
-                            <span>New Record</span>
+                            <span>New Objective Record</span>
                         </button>
 
                         <button className="button button--isi button--border-thick button--round-l button--size-s button--record"

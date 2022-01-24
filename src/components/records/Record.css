@@ -35,11 +35,11 @@
     position: absolute;
     top: 0.25rem;
     right: 0.25rem;
-    padding: 0.33rem;
 }
 
 .status--achieved {
     background-color: greenyellow;
+    padding: 0.33rem;
 }
 
 .status--incomplete {

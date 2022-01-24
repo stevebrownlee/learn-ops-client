@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { HumanDate } from "../utils/HumanDate.js"
 import { RecordContext } from "./RecordProvider"
@@ -8,30 +8,52 @@ import "./Record.css"
 
 export const Record = ({ record }) => {
     const history = useHistory()
-    const { deleteRecordEntry } = useContext(RecordContext)
+    const [ activeRecord, updateActiveRecord ] = useState({})
+    const { deleteRecordEntry, updateRecord } = useContext(RecordContext)
     const { activeCohort } = useContext(CohortContext)
     const { getStudent, getCohortStudents } = useContext(PeopleContext)
 
+    useEffect(() => {
+       updateActiveRecord({...record})
+    }, [record])
+
+    const markAsAchieved = () => {
+        const copy = {...record}
+        copy.achieved = true
+        updateRecord(copy).then(() => updateActiveRecord(copy))
+    }
+
     return (
         <>
-            <div key={`record--${record.id}`} className="record">
-                <div className={`record__status ${record.achieved ? "status--achieved" : "status--incomplete"}`}>
+            <div key={`record--${activeRecord.id}`} className="record">
+                <div className={`record__status ${activeRecord.achieved ? "status--achieved" : "status--incomplete"}`}>
                     {
-                        record.achieved ? "Achieved" : "In Progress"
+                        activeRecord.achieved
+                            ? "Achieved"
+                            : <div className="dropdown">
+                                <div className="dropdown__text">In progress</div>
+                                <div className="dropdown__content">
+                                    <a href="#"
+                                        onClick={() => {
+                                            history.push({ pathname: `/record/${activeRecord.id}/entries/new` })
+                                        }}
+                                    >Add to record</a>
+                                    <a href="#"
+                                        onClick={() => {
+                                            markAsAchieved()
+                                        }}
+                                    >Mark achieved</a>
+                                </div>
+                            </div>
                     }
                 </div>
                 <header className="record__header">
-                    <h3>Learning objective: {record.objective}</h3>
-
-                    <div className="record__addto fakeLink small" onClick={() => {
-                        history.push({ pathname: `/record/${record.id}/entries/new` })
-                    }}
-                    >Add to Record</div>
+                    <h3>Learning objective: {activeRecord.objective}</h3>
                 </header>
                 <details>
                     <div className="record__details">
                         {
-                            record.entries.map(entry => (
+                            activeRecord?.entries?.map(entry => (
                                 <React.Fragment key={`entry--${entry.id}`}>
                                     <div className="entry">
                                         <div className="entry__note"> {entry.note} </div>

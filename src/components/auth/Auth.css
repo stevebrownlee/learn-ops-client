@@ -2,13 +2,6 @@
     font-size: 1.75rem;
 }
 
-fieldset {
-    min-width: 0;
-    padding: 0.6rem 0;
-    margin: 0;
-    border: 0;
-}
-
 .form--login {
     display: inline-block;
     margin: 0 auto;
