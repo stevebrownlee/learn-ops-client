@@ -20,7 +20,13 @@ export const Record = ({ record }) => {
     const markAsAchieved = () => {
         const copy = {...record}
         copy.achieved = true
-        updateRecord(copy).then(() => updateActiveRecord(copy))
+        updateRecord(copy)
+            .then(() => getStudent())
+            .then(() => {
+                if ("id" in activeCohort) {
+                    getCohortStudents(activeCohort.id)
+                }
+            })
     }
 
     return (
