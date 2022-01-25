@@ -56,7 +56,7 @@ export const Record = ({ record }) => {
                 <header className="record__header">
                     <h3>Learning objective: {activeRecord.objective}</h3>
                 </header>
-                <details>
+                <details open={ !activeRecord.achieved }>
                     <div className="record__details">
                         {
                             activeRecord?.entries?.map(entry => (

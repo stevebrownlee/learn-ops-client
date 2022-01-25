@@ -59,9 +59,13 @@ export const RecordForm = () => {
     }
 
     const create = (evt) => {
+        debugger
         evt.preventDefault()
         return createRecord(newRecord)
-            .then(() => getStudent())
+            .then(() => {
+                debugger
+                return getStudent()
+            })
             .then(() => {
                 if ("id" in activeCohort) {
                     getCohortStudents(activeCohort.id)
@@ -111,7 +115,7 @@ export const RecordForm = () => {
                 <fieldset>
                     <div className="form-group">
                     <label htmlFor="note">Objective achieved:</label>
-                    <input id="achieved" type="checkbox" value={newRecord.achieved}
+                    <input id="achieved" type="checkbox" checked={newRecord.achieved}
                         controltype="boolean"
                         onChange={updateState} />
                     </div>
@@ -136,6 +140,7 @@ export const RecordForm = () => {
 
                     <button type="submit"
                         onClick={evt => create(evt).then(() => {
+                            debugger
                             storeRecord(defaultRecordState)
                         })}
                         className="btn btn-primary">Create and Add Another</button>
