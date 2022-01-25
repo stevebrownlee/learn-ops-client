@@ -18,10 +18,7 @@ export const RecordProvider = (props) => {
         })
             .then(response => response.json())
             .then(data => {
-                const sorted = data.results
-                    .filter(weight => weight.label !== "Guided Tour project completed")
-                    .sort( (c,n) => c.label > n.label && 1 || -1 )
-                setWeights(sorted)
+                setWeights(data.results)
             })
     }, [])
 

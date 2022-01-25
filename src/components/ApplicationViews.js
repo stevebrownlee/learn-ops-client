@@ -30,9 +30,6 @@ export const ApplicationViews = () => {
                     <Route exact path="/cohorts/new">
                         <CohortForm />
                     </Route>
-                    <Route exact path="/records">
-                        <RecordList />
-                    </Route>
                     <Route exact path="/records/new">
                         <RecordForm />
                     </Route>

@@ -36,25 +36,6 @@ export const RecordEntryForm = () => {
         storeRecord(copy)
     }
 
-    const displaySource = () => {
-        let source = ""
-        switch (record.obtained_from) {
-            case "ONEON":
-                source = "One on one"
-                break;
-            case "CLASS":
-                source = "Github classroom"
-                break;
-            case "SCORE":
-                source = "Google assessment score"
-                break;
-            default:
-                break;
-        }
-
-        return source
-    }
-
     return (
         <article className="container--recordForm">
             <form className="recordForm">
