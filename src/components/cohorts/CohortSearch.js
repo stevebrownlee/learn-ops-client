@@ -5,9 +5,10 @@ import { CohortContext } from "./CohortProvider.js"
 import { CohortResults } from "./CohortResults.js"
 
 export const CohortSearch = () => {
-    const { findCohort, getCohort } = useContext(CohortContext)
+    const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
     const { getCohortStudents, cohortStudents } = useContext(PeopleContext)
     const [terms, setTerms] = useState("")
+    const [active, setActive] = useState(false)
     const [cohorts, setCohorts] = useState([])
 
     useEffect(() => {
@@ -23,6 +24,13 @@ export const CohortSearch = () => {
         getCohortStudents(cohort.id)
         getCohort(cohort.id)
         setTerms("")
+
+        if (localStorage.getItem("activeCohort") && parseInt(localStorage.getItem("activeCohort")) === cohort.id) {
+            setActive(true)
+        }
+        else {
+            setActive(false)
+        }
     }, [getCohort])
 
     const handleSearchKey = (evt) => {
@@ -33,8 +41,14 @@ export const CohortSearch = () => {
     }
 
     useEffect(() => {
-        document.addEventListener("keypress", handleSearchKey)
+        if (localStorage.getItem("activeCohort")) {
+            const id = parseInt(localStorage.getItem("activeCohort"))
+            getCohortStudents(id)
+            getCohort(id)
+            setActive(true)
+        }
 
+        document.addEventListener("keypress", handleSearchKey)
         return () => document.removeEventListener("keypress", handleSearchKey)
     }, [])
 
@@ -73,6 +87,19 @@ export const CohortSearch = () => {
                 cohortStudents.count > 0
                     ? <section>
                         <div>{cohortStudents.count} students</div>
+                        <div>
+                            {
+                                active
+                                    ? "Your current cohort"
+                                    : <a href="#"
+                                        onClick={() => {
+                                            localStorage.setItem("activeCohort", activeCohort.id)
+                                            setActive(true)
+                                        }}
+                                        >Set as my active cohort</a>
+                            }
+
+                        </div>
                         <div className="table table--students">
                             {cohortStudents.results
                                 .sort((prev, curr) => curr.score - prev.score)
