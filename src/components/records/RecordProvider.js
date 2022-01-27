@@ -10,16 +10,14 @@ export const RecordProvider = (props) => {
     const { getCurrentUser } = useSimpleAuth()
     const user = getCurrentUser()
 
-    const getWeights = useCallback( () => {
-        return fetch(`${Settings.apiHost}/weights`, {
+    const getWeights = useCallback( (studentId = null) => {
+        return fetch(`${Settings.apiHost}/weights${studentId ? `?studentId=${studentId}` : ""}`, {
             headers:{
                 "Authorization": `Token ${user.token}`
             }
         })
             .then(response => response.json())
-            .then(data => {
-                setWeights(data.results)
-            })
+            .then(setWeights)
     }, [])
 
     const getRecords = () => {

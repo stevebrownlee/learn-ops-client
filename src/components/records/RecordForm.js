@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from "react"
 import { RecordContext } from "./RecordProvider.js"
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { PeopleContext } from "../people/PeopleProvider.js"
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min"
 import { CohortContext } from "../cohorts/CohortProvider.js"
@@ -15,15 +15,16 @@ export const RecordForm = () => {
     }
     const history = useHistory()
     const location = useLocation()
+    const { studentId } = useParams()
 
     const { createRecord, getWeights, weights } = useContext(RecordContext)
-    const { getCohortStudents, getStudents, students, getStudent } = useContext(PeopleContext)
+    const { getCohortStudents, getStudents, students, getStudent, activeStudent } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
 
     const [newRecord, storeRecord] = useState(defaultRecordState)
 
     const getData = useCallback(() => {
-        getWeights().then(getStudents)
+        getWeights(activeStudent.id).then(getStudents)
 
     }, [getWeights, getStudents])
 
@@ -35,11 +36,11 @@ export const RecordForm = () => {
     useEffect(() => {
         const updateStudent = (location) => {
             const copy = { ...newRecord }
-            copy.student = location?.state?.studentId
+            copy.student = studentId
             storeRecord(copy)
         }
 
-        if (newRecord.student !== location?.state?.studentId) {
+        if (newRecord.student !== studentId) {
             updateStudent(location)
         }
     }, [location, newRecord])
@@ -81,7 +82,7 @@ export const RecordForm = () => {
                     <div className="form-group">
                         <select id="student" className="form-control" autoFocus
                             controltype="number"
-                            disabled={location?.state?.studentId}
+                            disabled={studentId}
                             value={newRecord.student}
                             onChange={updateState}>
                             <option value="0">Select a student</option>

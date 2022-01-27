@@ -39,12 +39,7 @@ export const StudentOverview = ({ currentStudent }) => {
 
                         <button className="button button--isi button--border-thick button--round-l button--size-s button--record"
                             onClick={() => {
-                                history.push({
-                                    pathname: "/records/new",
-                                    state: {
-                                        studentId: student.id
-                                    }
-                                })
+                                history.push(`/records/new/${student.id}`)
                             }}
                         >
                             <i className="button__icon icon icon-book"></i>

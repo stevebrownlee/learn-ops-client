@@ -9,7 +9,6 @@ import { PeopleProvider } from "./people/PeopleProvider"
 import { StudentList } from "./people/StudentList"
 import { RecordEntryForm } from "./records/RecordEntryForm"
 import { RecordForm } from "./records/RecordForm"
-import { RecordList } from "./records/RecordList"
 import { RecordProvider } from "./records/RecordProvider"
 
 export const ApplicationViews = () => {
@@ -30,7 +29,7 @@ export const ApplicationViews = () => {
                     <Route exact path="/cohorts/new">
                         <CohortForm />
                     </Route>
-                    <Route exact path="/records/new">
+                    <Route exact path="/records/new/:studentId(\d+)">
                         <RecordForm />
                     </Route>
                     <Route exact path="/record/:recordId/entries/new">
