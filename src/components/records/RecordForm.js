@@ -14,19 +14,18 @@ export const RecordForm = () => {
         note: ""
     }
     const history = useHistory()
-    const location = useLocation()
     const { studentId } = useParams()
 
     const { createRecord, getWeights, weights } = useContext(RecordContext)
-    const { getCohortStudents, getStudents, students, getStudent, activeStudent } = useContext(PeopleContext)
+    const { getCohortStudents, students, getStudent, activeStudent } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
 
     const [newRecord, storeRecord] = useState(defaultRecordState)
 
     const getData = useCallback(() => {
-        getWeights(activeStudent.id).then(getStudents)
+        getWeights(studentId).then(() => getStudent(studentId))
 
-    }, [getWeights, getStudents])
+    }, [getWeights, getStudent])
 
     useEffect(() => {
         getData()
@@ -34,16 +33,16 @@ export const RecordForm = () => {
 
 
     useEffect(() => {
-        const updateStudent = (location) => {
+        const updateStudent = (studentId) => {
             const copy = { ...newRecord }
             copy.student = studentId
             storeRecord(copy)
         }
 
         if (newRecord.student !== studentId) {
-            updateStudent(location)
+            updateStudent(studentId)
         }
-    }, [location, newRecord])
+    }, [studentId, newRecord])
 
 
     const updateState = (event) => {
@@ -60,13 +59,10 @@ export const RecordForm = () => {
     }
 
     const create = (evt) => {
-        debugger
         evt.preventDefault()
         return createRecord(newRecord)
-            .then(() => {
-                debugger
-                return getStudent()
-            })
+            .then(() => getWeights(studentId))
+            .then(() => getStudent(studentId))
             .then(() => {
                 if ("id" in activeCohort) {
                     getCohortStudents(activeCohort.id)
@@ -77,24 +73,10 @@ export const RecordForm = () => {
     return (
         <article className="container--recordForm">
             <form className="recordForm">
-                <h2 className="recordForm__title">New Learning Record</h2>
+                <h1 className="recordForm__title">New Learning Record</h1>
                 <fieldset>
                     <div className="form-group">
-                        <select id="student" className="form-control" autoFocus
-                            controltype="number"
-                            disabled={studentId}
-                            value={newRecord.student}
-                            onChange={updateState}>
-                            <option value="0">Select a student</option>
-                            {
-                                students.map(student => (
-                                    <option key={student.id}
-                                        value={student.id}>
-                                        {student?.name}
-                                    </option>
-                                ))
-                            }
-                        </select>
+                        <h2>{ activeStudent.name }</h2>
                     </div>
                 </fieldset>
                 <fieldset>
@@ -141,7 +123,6 @@ export const RecordForm = () => {
 
                     <button type="submit"
                         onClick={evt => create(evt).then(() => {
-                            debugger
                             storeRecord(defaultRecordState)
                         })}
                         className="btn btn-primary">Create and Add Another</button>
