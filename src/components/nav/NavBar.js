@@ -28,7 +28,7 @@ export const NavBar = () => {
                         {makeLink("/students", "Students/Cohorts")}
                     </li>
                     <li className="navbar__item">
-                        {makeLink("/candidate", "Candidates")}
+                        {makeLink("/assessments", "Assessments")}
                     </li>
                     {
                         isAuthenticated()

@@ -1,0 +1,20 @@
+.container--assessmentForm {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.assessments {
+    z-index: 1;
+    min-height: 25rem;
+    min-width: 50%;
+    max-width: 70%;
+    padding: 0 5rem;
+    background-color: hsla(0,0%,100%,0.75);
+    background-blend-mode: overlay;
+    background-repeat: no-repeat;
+}
+

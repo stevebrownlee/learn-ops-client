@@ -1,6 +1,9 @@
 
 import React from "react"
 import { Route } from "react-router-dom"
+import { AssessmentForm } from "./assessments/AssessmentForm"
+import { AssessmentList } from "./assessments/AssessmentList"
+import { AssessmentProvider } from "./assessments/AssessmentProvider"
 import { CohortForm } from "./cohorts/CohortForm"
 import { CohortProvider } from "./cohorts/CohortProvider"
 import { Dashboard } from "./dashboard/Dashboard"
@@ -13,31 +16,37 @@ import { RecordProvider } from "./records/RecordProvider"
 
 export const ApplicationViews = () => {
     return <>
-        <RecordProvider>
-            <CohortProvider>
-                <PeopleProvider>
-                    <Route exact path="/">
-                        <Dashboard />
-                    </Route>
+        <AssessmentProvider>
+            <RecordProvider>
+                <CohortProvider>
+                    <PeopleProvider>
+                        <Route exact path="/">
+                            <Dashboard />
+                        </Route>
 
-                    <Route exact path="/students">
-                        <StudentList />
-                    </Route>
-                    <Route exact path="/feedback/new">
-                        <FeedbackForm />
-                    </Route>
-                    <Route exact path="/cohorts/new">
-                        <CohortForm />
-                    </Route>
-                    <Route exact path="/records/new/:studentId(\d+)">
-                        <RecordForm />
-                    </Route>
-                    <Route exact path="/record/:recordId/entries/new">
-                        <RecordEntryForm />
-                    </Route>
+                        <Route exact path="/students">
+                            <StudentList />
+                        </Route>
+                        <Route exact path="/assessments">
+                            <AssessmentList />
+                            <AssessmentForm />
+                        </Route>
+                        <Route exact path="/feedback/new">
+                            <FeedbackForm />
+                        </Route>
+                        <Route exact path="/cohorts/new">
+                            <CohortForm />
+                        </Route>
+                        <Route exact path="/records/new/:studentId(\d+)">
+                            <RecordForm />
+                        </Route>
+                        <Route exact path="/record/:recordId/entries/new">
+                            <RecordEntryForm />
+                        </Route>
 
-                </PeopleProvider>
-            </CohortProvider>
-        </RecordProvider>
+                    </PeopleProvider>
+                </CohortProvider>
+            </RecordProvider>
+        </AssessmentProvider>
     </>
 }

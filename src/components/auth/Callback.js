@@ -23,9 +23,17 @@ export const Callback = () => {
             },
             body: new URLSearchParams({ code: accessCode })
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json()
+                }
+                throw "Server error"
+            })
             .then(res => {
                 storeToken(res.key)
+            })
+            .catch((msg) => {
+                console.log(msg)
             })
     }
 
@@ -52,7 +60,7 @@ export const Callback = () => {
 
     return (
         <article>
-            Access code: {code}
+            You are now authorized via Github. Redirecting you to the Learning Platform home page.
         </article>
     )
 }
