@@ -7,22 +7,24 @@ import "./Student.css"
 
 export const StudentOverview = ({ currentStudent }) => {
     const { activeStudent } = useContext(PeopleContext)
-    const { getAssessments, assessments } = useContext(AssessmentContext)
+    const {
+        getStudentAssessments, getAssessmentList,
+        studentAssessments, allAssessments, saveStudentAssessment
+    } = useContext(AssessmentContext)
     const [student, setStudent] = useState({})
-    const [tab, changeTab] = useState()
     const history = useHistory()
 
     useEffect(() => {
         if ("id" in activeStudent) {
             setStudent(activeStudent)
-            getAssessments(activeStudent.id)
+            getStudentAssessments(activeStudent.id)
+            getAssessmentList()
         }
     }, [activeStudent])
 
     useEffect(() => {
         if (currentStudent) {
             setStudent(currentStudent)
-
         }
     }, [currentStudent])
 
@@ -47,6 +49,11 @@ export const StudentOverview = ({ currentStudent }) => {
         return (<div className={`assessment__status ${className}`}>
             {status}
         </div>)
+    }
+
+    const assign = (ass) => {
+        saveStudentAssessment(ass.id, activeStudent.id)
+            .then(() => getStudentAssessments(activeStudent.id))
     }
 
     return (
@@ -114,30 +121,37 @@ export const StudentOverview = ({ currentStudent }) => {
 
                             <li>
                                 <input type="radio" name="tabs" id="tab2" />
-                                <label htmlFor="tab2"
-                                    role="tab"
-                                    aria-selected="false"
-                                    aria-controls="panel2"
-                                    tabIndex="0">Assessments</label>
-                                <div id="tab-content2"
-                                    className="tab-content"
-                                    role="tabpanel"
-                                    aria-labelledby="specification"
-                                    aria-hidden="true">
+                                <label htmlFor="tab2" role="tab"
+                                    aria-selected="false" aria-controls="panel2" tabIndex="0">Assessments</label>
+                                <div id="tab-content2" className="tab-content" role="tabpanel"
+                                    aria-labelledby="specification" aria-hidden="true">
+
                                     <section className="records--overview">
-                                        <div className="spanner">
-                                            <button className="button button--isi button--border-thick button--round-l button--size-s button--assessment"
-                                                onClick={() => {
-                                                    history.push(`/records/new/${student.id}`)
-                                                }}
-                                            >
-                                                <i className="button__icon icon icon-book"></i>
-                                                <span>Send Assessment</span>
-                                            </button>
+                                        <div className="rightAlign">
+
+
+                                            <div className="dropdown">
+                                                <div className="dropdown__text">
+                                                    <button className="button button--isi button--border-thick button--round-l button--size-s button--assessment">
+                                                        <i className="button__icon icon icon-book"></i>
+                                                        <span>Send Assessment</span>
+                                                    </button>
+                                                </div>
+                                                <div className="dropdown__content assessment--dropdown">
+                                                    {
+                                                        allAssessments.map(ass => {
+                                                            return <a href="#" onClick={() => { assign(ass) }}>
+                                                                { ass.name }
+                                                            </a>
+                                                        })
+                                                    }
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                         {
-                                            assessments.map(assessment => {
+                                            studentAssessments.map(assessment => {
                                                 return <div className="assessment" key={`assessment--${assessment.id}`}>
                                                     <div className="assessment__name">
                                                         {assessment.assessment.name}

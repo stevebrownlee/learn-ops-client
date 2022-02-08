@@ -24,6 +24,10 @@
     flex-wrap: nowrap;
 }
 
+.assessment--dropdown {
+    font-size: 0.75rem;
+}
+
 .assessment__name {
     flex: 3;
 }
@@ -35,14 +39,8 @@
 
 .button--assessment {
     position: absolute;
+    cursor: pointer;
     left: 1rem;
-}
-
-.spanner {
-    display: flex;
-    justify-content: flex-end;
-    flex-wrap: nowrap;
-    margin: 0 0 2rem 0;
 }
 
 .assessment--inProgress {
