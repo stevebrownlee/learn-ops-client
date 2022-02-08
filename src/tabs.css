@@ -49,6 +49,7 @@
     background: #f4f7ff;
     padding: 2rem;
     position: absolute;
+    min-height: 45rem;
 }
 
 .tabs [id^="tab"]:checked+label {
