@@ -9,7 +9,8 @@ export const StudentOverview = ({ currentStudent }) => {
     const { activeStudent } = useContext(PeopleContext)
     const {
         getStudentAssessments, getAssessmentList,
-        studentAssessments, allAssessments, saveStudentAssessment
+        studentAssessments, allAssessments, saveStudentAssessment,
+        getStatuses, statuses, changeStatus
     } = useContext(AssessmentContext)
     const [student, setStudent] = useState({})
     const history = useHistory()
@@ -19,6 +20,7 @@ export const StudentOverview = ({ currentStudent }) => {
             setStudent(activeStudent)
             getStudentAssessments(activeStudent.id)
             getAssessmentList()
+            getStatuses()
         }
     }, [activeStudent])
 
@@ -53,6 +55,11 @@ export const StudentOverview = ({ currentStudent }) => {
 
     const assign = (ass) => {
         saveStudentAssessment(ass.id, activeStudent.id)
+            .then(() => getStudentAssessments(activeStudent.id))
+    }
+
+    const updateAssessmentStatus = (assessmentId, statusId) => {
+        changeStatus(assessmentId, statusId)
             .then(() => getStudentAssessments(activeStudent.id))
     }
 
@@ -98,17 +105,8 @@ export const StudentOverview = ({ currentStudent }) => {
                         <ul className="tabs" role="tablist">
                             <li>
                                 <input type="radio" name="tabs" id="tab1" defaultChecked />
-                                <label htmlFor="tab1"
-                                    role="tab"
-                                    aria-selected="true"
-                                    aria-controls="panel1"
-                                    tabIndex="0">Objectives</label>
-                                <div id="tab-content1"
-                                    className="tab-content"
-                                    role="tabpanel"
-                                    aria-labelledby="description"
-                                    aria-hidden="false">
-
+                                <label htmlFor="tab1" role="tab" aria-selected="true" aria-controls="panel1" tabIndex="0">Objectives</label>
+                                <div id="tab-content1" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
                                     <section className="records--overview">
                                         {
                                             student.records.map(record => {
@@ -121,14 +119,10 @@ export const StudentOverview = ({ currentStudent }) => {
 
                             <li>
                                 <input type="radio" name="tabs" id="tab2" />
-                                <label htmlFor="tab2" role="tab"
-                                    aria-selected="false" aria-controls="panel2" tabIndex="0">Assessments</label>
-                                <div id="tab-content2" className="tab-content" role="tabpanel"
-                                    aria-labelledby="specification" aria-hidden="true">
-
+                                <label htmlFor="tab2" role="tab" aria-selected="false" aria-controls="panel2" tabIndex="0">Assessments</label>
+                                <div id="tab-content2" className="tab-content" role="tabpanel" aria-labelledby="specification" aria-hidden="true">
                                     <section className="records--overview">
                                         <div className="rightAlign">
-
 
                                             <div className="dropdown">
                                                 <div className="dropdown__text">
@@ -144,7 +138,7 @@ export const StudentOverview = ({ currentStudent }) => {
                                                                 href="#"
                                                                 className="dropdownItem--condensed"
                                                                 onClick={() => { assign(ass) }}>
-                                                                { ass.name }
+                                                                {ass.name}
                                                             </a>
                                                         })
                                                     }
@@ -160,6 +154,17 @@ export const StudentOverview = ({ currentStudent }) => {
                                                         {assessment.assessment.name}
                                                     </div>
                                                     {createStatus(assessment.status)}
+                                                    <div className="assessment__statusDropdown">
+                                                        <select id="statuses"
+                                                            onChange={(e) => updateAssessmentStatus(assessment.id, e.target.value)}>
+                                                            <option value="0">Change status</option>
+                                                            {
+                                                                statuses.map(s => {
+                                                                    return <option value={s.id}>{s.status}</option>
+                                                                })
+                                                            }
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             })
                                         }

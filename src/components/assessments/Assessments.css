@@ -25,12 +25,19 @@
 }
 
 .assessment__name {
+    padding: 0.5rem 0;
     flex: 3;
 }
 
 .assessment__status {
     padding: 0.5rem 0.75rem;
     flex: 1;
+}
+
+.assessment__statusDropdown {
+    display: flex;
+    justify-content: flex-end;
+    flex: 2;
 }
 
 .button--assessment {

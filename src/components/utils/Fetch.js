@@ -5,7 +5,7 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }
 
     options.method = kwargs.method ?? "GET"
 
-    if ("token" in kwargs) {
+    if ("token" in kwargs && kwargs.token) {
         options.headers.Authorization = `Token ${kwargs.token}`
     }
     else {
@@ -22,18 +22,27 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }
         }
     }
 
-
+    let theFetch = null
     switch (options.method) {
         case "POST":
+            options.body = kwargs.body
+            options.headers["Content-Type"] = "application/json"
+            theFetch = fetch(url, options).then(r => r.json())
+            break;
         case "PUT":
             options.body = kwargs.body
             options.headers["Content-Type"] = "application/json"
+            theFetch = fetch(url, options)
+            break;
+        case "DELETE":
+            theFetch = fetch(url, options)
             break;
         default:
+            theFetch = fetch(url, options).then(r => r.json())
             break;
     }
 
-    return fetch(url, options).then(r => r.json())
+    return theFetch
 }
 
 export const request = {

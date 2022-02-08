@@ -7,6 +7,7 @@ export const AssessmentContext = React.createContext()
 export const AssessmentProvider = (props) => {
     const [studentAssessments, setAssessments] = useState([])
     const [allAssessments, setAll] = useState([])
+    const [statuses, setStatuses] = useState([])
 
     const getStudentAssessments = useCallback((studentId) => {
         return fetch(`${Settings.apiHost}/assessments?studentId=${studentId}`)
@@ -30,6 +31,18 @@ export const AssessmentProvider = (props) => {
         )
     }
 
+    const changeStatus = (assessmentId, statusId) => {
+        return fetchIt(
+            `${Settings.apiHost}/assessments/${assessmentId}`,
+            { method: "PUT", body: JSON.stringify({ status: statusId})}
+        )
+    }
+
+    const getStatuses = () => {
+        return fetchIt(`${Settings.apiHost}/statuses`)
+            .then(res => setStatuses(res.results))
+    }
+
     const saveStudentAssessment = (assessmentId, studentId) => {
         return fetchIt(
             `${Settings.apiHost}/assessments`,
@@ -43,7 +56,8 @@ export const AssessmentProvider = (props) => {
     return (
         <AssessmentContext.Provider value={{
             getStudentAssessments, getAssessmentList, studentAssessments,
-            saveAssessment, allAssessments, saveStudentAssessment
+            saveAssessment, allAssessments, saveStudentAssessment,
+            getStatuses, statuses, changeStatus
         }} >
             {props.children}
         </AssessmentContext.Provider>
