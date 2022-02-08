@@ -39,12 +39,13 @@ export const Record = ({ record }) => {
                             : <div className="dropdown">
                                 <div className="dropdown__text">In progress</div>
                                 <div className="dropdown__content">
-                                    <a href="#"
+                                    <a className="dropdownItem" href="#"
                                         onClick={() => {
                                             history.push({ pathname: `/record/${activeRecord.id}/entries/new` })
                                         }}
                                     >Add to record</a>
                                     <a href="#"
+                                        className="dropdownItem"
                                         onClick={() => {
                                             markAsAchieved()
                                         }}

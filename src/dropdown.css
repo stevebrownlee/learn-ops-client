@@ -21,10 +21,19 @@
     width: max-content;
 }
 
-/* Links inside the dropdown */
-.dropdown__content a {
+.dropdownItem {
+    font-size: 1rem;
     color: black;
     padding: 1rem 1rem;
+    text-decoration: none;
+    display: block;
+    min-width: 10rem;
+}
+
+.dropdownItem--condensed {
+    font-size: 0.75rem;
+    color: black;
+    padding: 0.5rem 1rem;
     text-decoration: none;
     display: block;
     min-width: 10rem;
@@ -44,3 +53,4 @@
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+

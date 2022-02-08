@@ -140,7 +140,10 @@ export const StudentOverview = ({ currentStudent }) => {
                                                 <div className="dropdown__content assessment--dropdown">
                                                     {
                                                         allAssessments.map(ass => {
-                                                            return <a href="#" onClick={() => { assign(ass) }}>
+                                                            return <a key={`assessment--${ass.id}`}
+                                                                href="#"
+                                                                className="dropdownItem--condensed"
+                                                                onClick={() => { assign(ass) }}>
                                                                 { ass.name }
                                                             </a>
                                                         })
