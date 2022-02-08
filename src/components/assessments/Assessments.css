@@ -18,3 +18,48 @@
     background-repeat: no-repeat;
 }
 
+.assessment {
+    padding: 1rem;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.assessment__name {
+    flex: 3;
+}
+
+.assessment__status {
+    padding: 0.5rem 0.75rem;
+    flex: 1;
+}
+
+.button--assessment {
+    position: absolute;
+    left: 1rem;
+}
+
+.spanner {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    margin: 0 0 2rem 0;
+}
+
+.assessment--inProgress {
+    background-color: lemonchiffon;
+}
+
+.assessment--readyForReview {
+    background-color: rgb(255, 157, 175);
+
+}
+
+.assessment--reviewedSuccess {
+    background-color: rgb(203, 255, 157);
+
+}
+
+.assessment--reviewedFail {
+    background-color: rgb(147, 159, 113);
+
+}

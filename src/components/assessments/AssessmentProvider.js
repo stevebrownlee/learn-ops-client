@@ -10,7 +10,12 @@ export const AssessmentProvider = (props) => {
     const getAssessments = useCallback((studentId=null) => {
         return fetch(`${Settings.apiHost}/assessments${studentId === null ? "" : `?studentId=${studentId}`}`)
             .then(response => response.json())
-            .then(data => setAssessments(data))
+            .then(data => {
+                data.sort(
+                    (c, n) => c.status - n.status ? 1 : -1
+                )
+                setAssessments(data)
+            })
     }, [setAssessments])
 
     const saveAssessment = (assessment) => {
