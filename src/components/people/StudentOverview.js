@@ -160,7 +160,7 @@ export const StudentOverview = ({ currentStudent }) => {
                                                             <option value="0">Change status</option>
                                                             {
                                                                 statuses.map(s => {
-                                                                    return <option value={s.id}>{s.status}</option>
+                                                                    return <option key={`asst--${s.id}`} value={s.id}>{s.status}</option>
                                                                 })
                                                             }
                                                         </select>
