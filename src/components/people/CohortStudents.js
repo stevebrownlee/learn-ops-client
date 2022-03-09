@@ -1,6 +1,6 @@
 import React from "react"
 
-export const StudentResults = ({ students, selectStudent }) => {
+export const CohortStudents = ({ students, selectStudent }) => {
     return (
         <article className={`search__results ${students?.length ? "" : "hidden"}`}>
             {

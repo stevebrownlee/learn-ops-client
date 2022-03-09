@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { PeopleContext } from "./PeopleProvider.js"
-import { StudentResults } from "./StudentResults.js"
+import { CohortStudents } from "./CohortStudents.js"
 import "./Search.css"
 
 export const StudentSearch = () => {
@@ -63,7 +63,7 @@ export const StudentSearch = () => {
                     placeholder="Search"
                     aria-label="Search" />
 
-                <StudentResults students={students} selectStudent={selectStudent} />
+                <CohortStudents students={students} selectStudent={selectStudent} />
             </div>
         </>
     )

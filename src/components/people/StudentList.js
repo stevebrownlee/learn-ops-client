@@ -57,7 +57,7 @@ export const StudentList = () => {
                 <button onClick={()=>history.push("/cohorts/new")} className="studentList__createCohort">Create New Cohort</button>
             </div>
             {
-                students.count > 0
+                students.length > 0
                     ? students.map(student => {
                         return <div className="studentList__student" key={`student--${student.id}`}>
                             <input type="checkbox" value={student.id}

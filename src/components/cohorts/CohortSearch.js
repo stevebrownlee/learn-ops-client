@@ -117,29 +117,13 @@ export const CohortSearch = () => {
                             {cohortStudents.count} students
                         </div>
                         <div>
-                            Sort by <button
-                                onClick={() => {
-                                    // If current state is score, that means the user previously clicked on score
-                                    // so if they click it again, just toggle boolean
-                                    if (sortBy === "score") {
-                                        setSortAsc(!sortAsc)
-                                    }
-                                    // If current sortBy is "name", this is the first click on score, so sort asc
-                                    else {
-                                        setSortAsc(true)
-                                    }
+                            Sort by <button onClick={() => {
+                                    sortBy === "score" ? setSortAsc(!sortAsc) : setSortAsc(true)
                                     specifySortFunction("score")
                                 }}
                                 className="fakeLink">score</button> or {" "}
-                            <button
-                                onClick={() => {
-                                    if (sortBy === "name") {
-                                        setSortAsc(!sortAsc)
-                                    }
-                                    // If current sortBy is "name", this is the first click on score, so sort asc
-                                    else {
-                                        setSortAsc(true)
-                                    }
+                            <button onClick={() => {
+                                    sortBy === "name" ? setSortAsc(!sortAsc) : setSortAsc(true)
                                     specifySortFunction("name")
                                 }}
                                 className="fakeLink">last name</button>
