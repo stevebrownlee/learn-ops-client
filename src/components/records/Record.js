@@ -46,9 +46,7 @@ export const Record = ({ record }) => {
                                     >Add to record</a>
                                     <a href="#"
                                         className="dropdownItem"
-                                        onClick={() => {
-                                            markAsAchieved()
-                                        }}
+                                        onClick={() => markAsAchieved()}
                                     >Mark achieved</a>
                                 </div>
                             </div>
