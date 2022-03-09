@@ -10,6 +10,9 @@ export const CohortSearch = () => {
     const [terms, setTerms] = useState("")
     const [active, setActive] = useState(false)
     const [cohorts, setCohorts] = useState([])
+    const [sortBy, specifySortFunction] = useState("score")
+    const [sortAsc, setSortAsc] = useState(true)
+
 
     useEffect(() => {
         if (terms !== "") {
@@ -60,6 +63,32 @@ export const CohortSearch = () => {
         }
     }
 
+    const sortStudentsByLastName = (current, next) => {
+        const [, clast] = current.name.split(" ")
+        const [, nlast] = next.name.split(" ")
+        let compare = null
+
+        if (sortAsc) {
+            compare = (clast).localeCompare(nlast);
+        }
+        else  {
+            compare = (nlast).localeCompare(clast);
+        }
+        return compare
+    }
+
+    const sortStudentsByScore = (current, next) => {
+        let result = 0
+
+        if (sortAsc) {
+            result = next.score - current.score
+        }
+        else  {
+            result = current.score - next.score
+        }
+        return result
+    }
+
     return (
         <>
             <header>
@@ -70,9 +99,7 @@ export const CohortSearch = () => {
             <div className="search">
                 <input id="search__terms--cohort"
                     onKeyUp={search}
-                    onChange={e => {
-                        setTerms(e.target.value)
-                    }}
+                    onChange={e => setTerms(e.target.value)}
                     autoFocus
                     value={terms}
                     className="form-control w-100"
@@ -86,24 +113,54 @@ export const CohortSearch = () => {
             {
                 cohortStudents.count > 0
                     ? <section>
-                        <div>{cohortStudents.count} students</div>
+                        <div>
+                            {cohortStudents.count} students
+                        </div>
+                        <div>
+                            Sort by <button
+                                onClick={() => {
+                                    // If current state is score, that means the user previously clicked on score
+                                    // so if they click it again, just toggle boolean
+                                    if (sortBy === "score") {
+                                        setSortAsc(!sortAsc)
+                                    }
+                                    // If current sortBy is "name", this is the first click on score, so sort asc
+                                    else {
+                                        setSortAsc(true)
+                                    }
+                                    specifySortFunction("score")
+                                }}
+                                className="fakeLink">score</button> or {" "}
+                            <button
+                                onClick={() => {
+                                    if (sortBy === "name") {
+                                        setSortAsc(!sortAsc)
+                                    }
+                                    // If current sortBy is "name", this is the first click on score, so sort asc
+                                    else {
+                                        setSortAsc(true)
+                                    }
+                                    specifySortFunction("name")
+                                }}
+                                className="fakeLink">last name</button>
+                        </div>
                         <div>
                             {
                                 active
-                                    ? "Your current cohort"
+                                    ? ""
                                     : <a href="#"
                                         onClick={() => {
                                             localStorage.setItem("activeCohort", activeCohort.id)
                                             setActive(true)
                                         }}
-                                        >Set as my active cohort</a>
+                                    >Set as my active cohort</a>
                             }
-
                         </div>
                         <div className="table table--students">
-                            {cohortStudents.results
-                                .sort((prev, curr) => curr.score - prev.score)
-                                .map( student => <Student key={`student--${student.id}`} student={student} /> )
+                            {
+                                cohortStudents.results
+                                    .sort(sortBy === "score" ? sortStudentsByScore : sortStudentsByLastName)
+                                    .map(student => <Student key={`student--${student.id}`} student={student} />)
                             }
                         </div>
                     </section>

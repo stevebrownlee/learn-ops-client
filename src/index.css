@@ -47,6 +47,7 @@ code {
     text-decoration: underline;
     border: none;
     cursor: pointer;
+    background-color: inherit;
 }
 
 .fakeLink:hover {
