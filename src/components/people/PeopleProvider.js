@@ -41,7 +41,7 @@ export const PeopleProvider = (props) => {
 
     const getStudent = useCallback((id = null) => {
         let studentId = 0
-        if (id) {
+        if (id && Number.isFinite(id)) {
             studentId = id
         }
         else if (!id && !("id" in activeStudent)) {

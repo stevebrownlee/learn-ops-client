@@ -67,7 +67,8 @@ export const Record = ({ record }) => {
                                         <div className="entry__date">
                                             Recorded on <HumanDate date={entry.recorded_on} /> by {entry.instructor}
                                             <span className="entry__delete small" onClick={() => {
-                                                deleteRecordEntry(entry.id).then(getStudent)
+                                                deleteRecordEntry(entry.id)
+                                                    .then(getStudent)
                                                     .then(() => {
                                                         if ("id" in activeCohort) {
                                                             getCohortStudents(activeCohort.id)
