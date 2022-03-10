@@ -1,8 +1,10 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import { PeopleContext } from "../people/PeopleProvider.js"
 import { Student } from "../people/Student.js"
 import { CohortContext } from "./CohortProvider.js"
 import { CohortResults } from "./CohortResults.js"
+import "./CohortStudentList.css"
 
 export const CohortSearch = () => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
@@ -71,7 +73,7 @@ export const CohortSearch = () => {
         if (sortAsc) {
             compare = (clast).localeCompare(nlast);
         }
-        else  {
+        else {
             compare = (nlast).localeCompare(clast);
         }
         return compare
@@ -83,7 +85,7 @@ export const CohortSearch = () => {
         if (sortAsc) {
             result = next.score - current.score
         }
-        else  {
+        else {
             result = current.score - next.score
         }
         return result
@@ -112,40 +114,46 @@ export const CohortSearch = () => {
 
             {
                 cohortStudents.count > 0
-                    ? <section>
-                        <div>
-                            {cohortStudents.count} students
-                        </div>
-                        <div>
+                    ? <section className="cohortStudents">
+
+                        <Link to="/teams"> Show current teams </Link>
+
+                        <div className="cohortStudents__sort">
                             Sort by <button onClick={() => {
-                                    sortBy === "score" ? setSortAsc(!sortAsc) : setSortAsc(true)
-                                    specifySortFunction("score")
-                                }}
+                                sortBy === "score" ? setSortAsc(!sortAsc) : setSortAsc(true)
+                                specifySortFunction("score")
+                            }}
                                 className="fakeLink">score</button> or {" "}
                             <button onClick={() => {
-                                    sortBy === "name" ? setSortAsc(!sortAsc) : setSortAsc(true)
-                                    specifySortFunction("name")
-                                }}
+                                sortBy === "name" ? setSortAsc(!sortAsc) : setSortAsc(true)
+                                specifySortFunction("name")
+                            }}
                                 className="fakeLink">last name</button>
                         </div>
-                        <div>
-                            {
-                                active
-                                    ? ""
-                                    : <a href="#"
-                                        onClick={() => {
+
+                        {
+                            active
+                                ? ""
+                                : <div>
+                                    <a href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault()
                                             localStorage.setItem("activeCohort", activeCohort.id)
                                             setActive(true)
                                         }}
                                     >Set as my active cohort</a>
-                            }
-                        </div>
-                        <div className="table table--students">
+                                </div>
+                        }
+
+                        <div className="table">
                             {
                                 cohortStudents.results
                                     .sort(sortBy === "score" ? sortStudentsByScore : sortStudentsByLastName)
                                     .map(student => <Student key={`student--${student.id}`} student={student} />)
                             }
+                        </div>
+                        <div>
+                            {cohortStudents.count} students
                         </div>
                     </section>
                     : ""

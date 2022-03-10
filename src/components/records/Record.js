@@ -53,7 +53,7 @@ export const Record = ({ record }) => {
                     }
                 </div>
                 <header className="record__header">
-                    <h3>Learning objective: {activeRecord.objective}</h3>
+                    <h3>{activeRecord.objective}</h3>
                 </header>
                 <details open={ !activeRecord.achieved }>
                     <div className="record__details">

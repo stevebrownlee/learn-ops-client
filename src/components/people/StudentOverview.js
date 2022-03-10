@@ -41,15 +41,6 @@ export const StudentOverview = ({ currentStudent }) => {
 
                         <button className="button button--isi button--border-thick button--round-l button--size-s button--record"
                             onClick={() => {
-                                history.push(`/records/new/${student.id}`)
-                            }}
-                        >
-                            <i className="button__icon icon icon-book"></i>
-                            <span>Start Objective</span>
-                        </button>
-
-                        <button className="button button--isi button--border-thick button--round-l button--size-s button--record"
-                            onClick={() => {
                                 history.push({
                                     pathname: "/feedback/new",
                                     state: {

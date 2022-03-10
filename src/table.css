@@ -4,10 +4,6 @@
     border: 1px dotted gainsboro;
 }
 
-.table--students {
-    margin: 1rem 0 0 0;
-}
-
 .cell--centered {
     text-align: center;
 }

@@ -148,6 +148,11 @@
 	vertical-align: middle;
 }
 
+.button__icon--only {
+	font-size: 2rem;
+	cursor: pointer;
+}
+
 .button--isi>span {
 	vertical-align: middle;
 	padding-left: 0.75em;

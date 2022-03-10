@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from "react"
+import { useHistory } from "react-router-dom"
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { Record } from "../records/Record.js"
 import "./Student.css"
@@ -9,6 +10,7 @@ export const StudentTabList = ({ student }) => {
         studentAssessments, allAssessments, saveStudentAssessment,
         getStatuses, statuses, changeStatus
     } = useContext(AssessmentContext)
+    const history = useHistory()
 
     useEffect(() => {
         getStudentAssessments(student.id)
@@ -55,6 +57,12 @@ export const StudentTabList = ({ student }) => {
                 <input type="radio" name="tabs" id="tab1" defaultChecked />
                 <label htmlFor="tab1" role="tab" aria-selected="true" aria-controls="panel1" tabIndex="0">Objectives</label>
                 <article id="tab-content1" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
+
+                        <i className="button__icon icon icon-plus button__icon--only position--topright"
+                            onClick={() => {
+                                history.push(`/records/new/${student.id}`)
+                            }}></i>
+
                     <section className="records--overview">
                         {
                             student.records?.map(record => {
@@ -95,12 +103,12 @@ export const StudentTabList = ({ student }) => {
 
                         {
                             studentAssessments.map(assessment => {
-                                return <>
+                                return <React.Fragment key={`assessment--${assessment.id}`}>
                                     <div className="assessment__name">
                                         {assessment.assessment.name}
                                     </div>
 
-                                    <div className="assessment" key={`assessment--${assessment.id}`}>
+                                    <div className="assessment">
 
                                         {createStatus(assessment.status)}
 
@@ -116,7 +124,7 @@ export const StudentTabList = ({ student }) => {
                                             </select>
                                         </div>
                                     </div>
-                                </>
+                                </React.Fragment>
                             })
                         }
                     </section>

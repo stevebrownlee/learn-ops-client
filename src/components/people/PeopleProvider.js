@@ -36,7 +36,7 @@ export const PeopleProvider = (props) => {
             }
         })
             .then(response => response.json())
-            .then(data => setCohortStudents(data))
+            .then(data => setCohortStudents(data.results))
     }, [user])
 
     const getStudent = useCallback((id = null) => {

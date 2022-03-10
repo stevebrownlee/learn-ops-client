@@ -53,9 +53,7 @@ export const StudentSearch = () => {
             <div className="search">
                 <input id="search__terms"
                     onKeyUp={search}
-                    onChange={e => {
-                        setTerms(e.target.value)
-                    }}
+                    onChange={e => setTerms(e.target.value)}
                     autoFocus
                     value={terms}
                     className="form-control w-100"

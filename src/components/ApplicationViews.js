@@ -13,6 +13,7 @@ import { StudentList } from "./people/StudentList"
 import { RecordEntryForm } from "./records/RecordEntryForm"
 import { RecordForm } from "./records/RecordForm"
 import { RecordProvider } from "./records/RecordProvider"
+import { WeeklyTeams } from "./teams/WeeklyTeams"
 
 export const ApplicationViews = () => {
     return <>
@@ -27,10 +28,16 @@ export const ApplicationViews = () => {
                         <Route exact path="/students">
                             <StudentList />
                         </Route>
+
+                        <Route exact path="/teams">
+                            <WeeklyTeams />
+                        </Route>
+
                         <Route exact path="/assessments">
                             <AssessmentList />
                             <AssessmentForm />
                         </Route>
+
                         <Route exact path="/feedback/new">
                             <FeedbackForm />
                         </Route>

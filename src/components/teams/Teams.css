@@ -1,0 +1,32 @@
+.team {
+    padding: 1rem;
+    margin: 0 25%;
+    border: 1px dashed slategrey;
+    border-radius: 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    margin: 0.5rem;
+    width: 8rem;
+    height: 10rem;
+}
+
+.teams {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.student--badge {
+    padding: 0.33rem;
+    background-color: darkcyan;
+    color: azure;
+    border-radius: 0.25rem;
+    margin: 0.33rem 0;
+    font-size: 0.7rem;
+}
+
+.students--teambuilder {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
