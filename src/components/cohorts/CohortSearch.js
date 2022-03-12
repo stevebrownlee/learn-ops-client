@@ -153,7 +153,7 @@ export const CohortSearch = () => {
                             }
                         </div>
                         <div>
-                            {cohortStudents.count} students
+                            {cohortStudents.length} students
                         </div>
                     </section>
                     : ""
