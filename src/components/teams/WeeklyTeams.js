@@ -1,9 +1,12 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
 import "./Teams.css"
+import slackLogo from "./images/slack.png"
 
 export const WeeklyTeams = () => {
     const [teamCount, changeCount] = useState(6)
+    const teamBoxes = useRef()
+    const [weeklyPrefix, setWeeklyPrefix] = useState("C54")
     const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
 
     useEffect(() => {
@@ -12,6 +15,10 @@ export const WeeklyTeams = () => {
             getCohortStudents(id)
         }
     }, [])
+
+    const clearTeams = () => {
+        teamBoxes.current.innerHTML = ""
+    }
 
 
     const makeTeamBoxes = () => {
@@ -25,57 +32,77 @@ export const WeeklyTeams = () => {
                         e.preventDefault()
                         const data = e.dataTransfer.getData("text/plain")
                         e.target.appendChild(document.getElementById(data))
-
                     }}
-                >Team {i}</div>
+                >
+                    Team {i}
+                    <img className="icon--slack" src={slackLogo} alt="Create Slack team channel" />
+                </div>
             )
         }
 
         return boxes
     }
 
+    const autoAssignStudents = () => {
+        cohortStudents.sort((current, next) => next.score - current.score)
+        const studentsPerTeam = Math.floor(cohortStudents.length / teamCount)
+        let remainingStudents = cohortStudents.length - (studentsPerTeam * teamCount)
+
+        let boxNumber = 1
+        let studentIndex = 0
+        for (let i = 1; i <= teamCount; i++) {
+
+            let studentsToAddToBox = studentsPerTeam
+            if (boxNumber <= remainingStudents) {
+                studentsToAddToBox = studentsPerTeam + 1
+            }
+            for (let j = 0; j < studentsToAddToBox; j++) {
+                const student = cohortStudents[studentIndex]
+                const studentBadge = document.getElementById(JSON.stringify(student))
+                const box = document.getElementById(`teambox--${boxNumber}`)
+                box.appendChild(studentBadge)
+                studentIndex++
+            }
+
+            boxNumber += 1
+        }
+    }
+
     return (
-        <>
+        <article className="teamView">
             <h1>Weekly Teams</h1>
 
-            <div>
-                How many teams: <input type="number"
-                    value={teamCount}
-                    onChange={e => changeCount(parseInt(e.target.value))} />
-            </div>
-            <div>
-                <button onClick={e => {
-                    cohortStudents.sort((current, next) => next.score - current.score)
-                    const studentsPerTeam = Math.floor(cohortStudents.length / teamCount)
-                    console.log("studentsPerTeam", studentsPerTeam)
-                    let remainingStudents = cohortStudents.length - (studentsPerTeam * teamCount)
-                    console.log("remainingStudents", remainingStudents)
+            <section className="teamsconfig">
+                <div>
+                    How many teams: <input type="number"
+                        className="teamsconfig__count"
+                        value={teamCount}
+                        onChange={e => changeCount(parseInt(e.target.value))} />
+                </div>
+                <div>
+                    Slack channel prefix: <input type="text"
+                        className="teamsconfig__prefix"
+                        value={weeklyPrefix}
+                        onChange={e => changeCount(parseInt(e.target.value))} />
+                </div>
+                <div className="teamsconfig__auto">
+                    <button onClick={autoAssignStudents}>
+                        Assign By Score
+                    </button>
+                </div>
+                <div className="teamsconfig__reset">
+                    <button onClick={() => {
+                       clearTeams()
+                       changeCount(5)
+                    }}>
+                        Reload
+                    </button>
+                </div>
+            </section>
 
-                    let boxNumber = 1
-                    let studentIndex = 0
-                    for (let i = 1; i <= teamCount; i++) {
+            <hr />
 
-                        let studentsToAddToBox = studentsPerTeam
-                        if (boxNumber <= remainingStudents) {
-                            studentsToAddToBox = studentsPerTeam + 1
-                        }
-                        for (let j = 0; j < studentsToAddToBox; j++) {
-                            const student = cohortStudents[studentIndex]
-                            const studentBadge = document.getElementById(JSON.stringify(student))
-                            const box = document.getElementById(`teambox--${boxNumber}`)
-                            box.appendChild(studentBadge)
-                            studentIndex++
-                        }
-
-                        console.log(boxNumber, remainingStudents, studentsToAddToBox, studentIndex)
-                        boxNumber += 1
-                    }
-
-                }}
-                >Assign By Score</button>
-            </div>
-
-            <article className="teams">
+            <article className="teams" ref={teamBoxes}>
                 {makeTeamBoxes()}
             </article>
             <article className="students--teambuilder">
@@ -94,6 +121,6 @@ export const WeeklyTeams = () => {
                         ))
                 }
             </article>
-        </>
+        </article>
     )
 }
