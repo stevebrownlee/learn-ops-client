@@ -17,7 +17,7 @@ export const WeeklyTeams = () => {
     const makeTeamBoxes = () => {
         let boxes = []
 
-        for (let i = 1; i <= 6; i++) {
+        for (let i = 1; i <= teamCount; i++) {
             boxes.push(
                 <div id={`teambox--${i}`} key={`teambox--${i}`} className="team"
                     onDragOver={e => e.preventDefault()}
@@ -36,7 +36,7 @@ export const WeeklyTeams = () => {
 
     return (
         <>
-            Weekly Teams
+            <h1>Weekly Teams</h1>
 
             <div>
                 How many teams: <input type="number"
@@ -45,9 +45,11 @@ export const WeeklyTeams = () => {
             </div>
             <div>
                 <button onClick={e => {
-                    const sorted = cohortStudents.sort((current, next) => next.score - current.score)
-                    const studentsPerTeam = Math.floor(cohortStudents.length / 6)
-                    let remainingStudents = cohortStudents.length % studentsPerTeam
+                    cohortStudents.sort((current, next) => next.score - current.score)
+                    const studentsPerTeam = Math.floor(cohortStudents.length / teamCount)
+                    console.log("studentsPerTeam", studentsPerTeam)
+                    let remainingStudents = cohortStudents.length - (studentsPerTeam * teamCount)
+                    console.log("remainingStudents", remainingStudents)
 
                     let boxNumber = 1
                     let studentIndex = 0
@@ -57,7 +59,6 @@ export const WeeklyTeams = () => {
                         if (boxNumber <= remainingStudents) {
                             studentsToAddToBox = studentsPerTeam + 1
                         }
-                        console.log(boxNumber, remainingStudents, studentsToAddToBox)
                         for (let j = 0; j < studentsToAddToBox; j++) {
                             const student = cohortStudents[studentIndex]
                             const studentBadge = document.getElementById(JSON.stringify(student))
@@ -66,14 +67,12 @@ export const WeeklyTeams = () => {
                             studentIndex++
                         }
 
+                        console.log(boxNumber, remainingStudents, studentsToAddToBox, studentIndex)
                         boxNumber += 1
                     }
 
                 }}
                 >Assign By Score</button>
-            </div>
-            <div>
-                <button>Create Slack Channels</button>
             </div>
 
             <article className="teams">
