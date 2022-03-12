@@ -47,23 +47,28 @@ export const WeeklyTeams = () => {
                 <button onClick={e => {
                     const sorted = cohortStudents.sort((current, next) => next.score - current.score)
                     const studentsPerTeam = Math.floor(cohortStudents.length / 6)
+                    let remainingStudents = cohortStudents.length % studentsPerTeam
 
                     let boxNumber = 1
-                    sorted.forEach((student, idx) => {
-                        const studentBadge = document.getElementById(JSON.stringify(student))
+                    let studentIndex = 0
+                    for (let i = 1; i <= teamCount; i++) {
 
-                        try {
+                        let studentsToAddToBox = studentsPerTeam
+                        if (boxNumber <= remainingStudents) {
+                            studentsToAddToBox = studentsPerTeam + 1
+                        }
+                        console.log(boxNumber, remainingStudents, studentsToAddToBox)
+                        for (let j = 0; j < studentsToAddToBox; j++) {
+                            const student = cohortStudents[studentIndex]
+                            const studentBadge = document.getElementById(JSON.stringify(student))
                             const box = document.getElementById(`teambox--${boxNumber}`)
                             box.appendChild(studentBadge)
-
-                            const timeToSwitch = (idx + 1) % studentsPerTeam
-                            if (idx > 0 && timeToSwitch === 0) {
-                                boxNumber += 1
-                            }
-                        } catch (error) {
-                            console.log(error)
+                            studentIndex++
                         }
-                    });
+
+                        boxNumber += 1
+                    }
+
                 }}
                 >Assign By Score</button>
             </div>
