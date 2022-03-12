@@ -21,10 +21,9 @@ export const WeeklyTeams = () => {
             boxes.push(
                 <div
                     onDragOver={e => e.preventDefault()}
-                    onDragStart={e => e.dataTransfer.setData("text", e.target.id)}
                     onDrop={e => {
                         e.preventDefault()
-                        const data = e.dataTransfer.getData("text")
+                        const data = e.dataTransfer.getData("text/plain")
                         e.target.appendChild(document.getElementById(data))
 
                     }}
@@ -53,7 +52,16 @@ export const WeeklyTeams = () => {
             </article>
             <article className="students--teambuilder">
                 {
-                    cohortStudents.map(s => <div draggable={true} key={`studentbadge--${s.id}`} className="student--badge">{s.name}</div>)
+                    cohortStudents.map(s => (
+                        <div key={`studentbadge--${s.id}`}
+                            id={JSON.stringify(s)}
+                            onDragStart={e => {
+                                e.dataTransfer.setData("text/plain", e.target.id)
+                            }}
+                            draggable={true} className="student--badge">
+                            {s.name}
+                        </div>
+                    ))
                 }
             </article>
         </>
