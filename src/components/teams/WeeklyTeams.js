@@ -18,7 +18,18 @@ export const WeeklyTeams = () => {
         let boxes = []
 
         for (let i = 1; i <= teamCount; i++) {
-           boxes.push(<div key={`teambox--${i}`} className="team">Team {i}</div>)
+            boxes.push(
+                <div
+                    onDragOver={e => e.preventDefault()}
+                    onDragStart={e => e.dataTransfer.setData("text", e.target.id)}
+                    onDrop={e => {
+                        e.preventDefault()
+                        const data = e.dataTransfer.getData("text")
+                        e.target.appendChild(document.getElementById(data))
+
+                    }}
+                    key={`teambox--${i}`} className="team">Team {i}</div>
+            )
         }
 
         return boxes
@@ -30,8 +41,8 @@ export const WeeklyTeams = () => {
 
             <div>
                 How many teams: <input type="number"
-                                        value={teamCount}
-                                        onChange={e => changeCount(parseInt(e.target.value))} />
+                    value={teamCount}
+                    onChange={e => changeCount(parseInt(e.target.value))} />
             </div>
             <div>
                 <button>Create</button>
@@ -42,7 +53,7 @@ export const WeeklyTeams = () => {
             </article>
             <article className="students--teambuilder">
                 {
-                    cohortStudents.map(s => <div key={`studentbadge--${s.id}`} className="student--badge">{s.name}</div>)
+                    cohortStudents.map(s => <div draggable={true} key={`studentbadge--${s.id}`} className="student--badge">{s.name}</div>)
                 }
             </article>
         </>

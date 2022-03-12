@@ -113,7 +113,7 @@ export const CohortSearch = () => {
             </div>
 
             {
-                cohortStudents.count > 0
+                cohortStudents.length > 0
                     ? <section className="cohortStudents">
 
                         <Link to="/teams"> Show current teams </Link>
@@ -147,7 +147,7 @@ export const CohortSearch = () => {
 
                         <div className="table">
                             {
-                                cohortStudents.results
+                                cohortStudents
                                     .sort(sortBy === "score" ? sortStudentsByScore : sortStudentsByLastName)
                                     .map(student => <Student key={`student--${student.id}`} student={student} />)
                             }
