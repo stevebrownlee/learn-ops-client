@@ -114,20 +114,15 @@ export const WeeklyTeams = () => {
             }
             for (let j = 0; j < studentsToAddToBox; j++) {
                 const student = cohortStudents[studentIndex]
-
-                // Move the div element to the correct team
-                const studentBadge = document.getElementById(JSON.stringify(student))
-                const box = document.getElementById(`teambox--${boxNumber}`)
-                box.appendChild(studentBadge)
-
-                // Update the state to put the student id in the right Set
-                teamsCopy.get(boxNumber).add(student.id)
-
+                teamsCopy.get(boxNumber).add(JSON.stringify(student))
                 studentIndex++
             }
 
             boxNumber += 1
         }
+
+        setUnassigned([])
+        updateTeams(teamsCopy)
     }
 
     return (
