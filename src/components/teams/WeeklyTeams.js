@@ -70,7 +70,9 @@ export const WeeklyTeams = () => {
                 teamMap.set(team.id, new Set(team.students))
             })
 
+            changeCount(Array.from(teamMap.entries()).length)
             updateTeams(teamMap)
+            setUnassigned([])
         }
         else {
             setUnassigned(cohortStudents)
