@@ -34,6 +34,20 @@ code {
         monospace;
 }
 
+.invisible {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+
+.error {
+    border: 1px dotted rgb(107, 21, 4);
+    padding: 1rem;
+    background-color: rgb(255, 229, 228);
+}
+
 .view {
     margin: 1rem 3rem;
 }

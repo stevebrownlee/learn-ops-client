@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
 import "./Teams.css"
 import slackLogo from "./images/slack.png"
+import TeamsRepository from "./TeamsRepository"
 
 export const WeeklyTeams = () => {
     const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
@@ -16,6 +17,7 @@ export const WeeklyTeams = () => {
     ])
 
     const [teamCount, changeCount] = useState(6)
+    const [feedback, setFeedback] = useState("")
     const [weeklyPrefix, setWeeklyPrefix] = useState("C54")
     const [unassignedStudents, setUnassigned] = useState([])
     const [originalTeam, trackOriginalTeam] = useState(0)
@@ -28,6 +30,14 @@ export const WeeklyTeams = () => {
             getCohortStudents(id)
         }
     }, [])
+
+    useEffect(() => {
+        if (feedback !== "") {
+            setTimeout(() => {
+                setFeedback("")
+            }, 3000);
+        }
+    }, [feedback])
 
     useEffect(() => {
         const newTeams = new Map()
@@ -71,6 +81,17 @@ export const WeeklyTeams = () => {
         </div>
     }
 
+    const makeSlackChannel = (teamNumber) => {
+        TeamsRepository.createSlackChannel(`${weeklyPrefix}-team-${teamNumber}`)
+            .then(res => {
+                if (res.ok) {
+                    setFeedback(`Slack channel ${res.channel.name} successfully created...`)
+                }
+                else {
+                    setFeedback(`Error creating Slack channel: ${res.error}`)
+                }
+            })
+    }
 
     const makeTeamBoxes = () => {
         let boxes = []
@@ -104,7 +125,8 @@ export const WeeklyTeams = () => {
                         }}
                     >
                         Team {i}
-                        <img className="icon--slack" src={slackLogo} alt="Create Slack team channel" />
+                        <img onClick={ () => makeSlackChannel(i) }
+                            className="icon--slack" src={slackLogo} alt="Create Slack team channel" />
                         {
                             Array.from(teams.get(i)).map(
                                 (studentJSON) => {
@@ -153,7 +175,7 @@ export const WeeklyTeams = () => {
     }
 
     return (
-        <article className="teamView">
+        <article className="view">
             <h1>Weekly Teams</h1>
 
             <section className="teamsconfig">
@@ -167,7 +189,7 @@ export const WeeklyTeams = () => {
                     Slack channel prefix: <input type="text"
                         className="teamsconfig__prefix"
                         value={weeklyPrefix}
-                        onChange={e => changeCount(parseInt(e.target.value))} />
+                        onChange={e => setWeeklyPrefix(e.target.value)} />
                 </div>
                 <div className="teamsconfig__auto">
                     <button onClick={autoAssignStudents}>
@@ -202,6 +224,10 @@ export const WeeklyTeams = () => {
             </section>
 
             <hr />
+
+            <div className={`${feedback.includes("Error") ? "error" : "feedback"} ${feedback === "" ? "invisible" : "visible"}`}>
+                {feedback}
+            </div>
 
             <article className="teams">
                 {makeTeamBoxes()}

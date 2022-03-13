@@ -6,7 +6,7 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }
     options.method = kwargs.method ?? "GET"
 
     if ("token" in kwargs && kwargs.token) {
-        options.headers.Authorization = `${kwargs.token}`
+        options.headers.Authorization = `Token ${kwargs.token}`
     }
     else {
         try {
@@ -15,10 +15,10 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }
             const parsed = JSON.parse(unencoded)
             const bare = Object.assign(Object.create(null), parsed)
 
-            options.headers.Authorization = `${bare.token}`
+            options.headers.Authorization = `Token ${bare.token}`
 
         } catch (error) {
-            options.headers.Authorization = `none`
+            options.headers.Authorization = `Token none`
         }
     }
 
