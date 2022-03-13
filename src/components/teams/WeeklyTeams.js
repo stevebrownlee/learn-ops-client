@@ -61,14 +61,16 @@ export const WeeklyTeams = () => {
                     onDrop={e => {
                         e.preventDefault()
                         const data = e.dataTransfer.getData("text/plain")
-                        const studentId = JSON.parse(data).id
-
-                        const badge = document.getElementById(data)
-                        // e.target.appendChild(badge)
+                        const rawStudent = JSON.parse(data)
 
                         // Add div to new team Set
                         const copy = new Map(teams)
                         copy.get(i).add(data)
+
+                        const idx = unassignedStudents.findIndex(s => s.id === rawStudent.id)
+                        const unassignedCopy = unassignedStudents.map(s => ({...s}))
+                        unassignedCopy.splice(idx, 1)
+                        setUnassigned(unassignedCopy)
 
                         // If dragged from another team, remove from original
                         if (originalTeam !== 0) {
@@ -170,6 +172,7 @@ export const WeeklyTeams = () => {
                 <div className="teamsconfig__clear">
                     <button onClick={() => {
                         updateTeams(initialTeamState)
+                        setUnassigned(cohortStudents)
                     }}>
                         Clear
                     </button>
