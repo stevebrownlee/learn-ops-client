@@ -4,10 +4,23 @@ import "./Teams.css"
 import slackLogo from "./images/slack.png"
 
 export const WeeklyTeams = () => {
-    const [teamCount, changeCount] = useState(6)
-    const teamBoxes = useRef()
-    const [weeklyPrefix, setWeeklyPrefix] = useState("C54")
     const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
+
+    const initialTeamState = new Map([
+        [1, new Set()],
+        [2, new Set()],
+        [3, new Set()],
+        [4, new Set()],
+        [5, new Set()],
+        [6, new Set()]
+    ])
+
+    const [teamCount, changeCount] = useState(6)
+    const [weeklyPrefix, setWeeklyPrefix] = useState("C54")
+    const [unassignedStudents, setUnassigned] = useState([])
+    const [originalTeam, trackOriginalTeam] = useState(0)
+    const [teams, updateTeams] = useState(initialTeamState)
+
 
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
@@ -16,8 +29,25 @@ export const WeeklyTeams = () => {
         }
     }, [])
 
-    const clearTeams = () => {
-        teamBoxes.current.innerHTML = ""
+    useEffect(() => {
+        setUnassigned(cohortStudents)
+    }, [cohortStudents])
+
+    const createStudentBadge = (student) => {
+        return <div key={`studentbadge--${student.id}`}
+            id={JSON.stringify(student)}
+            onDragStart={e => {
+                if (e.nativeEvent.path[1].hasAttribute("id")) {
+                    trackOriginalTeam(parseInt(e.nativeEvent.path[1].id.split("--")[1]))
+                }
+                else {
+                    trackOriginalTeam(0)
+                }
+                e.dataTransfer.setData("text/plain", e.target.id)
+            }}
+            draggable={true} className="student--badge">
+            {student.name}
+        </div>
     }
 
 
@@ -31,11 +61,33 @@ export const WeeklyTeams = () => {
                     onDrop={e => {
                         e.preventDefault()
                         const data = e.dataTransfer.getData("text/plain")
-                        e.target.appendChild(document.getElementById(data))
+                        const studentId = JSON.parse(data).id
+
+                        const badge = document.getElementById(data)
+                        // e.target.appendChild(badge)
+
+                        // Add div to new team Set
+                        const copy = new Map(teams)
+                        copy.get(i).add(data)
+
+                        // If dragged from another team, remove from original
+                        if (originalTeam !== 0) {
+                            copy.get(originalTeam).delete(data)
+                        }
+
+                        updateTeams(copy)
                     }}
                 >
                     Team {i}
                     <img className="icon--slack" src={slackLogo} alt="Create Slack team channel" />
+                    {
+                        Array.from(teams.get(i)).map(
+                            (studentJSON) => {
+                                const student = JSON.parse(studentJSON)
+                                return createStudentBadge(student)
+                            }
+                        )
+                    }
                 </div>
             )
         }
@@ -46,7 +98,9 @@ export const WeeklyTeams = () => {
     const autoAssignStudents = () => {
         cohortStudents.sort((current, next) => next.score - current.score)
         const studentsPerTeam = Math.floor(cohortStudents.length / teamCount)
+        const teamsCopy = new Map(teams)
         let remainingStudents = cohortStudents.length - (studentsPerTeam * teamCount)
+
 
         let boxNumber = 1
         let studentIndex = 0
@@ -58,9 +112,15 @@ export const WeeklyTeams = () => {
             }
             for (let j = 0; j < studentsToAddToBox; j++) {
                 const student = cohortStudents[studentIndex]
+
+                // Move the div element to the correct team
                 const studentBadge = document.getElementById(JSON.stringify(student))
                 const box = document.getElementById(`teambox--${boxNumber}`)
                 box.appendChild(studentBadge)
+
+                // Update the state to put the student id in the right Set
+                teamsCopy.get(boxNumber).add(student.id)
+
                 studentIndex++
             }
 
@@ -90,35 +150,42 @@ export const WeeklyTeams = () => {
                         Assign By Score
                     </button>
                 </div>
-                <div className="teamsconfig__reset">
+                <div className="teamsconfig__save">
                     <button onClick={() => {
-                       clearTeams()
-                       changeCount(5)
+                        const serializableMap = Array.from(teams)
+                        const convertible = serializableMap.map(
+                            ([id, studentSet]) => {
+                                return {
+                                    id,
+                                    students: Array.from(studentSet)
+                                }
+                            }
+                        )
+                        console.log(JSON.stringify(convertible))
+                        localStorage.setItem("currentCohortTeams", JSON.stringify(convertible))
                     }}>
-                        Reload
+                        Save
+                    </button>
+                </div>
+                <div className="teamsconfig__clear">
+                    <button onClick={() => {
+                        updateTeams(initialTeamState)
+                    }}>
+                        Clear
                     </button>
                 </div>
             </section>
 
             <hr />
 
-            <article className="teams" ref={teamBoxes}>
+            <article className="teams">
                 {makeTeamBoxes()}
             </article>
             <article className="students--teambuilder">
                 {
-                    cohortStudents
+                    unassignedStudents
                         .sort((current, next) => next.score - current.score)
-                        .map(s => (
-                            <div key={`studentbadge--${s.id}`}
-                                id={JSON.stringify(s)}
-                                onDragStart={e => {
-                                    e.dataTransfer.setData("text/plain", e.target.id)
-                                }}
-                                draggable={true} className="student--badge">
-                                {s.name}
-                            </div>
-                        ))
+                        .map(createStudentBadge)
                 }
             </article>
         </article>
