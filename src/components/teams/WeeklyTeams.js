@@ -246,6 +246,7 @@ export const WeeklyTeams = () => {
                     <button onClick={() => {
                         localStorage.removeItem("currentCohortTeams")
                         changeCount(6)
+                        buildNewTeams()
                         setUnassigned(cohortStudents)
                     }}>
                         Clear
