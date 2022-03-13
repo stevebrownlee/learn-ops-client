@@ -30,6 +30,14 @@ export const WeeklyTeams = () => {
     }, [])
 
     useEffect(() => {
+        const newTeams = new Map()
+        for (let i = 1; i <= teamCount; i++) {
+            newTeams.set(i, new Set())
+        }
+        updateTeams(newTeams)
+    }, [teamCount])
+
+    useEffect(() => {
         if (localStorage.getItem("currentCohortTeams")) {
             const storage = JSON.parse(localStorage.getItem("currentCohortTeams"))
             const teamMap = new Map()
@@ -67,44 +75,50 @@ export const WeeklyTeams = () => {
     const makeTeamBoxes = () => {
         let boxes = []
 
-        for (let i = 1; i <= teamCount; i++) {
-            boxes.push(
-                <div id={`teambox--${i}`} key={`teambox--${i}`} className="team"
-                    onDragOver={e => e.preventDefault()}
-                    onDrop={e => {
-                        e.preventDefault()
-                        const data = e.dataTransfer.getData("text/plain")
-                        const rawStudent = JSON.parse(data)
+        try {
 
-                        // Add div to new team Set
-                        const copy = new Map(teams)
-                        copy.get(i).add(data)
+            for (let i = 1; i <= teamCount; i++) {
+                boxes.push(
+                    <div id={`teambox--${i}`} key={`teambox--${i}`} className="team"
+                        onDragOver={e => e.preventDefault()}
+                        onDrop={e => {
+                            e.preventDefault()
+                            const data = e.dataTransfer.getData("text/plain")
+                            const rawStudent = JSON.parse(data)
 
-                        const idx = unassignedStudents.findIndex(s => s.id === rawStudent.id)
-                        const unassignedCopy = unassignedStudents.map(s => ({...s}))
-                        unassignedCopy.splice(idx, 1)
-                        setUnassigned(unassignedCopy)
+                            // Add div to new team Set
+                            const copy = new Map(teams)
+                            copy.get(i).add(data)
 
-                        // If dragged from another team, remove from original
-                        if (originalTeam !== 0) {
-                            copy.get(originalTeam).delete(data)
-                        }
+                            const idx = unassignedStudents.findIndex(s => s.id === rawStudent.id)
+                            const unassignedCopy = unassignedStudents.map(s => ({ ...s }))
+                            unassignedCopy.splice(idx, 1)
+                            setUnassigned(unassignedCopy)
 
-                        updateTeams(copy)
-                    }}
-                >
-                    Team {i}
-                    <img className="icon--slack" src={slackLogo} alt="Create Slack team channel" />
-                    {
-                        Array.from(teams.get(i)).map(
-                            (studentJSON) => {
-                                const student = JSON.parse(studentJSON)
-                                return createStudentBadge(student)
+                            // If dragged from another team, remove from original
+                            if (originalTeam !== 0) {
+                                copy.get(originalTeam).delete(data)
                             }
-                        )
-                    }
-                </div>
-            )
+
+                            updateTeams(copy)
+                        }}
+                    >
+                        Team {i}
+                        <img className="icon--slack" src={slackLogo} alt="Create Slack team channel" />
+                        {
+                            Array.from(teams.get(i)).map(
+                                (studentJSON) => {
+                                    const student = JSON.parse(studentJSON)
+                                    return createStudentBadge(student)
+                                }
+                            )
+                        }
+                    </div>
+                )
+            }
+
+        } catch (error) {
+            console.log("State out of sync. Waiting....")
         }
 
         return boxes
