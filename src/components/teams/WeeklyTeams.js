@@ -171,7 +171,6 @@ export const WeeklyTeams = () => {
                                 }
                             }
                         )
-                        console.log(JSON.stringify(convertible))
                         localStorage.setItem("currentCohortTeams", JSON.stringify(convertible))
                     }}>
                         Save
@@ -179,6 +178,7 @@ export const WeeklyTeams = () => {
                 </div>
                 <div className="teamsconfig__clear">
                     <button onClick={() => {
+                        localStorage.removeItem("currentCohortTeams")
                         updateTeams(initialTeamState)
                         setUnassigned(cohortStudents)
                     }}>
