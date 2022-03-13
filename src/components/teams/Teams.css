@@ -12,18 +12,23 @@
     padding: 0.2rem 0.3rem;
 }
 
-.teamsconfig input {
+.teamsconfig__prefix {
     padding: 0.2rem 0.3rem;
+    width: 4rem;
 }
 
 .teamsconfig__count {
     width: 3rem;
-    margin-right: 1rem;
+    margin-right: 0.75rem;
 }
 
 .teamsconfig__auto {
     margin-left: auto;
-    margin-right: 1rem;
+    margin-right: 0.75rem;
+}
+
+.teamsconfig__clear {
+    margin-left: 0.75rem;
 }
 
 .teams {
@@ -45,7 +50,6 @@
     min-height: 5rem;
     position: relative;
 }
-
 
 .student--badge {
     padding: 0.33rem;

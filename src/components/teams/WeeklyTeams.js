@@ -30,7 +30,20 @@ export const WeeklyTeams = () => {
     }, [])
 
     useEffect(() => {
-        setUnassigned(cohortStudents)
+        if (localStorage.getItem("currentCohortTeams")) {
+            const storage = JSON.parse(localStorage.getItem("currentCohortTeams"))
+            const teamMap = new Map()
+
+            storage.forEach(team => {
+                teamMap.set(team.id, new Set(team.students))
+            })
+
+            updateTeams(teamMap)
+        }
+        else {
+            setUnassigned(cohortStudents)
+        }
+
     }, [cohortStudents])
 
     const createStudentBadge = (student) => {
