@@ -52,6 +52,18 @@ code {
     margin: 1rem 3rem;
 }
 
+@media (min-width: 768px) {
+    .view {
+        margin: 1rem 5rem;
+    }
+}
+
+@media (min-width: 1000px) {
+    .view {
+        margin: 1rem 10rem;
+    }
+}
+
 .text--mini {
     font-size: small;
 }

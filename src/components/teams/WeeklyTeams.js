@@ -39,12 +39,26 @@ export const WeeklyTeams = () => {
         }
     }, [feedback])
 
-    useEffect(() => {
+    const buildNewTeams = () => {
         const newTeams = new Map()
+
         for (let i = 1; i <= teamCount; i++) {
             newTeams.set(i, new Set())
         }
+
+        setUnassigned(cohortStudents)
         updateTeams(newTeams)
+    }
+
+    useEffect(() => {
+        if (teamCount > teams.size) {
+            const newTeams = new Map(teams)
+            newTeams.set(teamCount, new Set())
+            updateTeams(newTeams)
+        }
+        else {
+            buildNewTeams()
+        }
     }, [teamCount])
 
     useEffect(() => {
@@ -125,7 +139,7 @@ export const WeeklyTeams = () => {
                         }}
                     >
                         Team {i}
-                        <img onClick={ () => makeSlackChannel(i) }
+                        <img onClick={() => makeSlackChannel(i)}
                             className="icon--slack" src={slackLogo} alt="Create Slack team channel" />
                         {
                             Array.from(teams.get(i)).map(
@@ -146,23 +160,34 @@ export const WeeklyTeams = () => {
         return boxes
     }
 
-    const autoAssignStudents = () => {
-        cohortStudents.sort((current, next) => next.score - current.score)
-        const studentsPerTeam = Math.floor(cohortStudents.length / teamCount)
-        const teamsCopy = new Map(teams)
-        let remainingStudents = cohortStudents.length - (studentsPerTeam * teamCount)
+    const autoAssignStudents = (random = false) => {
+        const copy = cohortStudents.map(s => ({ ...s }))
 
+        if (random) {
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+        }
+        else {
+            copy.sort((current, next) => next.score - current.score)
+        }
+
+        const teamsCopy = new Map(teams)
+        const studentsPerTeam = Math.floor(copy.length / teamCount)
+        let remainingStudents = copy.length - (studentsPerTeam * teamCount)
 
         let boxNumber = 1
         let studentIndex = 0
         for (let i = 1; i <= teamCount; i++) {
+            teamsCopy.get(boxNumber).clear()
 
             let studentsToAddToBox = studentsPerTeam
             if (boxNumber <= remainingStudents) {
                 studentsToAddToBox = studentsPerTeam + 1
             }
             for (let j = 0; j < studentsToAddToBox; j++) {
-                const student = cohortStudents[studentIndex]
+                const student = copy[studentIndex]
                 teamsCopy.get(boxNumber).add(JSON.stringify(student))
                 studentIndex++
             }
@@ -192,8 +217,13 @@ export const WeeklyTeams = () => {
                         onChange={e => setWeeklyPrefix(e.target.value)} />
                 </div>
                 <div className="teamsconfig__auto">
-                    <button onClick={autoAssignStudents}>
+                    <button onClick={() => autoAssignStudents()}>
                         Assign By Score
+                    </button>
+                </div>
+                <div className="teamsconfig__auto">
+                    <button onClick={() => autoAssignStudents(true)}>
+                        Random
                     </button>
                 </div>
                 <div className="teamsconfig__save">
@@ -215,7 +245,7 @@ export const WeeklyTeams = () => {
                 <div className="teamsconfig__clear">
                     <button onClick={() => {
                         localStorage.removeItem("currentCohortTeams")
-                        updateTeams(initialTeamState)
+                        changeCount(6)
                         setUnassigned(cohortStudents)
                     }}>
                         Clear
