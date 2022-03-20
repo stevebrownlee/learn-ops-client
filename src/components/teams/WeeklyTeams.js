@@ -98,13 +98,21 @@ export const WeeklyTeams = () => {
     }
 
     const makeSlackChannel = (teamNumber) => {
-        TeamsRepository.createSlackChannel(`${weeklyPrefix}-team-${teamNumber}`)
+        const studentIds = Array.from(teams.get(teamNumber))
+                                .map(JSON.parse)
+                                .map(student => student.id)
+
+        TeamsRepository.createSlackChannel(
+            `${weeklyPrefix}-team-${teamNumber}`,
+            studentIds
+        )
             .then(res => {
-                if (res.ok) {
-                    setFeedback(`Slack channel ${res.channel.name} successfully created...`)
+                debugger
+                if (res.channel.ok) {
+                    setFeedback(`Slack channel ${res.channel.channel.name} successfully created...`)
                 }
                 else {
-                    setFeedback(`Error creating Slack channel: ${res.error}`)
+                    setFeedback(`Error creating Slack channel: ${res.channel.error}`)
                 }
             })
     }
