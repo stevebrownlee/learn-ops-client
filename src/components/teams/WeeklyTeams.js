@@ -107,7 +107,6 @@ export const WeeklyTeams = () => {
             studentIds
         )
             .then(res => {
-                debugger
                 if (res.channel.ok) {
                     setFeedback(`Slack channel ${res.channel.channel.name} successfully created...`)
                 }
@@ -171,21 +170,21 @@ export const WeeklyTeams = () => {
     }
 
     const autoAssignStudents = (random = false) => {
-        const copy = cohortStudents.map(s => ({ ...s }))
+        const students = cohortStudents.map(s => ({ ...s }))
 
         if (random) {
-            for (let i = copy.length - 1; i > 0; i--) {
+            for (let i = students.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [copy[i], copy[j]] = [copy[j], copy[i]];
+                [students[i], students[j]] = [students[j], students[i]];
             }
         }
         else {
-            copy.sort((current, next) => next.score - current.score)
+            students.sort((current, next) => next.score - current.score)
         }
 
         const teamsCopy = new Map(teams)
-        const studentsPerTeam = Math.floor(copy.length / teamCount)
-        let remainingStudents = copy.length - (studentsPerTeam * teamCount)
+        const studentsPerTeam = Math.floor(students.length / teamCount)
+        let remainingStudents = students.length - (studentsPerTeam * teamCount)
 
         let boxNumber = 1
         let studentIndex = 0
@@ -197,7 +196,7 @@ export const WeeklyTeams = () => {
                 studentsToAddToBox = studentsPerTeam + 1
             }
             for (let j = 0; j < studentsToAddToBox; j++) {
-                const student = copy[studentIndex]
+                const student = students[studentIndex]
                 teamsCopy.get(boxNumber).add(JSON.stringify(student))
                 studentIndex++
             }
