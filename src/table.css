@@ -4,6 +4,10 @@
     border: 1px dotted gainsboro;
 }
 
+.table--smallPrompt {
+    grid-template-columns: 1fr 3fr;
+}
+
 .cell--centered {
     text-align: center;
 }

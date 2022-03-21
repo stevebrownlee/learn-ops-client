@@ -36,3 +36,22 @@
     font-size: x-small;
     padding-top: 0.5rem;
 }
+
+.slack {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    grid-column-gap: 3rem;
+    padding: 0 3rem;
+    grid-auto-flow: column;
+}
+
+.slack__input  {
+    margin: 1rem 0 0 0;
+    padding: 0.2rem 0.3rem;
+    width: 15rem;
+}
+
+.slack__save  {
+    margin: 1rem 0 0 0;
+    padding: 0.2rem 0.3rem;
+}
