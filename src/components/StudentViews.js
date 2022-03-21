@@ -2,8 +2,11 @@
 import React from "react"
 import { Route } from "react-router-dom"
 import { StudentDashboard } from "./dashboard/StudentDashboard"
-import { GeneralInfo } from "./info/GeneralInfo"
+import { Assessment } from "./info/Assessment"
+import { ClientAssessment } from "./info/ClientSideRequirements"
+import { LearningGoals } from "./info/Goals"
 import { Repos } from "./info/Repos"
+import { ServerAssessment } from "./info/ServerSideRequirements"
 import { PeopleProvider } from "./people/PeopleProvider"
 
 export const StudentViews = () => {
@@ -15,8 +18,17 @@ export const StudentViews = () => {
             <Route exact path="/repos">
                 <Repos />
             </Route>
+            <Route exact path="/goals">
+                <LearningGoals />
+            </Route>
             <Route exact path="/assessment">
-                <GeneralInfo />
+                <Assessment />
+            </Route>
+            <Route exact path="/assessment/server">
+                <ServerAssessment />
+            </Route>
+            <Route exact path="/assessment/client">
+                <ClientAssessment />
             </Route>
         </PeopleProvider>
     </>
