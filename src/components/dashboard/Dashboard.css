@@ -6,6 +6,7 @@
 .dashboard--student {
     display: block;
     padding: 3rem 3rem;
+    line-height: 1.7rem;
 }
 
 @media (min-width: 768px) {
