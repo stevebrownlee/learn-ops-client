@@ -117,6 +117,10 @@ code {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+.form-control--dialog {
+    width: 95%;
+}
+
 .form-group {
     margin: 1rem 0;
 }

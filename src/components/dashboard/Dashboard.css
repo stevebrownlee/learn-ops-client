@@ -19,8 +19,6 @@
     }
 }
 
-
-
 .dashboard__component {}
 
 .dashboard__cohorts {}
@@ -56,3 +54,10 @@
     margin: 1rem 0 0 0;
     padding: 0.2rem 0.3rem;
 }
+
+dialog {
+    z-index: 12;
+    width: 70%;
+    top:10rem;
+}
+

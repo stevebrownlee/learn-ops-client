@@ -53,8 +53,8 @@ export const CohortSearch = () => {
             setActive(true)
         }
 
-        document.addEventListener("keypress", handleSearchKey)
-        return () => document.removeEventListener("keypress", handleSearchKey)
+        // document.addEventListener("keypress", handleSearchKey)
+        // return () => document.removeEventListener("keypress", handleSearchKey)
     }, [])
 
     const search = (e) => {
@@ -102,7 +102,6 @@ export const CohortSearch = () => {
                 <input id="search__terms--cohort"
                     onKeyUp={search}
                     onChange={e => setTerms(e.target.value)}
-                    autoFocus
                     value={terms}
                     className="form-control w-100"
                     type="search"

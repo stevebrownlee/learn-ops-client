@@ -17,11 +17,11 @@ export const StudentSearch = () => {
         }
     }, [terms, findStudent])
 
-    useEffect(() => {
-       document.addEventListener("keypress", handleSearchKey)
+    // useEffect(() => {
+    //    document.addEventListener("keypress", handleSearchKey)
 
-       return () => document.removeEventListener("keypress",handleSearchKey)
-    }, [])
+    //    return () => document.removeEventListener("keypress",handleSearchKey)
+    // }, [])
 
     const handleSearchKey = (evt) => {
         if (evt.keyCode === 47) {
@@ -54,7 +54,6 @@ export const StudentSearch = () => {
                 <input id="search__terms"
                     onKeyUp={search}
                     onChange={e => setTerms(e.target.value)}
-                    autoFocus
                     value={terms}
                     className="form-control w-100"
                     type="search"
