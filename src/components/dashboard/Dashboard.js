@@ -4,65 +4,46 @@ import { PeopleContext } from "../people/PeopleProvider"
 import { StudentOverview } from "../people/StudentOverview"
 import { StudentSearch } from "../people/StudentSearch"
 import Settings from "../Settings"
+import useKeyboardShortcut from "../ui/useKeyboardShortcut"
 import useModal from "../ui/useModal"
 import { fetchIt } from "../utils/Fetch"
 import "./Dashboard.css"
 
 export const Dashboard = () => {
-    const [keyBuffer, updateKeyBuffer] = useState([])
-    const [currentKey, updateCurrentKey] = useState('')
     const { activeStudent } = useContext(PeopleContext)
+    const initialMessagesState = {
+        feedback: "",
+        status: ""
+    }
+    const [ messages, setMessages ] = useState(initialMessagesState)
+
+    const feedbackLogger = useKeyboardShortcut('f', () => {
+        if ("id" in activeStudent) {
+            toggleFeedback()
+            document.getElementById("feedbackText").focus()
+            setMessages(initialMessagesState)
+        }
+    })
+
+    const dailyStatusLogger = useKeyboardShortcut('d', () => {
+        if ("id" in activeStudent) {
+            toggleStatus()
+            document.getElementById("statusText").focus()
+            setMessages(initialMessagesState)
+        }
+    })
+
     let { toggleDialog: toggleStatus } = useModal("#dialog--status")
     let { toggleDialog: toggleFeedback } = useModal("#dialog--feedback")
-    const dailyStatus = useRef()
-    const feedback = useRef()
-
-    const acceptedKeys = new Set(['\\', 'n', 'd', 'f', 'a'])
-
-    const shortcutKeyBuffer = useCallback((e) => {
-        if (acceptedKeys.has(e.key)) {
-            updateCurrentKey(e.key)
-        }
-    }, [])
 
     useEffect(() => {
-        if (acceptedKeys.has(currentKey)) {
-            if (currentKey === "\\") {
-                updateKeyBuffer([currentKey])
-            }
-            else if (keyBuffer.length === 1) {
-                const copy = [...keyBuffer]
-                copy.push(currentKey)
-                updateKeyBuffer(copy)
-            }
-            else if (keyBuffer.length === 2) {
-                updateKeyBuffer([])
-            }
-            updateCurrentKey('')
+        document.addEventListener("keydown", feedbackLogger)
+        document.addEventListener("keydown", dailyStatusLogger)
+
+        return () => {
+            document.removeEventListener("keydown", feedbackLogger)
+            document.removeEventListener("keydown", dailyStatusLogger)
         }
-    }, [currentKey])
-
-    useEffect(() => {
-        if (keyBuffer.length === 2) {
-            switch (keyBuffer[1]) {
-                case 'd':
-                    toggleStatus()
-                    dailyStatus.current.focus()
-                    break;
-                case 'f':
-                    toggleFeedback()
-                    feedback.current.focus()
-                    break;
-            }
-            updateKeyBuffer([])
-
-        }
-    }, [keyBuffer])
-
-    useEffect(() => {
-        document.addEventListener("keydown", shortcutKeyBuffer)
-
-        return () => document.removeEventListener("keydown", shortcutKeyBuffer)
     }, [])
 
 
@@ -80,16 +61,21 @@ export const Dashboard = () => {
         <dialog id="dialog--status" className="dialog--status">
             <div className="form-group">
                 <label htmlFor="name">Daily status:</label>
-                <input ref={dailyStatus} onKeyPress={
-                    e => {
-                        if (e.key === "Enter" && e.target.value !== "") {
-                            console.log(activeStudent)
-                            toggleStatus()
+                <input type="text" id="statusText"
+                    className="form-control form-control--dialog"
+                    value={messages.status}
+                    onChange={(e) => {
+                        const copy = {...messages}
+                        copy.status = e.target.value
+                        setMessages(copy)
+                    }}
+                    onKeyDown={
+                        e => {
+                            if (e.key === "Enter") {
+                                toggleStatus()
+                            }
                         }
                     }
-                }
-                    type="text" required autoFocus
-                    id="status" className="form-control form-control--dialog"
                 />
             </div>
         </dialog>
@@ -97,24 +83,36 @@ export const Dashboard = () => {
         <dialog id="dialog--feedback" className="dialog--feedback">
             <div className="form-group">
                 <label htmlFor="name">Feedback for student:</label>
-                <input ref={feedback} onKeyPress={
-                    e => {
-                        if (e.key === "Enter" && e.target.value !== "") {
-                            fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/status`, {
-                                method: "POST",
-                                body: JSON.stringify({ notes: e.target.value })
-                            })
-                                .then(() => {
+                <input type="text" id="feedbackText"
+                    className="form-control form-control--dialog"
+                    value={messages.feedback}
+                    onChange={(e) => {
+                        const copy = {...messages}
+                        copy.feedback = e.target.value
+                        console.log(copy)
+                        setMessages(copy)
+                    }}
+                    onKeyDown={
+                        e => {
+                            if (e.key === "Enter") {
+                                if (e.target.value !== "") {
+                                    fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/status`, {
+                                        method: "POST",
+                                        body: JSON.stringify({ notes: e.target.value })
+                                    })
+                                        .then(() => {
+                                            toggleFeedback()
+                                        })
+                                }
+                                else {
                                     toggleFeedback()
-                                })
-
-
+                                }
+                            }
+                            else if (e.key === "Escape") {
+                                toggleFeedback()
+                            }
                         }
-                    }
-                }
-                    type="text" required autoFocus
-                    id="status" className="form-control form-control--dialog"
-                />
+                    } />
             </div>
         </dialog>
     </main>
