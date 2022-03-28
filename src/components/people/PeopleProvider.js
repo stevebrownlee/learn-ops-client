@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react"
 import useSimpleAuth from "../auth/useSimpleAuth.js"
 import Settings from "../Settings.js"
+import { fetchIt } from "../utils/Fetch.js"
 
 export const PeopleContext = React.createContext()
 
@@ -12,30 +13,12 @@ export const PeopleProvider = (props) => {
     const user = getCurrentUser()
 
     const getStudents = useCallback((status = "") => {
-        return fetch(`${Settings.apiHost}/students${status !== "" ? `?status=${status}` : ""}`, {
-            headers: {
-                "Authorization": `Token ${user.token}`
-            }
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-                else {
-                    throw new Error(`HTTP status ${response.status}`)
-                }
-            })
+        return fetchIt(`${Settings.apiHost}/students${status !== "" ? `?status=${status}` : ""}`)
             .then(data => setStudents(data.results))
-            .catch(console.error)
     }, [user])
 
     const getCohortStudents = useCallback((cohortId) => {
-        return fetch(`${Settings.apiHost}/students?cohort=${cohortId}`, {
-            headers: {
-                "Authorization": `Token ${user.token}`
-            }
-        })
-            .then(response => response.json())
+        return fetchIt(`${Settings.apiHost}/students?cohort=${cohortId}`)
             .then(data => setCohortStudents(data.results))
     }, [user])
 
@@ -50,40 +33,17 @@ export const PeopleProvider = (props) => {
         else if ("id" in activeStudent) {
             studentId = activeStudent.id
         }
-        return fetch(`${Settings.apiHost}/students/${studentId}`, {
-            headers: {
-                "Authorization": `Token ${user.token}`
-            }
-        })
-            .then(response => response.json())
+        return fetchIt(`${Settings.apiHost}/students/${studentId}`)
             .then(activateStudent)
     }, [user])
 
     const getStudentRepos = useCallback(() => {
-        return fetch(`${activeStudent.github.repos}?sort=updated&direction=desc`, {
-            headers: {
-                "Authorization": `Token ${user.token}`
-            }
-        })
-            .then(response => response.json())
+        return fetchIt(`${activeStudent.github.repos}?sort=updated&direction=desc`)
             .then(activateStudent)
     }, [user])
 
     const findStudent = useCallback((q) => {
-        return fetch(`${Settings.apiHost}/students?q=${q}`, {
-            headers: {
-                "Authorization": `Token ${user.token}`
-            }
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.json()
-                }
-                else {
-                    throw new Error(`HTTP status ${response.status}`)
-                }
-            })
-            .catch(console.error)
+        return fetchIt(`${Settings.apiHost}/students?q=${q}`)
     }, [user])
 
     return (

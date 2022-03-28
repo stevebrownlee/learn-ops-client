@@ -72,7 +72,19 @@ export const Dashboard = () => {
                     onKeyDown={
                         e => {
                             if (e.key === "Enter") {
-                                toggleStatus()
+                                if (e.target.value !== "") {
+                                    fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/status`, {
+                                        method: "POST",
+                                        body: JSON.stringify({ status: e.target.value })
+                                    })
+                                        .then(toggleStatus)
+                                }
+                                else {
+                                    toggleFeedback()
+                                }
+                            }
+                            else if (e.key === "Escape") {
+                                toggleFeedback()
                             }
                         }
                     }
@@ -89,14 +101,13 @@ export const Dashboard = () => {
                     onChange={(e) => {
                         const copy = {...messages}
                         copy.feedback = e.target.value
-                        console.log(copy)
                         setMessages(copy)
                     }}
                     onKeyDown={
                         e => {
                             if (e.key === "Enter") {
                                 if (e.target.value !== "") {
-                                    fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/status`, {
+                                    fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/feedback`, {
                                         method: "POST",
                                         body: JSON.stringify({ notes: e.target.value })
                                     })
