@@ -1,43 +1,29 @@
-import { useCallback, useEffect, useState } from "react"
+import { useRef } from "react"
 
-const useKeyboardShortcut = (activatorKey, handler) => {
+const useKeyboardShortcut = (activatorKey, handler, state={}) => {
     const acceptedKeys = new Set(['\\', activatorKey])
-    const [keyBuffer, updateKeyBuffer] = useState([])
-    const [currentKey, updateCurrentKey] = useState('')
+    const stateRef = useRef()
+    stateRef.current = {
+        ready: false,
+        state: state
+    }
 
-    const keyLogger = useCallback((e) => {
+    const keyLogger = (e) => {
         if (acceptedKeys.has(e.key)) {
-            updateCurrentKey(e.key)
-        }
-        else {
-            updateKeyBuffer([])
-        }
-    }, [])
-
-    useEffect(() => {
-        if (acceptedKeys.has(currentKey)) {
-            if (currentKey === "\\") {
-                updateKeyBuffer([currentKey])
+            if (!stateRef.current.ready && e.key === "\\") {
+                console.log(activatorKey, "Setting to ready")
+                stateRef.current.ready = true
             }
-            else if (keyBuffer.length === 1) {
-                const copy = [...keyBuffer]
-                copy.push(currentKey)
-                updateKeyBuffer(copy)
+            else if (stateRef.current.ready && e.key === activatorKey) {
+                console.log(activatorKey, "Activated")
+                stateRef.current.ready = false
+                handler(stateRef.current.state)
             }
-            else if (keyBuffer.length === 2) {
-                updateKeyBuffer([])
+            else {
+                stateRef.current.ready = false
             }
-            updateCurrentKey('')
         }
-    }, [currentKey])
-
-    useEffect(() => {
-        if (keyBuffer.length === 2 && keyBuffer[1] === activatorKey) {
-            updateKeyBuffer([])
-            handler()
-        }
-    }, [keyBuffer])
-
+    }
 
     return keyLogger
 }

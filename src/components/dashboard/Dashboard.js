@@ -8,41 +8,30 @@ import useKeyboardShortcut from "../ui/useKeyboardShortcut"
 import useModal from "../ui/useModal"
 import { fetchIt } from "../utils/Fetch"
 import "./Dashboard.css"
+import { FeedbackDialog } from "./FeedbackDialog"
 
 export const Dashboard = () => {
     const { activeStudent } = useContext(PeopleContext)
     const initialMessagesState = {
-        feedback: "",
         status: ""
     }
     const [ messages, setMessages ] = useState(initialMessagesState)
 
-    const feedbackLogger = useKeyboardShortcut('f', () => {
-        if ("id" in activeStudent) {
-            toggleFeedback()
-            document.getElementById("feedbackText").focus()
-            setMessages(initialMessagesState)
-        }
-    })
-
-    const dailyStatusLogger = useKeyboardShortcut('d', () => {
+    const dailyStatusLogger = useKeyboardShortcut('d', ({ activeStudent }) => {
         if ("id" in activeStudent) {
             toggleStatus()
             document.getElementById("statusText").focus()
             setMessages(initialMessagesState)
         }
-    })
+    }, { activeStudent })
 
     let { toggleDialog: toggleStatus } = useModal("#dialog--status")
-    let { toggleDialog: toggleFeedback } = useModal("#dialog--feedback")
 
     useEffect(() => {
-        document.addEventListener("keydown", feedbackLogger)
-        document.addEventListener("keydown", dailyStatusLogger)
+        document.addEventListener("keyup", dailyStatusLogger)
 
         return () => {
-            document.removeEventListener("keydown", feedbackLogger)
-            document.removeEventListener("keydown", dailyStatusLogger)
+            document.removeEventListener("keyup", dailyStatusLogger)
         }
     }, [])
 
@@ -80,11 +69,11 @@ export const Dashboard = () => {
                                         .then(toggleStatus)
                                 }
                                 else {
-                                    toggleFeedback()
+                                    toggleStatus()
                                 }
                             }
                             else if (e.key === "Escape") {
-                                toggleFeedback()
+                                toggleStatus()
                             }
                         }
                     }
@@ -92,39 +81,6 @@ export const Dashboard = () => {
             </div>
         </dialog>
 
-        <dialog id="dialog--feedback" className="dialog--feedback">
-            <div className="form-group">
-                <label htmlFor="name">Feedback for student:</label>
-                <input type="text" id="feedbackText"
-                    className="form-control form-control--dialog"
-                    value={messages.feedback}
-                    onChange={(e) => {
-                        const copy = {...messages}
-                        copy.feedback = e.target.value
-                        setMessages(copy)
-                    }}
-                    onKeyDown={
-                        e => {
-                            if (e.key === "Enter") {
-                                if (e.target.value !== "") {
-                                    fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/feedback`, {
-                                        method: "POST",
-                                        body: JSON.stringify({ notes: e.target.value })
-                                    })
-                                        .then(() => {
-                                            toggleFeedback()
-                                        })
-                                }
-                                else {
-                                    toggleFeedback()
-                                }
-                            }
-                            else if (e.key === "Escape") {
-                                toggleFeedback()
-                            }
-                        }
-                    } />
-            </div>
-        </dialog>
+        <FeedbackDialog activeStudent={activeStudent} />
     </main>
 }

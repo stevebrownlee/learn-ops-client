@@ -3,15 +3,14 @@ import { useState } from "react"
 const useModal = (selector) => {
 
     const [modalIsOpen, setIsOpen] = useState(false)
-    const [cssSelector, setSelector] = useState(selector)
 
     const toggleDialog = () => {
         setIsOpen(!modalIsOpen)
 
         if (modalIsOpen) {
-            document.querySelector(`${cssSelector}`).removeAttribute("open")
+            document.querySelector(`${selector}`).removeAttribute("open")
         } else {
-            document.querySelector(`${cssSelector}`).setAttribute("open", true)
+            document.querySelector(`${selector}`).setAttribute("open", true)
         }
     }
 

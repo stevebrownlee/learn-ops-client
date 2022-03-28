@@ -24,8 +24,8 @@ export const StudentSearch = () => {
     }, [terms, findStudent])
 
     useEffect(() => {
-       document.addEventListener("keydown", searchLogger)
-       return () => document.removeEventListener("keydown", searchLogger)
+       document.addEventListener("keyup", searchLogger)
+       return () => document.removeEventListener("keyup", searchLogger)
     }, [])
 
     const selectStudent = useCallback((student) => {
