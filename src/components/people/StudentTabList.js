@@ -2,9 +2,11 @@ import React, { useContext, useEffect } from "react"
 import { useHistory } from "react-router-dom"
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { Record } from "../records/Record.js"
+import { PeopleContext } from "./PeopleProvider.js"
 import "./Student.css"
 
-export const StudentTabList = ({ student }) => {
+export const StudentTabList = () => {
+    const { activeStudent } = useContext(PeopleContext)
     const {
         getStudentAssessments, getAssessmentList,
         studentAssessments, allAssessments, saveStudentAssessment,
@@ -13,10 +15,10 @@ export const StudentTabList = ({ student }) => {
     const history = useHistory()
 
     useEffect(() => {
-        getStudentAssessments(student.id)
+        getStudentAssessments(activeStudent.id)
         getAssessmentList()
         getStatuses()
-    }, [student])
+    }, [activeStudent])
 
     const createStatus = (status) => {
         let className = ""
@@ -42,13 +44,13 @@ export const StudentTabList = ({ student }) => {
     }
 
     const assign = (ass) => {
-        saveStudentAssessment(ass.id, student.id)
-            .then(() => getStudentAssessments(student.id))
+        saveStudentAssessment(ass.id, activeStudent.id)
+            .then(() => getStudentAssessments(activeStudent.id))
     }
 
     const updateAssessmentStatus = (assessmentId, statusId) => {
         changeStatus(assessmentId, statusId)
-            .then(() => getStudentAssessments(student.id))
+            .then(() => getStudentAssessments(activeStudent.id))
     }
 
     return (
@@ -58,14 +60,17 @@ export const StudentTabList = ({ student }) => {
                 <label htmlFor="tab1" role="tab" aria-selected="true" aria-controls="panel1" tabIndex="0">Objectives</label>
                 <article id="tab-content1" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
 
-                        <i className="button__icon icon icon-plus button__icon--only position--topright"
-                            onClick={() => {
-                                history.push(`/records/new/${student.id}`)
-                            }}></i>
+                    <button className="button button--isi button--border-thick button--round-l button--size-s button--assessment"
+                        onClick={() => {
+                            history.push(`/records/new/${activeStudent.id}`)
+                        }}>
+                        <i className="button__icon icon icon-book"></i>
+                        <span>Start Objective</span>
+                    </button>
 
                     <section className="records--overview">
                         {
-                            student.records?.map(record => {
+                            activeStudent.records?.map(record => {
                                 return <Record key={`record--${record.id}`} record={record} />
                             })
                         }

@@ -117,19 +117,6 @@ export const CohortSearch = () => {
 
                         <Link to="/teams"> Show current teams </Link>
 
-                        <div className="cohortStudents__sort">
-                            Sort by <button onClick={() => {
-                                sortBy === "score" ? setSortAsc(!sortAsc) : setSortAsc(true)
-                                specifySortFunction("score")
-                            }}
-                                className="fakeLink">score</button> or {" "}
-                            <button onClick={() => {
-                                sortBy === "name" ? setSortAsc(!sortAsc) : setSortAsc(true)
-                                specifySortFunction("name")
-                            }}
-                                className="fakeLink">last name</button>
-                        </div>
-
                         {
                             active
                                 ? ""
@@ -145,6 +132,20 @@ export const CohortSearch = () => {
                         }
 
                         <div className="table">
+                            <div>
+                                <i className={`icon icon-${sortBy !== "score" && sortAsc ? "up" : "down"}`} style={{ fontSize: "1.2rem" }} onClick={() => {
+                                    sortBy === "name" ? setSortAsc(!sortAsc) : setSortAsc(true)
+                                    specifySortFunction("name")
+                                }}></i>
+                            </div>
+                            <div>
+                                <i className={`icon icon-${sortBy === "score" && !sortAsc ? "up" : "down"}`}
+                                    style={{ fontSize: "1.2rem" }}
+                                    onClick={() => {
+                                        sortBy === "score" ? setSortAsc(!sortAsc) : setSortAsc(true)
+                                            specifySortFunction("score")
+                                    }}></i>
+                            </div>
                             {
                                 cohortStudents
                                     .sort(sortBy === "score" ? sortStudentsByScore : sortStudentsByLastName)
