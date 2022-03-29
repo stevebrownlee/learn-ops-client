@@ -1,6 +1,6 @@
 import { useRef } from "react"
 
-const useKeyboardShortcut = (activatorKey, handler, state={}) => {
+const useKeyboardShortcut = (activatorKey, handler=()=>{}, state={}) => {
     const acceptedKeys = new Set(['\\', activatorKey])
     const stateRef = useRef()
     stateRef.current = {
@@ -10,7 +10,7 @@ const useKeyboardShortcut = (activatorKey, handler, state={}) => {
 
     const keyLogger = (e) => {
         if (acceptedKeys.has(e.key)) {
-            if (!stateRef.current.ready && e.key === "\\") {
+            if (e.key === "\\") {
                 console.log(activatorKey, "Setting to ready")
                 stateRef.current.ready = true
             }

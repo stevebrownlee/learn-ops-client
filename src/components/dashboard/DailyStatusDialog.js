@@ -5,33 +5,33 @@ import Settings from "../Settings"
 import useModal from "../ui/useModal"
 import { fetchIt } from "../utils/Fetch"
 
-export const FeedbackDialog = () => {
+export const DailyStatusDialog = () => {
     const { activeStudent } = useContext(PeopleContext)
     const [message, setMessage] = useState("")
-
-    const feedbackLogger = useKeyboardShortcut('f', ({ activeStudent }) => {
+    let { toggleDialog: toggleStatus } = useModal("#dialog--status")
+    const dailyStatusLogger = useKeyboardShortcut('d', ({ activeStudent }) => {
         if ("id" in activeStudent) {
-            toggleFeedback()
-            document.getElementById("feedbackText").focus()
+            toggleStatus()
+            document.getElementById("statusText").focus()
             setMessage("")
         }
     }, { activeStudent })
-    let { toggleDialog: toggleFeedback } = useModal("#dialog--feedback")
+
 
     useEffect(() => {
-        document.addEventListener("keyup", feedbackLogger)
-        return () => document.removeEventListener("keyup", feedbackLogger)
+        document.addEventListener("keyup", dailyStatusLogger)
+        return () => document.removeEventListener("keyup", dailyStatusLogger)
     }, [])
 
     const reset = () => {
         setMessage("")
-        toggleFeedback()
+        toggleStatus()
     }
 
-    return <dialog id="dialog--feedback" className="dialog--feedback">
+    return <dialog id="dialog--status" className="dialog--status">
         <div className="form-group">
-            <label htmlFor="name">Feedback for student:</label>
-            <input type="text" id="feedbackText"
+            <label htmlFor="name">Daily status:</label>
+            <input type="text" id="statusText"
                 className="form-control form-control--dialog"
                 value={message}
                 onChange={e => setMessage(e.target.value)}
@@ -39,9 +39,9 @@ export const FeedbackDialog = () => {
                     e => {
                         if (e.key === "Enter") {
                             if (e.target.value !== "") {
-                                fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/feedback`, {
+                                fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/status`, {
                                     method: "POST",
-                                    body: JSON.stringify({ notes: e.target.value })
+                                    body: JSON.stringify({ status: e.target.value })
                                 })
                                     .then(reset)
                             }
@@ -53,7 +53,8 @@ export const FeedbackDialog = () => {
                             reset()
                         }
                     }
-                } />
+                }
+            />
         </div>
     </dialog>
 }
