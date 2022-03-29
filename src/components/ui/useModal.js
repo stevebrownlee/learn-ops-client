@@ -1,7 +1,6 @@
 import { useState } from "react"
 
 const useModal = (selector) => {
-
     const [modalIsOpen, setIsOpen] = useState(false)
 
     const toggleDialog = () => {

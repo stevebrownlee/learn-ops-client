@@ -11,11 +11,9 @@ const useKeyboardShortcut = (activatorKey, handler=()=>{}, state={}) => {
     const keyLogger = (e) => {
         if (acceptedKeys.has(e.key)) {
             if (e.key === "\\") {
-                console.log(activatorKey, "Setting to ready")
                 stateRef.current.ready = true
             }
             else if (stateRef.current.ready && e.key === activatorKey) {
-                console.log(activatorKey, "Activated")
                 stateRef.current.ready = false
                 handler(stateRef.current.state)
             }

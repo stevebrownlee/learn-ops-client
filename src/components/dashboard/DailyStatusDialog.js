@@ -28,6 +28,13 @@ export const DailyStatusDialog = () => {
         toggleStatus()
     }
 
+    const createStatusEntry = (e) => {
+        return fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/status`, {
+            method: "POST",
+            body: JSON.stringify({ status: e.target.value })
+        }).then(reset)
+    }
+
     return <dialog id="dialog--status" className="dialog--status">
         <div className="form-group">
             <label htmlFor="name">Daily status:</label>
@@ -38,18 +45,8 @@ export const DailyStatusDialog = () => {
                 onKeyDown={
                     e => {
                         if (e.key === "Enter") {
-                            if (e.target.value !== "") {
-                                fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/status`, {
-                                    method: "POST",
-                                    body: JSON.stringify({ status: e.target.value })
-                                })
-                                    .then(reset)
-                            }
-                            else {
-                                reset()
-                            }
-                        }
-                        else if (e.key === "Escape") {
+                            e.target.value !== "" ? createStatusEntry(e) : reset()
+                        } else if (e.key === "Escape") {
                             reset()
                         }
                     }

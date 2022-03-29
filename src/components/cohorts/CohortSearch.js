@@ -1,7 +1,8 @@
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { Link } from "react-router-dom"
 import { PeopleContext } from "../people/PeopleProvider.js"
 import { Student } from "../people/Student.js"
+import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
 import { CohortContext } from "./CohortProvider.js"
 import { CohortResults } from "./CohortResults.js"
 import "./CohortStudentList.css"
@@ -14,6 +15,11 @@ export const CohortSearch = () => {
     const [cohorts, setCohorts] = useState([])
     const [sortBy, specifySortFunction] = useState("score")
     const [sortAsc, setSortAsc] = useState(true)
+    const cohortSearch = useRef()
+    const searchLogger = useKeyboardShortcut('c', () => {
+        cohortSearch.current.focus()
+        setTerms("")
+    })
 
 
     useEffect(() => {
@@ -38,13 +44,6 @@ export const CohortSearch = () => {
         }
     }, [getCohort])
 
-    const handleSearchKey = (evt) => {
-        if (evt.keyCode === 92) {
-            evt.preventDefault()
-            document.getElementById("search__terms--cohort").focus()
-        }
-    }
-
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
             const id = parseInt(localStorage.getItem("activeCohort"))
@@ -53,12 +52,12 @@ export const CohortSearch = () => {
             setActive(true)
         }
 
-        // document.addEventListener("keypress", handleSearchKey)
-        // return () => document.removeEventListener("keypress", handleSearchKey)
+        document.addEventListener("keypress", searchLogger)
+        return () => document.removeEventListener("keypress", searchLogger)
     }, [])
 
     const search = (e) => {
-        if (e.keyCode === 13) {
+        if (e.key === "Enter") {
             if (cohorts.length === 1) {
                 selectCohort(cohorts[0])
             }
@@ -103,6 +102,7 @@ export const CohortSearch = () => {
                     onKeyUp={search}
                     onChange={e => setTerms(e.target.value)}
                     value={terms}
+                    ref={cohortSearch}
                     className="form-control w-100"
                     type="search"
                     placeholder="Search"

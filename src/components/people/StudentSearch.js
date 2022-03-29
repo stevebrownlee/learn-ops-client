@@ -8,24 +8,20 @@ export const StudentSearch = () => {
     const { findStudent, getStudent } = useContext(PeopleContext)
     const [terms, setTerms] = useState("")
     const [students, setStudents] = useState([])
-
     const studentSearch = useRef()
-    const searchLogger = useKeyboardShortcut('s', () => {
-        studentSearch.current.focus()
-    })
+    const searchLogger = useKeyboardShortcut('s', () => studentSearch.current.focus())
 
     useEffect(() => {
         if (terms !== "" && terms.length > 3) {
             findStudent(terms).then(setStudents)
-        }
-        else {
+        } else {
             setStudents([])
         }
     }, [terms, findStudent])
 
     useEffect(() => {
-       document.addEventListener("keyup", searchLogger)
-       return () => document.removeEventListener("keyup", searchLogger)
+        document.addEventListener("keyup", searchLogger)
+        return () => document.removeEventListener("keyup", searchLogger)
     }, [])
 
     const selectStudent = useCallback((student) => {
