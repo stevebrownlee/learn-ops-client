@@ -20,6 +20,8 @@ const useKeyboardShortcut = (activatorKey, handler=()=>{}, state={}) => {
             else {
                 stateRef.current.ready = false
             }
+        } else {
+            stateRef.current.ready = false
         }
     }
 
