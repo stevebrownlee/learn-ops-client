@@ -1,8 +1,8 @@
 import { useRef } from "react"
 
 const useKeyboardShortcut = (activatorKey, handler=()=>{}, state={}) => {
-    const acceptedKeys = new Set(['\\', activatorKey])
     const stateRef = useRef()
+    const acceptedKeys = new Set(['\\', activatorKey])
     stateRef.current = {
         ready: false,
         state: state

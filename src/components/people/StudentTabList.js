@@ -4,6 +4,8 @@ import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { Record } from "../records/Record.js"
 import { PeopleContext } from "./PeopleProvider.js"
 import "./Student.css"
+import "./Status.css"
+import { HumanDate } from "../utils/HumanDate.js"
 
 export const StudentTabList = () => {
     const { activeStudent } = useContext(PeopleContext)
@@ -80,8 +82,31 @@ export const StudentTabList = () => {
 
             <li>
                 <input type="radio" name="tabs" id="tab2" />
-                <label htmlFor="tab2" role="tab" aria-selected="false" aria-controls="panel2" tabIndex="0">Assessments</label>
-                <article id="tab-content2" className="tab-content" role="tabpanel" aria-labelledby="specification" aria-hidden="true">
+                <label htmlFor="tab2" role="tab" aria-selected="true" aria-controls="panel2" tabIndex="0">Status</label>
+                <article id="tab-content2" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
+
+                    <h2>Daily Status</h2>
+
+                    {
+                        activeStudent.statuses.map(status => <React.Fragment key={`status--${status.id}`}>
+                        <div className="status">
+                            <div className="status__note"> {status.status} </div>
+                            <div className="status__date">
+                                Recorded on <HumanDate date={status.created_on.split("T")[0]} /> by {status.author}
+                            </div>
+                        </div>
+                        <div className="status__separator"></div>
+                    </React.Fragment>)
+                    }
+
+                </article>
+            </li>
+
+
+            <li>
+                <input type="radio" name="tabs" id="tab3" />
+                <label htmlFor="tab3" role="tab" aria-selected="false" aria-controls="panel3" tabIndex="0">Assessments</label>
+                <article id="tab-content3" className="tab-content" role="tabpanel" aria-labelledby="specification" aria-hidden="true">
                     <section className="records--overview">
                         <div className="rightAlign">
 

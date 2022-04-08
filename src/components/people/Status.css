@@ -1,0 +1,19 @@
+.status__separator {
+    border-top: 1px dotted slateblue;
+    margin: 0 1rem 0 1rem;
+}
+
+.status__date {
+    font-size: smaller;
+    margin-top: 0.5rem;
+    color: rgb(136, 155, 173);
+}
+
+.status {
+    margin: 1rem 0 0 1rem;
+    padding: 0.5rem;
+}
+
+.status:hover {
+    background-color: rgb(247, 224, 208);
+}
