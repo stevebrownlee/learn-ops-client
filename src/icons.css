@@ -68,3 +68,6 @@
 .icon-refresh:before { content: '\e639'; }
 .icon-film:before { content: '\e63a'; }
 .icon-home:before { content: '\e63b'; }
+
+.icon--more { cursor: pointer; color: deepskyblue; }
+.icon--more:hover { color: crimson }
