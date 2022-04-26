@@ -9,14 +9,8 @@ export const Assessment = () => {
 
         <h2>Part 1: Language Fundamentals Exercises</h2>
         <p>
-            You will be given some exercises by the instruction team where you must demonstrate your ability to design and implement some algorithms to solve some basic problems. It is at the discretion of when these exercises must be completed, but this is most commonly done..
+            You will be given some exercises by the instruction team where you must demonstrate your ability to design and implement some algorithms to solve some basic problems. It is at the discretion of the senior instructor for when these exercises must be completed, but this is most commonly done before capstone development begins. As a beginner, we know that relying on memory is not something you are capable of during this part of the assessment, so we will primarily be assessing your <Link to="/goals">Core Skills</Link> during this phase. If you complete the code in 30 minutes, that's great, but it's not the primary goal.
         </p>
-        <ul>
-            <li>Before capstone development begins</li>
-            <li>After the student has reached MVP on the capstone</li>
-        </ul>
-
-        <p>As a beginner, we know that relying on memory is not something you are capable of during this part of the assessment, so we will also be assessing your Core Skills during this phase.</p>
 
         <h2>Part 2: Capstone Project</h2>
 
