@@ -1,6 +1,7 @@
 
 import React from "react"
 import { Route } from "react-router-dom"
+import { Readme } from "./dashboard/Readme"
 import { SlackMemberId } from "./dashboard/SlackMemberId"
 import { StudentDashboard } from "./dashboard/StudentDashboard"
 import { Assessment } from "./info/Assessment"
@@ -33,6 +34,9 @@ export const StudentViews = () => {
             </Route>
             <Route exact path="/slackUpdate">
                 <SlackMemberId />
+            </Route>
+            <Route exact path="/readme">
+                <Readme />
             </Route>
         </PeopleProvider>
     </>
