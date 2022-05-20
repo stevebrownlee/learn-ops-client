@@ -4,7 +4,7 @@ import { PeopleContext } from "./PeopleProvider.js"
 import { StudentTabList } from "./StudentTabList.js"
 import "./Student.css"
 
-export const StudentOverview = () => {
+export const StudentOverview = ({ toggleCohorts }) => {
     const { activeStudent } = useContext(PeopleContext)
 
     return (
@@ -13,7 +13,13 @@ export const StudentOverview = () => {
                 <div className="card-body">
                     <header className="student__header">
                         <h2 className="card-title student__info">
-                            {activeStudent.name} ({activeStudent.cohorts.map(c => c.name).join(", ")})
+                            {activeStudent.name} (
+                                <button className="fakeLink"
+                                    onClick={() => toggleCohorts()}
+                                    >
+                                    {activeStudent.cohorts.map(c => c.name).join(", ")}
+                                </button>
+                            )
                         </h2>
                         <div className="student__score">
                             {activeStudent.score}

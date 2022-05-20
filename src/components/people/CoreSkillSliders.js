@@ -99,9 +99,6 @@ export const CoreSkillSliders = () => {
             }
         </div>
 
-
-
-
         <dialog id="dialog--coreskillNote" className="dialog--coreskillNote">
             <div className="form-group">
                 <label htmlFor="name">Why are you changing core skill?</label>

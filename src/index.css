@@ -75,6 +75,7 @@ code {
     border: none;
     cursor: pointer;
     background-color: inherit;
+    font-size: inherit;
 }
 
 .fakeLink:hover {

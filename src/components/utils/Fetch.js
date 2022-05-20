@@ -35,6 +35,10 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }
             theFetch = fetch(url, options)
             break;
         case "DELETE":
+            if (kwargs.body !== null) {
+                options.headers["Content-Type"] = "application/json"
+                options.body = kwargs.body
+            }
             theFetch = fetch(url, options)
             break;
         default:
