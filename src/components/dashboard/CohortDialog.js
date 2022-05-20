@@ -41,7 +41,7 @@ export const CohortDialog = ({ toggleCohorts }) => {
                     onChange={(changeEvent) => {
                         // If true, POST to /cohorts/n with `person_id: n` in body
                         if (changeEvent.target.checked) {
-                            fetchIt(`http://localhost:8000/cohorts/${cohort.id}/assign`, {
+                            fetchIt(`${Settings.apiHost}/cohorts/${cohort.id}/assign`, {
                                 method: "POST",
                                 body: JSON.stringify({
                                     person_id: activeStudent.id
@@ -53,7 +53,7 @@ export const CohortDialog = ({ toggleCohorts }) => {
                         }
                         // If false, DELETE to /cohorts/n with `student_id: n` in body
                         else {
-                            fetchIt(`http://localhost:8000/cohorts/${cohort.id}/assign`, {
+                            fetchIt(`${Settings.apiHost}/cohorts/${cohort.id}/assign`, {
                                 method: "DELETE",
                                 body: JSON.stringify({
                                     student_id: activeStudent.id
