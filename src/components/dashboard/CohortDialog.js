@@ -11,7 +11,6 @@ export const CohortDialog = ({ toggleCohorts }) => {
     const [message, setMessage] = useState("")
     const { getCohorts, cohorts } = useContext(CohortContext)
     const [cohortIds, setCohortIds] = useState([])
-    // let { toggleDialog: toggleCohorts } = useModal("#dialog--cohorts")
 
     useEffect(
         () => {
@@ -27,11 +26,22 @@ export const CohortDialog = ({ toggleCohorts }) => {
         }
     }, [activeStudent])
 
-    const addStudentToCohort = (e) => {
-        // return fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/status`, {
-        //     method: "POST",
-        //     body: JSON.stringify({ status: e.target.value })
-        // }).then(reset)
+    const removeStudent = (cohort) => {
+        return fetchIt(`${Settings.apiHost}/cohorts/${cohort.id}/assign`, {
+            method: "DELETE",
+            body: JSON.stringify({
+                student_id: activeStudent.id
+            })
+        })
+    }
+
+    const assignStudent = (cohort) => {
+        return fetchIt(`${Settings.apiHost}/cohorts/${cohort.id}/assign`, {
+            method: "POST",
+            body: JSON.stringify({
+                person_id: activeStudent.id
+            })
+        })
     }
 
     return <dialog id="dialog--cohorts" className="dialog--cohorts">
@@ -39,43 +49,19 @@ export const CohortDialog = ({ toggleCohorts }) => {
             cohorts.map(cohort => <div key={`cohort--${cohort.id}`}>
                 <input type="checkbox"
                     onChange={(changeEvent) => {
-                        // If true, POST to /cohorts/n with `person_id: n` in body
-                        if (changeEvent.target.checked) {
-                            fetchIt(`${Settings.apiHost}/cohorts/${cohort.id}/assign`, {
-                                method: "POST",
-                                body: JSON.stringify({
-                                    person_id: activeStudent.id
-                                })
-                            })
-                                .then((data) => {
-                                    getStudent()
-                                })
-                        }
-                        // If false, DELETE to /cohorts/n with `student_id: n` in body
-                        else {
-                            fetchIt(`${Settings.apiHost}/cohorts/${cohort.id}/assign`, {
-                                method: "DELETE",
-                                body: JSON.stringify({
-                                    student_id: activeStudent.id
-                                })
-                            })
-                                .then((data) => {
-                                    getStudent()
-                                })
-                        }
-
-
+                        const action = changeEvent.target.checked ? assignStudent : removeStudent
+                        action(cohort).then(getStudent)
                     }}
-                    checked={cohortIds.includes(cohort.id) ? true : false} value={cohort.id} /> {cohort.name}
+                    checked={cohortIds.includes(cohort.id)} value={cohort.id} /> {cohort.name}
             </div>)
         }
         <button className="fakeLink" style={{
-                position: "absolute",
-                top: "0.33em",
-                right: "0.5em",
-                fontSize: "0.75rem"
-            }}
-                id="closeBtn"
-                onClick={toggleCohorts}>[ close ]</button>
+            position: "absolute",
+            top: "0.33em",
+            right: "0.5em",
+            fontSize: "0.75rem"
+        }}
+            id="closeBtn"
+            onClick={toggleCohorts}>[ close ]</button>
     </dialog>
 }
