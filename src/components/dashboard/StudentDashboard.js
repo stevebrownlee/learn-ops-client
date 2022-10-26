@@ -9,6 +9,8 @@ import "./Dashboard.css"
 export const StudentDashboard = () => {
     const { getCurrentUser, getProfile } = useSimpleAuth()
     const [user, setUser] = useState({})
+    const [briggs, setBriggs] = useState("")
+
     const history = useHistory()
 
     useEffect(() => {
@@ -30,31 +32,88 @@ export const StudentDashboard = () => {
 
         <h2>Personality Info</h2>
         <div className="table table--smallPrompt">
-            <div className="" >Briggs Myers</div>
+            <div>
+                <a href="https://www.16personalities.com/free-personality-test" target="_blank">
+                    Myers-Briggs
+                </a>
+            </div>
             <div className="cell--centered">
                 <input type="text" className="briggs__input"
-                    id="briggsMyers" value={user.profile?.briggs}
-                    onBlur={() => {
-                        fetchIt()
+                    id="briggsMyers" defaultValue={user.profile?.personality?.briggs_myers_type}
+                    onBlur={(evt) => {
+                        fetchIt("http://localhost:8000/personality?testresult=briggs",
+                            {
+                                method: "PUT",
+                                body: JSON.stringify({
+                                    value: evt.target.value
+                                })
+                            })
                     }}
                     placeholder="e.g. ENTJ-A" />
             </div>
-            <div className="" >Big Five</div>
+            <div>
+                <a href="https://www.outofservice.com/bigfive/" target="_blank">Big Five</a>
+            </div>
             <div className="cell--centered">
                 A: <input type="text" className="bfi__input"
-                    id="bfi_agree" value={""} />
+                    onBlur={(evt) => {
+                        fetchIt("http://localhost:8000/personality?testresult=bfia",
+                            {
+                                method: "PUT",
+                                body: JSON.stringify({
+                                    value: parseInt(evt.target.value)
+                                })
+                            })
+                    }}
+                    id="bfi_agree" defaultValue={user.profile?.personality?.bfi_agreeableness} />
 
                 N: <input type="text" className="bfi__input"
-                    id="bfi_neuro" value={""} />
+                    onBlur={(evt) => {
+                        fetchIt("http://localhost:8000/personality?testresult=bfin",
+                            {
+                                method: "PUT",
+                                body: JSON.stringify({
+                                    value: parseInt(evt.target.value)
+                                })
+                            })
+                    }}
+                    id="bfi_neuro" defaultValue={user.profile?.personality?.bfi_neuroticism} />
 
                 C: <input type="text" className="bfi__input"
-                    id="bfi_con" value={""} />
+                    onBlur={(evt) => {
+                        fetchIt("http://localhost:8000/personality?testresult=bfic",
+                            {
+                                method: "PUT",
+                                body: JSON.stringify({
+                                    value: parseInt(evt.target.value)
+                                })
+                            })
+                    }}
+                    id="bfi_con" defaultValue={user.profile?.personality?.bfi_conscientiousness} />
 
                 O: <input type="text" className="bfi__input"
-                    id="bfi_open" value={""} />
+                    onBlur={(evt) => {
+                        fetchIt("http://localhost:8000/personality?testresult=bfio",
+                            {
+                                method: "PUT",
+                                body: JSON.stringify({
+                                    value: parseInt(evt.target.value)
+                                })
+                            })
+                    }}
+                    id="bfi_open" defaultValue={user.profile?.personality?.bfi_openness} />
 
                 E: <input type="text" className="bfi__input"
-                    id="bfi_extra" value={""} />
+                    onBlur={(evt) => {
+                        fetchIt("http://localhost:8000/personality?testresult=bfie",
+                            {
+                                method: "PUT",
+                                body: JSON.stringify({
+                                    value: parseInt(evt.target.value)
+                                })
+                            })
+                    }}
+                    id="bfi_extra" defaultValue={user.profile?.personality?.bfi_extraversion} />
 
             </div>
         </div>
