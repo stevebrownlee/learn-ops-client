@@ -41,7 +41,7 @@ export const StudentDashboard = () => {
                 <input type="text" className="briggs__input"
                     id="briggsMyers" defaultValue={user.profile?.personality?.briggs_myers_type}
                     onBlur={(evt) => {
-                        fetchIt("http://localhost:8000/personality?testresult=briggs",
+                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=briggs`,
                             {
                                 method: "PUT",
                                 body: JSON.stringify({
@@ -57,7 +57,7 @@ export const StudentDashboard = () => {
             <div className="cell--centered">
                 A: <input type="text" className="bfi__input"
                     onBlur={(evt) => {
-                        fetchIt("http://localhost:8000/personality?testresult=bfia",
+                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=bfia`,
                             {
                                 method: "PUT",
                                 body: JSON.stringify({
@@ -69,7 +69,7 @@ export const StudentDashboard = () => {
 
                 N: <input type="text" className="bfi__input"
                     onBlur={(evt) => {
-                        fetchIt("http://localhost:8000/personality?testresult=bfin",
+                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=bfin`,
                             {
                                 method: "PUT",
                                 body: JSON.stringify({
@@ -81,7 +81,7 @@ export const StudentDashboard = () => {
 
                 C: <input type="text" className="bfi__input"
                     onBlur={(evt) => {
-                        fetchIt("http://localhost:8000/personality?testresult=bfic",
+                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=bfic`,
                             {
                                 method: "PUT",
                                 body: JSON.stringify({
@@ -93,7 +93,7 @@ export const StudentDashboard = () => {
 
                 O: <input type="text" className="bfi__input"
                     onBlur={(evt) => {
-                        fetchIt("http://localhost:8000/personality?testresult=bfio",
+                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=bfio`,
                             {
                                 method: "PUT",
                                 body: JSON.stringify({
@@ -105,7 +105,7 @@ export const StudentDashboard = () => {
 
                 E: <input type="text" className="bfi__input"
                     onBlur={(evt) => {
-                        fetchIt("http://localhost:8000/personality?testresult=bfie",
+                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=bfie`,
                             {
                                 method: "PUT",
                                 body: JSON.stringify({
