@@ -5,6 +5,7 @@ import { Readme } from "./dashboard/Readme"
 import { SlackMemberId } from "./dashboard/SlackMemberId"
 import { StudentDashboard } from "./dashboard/StudentDashboard"
 import { Assessment } from "./info/Assessment"
+import { ClientProposal } from "./info/ClientProposal"
 import { ClientAssessment } from "./info/ClientSideRequirements"
 import { LearningGoals } from "./info/Goals"
 import { Repos } from "./info/Repos"
@@ -25,6 +26,9 @@ export const StudentViews = () => {
             </Route>
             <Route exact path="/assessment">
                 <Assessment />
+            </Route>
+            <Route exact path="/proposal/client">
+                <ClientProposal />
             </Route>
             <Route exact path="/assessment/server">
                 <ServerAssessment />

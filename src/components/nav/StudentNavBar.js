@@ -25,13 +25,10 @@ export const StudentNavBar = () => {
                         {makeLink("/", "Overview")}
                     </li>
                     <li className="navbar__item">
-                        {makeLink("/repos", "My Repos")}
-                    </li>
-                    <li className="navbar__item">
                         {makeLink("/goals", "Learning Goals")}
                     </li>
                     <li className="navbar__item">
-                        {makeLink("/assessment", "Assessment")}
+                        {makeLink("/assessment", "Capstones")}
                     </li>
                     <li className="navbar__item">
                         {makeLink("/readme", "README Resources")}

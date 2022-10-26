@@ -50,6 +50,15 @@
     width: 15rem;
 }
 
+.bfi__input  {
+    max-width: 2.5rem;
+    margin-right: 1rem;
+}
+
+.briggs__input  {
+    max-width: 15rem;
+}
+
 .slack__save  {
     margin: 1rem 0 0 0;
     padding: 0.2rem 0.3rem;
