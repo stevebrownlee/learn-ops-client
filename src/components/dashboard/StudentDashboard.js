@@ -26,6 +26,43 @@ export const StudentDashboard = () => {
         })
     }
 
+    const updatePersonalityInfo = (inputValue, personalityProp, queryParamValue) => {
+        if (inputValue !== user.profile?.personality?.[personalityProp]) {
+            fetchIt(`${Settings.apiHost}/personality/${user.profile.personality.id}?testresult=${queryParamValue}`,
+                {
+                    method: "PUT",
+                    body: JSON.stringify({
+                        value: inputValue
+                    })
+                })
+                .then(() => {
+                    getProfile().then(() => {
+                        setUser(getCurrentUser())
+                    })
+                })
+        }
+    }
+
+    const createPersonalityInput = (propName, queryParamValue, isNumeric = true) => {
+        return <input
+            type="text"
+            className={isNumeric ? "bfi__input" : "briggs__input"}
+            onBlur={(evt) => {
+                let currentValue = ""
+
+                if (isNumeric) {
+                    currentValue = parseInt(evt.target.value)
+                }
+                else {
+                    currentValue = evt.target.value
+                }
+
+                updatePersonalityInfo(currentValue, propName, queryParamValue)
+            }}
+            defaultValue={user.profile?.personality?.[propName]} />
+    }
+
+
     return <article className="dashboard--student">
         <h1>Welcome {user.profile?.name}</h1>
         <div className="text--mini">This is your student dashboard where you can see all information about your cohort dates, notes from instructors, and general information about presentations, assessments, and shared projects.</div>
@@ -38,83 +75,17 @@ export const StudentDashboard = () => {
                 </a>
             </div>
             <div className="cell--centered">
-                <input type="text" className="briggs__input"
-                    id="briggsMyers" defaultValue={user.profile?.personality?.briggs_myers_type}
-                    onBlur={(evt) => {
-                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=briggs`,
-                            {
-                                method: "PUT",
-                                body: JSON.stringify({
-                                    value: evt.target.value
-                                })
-                            })
-                    }}
-                    placeholder="e.g. ENTJ-A" />
+                { createPersonalityInput("briggs_myers_type", "briggs", false) }
             </div>
             <div>
                 <a href="https://www.outofservice.com/bigfive/" target="_blank">Big Five</a>
             </div>
             <div className="cell--centered">
-                A: <input type="text" className="bfi__input"
-                    onBlur={(evt) => {
-                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=bfia`,
-                            {
-                                method: "PUT",
-                                body: JSON.stringify({
-                                    value: parseInt(evt.target.value)
-                                })
-                            })
-                    }}
-                    id="bfi_agree" defaultValue={user.profile?.personality?.bfi_agreeableness} />
-
-                N: <input type="text" className="bfi__input"
-                    onBlur={(evt) => {
-                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=bfin`,
-                            {
-                                method: "PUT",
-                                body: JSON.stringify({
-                                    value: parseInt(evt.target.value)
-                                })
-                            })
-                    }}
-                    id="bfi_neuro" defaultValue={user.profile?.personality?.bfi_neuroticism} />
-
-                C: <input type="text" className="bfi__input"
-                    onBlur={(evt) => {
-                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=bfic`,
-                            {
-                                method: "PUT",
-                                body: JSON.stringify({
-                                    value: parseInt(evt.target.value)
-                                })
-                            })
-                    }}
-                    id="bfi_con" defaultValue={user.profile?.personality?.bfi_conscientiousness} />
-
-                O: <input type="text" className="bfi__input"
-                    onBlur={(evt) => {
-                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=bfio`,
-                            {
-                                method: "PUT",
-                                body: JSON.stringify({
-                                    value: parseInt(evt.target.value)
-                                })
-                            })
-                    }}
-                    id="bfi_open" defaultValue={user.profile?.personality?.bfi_openness} />
-
-                E: <input type="text" className="bfi__input"
-                    onBlur={(evt) => {
-                        fetchIt(`http://localhost:8000/personality/${user.profile.personality.id}?testresult=bfie`,
-                            {
-                                method: "PUT",
-                                body: JSON.stringify({
-                                    value: parseInt(evt.target.value)
-                                })
-                            })
-                    }}
-                    id="bfi_extra" defaultValue={user.profile?.personality?.bfi_extraversion} />
-
+                A: { createPersonalityInput("bfi_agreeableness", "bfia") }
+                N: { createPersonalityInput("bfi_neuroticism", "bfin") }
+                C: { createPersonalityInput("bfi_conscientiousness", "bfic") }
+                O: { createPersonalityInput("bfi_openness", "bfio") }
+                E: { createPersonalityInput("bfi_extraversion", "bfie") }
             </div>
         </div>
 
