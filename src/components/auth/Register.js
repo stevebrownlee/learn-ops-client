@@ -28,6 +28,7 @@ export const Register = (props) => {
 
     useEffect(() => {
         getCohorts()
+        // eslint-disable-next-line
     }, [])
 
     const storeProfile = useCallback((profile) => {

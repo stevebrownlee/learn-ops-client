@@ -27,7 +27,7 @@ export const Callback = () => {
                 if (response.status === 200) {
                     return response.json()
                 }
-                throw "Server error"
+                throw { message: "Server error", statusCode: response.status }
             })
             .then(res => {
                 storeToken(res.key)
@@ -44,13 +44,13 @@ export const Callback = () => {
             set(accessCode)
         }
 
-    }, [])
+    }, [location.search])
 
     useEffect(() => {
         if (token) {
             fetchUser()
         }
-    }, [token])
+    }, [token, fetchUser])
 
     useEffect(() => {
         if (code) {

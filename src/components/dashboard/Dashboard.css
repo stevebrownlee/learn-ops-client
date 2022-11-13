@@ -50,6 +50,21 @@
     width: 15rem;
 }
 
+.bfiRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.bfiRow__prompt {
+    text-align: left;
+    flex: 2;
+    max-width: 14rem;
+}
+
+.bfiRow__input {
+    flex: 1;
+}
+
 .bfi__input  {
     max-width: 2.5rem;
     margin-right: 1rem;

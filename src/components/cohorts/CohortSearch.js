@@ -42,7 +42,7 @@ export const CohortSearch = () => {
         else {
             setActive(false)
         }
-    }, [getCohort])
+    }, [getCohort, getCohortStudents])
 
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
@@ -54,7 +54,7 @@ export const CohortSearch = () => {
 
         document.addEventListener("keypress", searchLogger)
         return () => document.removeEventListener("keypress", searchLogger)
-    }, [])
+    }, [getCohortStudents, getCohort, searchLogger])
 
     const search = (e) => {
         if (e.key === "Enter") {

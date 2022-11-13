@@ -1,14 +1,11 @@
 import React, { useContext, useEffect, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
-import useKeyboardShortcut from "../ui/useKeyboardShortcut"
 import Settings from "../Settings"
-import useModal from "../ui/useModal"
 import { fetchIt } from "../utils/Fetch"
 import { CohortContext } from "../cohorts/CohortProvider"
 
 export const CohortDialog = ({ toggleCohorts }) => {
     const { activeStudent, getStudent } = useContext(PeopleContext)
-    const [message, setMessage] = useState("")
     const { getCohorts, cohorts } = useContext(CohortContext)
     const [cohortIds, setCohortIds] = useState([])
 

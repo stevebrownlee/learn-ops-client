@@ -47,29 +47,6 @@ export const StudentNavBar = () => {
                     }
                 </div>
             </ul>
-
-
-            {/* <li className="navbar__item">
-                    <Link className="navbar__link" to="/">Overview</Link>
-                </li>
-                <li className="navbar__item">
-                    <Link className="navbar__link" to="/records">Records</Link>
-                </li>
-                <li className="navbar__item">
-                    <Link className="navbar__link" to="/candidates">Candidates</Link>
-                </li>
-                {
-                    isAuthenticated()
-                        ? <li className="nav-item navbar__logout">
-                            <img alt="Project logo" className="img--logout" src={Logout}
-                                onClick={() => {
-                                    logout()
-                                    history.push({ pathname: "/" })
-                                }}
-                            />
-                        </li>
-                        : ""
-                } */}
         </nav>
     )
 }
