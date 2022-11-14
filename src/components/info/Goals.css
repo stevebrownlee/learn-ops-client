@@ -7,3 +7,11 @@
         width: 100%;
     }
 }
+
+.proposal__overview {
+    min-height: 10rem;
+}
+
+.proposal__checklist {
+    list-style-type: none;
+}
