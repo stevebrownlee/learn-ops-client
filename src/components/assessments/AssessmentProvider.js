@@ -31,6 +31,17 @@ export const AssessmentProvider = (props) => {
         )
     }
 
+    const saveProposal = (proposal) => {
+        return fetchIt(
+            `${Settings.apiHost}/capstones`,
+            { method: "POST", body: JSON.stringify(proposal)}
+        )
+    }
+
+    const getCourses = () => {
+        return fetchIt(`${Settings.apiHost}/courses`)
+    }
+
     const changeStatus = (assessmentId, statusId) => {
         return fetchIt(
             `${Settings.apiHost}/assessments/${assessmentId}`,
@@ -57,7 +68,7 @@ export const AssessmentProvider = (props) => {
         <AssessmentContext.Provider value={{
             getStudentAssessments, getAssessmentList, studentAssessments,
             saveAssessment, allAssessments, saveStudentAssessment,
-            getStatuses, statuses, changeStatus
+            getStatuses, statuses, changeStatus, getCourses, saveProposal
         }} >
             {props.children}
         </AssessmentContext.Provider>

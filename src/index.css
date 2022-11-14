@@ -133,3 +133,8 @@ fieldset {
     margin-inline-start: 0;
     margin-inline-end: 0;
 }
+
+.important {
+    color: firebrick;
+    font-size: 1rem;
+}

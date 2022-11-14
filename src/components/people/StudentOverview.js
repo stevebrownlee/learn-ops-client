@@ -15,8 +15,7 @@ export const StudentOverview = ({ toggleCohorts }) => {
                         <h2 className="card-title student__info">
                             {activeStudent.name} (
                                 <button className="fakeLink"
-                                    onClick={() => toggleCohorts()}
-                                    >
+                                    onClick={toggleCohorts}>
                                     {activeStudent.cohorts.map(c => c.name).join(", ")}
                                 </button>
                             )
