@@ -25,14 +25,14 @@
 }
 
 .assessment__name {
-    font-size: larger;
+    font-size: 1.1rem;
     font-weight: bolder;
     padding: 0.5rem 0;
     flex: 3;
 }
 
 .assessment__status {
-    padding: 0.5rem 0.75rem;
+    padding: 0 0.75rem;
     flex: 1;
 }
 
