@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { Record } from "../records/Record.js"
@@ -8,6 +8,7 @@ import "./Status.css"
 import { HumanDate } from "../utils/HumanDate.js"
 
 export const StudentTabList = () => {
+    const [chosenAssessment, chooseAssessment] = useState(0)
     const {
         activeStudent, getStudentProposals,
         proposals } = useContext(PeopleContext)
@@ -48,9 +49,14 @@ export const StudentTabList = () => {
         </div>)
     }
 
-    const assign = (ass) => {
-        saveStudentAssessment(ass.id, activeStudent.id)
-            .then(() => getStudentAssessments(activeStudent.id))
+    const assign = () => {
+        if (chosenAssessment > 0) {
+            saveStudentAssessment(chosenAssessment, activeStudent.id)
+                .then(() => {
+                    getStudentAssessments(activeStudent.id)
+                    chooseAssessment(0)
+                })
+        }
     }
 
     const updateAssessmentStatus = (assessmentId, statusId) => {
@@ -128,25 +134,23 @@ export const StudentTabList = () => {
                     <section className="records--overview">
                         <div className="rightAlign">
 
-                            <div className="dropdown">
-                                <div className="dropdown__text">
-                                    <button className="button button--isi button--border-thick button--round-l button--size-s button--assessment">
-                                        <i className="button__icon icon icon-book"></i>
-                                        <span>Send Assessment</span>
-                                    </button>
-                                </div>
-                                <div className="dropdown__content assessment--dropdown">
-                                    {
-                                        allAssessments.map(ass => {
-                                            return <a key={`assessment--${ass.id}`}
-                                                onClick={() => assign(ass)} href="#"
-                                                className="dropdownItem--condensed">
-                                                {ass.name}
-                                            </a>
-                                        })
-                                    }
-                                </div>
-                            </div>
+                            <select className="form-control"
+                                value={chosenAssessment}
+                                onChange={(e) => chooseAssessment(parseInt(e.target.value))}>
+                                <option value="0">Choose assessment...</option>
+                                {
+                                    allAssessments.map(asst => {
+                                        return <option key={`asst--${asst.id}`} value={asst.id}>{asst.name}</option>
+                                    })
+                                }
+                            </select>
+
+                            <button onClick={assign}
+                                className="button button--isi button--border-thick button--round-l button--size-s button--assessment">
+                                <i className="button__icon icon icon-book"></i>
+                                <span>Assign</span>
+                            </button>
+
                         </div>
 
                         {
@@ -190,7 +194,6 @@ export const StudentTabList = () => {
                 <article id="tab-content4" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
 
                     <h2>Capstone Proposals</h2>
-
                     {
                         proposals.map(p => <div key={`prop--${p.id}`} className="table">
                             <div>
@@ -203,16 +206,12 @@ export const StudentTabList = () => {
                                         ? "Approved"
                                         : capstoneStatuses(p.id)
                                 }
-
-
                             </div>
                         </div>
                         )
                     }
-
                 </article>
             </li>
-
         </ul>
     )
 }
