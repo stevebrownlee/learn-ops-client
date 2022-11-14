@@ -8,11 +8,14 @@ import "./Status.css"
 import { HumanDate } from "../utils/HumanDate.js"
 
 export const StudentTabList = () => {
-    const { activeStudent, getStudentProposals, proposals } = useContext(PeopleContext)
+    const {
+        activeStudent, getStudentProposals,
+        proposals } = useContext(PeopleContext)
     const {
         getStudentAssessments, getAssessmentList,
         studentAssessments, allAssessments, saveStudentAssessment,
-        getStatuses, statuses, changeStatus
+        getStatuses, statuses, changeStatus, proposalStatuses,
+        getProposalStatuses, addToProposalTimeline
     } = useContext(AssessmentContext)
     const history = useHistory()
 
@@ -89,14 +92,14 @@ export const StudentTabList = () => {
 
                     {
                         activeStudent.statuses.map(status => <React.Fragment key={`status--${status.id}`}>
-                        <div className="status">
-                            <div className="status__note"> {status.status} </div>
-                            <div className="status__date">
-                                Recorded on <HumanDate date={status.created_on.split("T")[0]} /> by {status.author}
+                            <div className="status">
+                                <div className="status__note"> {status.status} </div>
+                                <div className="status__date">
+                                    Recorded on <HumanDate date={status.created_on.split("T")[0]} /> by {status.author}
+                                </div>
                             </div>
-                        </div>
-                        <div className="status__separator"></div>
-                    </React.Fragment>)
+                            <div className="status__separator"></div>
+                        </React.Fragment>)
                     }
 
                 </article>
@@ -163,16 +166,38 @@ export const StudentTabList = () => {
             <li>
                 <input type="radio" name="tabs" id="tab4" />
                 <label htmlFor="tab4" role="tab"
-                    onClick={getStudentProposals}
+                    onClick={() => {
+                        getStudentProposals()
+                        getProposalStatuses()
+                    }}
                     aria-selected="true" aria-controls="panel4" tabIndex="0">Proposals</label>
                 <article id="tab-content4" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
 
                     <h2>Capstone Proposals</h2>
 
                     {
-                        proposals.map(p => <div>
-                            <a href={p.proposal_url} target="_blank">{p.course}</a>
-                        </div>)
+                        proposals.map(p => <div className="table">
+                            <div>
+                                <a href={p.proposal_url} target="_blank">{p.course}</a>
+                                {p.statuses.map(s => <div>{s.status} on {s.date}</div>)}
+                            </div>
+                            <div>
+                                <select id="statuses"
+                                    onChange={(e) => {
+                                        addToProposalTimeline(p.id, parseInt(e.target.value))
+                                            .then(getStudentProposals)
+                                    }}>
+                                    <option value="0">Change status</option>
+                                    {
+                                        proposalStatuses.map(s => {
+                                            return <option key={`asst--${s.id}`} value={s.id}>{s.status}</option>
+                                        })
+                                    }
+                                </select>
+
+                            </div>
+                        </div>
+                        )
                     }
 
                 </article>

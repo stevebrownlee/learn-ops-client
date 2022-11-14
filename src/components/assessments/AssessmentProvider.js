@@ -8,12 +8,13 @@ export const AssessmentProvider = (props) => {
     const [studentAssessments, setAssessments] = useState([])
     const [allAssessments, setAll] = useState([])
     const [statuses, setStatuses] = useState([])
+    const [proposalStatuses, setProposalStatuses] = useState([])
 
     const getStudentAssessments = useCallback((studentId) => {
         return fetch(`${Settings.apiHost}/assessments?studentId=${studentId}`)
             .then(response => response.json())
             .then(data => {
-                data.sort( (c, n) => c.status - n.status ? 1 : -1 )
+                data.sort((c, n) => c.status - n.status ? 1 : -1)
                 setAssessments(data)
             })
     }, [setAssessments])
@@ -27,14 +28,14 @@ export const AssessmentProvider = (props) => {
     const saveAssessment = (assessment) => {
         return fetchIt(
             `${Settings.apiHost}/assessments`,
-            { method: "POST", body: JSON.stringify(assessment)}
+            { method: "POST", body: JSON.stringify(assessment) }
         )
     }
 
     const saveProposal = (proposal) => {
         return fetchIt(
             `${Settings.apiHost}/capstones`,
-            { method: "POST", body: JSON.stringify(proposal)}
+            { method: "POST", body: JSON.stringify(proposal) }
         )
     }
 
@@ -45,13 +46,31 @@ export const AssessmentProvider = (props) => {
     const changeStatus = (assessmentId, statusId) => {
         return fetchIt(
             `${Settings.apiHost}/assessments/${assessmentId}`,
-            { method: "PUT", body: JSON.stringify({ status: statusId})}
+            { method: "PUT", body: JSON.stringify({ status: statusId }) }
+        )
+    }
+
+    const addToProposalTimeline = (capstoneId, statusId) => {
+        return fetchIt(
+            `${Settings.apiHost}/timelines`,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    capstone: capstoneId,
+                    status: statusId
+                })
+            }
         )
     }
 
     const getStatuses = () => {
         return fetchIt(`${Settings.apiHost}/statuses`)
             .then(res => setStatuses(res.results))
+    }
+
+    const getProposalStatuses = () => {
+        return fetchIt(`${Settings.apiHost}/proposalstatuses`)
+            .then(res => setProposalStatuses(res.results))
     }
 
     const saveStudentAssessment = (assessmentId, studentId) => {
@@ -68,7 +87,8 @@ export const AssessmentProvider = (props) => {
         <AssessmentContext.Provider value={{
             getStudentAssessments, getAssessmentList, studentAssessments,
             saveAssessment, allAssessments, saveStudentAssessment,
-            getStatuses, statuses, changeStatus, getCourses, saveProposal
+            getStatuses, statuses, changeStatus, getCourses, saveProposal,
+            proposalStatuses, getProposalStatuses, addToProposalTimeline
         }} >
             {props.children}
         </AssessmentContext.Provider>
