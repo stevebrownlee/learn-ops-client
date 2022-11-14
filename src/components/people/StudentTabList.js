@@ -8,7 +8,7 @@ import "./Status.css"
 import { HumanDate } from "../utils/HumanDate.js"
 
 export const StudentTabList = () => {
-    const { activeStudent } = useContext(PeopleContext)
+    const { activeStudent, getStudentProposals, proposals } = useContext(PeopleContext)
     const {
         getStudentAssessments, getAssessmentList,
         studentAssessments, allAssessments, saveStudentAssessment,
@@ -102,7 +102,6 @@ export const StudentTabList = () => {
                 </article>
             </li>
 
-
             <li>
                 <input type="radio" name="tabs" id="tab3" />
                 <label htmlFor="tab3" role="tab" aria-selected="false" aria-controls="panel3" tabIndex="0">Assessments</label>
@@ -160,6 +159,25 @@ export const StudentTabList = () => {
                     </section>
                 </article>
             </li>
+
+            <li>
+                <input type="radio" name="tabs" id="tab4" />
+                <label htmlFor="tab4" role="tab"
+                    onClick={getStudentProposals}
+                    aria-selected="true" aria-controls="panel4" tabIndex="0">Proposals</label>
+                <article id="tab-content4" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
+
+                    <h2>Capstone Proposals</h2>
+
+                    {
+                        proposals.map(p => <div>
+                            <a href={p.proposal_url} target="_blank">{p.course}</a>
+                        </div>)
+                    }
+
+                </article>
+            </li>
+
         </ul>
     )
 }

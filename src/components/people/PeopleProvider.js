@@ -7,6 +7,7 @@ export const PeopleContext = React.createContext()
 
 export const PeopleProvider = (props) => {
     const [students, setStudents] = useState([])
+    const [proposals, setProposals] = useState([])
     const [cohortStudents, setCohortStudents] = useState([])
     const [activeStudent, activateStudent] = useState({})
     const { getCurrentUser } = useSimpleAuth()
@@ -42,9 +43,9 @@ export const PeopleProvider = (props) => {
             .then(activateStudent)
     }, [user])
 
-    const getStudentProposals = useCallback(() => {
-        return fetchIt(`${Settings.apiHost}/proposals?studentId=${studentId}`)
-            .then(activateStudent)
+    const getStudentProposals = useCallback((studentId) => {
+        return fetchIt(`${Settings.apiHost}/capstones?studentId=${activeStudent.id}`)
+            .then(setProposals)
     }, [user])
 
     const findStudent = useCallback((q) => {
@@ -59,7 +60,7 @@ export const PeopleProvider = (props) => {
         <PeopleContext.Provider value={{
             getStudents, students, findStudent, getStudent,
             activeStudent, activateStudent, getCohortStudents,
-            cohortStudents
+            cohortStudents, getStudentProposals, proposals
         }} >
             {props.children}
         </PeopleContext.Provider>
