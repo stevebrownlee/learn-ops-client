@@ -58,6 +58,22 @@ export const StudentTabList = () => {
             .then(() => getStudentAssessments(activeStudent.id))
     }
 
+    const capstoneStatuses = (proposalId) => {
+        return <select id="statuses"
+            className="form-control"
+            onChange={(e) => {
+                addToProposalTimeline(proposalId, parseInt(e.target.value))
+                    .then(getStudentProposals)
+            }}>
+            <option value="0">Status</option>
+            {
+                proposalStatuses.map(s => {
+                    return <option key={`asst--${s.id}`} value={s.id}>{s.status}</option>
+                })
+            }
+        </select>
+    }
+
     return (
         <ul className="tabs" role="tablist">
             <li>
@@ -176,24 +192,18 @@ export const StudentTabList = () => {
                     <h2>Capstone Proposals</h2>
 
                     {
-                        proposals.map(p => <div className="table">
+                        proposals.map(p => <div key={`prop--${p.id}`} className="table">
                             <div>
                                 <a href={p.proposal_url} target="_blank">{p.course}</a>
-                                {p.statuses.map(s => <div>{s.status} on {s.date}</div>)}
+                                {p.statuses.map(s => <div key={`propstat--${s.id}`}>{s.status} on {s.date}</div>)}
                             </div>
                             <div>
-                                <select id="statuses"
-                                    onChange={(e) => {
-                                        addToProposalTimeline(p.id, parseInt(e.target.value))
-                                            .then(getStudentProposals)
-                                    }}>
-                                    <option value="0">Change status</option>
-                                    {
-                                        proposalStatuses.map(s => {
-                                            return <option key={`asst--${s.id}`} value={s.id}>{s.status}</option>
-                                        })
-                                    }
-                                </select>
+                                {
+                                    p.statuses.find(s => s.status === "Approved")
+                                        ? "Approved"
+                                        : capstoneStatuses(p.id)
+                                }
+
 
                             </div>
                         </div>

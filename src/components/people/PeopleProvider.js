@@ -16,12 +16,12 @@ export const PeopleProvider = (props) => {
     const getStudents = useCallback((status = "") => {
         return fetchIt(`${Settings.apiHost}/students${status !== "" ? `?status=${status}` : ""}`)
             .then(data => setStudents(data.results))
-    }, [user])
+    }, [])
 
     const getCohortStudents = useCallback((cohortId) => {
         return fetchIt(`${Settings.apiHost}/students?cohort=${cohortId}`)
             .then(data => setCohortStudents(data.results))
-    }, [user])
+    }, [])
 
     const getStudent = useCallback((id = null) => {
         let studentId = 0
@@ -41,20 +41,20 @@ export const PeopleProvider = (props) => {
     const getStudentRepos = useCallback(() => {
         return fetchIt(`${activeStudent.github.repos}?sort=updated&direction=desc`)
             .then(activateStudent)
-    }, [user])
+    }, [activeStudent])
 
     const getStudentProposals = useCallback((studentId) => {
         return fetchIt(`${Settings.apiHost}/capstones?studentId=${activeStudent.id}`)
             .then(setProposals)
-    }, [user])
+    }, [activeStudent])
 
     const findStudent = useCallback((q) => {
         return fetchIt(`${Settings.apiHost}/students?q=${q}`)
-    }, [user])
+    }, [])
 
     const submitClientProposal = useCallback((q) => {
         return fetchIt(`${Settings.apiHost}/proposal?course=javascript`)
-    }, [user])
+    }, [])
 
     return (
         <PeopleContext.Provider value={{
