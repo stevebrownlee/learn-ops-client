@@ -31,6 +31,10 @@ export const ClientProposal = () => {
                         "repoURL": "",
                         "course": parseInt(course)
                     })
+                        .then(() => {
+                            history.push("/")
+                            window.alert("Proposal submitted")
+                        })
                 }
                 else {
                     window.alert("Choose a course, please")
