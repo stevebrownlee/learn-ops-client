@@ -4,8 +4,8 @@ import { AssessmentContext } from "../assessments/AssessmentProvider"
 
 export const ClientProposal = () => {
     const [courses, establishCourses] = useState([])
-    const [url, setURL] = useState("http://www.google.com")
-    const [overview, setOverview] = useState("http://www.google.com")
+    const [url, setURL] = useState("")
+    const [overview, setOverview] = useState("")
     const [allChecked, updateAllChecked] = useState(0)
     const [course, setCourse] = useState(0)
 
