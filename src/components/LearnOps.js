@@ -7,7 +7,7 @@ import { Register } from "./auth/Register"
 import useSimpleAuth from "./auth/useSimpleAuth"
 import { CohortProvider } from "./cohorts/CohortProvider"
 import { Callback } from "./auth/Callback"
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min"
+import { useLocation } from "react-router-dom"
 import { StudentViews } from "./StudentViews"
 import { StudentNavBar } from "./nav/StudentNavBar"
 

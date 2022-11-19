@@ -1,8 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from "react"
+import { useHistory, useParams } from 'react-router-dom'
 import { RecordContext } from "./RecordProvider.js"
-import { useHistory } from 'react-router-dom'
 import { PeopleContext } from "../people/PeopleProvider.js"
-import { useParams } from "react-router-dom/cjs/react-router-dom.min"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 
 

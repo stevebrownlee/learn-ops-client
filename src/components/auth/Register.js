@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
+import { useHistory } from "react-router-dom"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 import Settings from "../Settings.js"
 import "./Auth.css"

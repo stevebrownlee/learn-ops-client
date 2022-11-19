@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
+import { useHistory } from "react-router-dom"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 import "./CohortForm.css"

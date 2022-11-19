@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom.min"
+import { useHistory, useLocation } from "react-router-dom"
 import useSimpleAuth from "./useSimpleAuth"
 import Settings from "../Settings"
 import "./Auth.css"

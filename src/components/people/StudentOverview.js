@@ -13,21 +13,25 @@ export const StudentOverview = ({ toggleCohorts }) => {
                 <div className="card-body">
                     <header className="student__header">
                         <h2 className="card-title student__info">
-                            {activeStudent.name} (
-                                <button className="fakeLink"
-                                    onClick={toggleCohorts}>
-                                    {activeStudent.cohorts.map(c => c.name).join(", ")}
-                                </button>
-                            )
+                            {activeStudent.name}
                         </h2>
                         <div className="student__score">
                             {activeStudent.score}
                         </div>
                     </header>
                     <div className="card-text">
-                        <div className="student__github">
-                            Github: <a href={`https://www.github.com/${activeStudent.github}`}>
-                                {`https://www.github.com/${activeStudent.github}`}</a>
+                        <div className="student__details">
+
+                            <div className="student__github">
+                                Github: <a href={`https://www.github.com/${activeStudent.github}`}>
+                                    {`https://www.github.com/${activeStudent.github}`}</a>
+                            </div>
+                            <div className="student__cohort">
+                                Cohort: <button className="fakeLink"
+                                    onClick={toggleCohorts}>
+                                    {activeStudent.cohorts.map(c => c.name).join(", ")}
+                                </button>
+                            </div>
                         </div>
 
                         <CoreSkillSliders />

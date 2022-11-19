@@ -212,6 +212,19 @@ export const StudentTabList = () => {
                     }
                 </article>
             </li>
+
+            <li>
+                <input type="radio" name="tabs" id="tab5" />
+                <label htmlFor="tab5" role="tab" aria-selected="true" aria-controls="panel5" tabIndex="0">Persona</label>
+                <article id="tab-content5" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
+                    <h2>{activeStudent?.personality?.briggs_myers_type.code}</h2>
+                    <h3>Summary</h3>
+                    <p>{activeStudent?.personality?.briggs_myers_type.description.summary}</p>
+                    <h3>Emotions &amp; Communication</h3>
+                    <p>{activeStudent?.personality?.briggs_myers_type.description.emotion}</p>
+
+                </article>
+            </li>
         </ul>
     )
 }

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
+import { useHistory } from "react-router-dom"
 import useSimpleAuth from "../auth/useSimpleAuth"
 import { CohortContext } from "../cohorts/CohortProvider"
 import Settings from "../Settings"

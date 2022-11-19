@@ -31,10 +31,17 @@
     margin: 1rem 0;
 }
 
-.student__github {
-    font-size: 0.7rem;
-}
 
 .student__details {
-    margin-top: 1rem;
+    font-size: 0.7rem;
+    display: flex;
+}
+
+.student__github {
+    flex: 2;
+}
+
+.student__cohort {
+    flex: 1;
+    /* display: flex; */
 }

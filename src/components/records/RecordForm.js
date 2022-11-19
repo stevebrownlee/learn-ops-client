@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect, useCallback } from "react"
 import { RecordContext } from "./RecordProvider.js"
 import { useHistory, useParams } from 'react-router-dom'
 import { PeopleContext } from "../people/PeopleProvider.js"
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 
 
@@ -17,7 +16,7 @@ export const RecordForm = () => {
     const { studentId } = useParams()
 
     const { createRecord, getWeights, weights } = useContext(RecordContext)
-    const { getCohortStudents, students, getStudent, activeStudent } = useContext(PeopleContext)
+    const { getCohortStudents, getStudent, activeStudent } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
 
     const [newRecord, storeRecord] = useState(defaultRecordState)
@@ -29,7 +28,7 @@ export const RecordForm = () => {
 
     useEffect(() => {
         getData()
-    }, [])
+    }, [studentId])
 
 
     useEffect(() => {
