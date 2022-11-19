@@ -28,7 +28,7 @@ export const StudentDashboard = () => {
 
     const updatePersonalityInfo = (inputValue, personalityProp, queryParamValue) => {
         if (inputValue !== user.profile?.personality?.[personalityProp]) {
-            fetchIt(`${Settings.apiHost}/personality/${user.profile.personality.id}?testresult=${queryParamValue}`,
+            fetchIt(`${Settings.apiHost}/personality/0?testresult=${queryParamValue}`,
                 {
                     method: "PUT",
                     body: JSON.stringify({
