@@ -43,5 +43,37 @@
 
 .student__cohort {
     flex: 1;
-    /* display: flex; */
+}
+
+.persona {
+    display: flex;
+    flex-direction: row;
+}
+
+.section--persona {
+    padding: 0 1rem;
+}
+
+.persona__myers-briggs {
+    flex: 3;
+}
+
+.persona__bfi {
+    flex: 2;
+}
+
+.personality--Analyst {
+    background-color: #e0c8e9;
+}
+
+.personality--Sentinel {
+    background-color: #b1dff0;
+}
+
+.personality--Explorer {
+    background-color: #f9e7c1;
+}
+
+.personality--Diplomat {
+    background-color: #c2f0dd;
 }

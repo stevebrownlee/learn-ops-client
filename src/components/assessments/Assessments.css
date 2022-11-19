@@ -43,7 +43,6 @@
 }
 
 .button--assessment {
-    position: absolute;
     cursor: pointer;
     left: 1rem;
 }

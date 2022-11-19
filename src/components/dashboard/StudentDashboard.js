@@ -105,8 +105,8 @@ export const StudentDashboard = () => {
 
                     <h2>General Info</h2>
                     <div className="table table--smallPrompt">
-                        <div className="" >Cohort</div>
-                        <div className="cell--centered">
+                        <div className="cell" >Cohort</div>
+                        <div className="cell cell--centered">
                             {
                                 user.profile?.cohorts.length
                                     ? user.profile?.cohorts.map(cohort => {
@@ -117,10 +117,10 @@ export const StudentDashboard = () => {
                                     : "Unassigned"
                             }
                         </div>
-                        <div className="" >Github Id</div>
-                        <div className="cell--centered">{user.profile?.github}</div>
-                        <div className="" >Slack Id</div>
-                        <div className="cell--centered">{user.profile?.slack_handle} <button
+                        <div className="cell" >Github Id</div>
+                        <div className="cell cell--centered">{user.profile?.github}</div>
+                        <div className="cell" >Slack Id</div>
+                        <div className="cell cell--centered">{user.profile?.slack_handle} <button
                             onClick={() => history.push("/slackUpdate")}
                             className="fakeLink">Update</button></div>
                     </div>
@@ -136,18 +136,18 @@ export const StudentDashboard = () => {
 
                     <h2>Personality Info</h2>
                     <div className="table table--smallPrompt">
-                        <div>
+                        <div className="cell">
                             <a href="https://www.16personalities.com/free-personality-test" target="_blank">
                                 Myers-Briggs
                             </a>
                         </div>
-                        <div className="cell--centered">
+                        <div className="cell cell--centered">
                             {createPersonalityInput("briggs_myers_type", "briggs", false)}
                         </div>
-                        <div>
+                        <div className="cell">
                             <a href="https://www.outofservice.com/bigfive/" target="_blank">Big Five</a>
                         </div>
-                        <div className="cell--centered">
+                        <div className="cell cell--centered">
                             <div className="bfiRow">
                                 <div className="bfiRow__prompt">Openness to experiences:</div>
                                 <div className="bfiRow__input">{createPersonalityInput("bfi_openness", "bfio")}</div>
@@ -168,23 +168,10 @@ export const StudentDashboard = () => {
                                 <div className="bfiRow__prompt">Neuroticism:</div>
                                 <div className="bfiRow__input">{createPersonalityInput("bfi_neuroticism", "bfin")}</div>
                             </div>
-
                         </div>
                     </div>
-
                 </article>
             </li>
         </ul>
-
-
-
-
-
-
-
-
-
-
-
     </article>
 }

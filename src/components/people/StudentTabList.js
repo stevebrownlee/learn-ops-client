@@ -3,9 +3,8 @@ import { useHistory } from "react-router-dom"
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { Record } from "../records/Record.js"
 import { PeopleContext } from "./PeopleProvider.js"
-import "./Student.css"
-import "./Status.css"
 import { HumanDate } from "../utils/HumanDate.js"
+import "./Status.css"
 
 export const StudentTabList = () => {
     const [chosenAssessment, chooseAssessment] = useState(0)
@@ -133,7 +132,6 @@ export const StudentTabList = () => {
                 <article id="tab-content3" className="tab-content" role="tabpanel" aria-labelledby="specification" aria-hidden="true">
                     <section className="records--overview">
                         <div className="rightAlign">
-
                             <select className="form-control"
                                 value={chosenAssessment}
                                 onChange={(e) => chooseAssessment(parseInt(e.target.value))}>
@@ -196,11 +194,11 @@ export const StudentTabList = () => {
                     <h2>Capstone Proposals</h2>
                     {
                         proposals.map(p => <div key={`prop--${p.id}`} className="table">
-                            <div>
+                            <div className="cell">
                                 <a href={p.proposal_url} target="_blank">{p.course}</a>
                                 {p.statuses.map(s => <div key={`propstat--${s.id}`}>{s.status} on {s.date}</div>)}
                             </div>
-                            <div>
+                            <div className="cell">
                                 {
                                     p.statuses.find(s => s.status === "Approved")
                                         ? "Approved"
@@ -217,11 +215,25 @@ export const StudentTabList = () => {
                 <input type="radio" name="tabs" id="tab5" />
                 <label htmlFor="tab5" role="tab" aria-selected="true" aria-controls="panel5" tabIndex="0">Persona</label>
                 <article id="tab-content5" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
-                    <h2>{activeStudent?.personality?.briggs_myers_type.code}</h2>
-                    <h3>Summary</h3>
-                    <p>{activeStudent?.personality?.briggs_myers_type?.description?.summary}</p>
-                    <h3>Emotions &amp; Communication</h3>
-                    <p>{activeStudent?.personality?.briggs_myers_type?.description?.emotion}</p>
+
+                    <div className="persona">
+                        <section className={`persona__myers-briggs section--persona personality--${activeStudent?.personality?.briggs_myers_type?.description?.type}`}>
+                            <h2>{activeStudent?.personality?.briggs_myers_type.code}</h2>
+                            <h3>Summary</h3>
+                            <p>{activeStudent?.personality?.briggs_myers_type?.description?.summary}</p>
+                            <h3>Emotions &amp; Communication</h3>
+                            <p>{activeStudent?.personality?.briggs_myers_type?.description?.details}</p>
+                        </section>
+
+                        <section className="persona__bfi section--persona">
+                            <h2>BFI</h2>
+                            <div>Extraversion: {activeStudent?.personality?.bfi_extraversion}</div>
+                            <div>Conscientiousness: {activeStudent?.personality?.bfi_conscientiousness}</div>
+                            <div>Neuroticism: {activeStudent?.personality?.bfi_neuroticism}</div>
+                            <div>Openness to Experience: {activeStudent?.personality?.bfi_openness}</div>
+                            <div>Agreeableness: {activeStudent?.personality?.bfi_agreeableness}</div>
+                        </section>
+                    </div>
 
                 </article>
             </li>

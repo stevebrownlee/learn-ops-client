@@ -132,13 +132,13 @@ export const CohortSearch = () => {
                         }
 
                         <div className="table">
-                            <div>
+                            <div className="cell">
                                 <i className={`icon icon-${sortBy !== "score" && sortAsc ? "up" : "down"}`} style={{ fontSize: "1.2rem" }} onClick={() => {
                                     sortBy === "name" ? setSortAsc(!sortAsc) : setSortAsc(true)
                                     specifySortFunction("name")
                                 }}></i>
                             </div>
-                            <div>
+                            <div className="cell">
                                 <i className={`icon icon-${sortBy === "score" && !sortAsc ? "up" : "down"}`}
                                     style={{ fontSize: "1.2rem" }}
                                     onClick={() => {
