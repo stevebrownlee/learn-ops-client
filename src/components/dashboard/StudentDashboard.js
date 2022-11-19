@@ -54,7 +54,7 @@ export const StudentDashboard = () => {
                     currentValue = parseInt(evt.target.value)
                 }
                 else {
-                    currentValue = evt.target.value
+                    currentValue = evt.target.value.toUpperCase()
                 }
 
                 updatePersonalityInfo(currentValue, propName, queryParamValue)
