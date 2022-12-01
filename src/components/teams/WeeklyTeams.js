@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
 import "./Teams.css"
 import slackLogo from "./images/slack.png"

@@ -6,7 +6,13 @@ export const Student = ({ student }) => {
 
     return (
         <>
-            <div className={`personality--${student.personality} cell fakeLink`} onClick={() => getStudent(student.id)}>{student.name}</div>
+            <div className={`personality--${student.personality} cell`}
+                 onClick={() => getStudent(student.id)}>
+                {student.pending_proposal ? "📕 " : ""}
+                <span className="fakeLink">
+                    {student.name}
+                </span>
+            </div>
             <div className="cell cell--centered">{student.score}</div>
         </>
     )
