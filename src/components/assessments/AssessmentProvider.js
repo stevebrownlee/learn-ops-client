@@ -6,6 +6,7 @@ export const AssessmentContext = React.createContext()
 
 export const AssessmentProvider = (props) => {
     const [studentAssessments, setAssessments] = useState([])
+    const [cohortCapstones, setCohortCapstones] = useState([])
     const [allAssessments, setAll] = useState([])
     const [statuses, setStatuses] = useState([])
     const [proposalStatuses, setProposalStatuses] = useState([])
@@ -18,6 +19,11 @@ export const AssessmentProvider = (props) => {
                 setAssessments(data)
             })
     }, [setAssessments])
+
+    const getCohortCapstones = useCallback((cohortId) => {
+        return fetchIt(`${Settings.apiHost}/capstones?cohortId=${cohortId}`)
+            .then(setCohortCapstones)
+    }, [])
 
     const getAssessmentList = useCallback(() => {
         return fetch(`${Settings.apiHost}/assessments`)
@@ -88,7 +94,8 @@ export const AssessmentProvider = (props) => {
             getStudentAssessments, getAssessmentList, studentAssessments,
             saveAssessment, allAssessments, saveStudentAssessment,
             getStatuses, statuses, changeStatus, getCourses, saveProposal,
-            proposalStatuses, getProposalStatuses, addToProposalTimeline
+            proposalStatuses, getProposalStatuses, addToProposalTimeline,
+            cohortCapstones, getCohortCapstones
         }} >
             {props.children}
         </AssessmentContext.Provider>

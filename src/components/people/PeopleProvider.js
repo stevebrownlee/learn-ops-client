@@ -43,8 +43,8 @@ export const PeopleProvider = (props) => {
             .then(activateStudent)
     }, [activeStudent])
 
-    const getStudentProposals = useCallback((studentId) => {
-        return fetchIt(`${Settings.apiHost}/capstones?studentId=${studentId ?? activeStudent.id}`)
+    const getStudentProposals = useCallback(() => {
+        return fetchIt(`${Settings.apiHost}/capstones?studentId=${activeStudent.id}`)
             .then(setProposals)
     }, [activeStudent])
 

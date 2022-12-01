@@ -25,6 +25,9 @@ export const NavBar = () => {
                         {makeLink("/", "Overview")}
                     </li>
                     <li className="navbar__item">
+                        {makeLink("/capstones", "Capstones")}
+                    </li>
+                    <li className="navbar__item">
                         {makeLink("/students", "Cohorts")}
                     </li>
                     <li className="navbar__item">

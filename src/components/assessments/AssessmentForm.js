@@ -9,12 +9,12 @@ export const AssessmentForm = () => {
         sourceURL: "",
         type: ""
     }
-    const { getAssessments, assessments, saveAssessment } = useContext(AssessmentContext)
+    const { getAssessmentList, allAssessments, saveAssessment } = useContext(AssessmentContext)
     const [assessment, changeAssessment] = useState(defaultState)
 
     const getData = useCallback(() => {
-        getAssessments()
-    }, [getAssessments])
+        getAssessmentList()
+    }, [getAssessmentList])
 
     useEffect(() => {
         getData()
@@ -35,7 +35,7 @@ export const AssessmentForm = () => {
 
     const create = (evt) => {
         evt.preventDefault()
-        return saveAssessment(assessment).then(getAssessments)
+        return saveAssessment(assessment).then(getAssessmentList)
     }
 
     return (
