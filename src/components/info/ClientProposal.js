@@ -52,7 +52,7 @@ export const ClientProposal = () => {
 
                         <option value={0}>Choose course</option>
                         {
-                            courses.map(c => <option value={c.id}>{c.name}</option>)
+                            courses.map(c => <option key={`crs--${c.id}`} value={c.id}>{c.name}</option>)
                         }
                     </select>
                 </div>

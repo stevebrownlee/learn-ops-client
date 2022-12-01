@@ -20,9 +20,14 @@ export const StudentTabList = () => {
     const history = useHistory()
 
     useEffect(() => {
-        getStudentAssessments(activeStudent.id)
-        getAssessmentList()
+        getProposalStatuses()
         getStatuses()
+        getAssessmentList()
+    }, [])
+
+    useEffect(() => {
+        getStudentAssessments(activeStudent.id)
+        getStudentProposals()
     }, [activeStudent])
 
     const createStatus = (status) => {

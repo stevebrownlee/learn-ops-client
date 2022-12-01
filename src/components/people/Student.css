@@ -63,7 +63,7 @@
 }
 
 .personality-- {
-    background-color: powderblue;
+    background-color: rgb(219, 234, 237);
 }
 
 .personality--Analyst {
@@ -71,7 +71,7 @@
 }
 
 .personality--Sentinel {
-    background-color: #b1dff0;
+    background-color: #aedced;
 }
 
 .personality--Explorer {
