@@ -188,12 +188,7 @@ export const StudentTabList = () => {
 
             <li>
                 <input type="radio" name="tabs" id="tab4" />
-                <label htmlFor="tab4" role="tab"
-                    onClick={() => {
-                        getStudentProposals()
-                        getProposalStatuses()
-                    }}
-                    aria-selected="true" aria-controls="panel4" tabIndex="0">Proposals</label>
+                <label htmlFor="tab4" role="tab" aria-selected="true" aria-controls="panel4" tabIndex="0">Proposals</label>
                 <article id="tab-content4" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
 
                     <h2>Capstone Proposals</h2>
