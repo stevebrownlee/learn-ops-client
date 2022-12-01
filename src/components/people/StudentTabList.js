@@ -5,12 +5,15 @@ import { Record } from "../records/Record.js"
 import { PeopleContext } from "./PeopleProvider.js"
 import { HumanDate } from "../utils/HumanDate.js"
 import "./Status.css"
+import { CohortContext } from "../cohorts/CohortProvider.js"
 
 export const StudentTabList = () => {
     const [chosenAssessment, chooseAssessment] = useState(0)
     const {
         activeStudent, getStudentProposals,
-        proposals } = useContext(PeopleContext)
+        proposals, getCohortStudents
+    } = useContext(PeopleContext)
+    const { activeCohort } = useContext(CohortContext)
     const {
         getStudentAssessments, getAssessmentList,
         studentAssessments, allAssessments, saveStudentAssessment,
@@ -69,19 +72,18 @@ export const StudentTabList = () => {
     }
 
     const capstoneStatuses = (proposalId) => {
-        return <select id="statuses"
-            className="form-control"
-            onChange={(e) => {
-                addToProposalTimeline(proposalId, parseInt(e.target.value))
-                    .then(getStudentProposals)
-            }}>
-            <option value="0">Status</option>
-            {
-                proposalStatuses.map(s => {
-                    return <option key={`asst--${s.id}`} value={s.id}>{s.status}</option>
-                })
-            }
-        </select>
+        return proposalStatuses.map(s => {
+            return <button key={`asst--${s.id}`}
+                onClick={(e) => {
+                    addToProposalTimeline(proposalId, s.id)
+                        .then(getStudentProposals)
+                        .then(() => {
+                            if ("id" in activeCohort) {
+                                getCohortStudents(activeCohort.id)
+                            }
+                        })
+                }}>Mark as {s.status}</button>
+        })
     }
 
     return (
@@ -199,11 +201,7 @@ export const StudentTabList = () => {
                                 {p.statuses.map(s => <div key={`propstat--${s.id}`}>{s.status} on {s.date}</div>)}
                             </div>
                             <div className="cell">
-                                {
-                                    p.statuses.find(s => s.status === "Approved")
-                                        ? "Approved"
-                                        : capstoneStatuses(p.id)
-                                }
+                                {capstoneStatuses(p.id)}
                             </div>
                         </div>
                         )

@@ -8,7 +8,21 @@ export const Student = ({ student }) => {
         <>
             <div className={`personality--${student.personality} cell`}
                  onClick={() => getStudent(student.id)}>
-                {student.pending_proposal ? "📕 " : ""}
+
+                {
+                    student.pending_proposal.map(p => {
+                        if (p.status === "submitted") {
+                            return "📕 "
+                        }
+                        else if (p.status === "reviewed") {
+                            return "📒 "
+                        }
+                        else if (p.status === "approved") {
+                            return "📗 "
+                        }
+                    })
+                }
+
                 <span className="fakeLink">
                     {student.name}
                 </span>
