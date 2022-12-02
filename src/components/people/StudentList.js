@@ -14,7 +14,7 @@ export const StudentList = () => {
     const [editSlack, setSlackEdit] = useState(0)
     const [chosenStudents, updateStudents] = useState(new Set())
     const { students, getStudents } = useContext(PeopleContext)
-    const { getCohorts, cohorts } = useContext(CohortContext)
+    const { getCohorts, cohorts, leaveCohort } = useContext(CohortContext)
     const { getCurrentUser } = useSimpleAuth()
     const history = useHistory()
 
@@ -37,6 +37,10 @@ export const StudentList = () => {
         </>
     }
 
+    const leave = (cohortId) => {
+        leaveCohort(cohortId).then(() => getCohorts({ limit: 4 }))
+    }
+
     return <>
         <div className="cohorts">
             {
@@ -44,7 +48,12 @@ export const StudentList = () => {
                     return <section key={`cohort--${cohort.id}`} className="cohort">
                         <h2>{cohort.name}</h2>
                         <div className="cohort__join">
-                            <button className="fakeLink">Join</button>
+                            {
+                                cohort.is_instructor === 1
+                                    ? <button onClick={() => leave(cohort.id)} className="fakeLink">Leave</button>
+                                    : <button className="fakeLink">Join</button>
+                            }
+
                         </div>
                         <div className="cohort__dates">
                             <div>

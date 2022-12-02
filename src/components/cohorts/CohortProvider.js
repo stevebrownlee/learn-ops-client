@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react"
 import useSimpleAuth from "../auth/useSimpleAuth.js"
 import Settings from "../Settings.js"
+import { fetchIt } from "../utils/Fetch.js"
 
 export const CohortContext = React.createContext()
 
@@ -14,34 +15,28 @@ export const CohortProvider = (props) => {
     const getCohorts = useCallback((options={}) => {
         const limit = options.limit ? `?limit=${options.limit}` : ""
 
-        return fetch(`${Settings.apiHost}/cohorts${limit}`)
-            .then(response => response.json())
+        return fetchIt(`${Settings.apiHost}/cohorts${limit}`)
             .then(data => setCohorts(data))
     }, [setCohorts])
 
     const getCohort = useCallback((id) => {
-        return fetch(`${Settings.apiHost}/cohorts/${id}`, {
-            headers: {
-                "Authorization": `Token ${user.token}`
-            }
-        })
-            .then(response => response.json())
+        return fetchIt(`${Settings.apiHost}/cohorts/${id}`)
             .then(activateCohort)
     }, [user])
 
+    const leaveCohort = useCallback((cohortId) => {
+        return fetchIt(`${Settings.apiHost}/cohorts/${cohortId}/assign?userType=instructor`, { method: "DELETE" })
+    }, [])
+
 
     const findCohort = useCallback((q) => {
-        return fetch(`${Settings.apiHost}/cohorts?q=${q}`, {
-            headers: {
-                "Authorization": `Token ${user.token}`
-            }
-        })
-            .then(response => response.json())
+        return fetchIt(`${Settings.apiHost}/cohorts?q=${q}`)
     }, [user])
 
     return (
         <CohortContext.Provider value={{
-            getCohorts, cohorts, findCohort, activeCohort, activateCohort, getCohort
+            getCohorts, cohorts, findCohort, activeCohort, activateCohort, getCohort,
+            leaveCohort
         }} >
             {props.children}
         </CohortContext.Provider>
