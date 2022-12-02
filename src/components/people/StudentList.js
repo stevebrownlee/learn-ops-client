@@ -1,10 +1,12 @@
+import Settings from "../Settings"
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import useSimpleAuth from "../auth/useSimpleAuth"
 import { CohortContext } from "../cohorts/CohortProvider"
-import Settings from "../Settings"
 import { PeopleContext } from "./PeopleProvider"
+import { HumanDate } from "../utils/HumanDate"
 import "./StudentList.css"
+import slackLogo from "../teams/images/slack.png"
 
 
 export const StudentList = () => {
@@ -20,9 +22,43 @@ export const StudentList = () => {
         getCohorts()
     }, [])
 
-    return (
+    return <>
+        <div className="cohorts">
+            {
+                cohorts.map(cohort => {
+                    return <section key={`cohort--${cohort.id}`} className="cohort">
+                        <h2>{cohort.name}</h2>
+                        <div className="cohort__join">
+                            <button className="fakeLink">Join</button>
+                        </div>
+                        <div className="cohort__dates">
+                            <div>
+                            <HumanDate date={cohort.start_date} />
+                            </div>
+                            <div style={{ width: "30%"}}><hr /></div>
+                            <div><HumanDate date={cohort.end_date} /></div>
+                        </div>
+                        <h4>Coaches</h4>
+                        <div className="cohort__coaches">
+                            {
+                                cohort.coaches.map(coach => <div className="instructor--badge cohort__coach">{coach.name}</div>)
+                            }
+
+                        </div>
+
+                        <footer className="cohort__footer">
+                            <div>
+                                {cohort.students} students
+                            </div>
+                            <div>{cohort.slack_channel} <img className="icon--slack--cohort" src={slackLogo} alt="Create Slack team channel" /></div>
+                        </footer>
+                    </section>
+                })
+            }
+        </div>
+
         <div className="studentList">
-            <h2>Student List</h2>
+            <h2>Unassigned Students</h2>
             <div className="studentList__options">
                 <select value={chosenCohort} onChange={e => setCohort(e.target.value)}>
                     <option value="0">Assign to cohort...</option>
@@ -54,7 +90,7 @@ export const StudentList = () => {
                     }}
                 >Commit Change</button>
 
-                <button onClick={()=>history.push("/cohorts/new")} className="studentList__createCohort">Create New Cohort</button>
+                <button onClick={() => history.push("/cohorts/new")} className="studentList__createCohort">Create New Cohort</button>
             </div>
             {
                 students.length > 0
@@ -86,6 +122,6 @@ export const StudentList = () => {
                     : `No unassigned students`
             }
         </div>
-    )
+    </>
 
 }
