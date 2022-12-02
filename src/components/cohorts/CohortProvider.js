@@ -11,8 +11,10 @@ export const CohortProvider = (props) => {
     const { getCurrentUser } = useSimpleAuth()
     const user = getCurrentUser()
 
-    const getCohorts = useCallback(() => {
-        return fetch(`${Settings.apiHost}/cohorts`)
+    const getCohorts = useCallback((options={}) => {
+        const limit = options.limit ? `?limit=${options.limit}` : ""
+
+        return fetch(`${Settings.apiHost}/cohorts${limit}`)
             .then(response => response.json())
             .then(data => setCohorts(data))
     }, [setCohorts])

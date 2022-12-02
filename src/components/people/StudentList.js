@@ -11,6 +11,7 @@ import slackLogo from "../teams/images/slack.png"
 
 export const StudentList = () => {
     const [chosenCohort, setCohort] = useState(0)
+    const [editSlack, setSlackEdit] = useState(0)
     const [chosenStudents, updateStudents] = useState(new Set())
     const { students, getStudents } = useContext(PeopleContext)
     const { getCohorts, cohorts } = useContext(CohortContext)
@@ -19,8 +20,22 @@ export const StudentList = () => {
 
     useEffect(() => {
         getStudents("unassigned")
-        getCohorts()
+        getCohorts({ limit: 4 })
     }, [])
+
+    const slackEditInput = (current) => {
+        return <input type="text" value={current} />
+    }
+
+    const slackDisplay = (cohort) => {
+        return <>
+            {cohort.slack_channel}
+            <img onClick={() => {
+                setSlackEdit(cohort.id)
+            }}
+                className="icon--slack--cohort" src={slackLogo} alt="Create Slack team channel" />
+        </>
+    }
 
     return <>
         <div className="cohorts">
@@ -33,15 +48,33 @@ export const StudentList = () => {
                         </div>
                         <div className="cohort__dates">
                             <div>
-                            <HumanDate date={cohort.start_date} />
+                                {
+                                    new Date(cohort.start_date.replace(/-/g, '\/')).toLocaleDateString("en-US",
+                                        {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            timeZone: 'America/Chicago'
+                                        })
+                                }
                             </div>
-                            <div style={{ width: "30%"}}><hr /></div>
-                            <div><HumanDate date={cohort.end_date} /></div>
+                            <div style={{ width: "30%" }}><hr /></div>
+                            <div>
+                                {
+                                    new Date(cohort.end_date.replace(/-/g, '\/')).toLocaleDateString("en-US",
+                                        {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            timeZone: 'America/Chicago'
+                                        })
+                                }
+                            </div>
                         </div>
                         <h4>Coaches</h4>
                         <div className="cohort__coaches">
                             {
-                                cohort.coaches.map(coach => <div className="instructor--badge cohort__coach">{coach.name}</div>)
+                                cohort.coaches.map(coach => <div key={`coach--${coach.name}`} className="instructor--badge cohort__coach">{coach.name}</div>)
                             }
 
                         </div>
@@ -50,7 +83,13 @@ export const StudentList = () => {
                             <div>
                                 {cohort.students} students
                             </div>
-                            <div>{cohort.slack_channel} <img className="icon--slack--cohort" src={slackLogo} alt="Create Slack team channel" /></div>
+                            <div>
+                                {
+                                    editSlack === cohort.id
+                                        ? slackEditInput(cohort.slack_channel)
+                                        : slackDisplay(cohort)
+                                }
+                            </div>
                         </footer>
                     </section>
                 })
