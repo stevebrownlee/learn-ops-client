@@ -10,7 +10,7 @@ export const Student = ({ student }) => {
                  onClick={() => getStudent(student.id)}>
 
                 {
-                    student.pending_proposal.map(p => {
+                    student.proposals.map(p => {
                         if (p.status === "submitted") {
                             return "📕 "
                         }

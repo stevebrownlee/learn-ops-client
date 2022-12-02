@@ -4,8 +4,9 @@ import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { Record } from "../records/Record.js"
 import { PeopleContext } from "./PeopleProvider.js"
 import { HumanDate } from "../utils/HumanDate.js"
-import "./Status.css"
 import { CohortContext } from "../cohorts/CohortProvider.js"
+import "./Status.css"
+import { fetchIt } from "../utils/Fetch.js"
 
 export const StudentTabList = () => {
     const [chosenAssessment, chooseAssessment] = useState(0)
@@ -15,7 +16,7 @@ export const StudentTabList = () => {
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
     const {
-        getStudentAssessments, getAssessmentList,
+        getStudentAssessments, getAssessmentList, revokeApproval,
         studentAssessments, allAssessments, saveStudentAssessment,
         getStatuses, statuses, changeStatus, proposalStatuses,
         getProposalStatuses, addToProposalTimeline
@@ -71,20 +72,31 @@ export const StudentTabList = () => {
             .then(() => getStudentAssessments(activeStudent.id))
     }
 
-    const capstoneStatuses = (proposalId) => {
+    const capstoneStatuses = (proposalId, currentStatuses) => {
         return proposalStatuses.map(s => {
-            return <button key={`asst--${s.id}`}
-                onClick={(e) => {
-                    addToProposalTimeline(proposalId, s.id)
-                        .then(getStudentProposals)
-                        .then(() => {
-                            if ("id" in activeCohort) {
-                                getCohortStudents(activeCohort.id)
-                            }
-                        })
-                }}>Mark as {s.status}</button>
+            const statusExists = currentStatuses.find(cs => cs.status === s.status)
+            if (!statusExists) {
+                return <button className="fakeLink button--capstoneStage" key={`asst--${s.id}`}
+                    onClick={(e) => {
+                        addToProposalTimeline(proposalId, s.id)
+                            .then(getStudentProposals)
+                            .then(() => {
+                                if ("id" in activeCohort) {
+                                    getCohortStudents(activeCohort.id)
+                                }
+                            })
+                    }}>{s.status}</button>
+            }
         })
     }
+
+    const revoke = (timelineStatus) => {
+        revokeApproval(timelineStatus)
+            .then(getStudentProposals)
+            .then(() => getCohortStudents(activeCohort.id))
+    }
+
+
 
     return (
         <ul className="tabs" role="tablist">
@@ -198,10 +210,23 @@ export const StudentTabList = () => {
                         proposals.map(p => <div key={`prop--${p.id}`} className="table">
                             <div className="cell">
                                 <a href={p.proposal_url} target="_blank">{p.course}</a>
-                                {p.statuses.map(s => <div key={`propstat--${s.id}`}>{s.status} on {s.date}</div>)}
+                                {
+                                    p.statuses.map(s => <div key={`propstat--${s.id}`} className="proposalStatus">
+                                        <span>{s.status} on {s.date}</span>
+                                        {
+                                            s.status === "Approved"
+                                                ? <button className="fakeLink small button--revoke"
+                                                    onClick={() => revoke(s)}
+                                                    >[ revoke ]</button>
+                                                : <span className="button--revoke"> </span>
+                                        }
+
+                                    </div>)
+                                }
                             </div>
                             <div className="cell">
-                                {capstoneStatuses(p.id)}
+                                <div>Change status to...</div>
+                                {capstoneStatuses(p.id, p.statuses)}
                             </div>
                         </div>
                         )

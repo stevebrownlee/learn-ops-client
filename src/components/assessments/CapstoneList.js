@@ -18,7 +18,7 @@ export const CapstoneList = () => {
                     cohortCapstones.map(capstone => {
                         return <div key={`capstone--${capstone.id}`} className="capstone">
                             <header className="capstone__header">
-                                {capstone.name} ({capstone.course})
+                                {capstone.name} <a href={capstone.proposal_url} target="_blank">({capstone.course})</a>
                                 {
                                     capstone.statuses.map(status => {
                                         return <div>{status.status} on {new Date(status.date).toLocaleDateString("en-US", {

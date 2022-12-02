@@ -17,3 +17,16 @@
 .status:hover {
     background-color: rgb(247, 224, 208);
 }
+
+.button--capstoneStage {
+    font-size: smaller;
+}
+
+.button--revoke {
+    margin-left: auto;
+}
+
+.proposalStatus {
+    display: flex;
+    justify-content: space-evenly;
+}

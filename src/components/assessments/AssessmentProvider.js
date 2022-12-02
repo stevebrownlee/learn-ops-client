@@ -89,13 +89,17 @@ export const AssessmentProvider = (props) => {
         )
     }
 
+    const revokeApproval = (status) => {
+        return fetchIt( `${Settings.apiHost}/timelines/${status.id}`, { method: "DELETE" } )
+    }
+
     return (
         <AssessmentContext.Provider value={{
             getStudentAssessments, getAssessmentList, studentAssessments,
             saveAssessment, allAssessments, saveStudentAssessment,
             getStatuses, statuses, changeStatus, getCourses, saveProposal,
             proposalStatuses, getProposalStatuses, addToProposalTimeline,
-            cohortCapstones, getCohortCapstones
+            cohortCapstones, getCohortCapstones, revokeApproval
         }} >
             {props.children}
         </AssessmentContext.Provider>
