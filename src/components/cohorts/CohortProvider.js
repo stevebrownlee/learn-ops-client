@@ -28,6 +28,10 @@ export const CohortProvider = (props) => {
         return fetchIt(`${Settings.apiHost}/cohorts/${cohortId}/assign?userType=instructor`, { method: "DELETE" })
     }, [])
 
+    const joinCohort = useCallback((cohortId) => {
+        return fetchIt(`${Settings.apiHost}/cohorts/${cohortId}/assign?userType=instructor`, { method: "POST" })
+    }, [])
+
 
     const findCohort = useCallback((q) => {
         return fetchIt(`${Settings.apiHost}/cohorts?q=${q}`)
@@ -36,7 +40,7 @@ export const CohortProvider = (props) => {
     return (
         <CohortContext.Provider value={{
             getCohorts, cohorts, findCohort, activeCohort, activateCohort, getCohort,
-            leaveCohort
+            leaveCohort, joinCohort
         }} >
             {props.children}
         </CohortContext.Provider>
