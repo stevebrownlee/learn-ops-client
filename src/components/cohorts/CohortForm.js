@@ -3,16 +3,17 @@ import { useHistory } from "react-router-dom"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 import "./CohortForm.css"
+import { HelpIcon } from "../../svgs/Help.js"
 
 
 export const CohortForm = () => {
     const [cohort, updateCohort] = useState({
-        name: "Day Cohort 54",
-        startDate: new Date("01/03/2022").toISOString().substring(0,10),
-        endDate: new Date("06/25/2022").toISOString().substring(0,10),
-        breakStartDate: new Date("03/28/2022").toISOString().substring(0,10),
-        breakEndDate: new Date("04/01/2022").toISOString().substring(0,10),
-        slackChannel: "day-cohort-54"
+        name: "",
+        startDate: "",
+        endDate: "",
+        breakStartDate: "",
+        breakEndDate: "",
+        slackChannel: ""
     })
     const history = useHistory()
 
@@ -27,13 +28,15 @@ export const CohortForm = () => {
         updateCohort(copy)
     }
 
-
     return (
         <>
             <form className="cohortForm view">
                 <h2 className="cohortForm__title">New Cohort</h2>
                 <div className="form-group">
-                    <label htmlFor="name">Cohort name</label>
+                    <label htmlFor="name">
+                        Cohort name
+                        <HelpIcon tip="Day Cohort 62, for example." />
+                    </label>
                     <input onChange={handleUserInput}
                         value={cohort.name}
                         type="text" required autoFocus
@@ -42,7 +45,10 @@ export const CohortForm = () => {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="slackChannel">Slack channel</label>
+                    <label>
+                        Instructor Slack Channel ID
+                        <HelpIcon tip="Click on the instructor channel name at the top of Slack. Channel ID is at the bottom of pop-up." />
+                    </label>
                     <input onChange={handleUserInput}
                         value={cohort.slackChannel}
                         type="text" required
@@ -67,26 +73,6 @@ export const CohortForm = () => {
                         id="endDate" className="form-control"
                     />
                 </div>
-
-                <div className="form-group">
-                    <label htmlFor="breakStartDate">Break start date</label>
-                    <input onChange={handleUserInput}
-                        value={cohort.breakStartDate}
-                        type="date" required
-                        id="breakStartDate" className="form-control"
-                    />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="breakEndDate">Break end date</label>
-                    <input onChange={handleUserInput}
-                        value={cohort.breakEndDate}
-                        type="date" required
-                        id="breakEndDate" className="form-control"
-                    />
-                </div>
-
-
 
                 <button type="submit"
                     onClick={

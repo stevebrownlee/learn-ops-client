@@ -20,8 +20,10 @@ export const StudentList = () => {
 
     useEffect(() => {
         getStudents("unassigned")
-        getCohorts({ limit: 4 })
+        getLastFourCohorts()
     }, [])
+
+    const getLastFourCohorts = () => getCohorts({ limit: 4 })
 
     const slackEditInput = (current) => {
         return <input type="text" value={current} />
@@ -38,11 +40,11 @@ export const StudentList = () => {
     }
 
     const leave = (cohortId) => {
-        leaveCohort(cohortId).then(() => getCohorts({ limit: 4 }))
+        leaveCohort(cohortId).then(getLastFourCohorts)
     }
 
     const join = (cohortId) => {
-        joinCohort(cohortId).then(() => getCohorts({ limit: 4 }))
+        joinCohort(cohortId).then(getLastFourCohorts)
     }
 
     return <>
@@ -50,7 +52,7 @@ export const StudentList = () => {
             {
                 cohorts.map(cohort => {
                     return <section key={`cohort--${cohort.id}`} className="cohort">
-                        <h2>{cohort.name}</h2>
+                        <h3>{cohort.name}</h3>
                         <div className="cohort__join">
                             {
                                 cohort.is_instructor === 1

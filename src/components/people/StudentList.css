@@ -1,12 +1,13 @@
 .cohorts {
     display: flex;
     flex-wrap: wrap;
-    /* justify-content: space-between; */
-    margin: 0 10rem;
+    margin: 0 5rem;
+    font-size: small;
+    justify-content: space-between;
 }
 
 .cohort {
-    flex: 0 1 40%;
+    flex: 0 1 25%;
     position: relative;
     margin: 0.5rem 1rem;
     padding: 0rem 1rem 0.5rem 1rem;
@@ -53,7 +54,7 @@
     color: black;
     border-radius: 0.25rem;
     margin: 0.2rem 0.25rem;
-    font-size: 0.75rem;
+    font-size: smaller;
     max-width: 10rem;
     text-align: center;
 }
