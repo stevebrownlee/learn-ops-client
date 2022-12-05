@@ -1,7 +1,9 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 
-export const HelpIcon = ({ helpFunction, tip }) => {
+export const HelpIcon = ({ helpFunction, tip, position }) => {
     const [visible, setVisible] = useState(false)
+    const [style, setStyle] = useState(false)
+
     const tooltipStyle = {
         position: "absolute",
         top: "-4rem",
@@ -14,14 +16,15 @@ export const HelpIcon = ({ helpFunction, tip }) => {
         zIndex: 10
     }
 
-
-    return <span style={{position: "relative"}}>
-    {
-        visible
-            ? <div style={tooltipStyle}>{tip}</div>
-            : ""
+    const displayTip = () => {
+        if (position === "left") {
+            tooltipStyle.left = "-12rem"
+        }
+        return <div style={tooltipStyle}>{tip}</div>
     }
 
+    return <span style={{ position: "relative" }}>
+        { visible ? displayTip() : "" }
 
         <svg className="tooltip"
             onMouseOver={() => setVisible(!visible)}

@@ -96,8 +96,6 @@ export const StudentTabList = () => {
             .then(() => getCohortStudents(activeCohort.id))
     }
 
-
-
     return (
         <ul className="tabs" role="tablist">
             <li>

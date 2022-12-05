@@ -16,6 +16,10 @@
     flex-direction: column;
 }
 
+.cohort__header {
+    margin: 2.25rem 0 1rem 0;
+}
+
 .cohort__dates {
     display: flex;
     justify-content: space-between;
@@ -40,6 +44,7 @@
     color: rgb(149, 149, 149);
     justify-content: space-between;
     margin-top: auto;
+    font-size: 0.75rem;
 }
 
 .cohort__coaches {
@@ -78,14 +83,24 @@
 
 .studentList__options {
     margin-bottom: 2rem;
-    display: flex;
     flex-direction: row;
+    display: flex;
 }
 
 .studentList__createCohort {
-    margin-left: auto;
+    margin: 1rem 0 1rem 4rem;
+}
+
+.header--studentList {
+    font-size: large;
+    font-weight: bold;
 }
 
 .button--commit {
     margin: 0 0 0 1rem;
+}
+
+.button--collect {
+    margin-left: auto;
+    margin-right: 5rem
 }

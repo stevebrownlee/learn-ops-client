@@ -5,8 +5,11 @@ import useSimpleAuth from "../auth/useSimpleAuth"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { PeopleContext } from "./PeopleProvider"
 import { HumanDate } from "../utils/HumanDate"
+import { EditIcon } from "../../svgs/Edit"
+import { PeopleIcon } from "../../svgs/PeopleIcon"
 import "./StudentList.css"
-import slackLogo from "../teams/images/slack.png"
+import { fetchIt } from "../utils/Fetch"
+import { HelpIcon } from "../../svgs/Help"
 
 
 export const StudentList = () => {
@@ -14,7 +17,7 @@ export const StudentList = () => {
     const [editSlack, setSlackEdit] = useState(0)
     const [chosenStudents, updateStudents] = useState(new Set())
     const { students, getStudents } = useContext(PeopleContext)
-    const { getCohorts, cohorts, leaveCohort, joinCohort } = useContext(CohortContext)
+    const { getCohorts, cohorts, leaveCohort, joinCohort, updateCohort } = useContext(CohortContext)
     const { getCurrentUser } = useSimpleAuth()
     const history = useHistory()
 
@@ -25,17 +28,27 @@ export const StudentList = () => {
 
     const getLastFourCohorts = () => getCohorts({ limit: 4 })
 
-    const slackEditInput = (current) => {
-        return <input type="text" value={current} />
+    const slackEditInput = (cohort) => {
+        return <input type="text" autoFocus style={{ fontSize: "smaller" }} onKeyUp={e => {
+            if (e.key === "Enter") {
+                const updatedCohort = { ...cohort, slack_channel: e.target.value }
+                updateCohort(updatedCohort).then(() => {
+                    getLastFourCohorts()
+                    setSlackEdit(0)
+                })
+            }
+            else if (e.key === "Escape") {
+                setSlackEdit(0)
+            }
+        }} defaultValue={cohort.slack_channel} />
     }
 
     const slackDisplay = (cohort) => {
         return <>
             {cohort.slack_channel}
-            <img onClick={() => {
+            <EditIcon helpFunction={() => {
                 setSlackEdit(cohort.id)
-            }}
-                className="icon--slack--cohort" src={slackLogo} alt="Create Slack team channel" />
+            }} />
         </>
     }
 
@@ -48,11 +61,17 @@ export const StudentList = () => {
     }
 
     return <>
+        <button className="button button--isi button--border-thick button--round-l button--size-s studentList__createCohort"
+            onClick={() => history.push("/cohorts/new")}>
+            <i className="button__icon icon icon-book"></i>
+            <span>Create Cohort</span>
+        </button>
         <div className="cohorts">
+
             {
                 cohorts.map(cohort => {
                     return <section key={`cohort--${cohort.id}`} className="cohort">
-                        <h3>{cohort.name}</h3>
+                        <h3 className="cohort__header">{cohort.name}</h3>
                         <div className="cohort__join">
                             {
                                 cohort.is_instructor === 1
@@ -96,12 +115,12 @@ export const StudentList = () => {
 
                         <footer className="cohort__footer">
                             <div>
-                                {cohort.students} students
+                                <PeopleIcon /> {cohort.students}
                             </div>
                             <div>
                                 {
                                     editSlack === cohort.id
-                                        ? slackEditInput(cohort.slack_channel)
+                                        ? slackEditInput(cohort)
                                         : slackDisplay(cohort)
                                 }
                             </div>
@@ -122,29 +141,33 @@ export const StudentList = () => {
                         })
                     }
                 </select>
-                <button className="studentList__commit button--commit"
+
+                <button className="button button--isi button--border-thick button--round-l button--size-s"
                     onClick={() => {
                         const fetches = []
 
                         const students = [...chosenStudents]
                         students.forEach(s => fetches.push(
-                            fetch(`${Settings.apiHost}/cohorts/${chosenCohort}/assign`, {
+                            fetchIt(`${Settings.apiHost}/cohorts/${chosenCohort}/assign`, {
                                 method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    Authorization: `Token ${getCurrentUser().token}`
-                                },
                                 body: JSON.stringify({
                                     person_id: parseInt(s)
                                 })
                             })
                         ))
 
-                        Promise.all(fetches).then(getStudents)
-                    }}
-                >Commit Change</button>
-
-                <button onClick={() => history.push("/cohorts/new")} className="studentList__createCohort">Create New Cohort</button>
+                        Promise.all(fetches)
+                            .then(() => getStudents("unassigned"))
+                            .then(getLastFourCohorts)
+                    }}>
+                    <i className="button__icon icon icon-book"></i>
+                    <span>Assign Students</span>
+                </button>
+            </div>
+            <div className="studentList__student">
+                <div></div>
+                <h2>Student</h2>
+                <h2>Joined On</h2>
             </div>
             {
                 students.length > 0
@@ -166,9 +189,13 @@ export const StudentList = () => {
                             </div>
                             <div>
                                 {
-                                    student.cohorts.length > 0
-                                        ? student.cohorts[0].name
-                                        : "Not assigned"
+                                    new Date(student.date_joined).toLocaleDateString("en-US",
+                                        {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                            timeZone: 'America/Chicago'
+                                        })
                                 }
                             </div>
                         </div>
