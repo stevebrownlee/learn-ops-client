@@ -23,7 +23,7 @@ export const Student = ({ student }) => {
                     </span>
                 </div>
                 <div className="student__header">
-                    <h4>{student.name}</h4>
+                    <h4>{student.name.split("").slice(0,15).join("")}</h4>
                 </div>
                 <div className="student__coreskills">
                     <div>Al: 5</div>
@@ -32,12 +32,28 @@ export const Student = ({ student }) => {
                     <div>Le: 3</div>
                 </div>
                 <div className="student__footer">
-                    <h4 className="footer__score">{student.score}</h4>
+                    <div>
+                        {student.score}
+                    </div>
+                    <div>
+                        {student.book.name}
+                    </div>
+                    <div>
+                        {
+                            student.proposals.map(p => {
+                                if (p.status === "submitted") {
+                                    return "📕"
+                                }
+                                else if (p.status === "reviewed") {
+                                    return "📒"
+                                }
+                                else if (p.status === "approved") {
+                                    return "📗"
+                                }
+                            })
+                        }
+                    </div>
                 </div>
-
-
-
-
             </div>
         </>
     )
