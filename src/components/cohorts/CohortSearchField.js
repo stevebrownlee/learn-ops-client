@@ -7,7 +7,7 @@ import { CohortContext } from "./CohortProvider.js"
 import { CohortResults } from "./CohortResults.js"
 import "./CohortStudentList.css"
 
-export const StudentCardList = () => {
+export const CohortSearchField = () => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
     const { getCohortStudents, cohortStudents } = useContext(PeopleContext)
     const [terms, setTerms] = useState("")
@@ -110,54 +110,6 @@ export const StudentCardList = () => {
 
                 <CohortResults cohorts={cohorts} selectCohort={selectCohort} />
             </div>
-
-            {
-                cohortStudents.length > 0
-                    ? <section className="cohortStudents">
-
-                        <Link to="/teams"> Show current teams </Link>
-
-                        {
-                            active
-                                ? ""
-                                : <div>
-                                    <a href="#"
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            localStorage.setItem("activeCohort", activeCohort.id)
-                                            setActive(true)
-                                        }}
-                                    >Set as my active cohort</a>
-                                </div>
-                        }
-
-                        <div className="table">
-                            <div className="cell">
-                                <i className={`icon icon-${sortBy !== "score" && sortAsc ? "up" : "down"}`} style={{ fontSize: "1.2rem" }} onClick={() => {
-                                    sortBy === "name" ? setSortAsc(!sortAsc) : setSortAsc(true)
-                                    specifySortFunction("name")
-                                }}></i>
-                            </div>
-                            <div className="cell">
-                                <i className={`icon icon-${sortBy === "score" && !sortAsc ? "up" : "down"}`}
-                                    style={{ fontSize: "1.2rem" }}
-                                    onClick={() => {
-                                        sortBy === "score" ? setSortAsc(!sortAsc) : setSortAsc(true)
-                                            specifySortFunction("score")
-                                    }}></i>
-                            </div>
-                            {
-                                cohortStudents
-                                    .sort(sortBy === "score" ? sortStudentsByScore : sortStudentsByLastName)
-                                    .map(student => <Student key={`student--${student.id}`} student={student} />)
-                            }
-                        </div>
-                        <div>
-                            {cohortStudents.length} students
-                        </div>
-                    </section>
-                    : ""
-            }
         </>
     )
 }
