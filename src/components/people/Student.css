@@ -81,3 +81,13 @@
 .personality--Diplomat {
     background-color: #c2f0dd;
 }
+
+.student__header {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.student__book {
+    font-size: smaller;
+}

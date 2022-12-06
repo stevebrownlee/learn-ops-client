@@ -12,6 +12,8 @@ export const StudentCardList = () => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
     const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
     const [sortBy, specifySortFunction] = useState("score")
+    const [sortedStudents, setSortedStudents] = useState([])
+    const [groupedStudents, setGroupedStudents] = useState(new Map())
     const [sortAsc, setSortAsc] = useState(true)
 
     useEffect(() => {
@@ -22,13 +24,34 @@ export const StudentCardList = () => {
         }
     }, [])
 
+    useEffect(() => {
+        const grouped = cohortStudents.reduce(
+            (theMap, currentStudent) => {
+                if (!theMap.has(currentStudent.book.id)) {
+                    theMap.set(currentStudent.book.id, 1)
+                }
+                else {
+                    theMap.set(currentStudent.book.id, theMap.get(currentStudent.book.id) + 1)
+                }
+                return theMap
+            },
+            new Map()
+        )
+        console.log(grouped)
+
+        /* eslint-disable no-undef */
+        const copy = structuredClone(cohortStudents)
+        copy.sort((thisOne, nextOne) => thisOne.book.name < nextOne.book.name ? 1 : -1)
+        setSortedStudents(copy)
+    }, [cohortStudents])
+
     return (
         <>
             {
-                cohortStudents.length > 0
+                sortedStudents.length > 0
                     ? <section className="cohortStudents">
                         {
-                            cohortStudents
+                            sortedStudents
                                 .map(student => <Student key={`student--${student.id}`} student={student} />)
                         }
                     </section>

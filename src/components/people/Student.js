@@ -5,12 +5,10 @@ import { NoteIcon } from "../../svgs/NoteIcon.js"
 import { PeopleContext } from "./PeopleProvider.js"
 
 export const Student = ({ student }) => {
-    const { getStudent } = useContext(PeopleContext)
 
     return (
         <>
-            <div className={`personality--${student.personality} student`}
-                onClick={() => getStudent(student.id)}>
+            <div className={`personality--${student.personality} student`}>
                 <div className="student__actions">
                     <span className="action action--notes">
                         <NoteIcon tip="Enter in your notes about this student" />
@@ -24,19 +22,16 @@ export const Student = ({ student }) => {
                 </div>
                 <div className="student__header">
                     <h4>{student.name.split("").slice(0,15).join("")}</h4>
-                </div>
-                <div className="student__coreskills">
-                    <div>Al: 5</div>
-                    <div>An: 4</div>
-                    <div>Co: 7</div>
-                    <div>Le: 3</div>
+                    <div className="student__book">
+                        {student.book.name}
+                    </div>
+                    <div className="student__book">
+                        {student.book.project}
+                    </div>
                 </div>
                 <div className="student__footer">
                     <div>
                         {student.score}
-                    </div>
-                    <div>
-                        {student.book.name}
                     </div>
                     <div>
                         {
