@@ -6,14 +6,18 @@ import { NoteIcon } from "../../svgs/NoteIcon.js"
 import { PeopleContext } from "./PeopleProvider.js"
 
 export const Student = ({ student, toggleProjects }) => {
-    const { activateStudent } = useContext(PeopleContext)
+    const { activateStudent, setStudentCurrentAssessment } = useContext(PeopleContext)
 
     return (
         <>
-            <div className={`personality--${student.personality} student`}>
+            <div className={`personality--${student.personality} student ${student.on_assessment ? "student--takingAssessment": ""}`}>
                 <div className="student__actions">
                     <div className="action action--assessments">
-                        <AssessmentIcon tip="View and assign self-assessments to student" />
+                        <AssessmentIcon clickFunction={
+                            () => {
+                                setStudentCurrentAssessment(student)
+                            }
+                        } tip="View and assign self-assessments to student" />
                     </div>
                     <div className="action action--notes">
                         <NoteIcon tip="Enter in your notes about this student" />

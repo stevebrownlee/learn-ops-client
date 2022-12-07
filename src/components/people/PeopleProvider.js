@@ -32,6 +32,15 @@ export const PeopleProvider = (props) => {
         })
     }, [])
 
+    const setStudentCurrentAssessment = useCallback((student) => {
+        return fetchIt(`${Settings.apiHost}/students/${student.id}/assess`, {
+            method: "POST",
+            body: JSON.stringify({
+                bookId: student.book.id
+            })
+        })
+    }, [])
+
     const getStudent = useCallback((id = null) => {
         let studentId = 0
         if (id && Number.isFinite(id)) {
@@ -70,7 +79,7 @@ export const PeopleProvider = (props) => {
             getStudents, students, findStudent, getStudent,
             activeStudent, activateStudent, getCohortStudents,
             cohortStudents, getStudentProposals, proposals,
-            setStudentCurrentProject
+            setStudentCurrentProject, setStudentCurrentAssessment
         }} >
             {props.children}
         </PeopleContext.Provider>

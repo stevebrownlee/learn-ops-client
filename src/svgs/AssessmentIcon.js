@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-export const AssessmentIcon = ({ tip, position }) => {
+export const AssessmentIcon = ({ tip, position, clickFunction }) => {
     const [visible, setVisible] = useState(false)
     const [style, setStyle] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
@@ -42,6 +42,7 @@ export const AssessmentIcon = ({ tip, position }) => {
         <svg xmlns="http://www.w3.org/2000/svg"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={clickFunction}
             style={{ cursor: "pointer", marginLeft: "0.33rem", height: "1rem" }}
             viewBox="0 0 512 512">
             <g fill="none">

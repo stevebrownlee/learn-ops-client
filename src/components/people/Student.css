@@ -88,6 +88,11 @@
     max-width: 8rem;
 }
 
+.student--takingAssessment {
+    border: 2px solid rgb(203, 53, 27);
+
+}
+
 .student__actions {
     display: flex;
     flex-wrap: nowrap;
