@@ -5,28 +5,46 @@ import { fetchIt } from "../utils/Fetch"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { CourseContext } from "../course/CourseProvider"
 
-export const BookProjectDialog = () => {
-    const { activeStudent } = useContext(PeopleContext)
-    const { courses } = useContext(CourseContext)
+export const BookProjectDialog = ({ toggleProjects }) => {
+    const { activeStudent, setStudentCurrentProject, getCohortStudents } = useContext(PeopleContext)
+    const { activeCourse } = useContext(CourseContext)
+    const { activeCohort } = useContext(CohortContext)
+    const [book, setBook] = useState({})
+    const [bookProjects, setBookProjects] = useState([])
 
     useEffect(() => {
-        if ("cohorts" in activeStudent) {
-            const ids = activeStudent?.cohorts?.map(c => c.id) ?? []
-            setCohortIds(ids)
+        if ("id" in book) {
+            console.log(activeCourse.books)
+            const projects = activeCourse.books.find(b => b.id === book.id).projects
+            setBookProjects(projects)
         }
-    }, [activeStudent])
+    }, [book])
 
-    return <dialog id="dialog--cohorts" className="dialog--cohorts">
+    return <dialog id="dialog--projects" className="dialog--projects">
         {
-            cohorts.map(cohort => <div key={`cohort--${cohort.id}`}>
-                <input type="checkbox"
-                    onChange={(changeEvent) => {
-                        const action = changeEvent.target.checked ? assignStudent : removeStudent
-                        action(cohort).then(getStudent)
-                    }}
-                    checked={cohortIds.includes(cohort.id)} value={cohort.id} /> {cohort.name}
-            </div>)
+            activeCourse?.books?.map(book => <button
+                onClick={() => {
+                    setBook(book)
+                }}>{book.name}</button>)
         }
+        <select id="project"
+            onChange={(e) => {
+                setStudentCurrentProject(activeStudent.id, parseInt(e.target.value))
+                    .then(() => {
+                        getCohortStudents(activeCohort.id)
+                        toggleProjects()
+                        setBook({})
+                        setBookProjects([])
+                    })
+            }}
+        >
+            <option value="0">Choose project</option>
+            {
+                bookProjects.map(project => {
+                    return <option value={project.id}>{project.name}</option>
+                })
+            }
+        </select>
         <button className="fakeLink" style={{
             position: "absolute",
             top: "0.33em",
@@ -34,6 +52,6 @@ export const BookProjectDialog = () => {
             fontSize: "0.75rem"
         }}
             id="closeBtn"
-            onClick={toggleCohorts}>[ close ]</button>
+            onClick={toggleProjects}>[ close ]</button>
     </dialog>
 }

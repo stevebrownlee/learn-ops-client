@@ -7,6 +7,8 @@ import { CohortSearchField } from "./CohortSearchField.js"
 import { Student } from "../people/Student.js"
 import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
 import "./CohortStudentList.css"
+import { BookProjectDialog } from "../dashboard/BookProjectDialog.js"
+import useModal from "../ui/useModal.js"
 
 export const StudentCardList = () => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
@@ -15,6 +17,7 @@ export const StudentCardList = () => {
     const [sortBy, specifySortFunction] = useState("score")
     const [groupedStudents, setGroupedStudents] = useState([])
     const [sortAsc, setSortAsc] = useState(true)
+    let { toggleDialog: toggleProjects } = useModal("#dialog--projects")
 
     useEffect(() => {
 
@@ -58,11 +61,12 @@ export const StudentCardList = () => {
                 return <article key={`book--${book.id}`} className="bookColumn">
                     <header className="bookColumn__header">{book.name}</header>
                     {
-                        book.students.map(student => <Student key={`student--${student.id}`} student={student} />)
+                        book.students.map(student => <Student toggleProjects={toggleProjects} key={`student--${student.id}`} student={student} />)
                     }
                 </article>
             })
         }
 
+        <BookProjectDialog toggleProjects={toggleProjects} />
     </section>
 }

@@ -5,15 +5,13 @@ import { GlobeIcon } from "../../svgs/GlobeIcon.js"
 import { NoteIcon } from "../../svgs/NoteIcon.js"
 import { PeopleContext } from "./PeopleProvider.js"
 
-export const Student = ({ student }) => {
+export const Student = ({ student, toggleProjects }) => {
+    const { activateStudent } = useContext(PeopleContext)
 
     return (
         <>
             <div className={`personality--${student.personality} student`}>
                 <div className="student__actions">
-                    <div className="action action--progress">
-                        <GlobeIcon tip="Update current book and project" />
-                    </div>
                     <div className="action action--assessments">
                         <AssessmentIcon tip="View and assign self-assessments to student" />
                     </div>
@@ -24,7 +22,10 @@ export const Student = ({ student }) => {
                 <div className="student__header">
                     <h4 className="student__name">{student.name}</h4>
                     <div className="student__book">
-                        {student.book.name} <EditIcon helpFunction={() => {}} />
+                        {student.book.name} <EditIcon helpFunction={() => {
+                            toggleProjects(student)
+                            activateStudent(student)
+                        }} />
                     </div>
                     <div className="student__project">
                         {student.book.project}
