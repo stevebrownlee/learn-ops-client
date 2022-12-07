@@ -25,35 +25,42 @@ export const StudentCardList = () => {
     }, [])
 
     useEffect(() => {
-        const grouped = cohortStudents.reduce(
+        /* eslint-disable no-undef */
+        const copy = structuredClone(cohortStudents)
+        copy.sort((thisOne, nextOne) => thisOne.book.name > nextOne.book.name ? 1 : -1)
+
+        const grouped = copy.reduce(
             (theMap, currentStudent) => {
-                if (!theMap.has(currentStudent.book.id)) {
-                    theMap.set(currentStudent.book.id, 1)
+                if (!theMap.has(currentStudent.book.name)) {
+                    theMap.set(currentStudent.book.name, [currentStudent])
                 }
                 else {
-                    theMap.set(currentStudent.book.id, theMap.get(currentStudent.book.id) + 1)
+                    theMap.get(currentStudent.book.name).push(currentStudent)
                 }
                 return theMap
             },
             new Map()
         )
-        console.log(grouped)
 
-        /* eslint-disable no-undef */
-        const copy = structuredClone(cohortStudents)
-        copy.sort((thisOne, nextOne) => thisOne.book.name < nextOne.book.name ? 1 : -1)
-        setSortedStudents(copy)
+        setGroupedStudents(Array.from(grouped))
     }, [cohortStudents])
 
     return (
         <>
             {
-                sortedStudents.length > 0
+                groupedStudents.length > 0
                     ? <section className="cohortStudents">
                         {
-                            sortedStudents
-                                .map(student => <Student key={`student--${student.id}`} student={student} />)
+                            groupedStudents.map((column) => {
+                                return <article className="bookColumn">
+                                    <header className="bookColumn__header">{ column[0] }</header>
+                                    {
+                                        column[1].map(student => <Student key={`student--${student.id}`} student={student} />)
+                                    }
+                                </article>
+                            })
                         }
+
                     </section>
                     : ""
             }

@@ -1,13 +1,25 @@
 import React, { useState } from "react"
 
-export const NoteIcon = ({ tip }) => {
+export const NoteIcon = ({ tip, position }) => {
     const [visible, setVisible] = useState(false)
     const [style, setStyle] = useState(false)
+    const [delayHandler, setDelayHandler] = useState(null)
+
+    const handleMouseEnter = event => {
+        setDelayHandler(setTimeout(() => {
+            setVisible(true)
+        }, 750))
+    }
+
+    const handleMouseLeave = () => {
+        setVisible(false)
+        clearTimeout(delayHandler)
+    }
 
     const tooltipStyle = {
         position: "absolute",
-        top: "-4rem",
-        left: "2rem",
+        top: "-4.25rem",
+        left: "-4rem",
         border: "1px dashed gray",
         padding: "0.75rem",
         fontSize: "smaller",
@@ -17,9 +29,9 @@ export const NoteIcon = ({ tip }) => {
     }
 
     const displayTip = () => {
-        // if (position === "left") {
-        //     tooltipStyle.left = "-12rem"
-        // }
+        if (position === "left") {
+            tooltipStyle.left = "-12rem"
+        }
         return <div style={tooltipStyle}>{tip}</div>
     }
 
@@ -27,8 +39,8 @@ export const NoteIcon = ({ tip }) => {
         {visible ? displayTip() : ""}
 
         <svg xmlns="http://www.w3.org/2000/svg"
-            onMouseOver={() => setVisible(!visible)}
-            onMouseOut={() => setVisible(!visible)}
+            onMouseOver={handleMouseEnter}
+            onMouseOut={handleMouseLeave}
             style={{ cursor: "pointer", marginLeft: "0.33rem", height: "1rem" }}
             viewBox="0 0 24 24">
             <g fill="none">

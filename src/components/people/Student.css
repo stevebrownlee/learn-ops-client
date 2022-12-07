@@ -1,7 +1,3 @@
-.student {
-    margin: 2rem 0 0 0;
-}
-
 .student__header {
     display: grid;
     grid-template-columns: 6fr 1fr;
@@ -82,10 +78,62 @@
     background-color: #c2f0dd;
 }
 
+.student {
+    border: 2px dotted rgb(137, 188, 188);
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin: 0.33rem 0 0 0;
+    max-width: 8rem;
+}
+
+.student__actions {
+    display: flex;
+    flex-wrap: nowrap;
+    border-bottom: 1px dotted darkgreen;
+}
+
+.student__name {
+    margin: 0 0 0.33rem 0;
+}
+
+.action {
+    flex: 0 0 33%;
+}
+
+.student__coreskills {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    font-size: smaller;
+    margin: 0 0 1rem 0;
+    margin-top: auto;
+}
+
+.student__footer {
+    margin-top: auto;
+    border-top: 1px dotted darkslategray;
+    padding: 0.5rem 0 0 0;
+    font-size: smaller;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.footer__score {
+    margin: 0;
+    line-height: 0;
+}
+
 .student__header {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+}
+
+.student__project {
+    font-size: smaller;
+    padding: 0 0 0.33rem 0;
 }
 
 .student__book {

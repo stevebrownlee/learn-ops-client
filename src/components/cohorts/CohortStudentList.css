@@ -8,44 +8,16 @@
     justify-content: space-evenly;
 }
 
-.student {
-    flex: 0 1 10%;
-    border: 1px dotted darkcyan;
-    padding: 1rem;
+.bookColumn {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    margin: 2rem 0 0 0;
 }
 
-.student__actions {
-    display: flex;
-    flex-wrap: nowrap;
-    border-bottom: 1px dotted darkgreen;
-}
-
-.action {
-    flex: 0 0 33%;
-}
-
-.student__coreskills {
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-    font-size: smaller;
-    margin: 0 0 1rem 0;
-    margin-top: auto;
-}
-
-.student__footer {
-    margin-top: auto;
-    border-top: 1px dotted darkslategray;
-    padding: 0.5rem 0 0 0;
-    font-size: smaller;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-}
-
-.footer__score {
-    margin: 0;
-    line-height: 0;
+.bookColumn__header {
+    border: 1px dotted darkmagenta;
+    background-color: lightpink;
+    padding: 0.5rem 1rem;
+    text-align: center;
 }

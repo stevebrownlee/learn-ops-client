@@ -14,18 +14,18 @@ export const Student = ({ student }) => {
                         <NoteIcon tip="Enter in your notes about this student" />
                     </span>
                     <span className="action action--progress">
-                        <GlobeIcon />
+                        <GlobeIcon tip="Update current book and project" />
                     </span>
                     <span className="action action--assessments">
-                        <AssessmentIcon />
+                        <AssessmentIcon tip="View and assign self-assessments to student" />
                     </span>
                 </div>
                 <div className="student__header">
-                    <h4>{student.name.split("").slice(0,15).join("")}</h4>
+                    <h4 className="student__name">{student.name.split("").slice(0,15).join("")}</h4>
                     <div className="student__book">
                         {student.book.name}
                     </div>
-                    <div className="student__book">
+                    <div className="student__project">
                         {student.book.project}
                     </div>
                 </div>
