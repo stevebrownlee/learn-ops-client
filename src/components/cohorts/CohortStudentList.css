@@ -4,7 +4,7 @@
 
 .cohortStudents {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-evenly;
 }
 
@@ -20,4 +20,5 @@
     background-color: lightpink;
     padding: 0.5rem 1rem;
     text-align: center;
+    min-width: 5rem;
 }

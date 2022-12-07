@@ -7,6 +7,7 @@ import { AssessmentProvider } from "./assessments/AssessmentProvider"
 import { CapstoneList } from "./assessments/CapstoneList"
 import { CohortForm } from "./cohorts/CohortForm"
 import { CohortProvider } from "./cohorts/CohortProvider"
+import { CourseProvider } from "./course/CourseProvider"
 import { Dashboard } from "./dashboard/Dashboard"
 import { FeedbackForm } from "./people/FeedbackForm"
 import { PeopleProvider } from "./people/PeopleProvider"
@@ -22,40 +23,44 @@ export const ApplicationViews = () => {
             <RecordProvider>
                 <CohortProvider>
                     <PeopleProvider>
-                        <Route exact path="/">
-                            <Dashboard />
-                        </Route>
+                        <CourseProvider>
+                            <Route exact path="/">
+                                <Dashboard />
+                            </Route>
 
-                        <Route exact path="/students">
-                            <StudentList />
-                        </Route>
+                            <Route exact path="/students">
+                                <StudentList />
+                            </Route>
 
-                        <Route exact path="/teams">
-                            <WeeklyTeams />
-                        </Route>
+                            <Route exact path="/teams">
+                                <WeeklyTeams />
+                            </Route>
 
-                        <Route exact path="/assessments">
-                            <AssessmentList />
-                            <AssessmentForm />
-                        </Route>
+                            <Route exact path="/assessments">
+                                <AssessmentList />
+                                <AssessmentForm />
+                            </Route>
 
-                        <Route exact path="/capstones">
-                            <CapstoneList />
-                        </Route>
+                            <Route exact path="/capstones">
+                                <CapstoneList />
+                            </Route>
 
-                        <Route exact path="/feedback/new">
-                            <FeedbackForm />
-                        </Route>
-                        <Route exact path="/cohorts/new">
-                            <CohortForm />
-                        </Route>
-                        <Route exact path="/records/new/:studentId(\d+)">
-                            <RecordForm />
-                        </Route>
-                        <Route exact path="/record/:recordId/entries/new">
-                            <RecordEntryForm />
-                        </Route>
+                            <Route exact path="/feedback/new">
+                                <FeedbackForm />
+                            </Route>
 
+                            <Route exact path="/cohorts/new">
+                                <CohortForm />
+                            </Route>
+
+                            <Route exact path="/records/new/:studentId(\d+)">
+                                <RecordForm />
+                            </Route>
+
+                            <Route exact path="/record/:recordId/entries/new">
+                                <RecordEntryForm />
+                            </Route>
+                        </CourseProvider>
                     </PeopleProvider>
                 </CohortProvider>
             </RecordProvider>

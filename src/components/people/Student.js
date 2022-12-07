@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
 import { AssessmentIcon } from "../../svgs/AssessmentIcon.js"
+import { EditIcon } from "../../svgs/EditIcon.js"
 import { GlobeIcon } from "../../svgs/GlobeIcon.js"
 import { NoteIcon } from "../../svgs/NoteIcon.js"
 import { PeopleContext } from "./PeopleProvider.js"
@@ -10,20 +11,20 @@ export const Student = ({ student }) => {
         <>
             <div className={`personality--${student.personality} student`}>
                 <div className="student__actions">
-                    <span className="action action--notes">
-                        <NoteIcon tip="Enter in your notes about this student" />
-                    </span>
-                    <span className="action action--progress">
+                    <div className="action action--progress">
                         <GlobeIcon tip="Update current book and project" />
-                    </span>
-                    <span className="action action--assessments">
+                    </div>
+                    <div className="action action--assessments">
                         <AssessmentIcon tip="View and assign self-assessments to student" />
-                    </span>
+                    </div>
+                    <div className="action action--notes">
+                        <NoteIcon tip="Enter in your notes about this student" />
+                    </div>
                 </div>
                 <div className="student__header">
-                    <h4 className="student__name">{student.name.split("").slice(0,15).join("")}</h4>
+                    <h4 className="student__name">{student.name}</h4>
                     <div className="student__book">
-                        {student.book.name}
+                        {student.book.name} <EditIcon helpFunction={() => {}} />
                     </div>
                     <div className="student__project">
                         {student.book.project}

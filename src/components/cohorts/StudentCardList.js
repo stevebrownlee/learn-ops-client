@@ -1,33 +1,40 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { CourseContext } from "../course/CourseProvider.js"
 import { PeopleContext } from "../people/PeopleProvider.js"
+import { CohortContext } from "./CohortProvider.js"
+import { CohortSearchField } from "./CohortSearchField.js"
 import { Student } from "../people/Student.js"
 import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
-import { CohortContext } from "./CohortProvider.js"
-import { CohortResults } from "./CohortResults.js"
-import { CohortSearchField } from "./CohortSearchField.js"
 import "./CohortStudentList.css"
 
 export const StudentCardList = () => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
+    const { getCourses, course, activeCourse } = useContext(CourseContext)
     const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
     const [sortBy, specifySortFunction] = useState("score")
-    const [sortedStudents, setSortedStudents] = useState([])
-    const [groupedStudents, setGroupedStudents] = useState(new Map())
+    const [groupedStudents, setGroupedStudents] = useState([])
     const [sortAsc, setSortAsc] = useState(true)
 
     useEffect(() => {
+
         if (localStorage.getItem("activeCohort")) {
             const id = parseInt(localStorage.getItem("activeCohort"))
-            getCohortStudents(id)
-            getCohort(id)
+            getCourses().then(() => {
+                getCohortStudents(id)
+            })
         }
     }, [])
 
     useEffect(() => {
         /* eslint-disable no-undef */
         const copy = structuredClone(cohortStudents)
-        copy.sort((thisOne, nextOne) => thisOne.book.name > nextOne.book.name ? 1 : -1)
+
+        const studentsPerBook = activeCourse?.books?.map(book => {
+            const students = cohortStudents.filter(student => student.book.id === book.id)
+            book.students = students
+            return book
+        })
 
         const grouped = copy.reduce(
             (theMap, currentStudent) => {
@@ -42,28 +49,20 @@ export const StudentCardList = () => {
             new Map()
         )
 
-        setGroupedStudents(Array.from(grouped))
+        setGroupedStudents(studentsPerBook)
     }, [cohortStudents])
 
-    return (
-        <>
-            {
-                groupedStudents.length > 0
-                    ? <section className="cohortStudents">
-                        {
-                            groupedStudents.map((column) => {
-                                return <article className="bookColumn">
-                                    <header className="bookColumn__header">{ column[0] }</header>
-                                    {
-                                        column[1].map(student => <Student key={`student--${student.id}`} student={student} />)
-                                    }
-                                </article>
-                            })
-                        }
+    return <section className="cohortStudents">
+        {
+            groupedStudents?.map((book) => {
+                return <article key={`book--${book.id}`} className="bookColumn">
+                    <header className="bookColumn__header">{book.name}</header>
+                    {
+                        book.students.map(student => <Student key={`student--${student.id}`} student={student} />)
+                    }
+                </article>
+            })
+        }
 
-                    </section>
-                    : ""
-            }
-        </>
-    )
+    </section>
 }
