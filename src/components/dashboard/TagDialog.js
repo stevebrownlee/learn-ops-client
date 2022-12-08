@@ -5,28 +5,69 @@ import { CohortContext } from "../cohorts/CohortProvider"
 export const TagDialog = ({ toggleTags }) => {
     const {
         activeStudent, getCohortStudents, tags, tagStudent,
-        updateStudentCurrentAssessment, getAllTags
+        updateStudentCurrentAssessment, getAllTags, createNewTag,
+        deleteTag
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
+    const [tag, setTag] = useState("")
 
     useEffect(() => {
         getAllTags()
     }, [])
 
     return <dialog id="dialog--tags" className="dialog--tags">
-        <section className="statutsButtons">
+        <section className="tagButtons">
             {
                 tags.map(tag => {
-                    return <button key={`tag--${tag.id}`}
-                        onClick={() => {
-                            tagStudent(activeStudent.id, tag.id)
-                                .then(() => {
+                    return <div>
+                        <button key={`tag--${tag.id}`}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                tagStudent(activeStudent.id, tag.id)
+                                    .then(() => {
+                                        getCohortStudents(activeCohort.id)
+                                        toggleTags()
+                                    })
+                            }}
+                            className="button button--isi button--border-thick button--round-m button--size-s button--assessment"
+                            ><i className="button__icon icon icon-tag"></i>
+                            <span>{tag.name}</span>
+                            <span class="delete"
+                            onClick={e => {
+                                e.stopPropagation()
+                                deleteTag(tag.id).then(() => {
+                                    getAllTags()
                                     getCohortStudents(activeCohort.id)
-                                    toggleTags()
                                 })
-                        }}>{tag.name}</button>
+                            }}
+                                >&times;</span>
+                        </button>
+                    </div>
                 })
             }
+        </section>
+
+        <section>
+            New tag: <input type="text" value={tag}
+                onChange={(e) => {
+                    setTag(e.target.value)
+                }}
+                onKeyUp={(e) => {
+                    if (e.key === "Enter") {
+                        createNewTag(tag)
+                            .then(tag => {
+                                setTag("")
+
+                                return tagStudent(activeStudent.id, tag.id)
+                                    .then(() => {
+                                        getCohortStudents(activeCohort.id)
+                                        toggleTags()
+                                    })
+                            })
+                            .then(getAllTags)
+                    }
+                }}
+                placeholder="New tag name" />
         </section>
 
         <button className="fakeLink" style={{

@@ -132,6 +132,16 @@
     justify-content: space-between;
 }
 
+.student__tags {
+    margin-top: auto;
+    border-top: 1px dotted darkslategray;
+    padding: 0.5rem 0 0 0;
+    font-size: smaller;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
 .footer__score {
     margin: 0;
     line-height: 0;

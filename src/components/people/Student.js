@@ -66,7 +66,7 @@ export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags })
                         {student.book.project}
                     </div>
                 </div>
-                <div className="student__footer">
+                <div className="student__tags">
                     {
                         student.tags.map(tag => <span
                             onClick={() => {

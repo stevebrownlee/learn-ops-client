@@ -42,6 +42,19 @@ export const PeopleProvider = (props) => {
         })
     }, [])
 
+    const createNewTag = useCallback((tag) => {
+        return fetchIt(`${Settings.apiHost}/tags`, {
+            method: "POST",
+            body: JSON.stringify({ name: tag })
+        })
+    }, [])
+
+    const deleteTag = useCallback((tagId) => {
+        return fetchIt(`${Settings.apiHost}/tags/${tagId}`, {
+            method: "DELETE"
+        })
+    }, [])
+
     const setStudentCurrentProject = useCallback((studentId, projectId) => {
         return fetchIt(`${Settings.apiHost}/students/${studentId}/project`, {
             method: "POST",
@@ -107,7 +120,7 @@ export const PeopleProvider = (props) => {
             cohortStudents, getStudentProposals, proposals,
             setStudentCurrentProject, setStudentCurrentAssessment,
             updateStudentCurrentAssessment, getAllTags, tags,
-            tagStudent, untagStudent
+            tagStudent, untagStudent, createNewTag, deleteTag
         }} >
             {props.children}
         </PeopleContext.Provider>

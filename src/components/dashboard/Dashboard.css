@@ -96,6 +96,13 @@ dialog {
     margin: 2rem 0 2rem 0;
 }
 
+.tagButtons {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    margin: 2rem 0 2rem 0;
+}
+
+
 .dialog--projects {
     width: 30%;
 }

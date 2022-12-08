@@ -116,13 +116,6 @@
 	overflow: hidden;
 }
 
-.button--isi {
-	padding: 0.7em 1.5em;
-	color: #fff;
-	background: #7986cb;
-	overflow: hidden;
-}
-
 .button--isi::before {
 	content: '';
 	z-index: -1;
@@ -146,6 +139,14 @@
 
 .button--isi .button__icon {
 	vertical-align: middle;
+}
+
+.button--isi .delete {
+	position: absolute;
+	right: 0.5rem;
+	top: 0;
+	bottom: 0;
+	line-height: 40px;
 }
 
 .button__icon--only {
