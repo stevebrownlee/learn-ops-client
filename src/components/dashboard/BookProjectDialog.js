@@ -46,7 +46,7 @@ export const BookProjectDialog = ({ toggleProjects }) => {
                         <option value="0">Choose project</option>
                         {
                             bookProjects.map(project => {
-                                return <option value={project.id}>{project.name}</option>
+                                return <option key={`pro--${project.id}`} value={project.id}>{project.name}</option>
                             })
                         }
                     </select>

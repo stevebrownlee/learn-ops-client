@@ -14,17 +14,20 @@ export const AssessmentStatusDialog = ({ toggleStatuses }) => {
     }, [])
 
     return <dialog id="dialog--statuses" className="dialog--statuses">
-        <section className="bookButtons">
+        <section className="statutsButtons">
             {
-                statuses.map(status => <button key={`st--${status.id}`}
-                    onClick={() => {
-                        updateStudentCurrentAssessment(activeStudent, status.id)
-                            .then(() => {
-                                toggleStatuses()
-                                getCohortStudents(activeCohort.id)
-                            })
-                    }}>
-                    {status.status}</button>)
+                statuses.map(status => {
+                    if (status.status !== "In Progress") {
+                        return <button key={`st--${status.id}`}
+                            onClick={() => {
+                                updateStudentCurrentAssessment(activeStudent, status.id)
+                                    .then(() => {
+                                        toggleStatuses()
+                                        getCohortStudents(activeCohort.id)
+                                    })
+                            }}>{status.status}</button>
+                    }
+                })
             }
         </section>
 

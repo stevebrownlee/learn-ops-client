@@ -45,7 +45,7 @@
     grid-auto-flow: column;
 }
 
-.slack__input  {
+.slack__input {
     margin: 1rem 0 0 0;
     padding: 0.2rem 0.3rem;
     width: 15rem;
@@ -66,16 +66,16 @@
     flex: 1;
 }
 
-.bfi__input  {
+.bfi__input {
     max-width: 2.5rem;
     margin-right: 1rem;
 }
 
-.briggs__input  {
+.briggs__input {
     max-width: 8rem;
 }
 
-.slack__save  {
+.slack__save {
     margin: 1rem 0 0 0;
     padding: 0.2rem 0.3rem;
 }
@@ -83,7 +83,17 @@
 dialog {
     z-index: 12;
     width: 70%;
-    top:10rem;
+    top: 10rem;
+}
+
+.dialog--statuses {
+    width: 30%;
+}
+
+.statutsButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 2rem 0 2rem 0;
 }
 
 .dialog--projects {
@@ -99,5 +109,3 @@ dialog {
 .projectSelect {
     text-align: center;
 }
-
-
