@@ -3,6 +3,7 @@ import { AssessmentIcon } from "../../svgs/AssessmentIcon.js"
 import { EditIcon } from "../../svgs/EditIcon.js"
 import { GlobeIcon } from "../../svgs/GlobeIcon.js"
 import { NoteIcon } from "../../svgs/NoteIcon.js"
+import { TagIcon } from "../../svgs/TagIcon.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 import { PeopleContext } from "./PeopleProvider.js"
 
@@ -43,7 +44,7 @@ export const Student = ({ student, toggleProjects, toggleStatuses }) => {
                                     toggleStatuses()
                                 }
                             }
-                        } tip="View and assign self-assessments to student" />
+                        } tip={`${student.assessment_status === 0 ? "Assign book assessment to student": "Update assessment status"}`} />
                     </div>
                     <div className="action action--notes">
                         <NoteIcon tip="Enter in your notes about this student" />
@@ -79,6 +80,9 @@ export const Student = ({ student, toggleProjects, toggleStatuses }) => {
                                 }
                             })
                         }
+                    </div>
+                    <div className="student__tag--add">
+                        <TagIcon tip="Add a tag to this student" />
                     </div>
                 </div>
             </div>

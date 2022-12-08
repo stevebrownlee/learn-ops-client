@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-export const AssessmentIcon = ({ tip, position, clickFunction, active }) => {
+export const TagIcon = ({ tip, position, clickFunction }) => {
     const [visible, setVisible] = useState(false)
     const [style, setStyle] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
@@ -23,7 +23,7 @@ export const AssessmentIcon = ({ tip, position, clickFunction, active }) => {
         left: "-4rem",
         border: "1px dashed gray",
         padding: "0.75rem",
-        fontSize: "smaller",
+        fontSize: "0.70rem",
         backgroundColor: "lightgoldenrodyellow",
         width: "10rem",
         zIndex: 10
@@ -44,8 +44,10 @@ export const AssessmentIcon = ({ tip, position, clickFunction, active }) => {
             onMouseLeave={handleMouseLeave}
             onClick={clickFunction}
             style={{ cursor: "pointer", marginLeft: "0.33rem", height: "1rem" }}
-            viewBox="0 0 384 512">
-            <path d="M384 144c0-44.2-35.8-80-80-80s-80 35.8-80 80c0 36.4 24.3 67.1 57.5 76.8c-.6 16.1-4.2 28.5-11 36.9c-15.4 19.2-49.3 22.4-85.2 25.7c-28.2 2.6-57.4 5.4-81.3 16.9v-144c32.5-10.2 56-40.5 56-76.3c0-44.2-35.8-80-80-80S0 35.8 0 80c0 35.8 23.5 66.1 56 76.3v199.3C23.5 365.9 0 396.2 0 432c0 44.2 35.8 80 80 80s80-35.8 80-80c0-34-21.2-63.1-51.2-74.6c3.1-5.2 7.8-9.8 14.9-13.4c16.2-8.2 40.4-10.4 66.1-12.8c42.2-3.9 90-8.4 118.2-43.4c14-17.4 21.1-39.8 21.6-67.9c31.6-10.8 54.4-40.7 54.4-75.9zM80 64c8.8 0 16 7.2 16 16s-7.2 16-16 16s-16-7.2-16-16s7.2-16 16-16zm0 384c-8.8 0-16-7.2-16-16s7.2-16 16-16s16 7.2 16 16s-7.2 16-16 16zm224-320c8.8 0 16 7.2 16 16s-7.2 16-16 16s-16-7.2-16-16s7.2-16 16-16z" fill="currentColor"></path>
+            viewBox="0 0 20 20">
+            <g fill="none">
+            <path d="M5 6a4 4 0 1 1 6.646 3h-.133c-.803 0-1.518.377-1.979.965A4 4 0 0 1 5 6zm4-3a3 3 0 1 0 0 6a3 3 0 0 0 0-6zm.053 8H4.009A2.001 2.001 0 0 0 2 13c0 1.691.833 2.966 2.135 3.797C5.417 17.614 7.145 18 9 18c.803 0 1.583-.072 2.313-.22l-.854-.872C9.995 16.97 9.507 17 9 17c-1.735 0-3.257-.364-4.327-1.047C3.623 15.283 3 14.31 3 13c0-.553.448-1 1.009-1h4.99v-.484c0-.177.02-.35.054-.516zM10 14.39c0 .397.155.777.432 1.06l3.034 3.097c.58.592 1.527.606 2.124.031l2.947-2.837c.607-.585.619-1.555.025-2.155l-3.107-3.139A1.509 1.509 0 0 0 14.383 10H11.51A1.51 1.51 0 0 0 10 11.512v2.879zm2.75-.89a.75.75 0 1 1 0-1.5a.75.75 0 0 1 0 1.5z" fill="currentColor"></path>
+            </g>
         </svg>
     </span>
 }
