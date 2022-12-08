@@ -9,6 +9,7 @@ import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
 import "./CohortStudentList.css"
 import { BookProjectDialog } from "../dashboard/BookProjectDialog.js"
 import useModal from "../ui/useModal.js"
+import { AssessmentStatusDialog } from "../dashboard/AssessmentStatusDialog.js"
 
 export const StudentCardList = () => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
@@ -18,6 +19,7 @@ export const StudentCardList = () => {
     const [groupedStudents, setGroupedStudents] = useState([])
     const [sortAsc, setSortAsc] = useState(true)
     let { toggleDialog: toggleProjects } = useModal("#dialog--projects")
+    let { toggleDialog: toggleStatuses } = useModal("#dialog--statuses")
 
     useEffect(() => {
 
@@ -61,12 +63,17 @@ export const StudentCardList = () => {
                 return <article key={`book--${book.id}`} className="bookColumn">
                     <header className="bookColumn__header">{book.name}</header>
                     {
-                        book.students.map(student => <Student toggleProjects={toggleProjects} key={`student--${student.id}`} student={student} />)
+                        book.students.map(student => <Student
+                            toggleProjects={toggleProjects}
+                            toggleStatuses={toggleStatuses}
+                            key={`student--${student.id}`}
+                            student={student} />)
                     }
                 </article>
             })
         }
 
         <BookProjectDialog toggleProjects={toggleProjects} />
+        <AssessmentStatusDialog toggleStatuses={toggleStatuses} />
     </section>
 }

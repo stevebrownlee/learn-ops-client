@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-export const AssessmentIcon = ({ tip, position, clickFunction }) => {
+export const AssessmentIcon = ({ tip, position, clickFunction, active }) => {
     const [visible, setVisible] = useState(false)
     const [style, setStyle] = useState(false)
     const [isHovered, setIsHovered] = useState(false)

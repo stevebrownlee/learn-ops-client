@@ -86,3 +86,18 @@ dialog {
     top:10rem;
 }
 
+.dialog--projects {
+    width: 30%;
+}
+
+.bookButtons {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 2rem 0 2rem 0;
+}
+
+.projectSelect {
+    text-align: center;
+}
+
+

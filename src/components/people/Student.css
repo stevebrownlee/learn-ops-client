@@ -89,8 +89,15 @@
 }
 
 .student--takingAssessment {
-    border: 2px solid rgb(203, 53, 27);
+    border: 2px solid rgb(251, 255, 30);
+}
 
+.student--assessmentReviewNeeded {
+    border: 2px solid rgb(203, 53, 27);
+}
+
+.student--assessReviewComplete {
+    border: 2px solid rgb(9, 228, 68);
 }
 
 .student__actions {

@@ -14,37 +14,46 @@ export const BookProjectDialog = ({ toggleProjects }) => {
 
     useEffect(() => {
         if ("id" in book) {
-            console.log(activeCourse.books)
             const projects = activeCourse.books.find(b => b.id === book.id).projects
             setBookProjects(projects)
         }
     }, [book])
 
     return <dialog id="dialog--projects" className="dialog--projects">
-        {
-            activeCourse?.books?.map(book => <button
-                onClick={() => {
-                    setBook(book)
-                }}>{book.name}</button>)
-        }
-        <select id="project"
-            onChange={(e) => {
-                setStudentCurrentProject(activeStudent.id, parseInt(e.target.value))
-                    .then(() => {
-                        getCohortStudents(activeCohort.id)
-                        toggleProjects()
-                        setBook({})
-                        setBookProjects([])
-                    })
-            }}
-        >
-            <option value="0">Choose project</option>
+        <section className="bookButtons">
             {
-                bookProjects.map(project => {
-                    return <option value={project.id}>{project.name}</option>
-                })
+                activeCourse?.books?.map(book => <button key={`bk--${book.id}`}
+                    onClick={() => {
+                        setBook(book)
+                    }}>{book.name}</button>)
             }
-        </select>
+        </section>
+
+        <section className="projectSelect">
+            {
+                bookProjects.length > 0
+                    ? <select id="project"
+                        onChange={(e) => {
+                            setStudentCurrentProject(activeStudent.id, parseInt(e.target.value))
+                                .then(() => {
+                                    getCohortStudents(activeCohort.id)
+                                    toggleProjects()
+                                    setBook({})
+                                    setBookProjects([])
+                                })
+                        }}
+                    >
+                        <option value="0">Choose project</option>
+                        {
+                            bookProjects.map(project => {
+                                return <option value={project.id}>{project.name}</option>
+                            })
+                        }
+                    </select>
+                    : ""
+            }
+        </section>
+
         <button className="fakeLink" style={{
             position: "absolute",
             top: "0.33em",
@@ -52,6 +61,10 @@ export const BookProjectDialog = ({ toggleProjects }) => {
             fontSize: "0.75rem"
         }}
             id="closeBtn"
-            onClick={toggleProjects}>[ close ]</button>
+            onClick={() => {
+                toggleProjects()
+                setBook({})
+                setBookProjects([])
+            }}>[ close ]</button>
     </dialog>
 }
