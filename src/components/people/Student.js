@@ -3,6 +3,7 @@ import { AssessmentIcon } from "../../svgs/AssessmentIcon.js"
 import { EditIcon } from "../../svgs/EditIcon.js"
 import { GlobeIcon } from "../../svgs/GlobeIcon.js"
 import { NoteIcon } from "../../svgs/NoteIcon.js"
+import { ProposalIcon } from "../../svgs/ProposalIcon.js"
 import { TagIcon } from "../../svgs/TagIcon.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 import { PeopleContext } from "./PeopleProvider.js"
@@ -70,13 +71,13 @@ export const Student = ({ student, toggleProjects, toggleStatuses }) => {
                         {
                             student.proposals.map(p => {
                                 if (p.status === "submitted") {
-                                    return "📕"
+                                    return <ProposalIcon color="red" />
                                 }
                                 else if (p.status === "reviewed") {
-                                    return "📒"
+                                    return <ProposalIcon color="goldenrod" />
                                 }
                                 else if (p.status === "approved") {
-                                    return "📗"
+                                    return <ProposalIcon color="dodgerblue" />
                                 }
                             })
                         }
