@@ -8,8 +8,11 @@ import { TagIcon } from "../../svgs/TagIcon.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 import { PeopleContext } from "./PeopleProvider.js"
 
-export const Student = ({ student, toggleProjects, toggleStatuses }) => {
-    const { activateStudent, setStudentCurrentAssessment, getCohortStudents } = useContext(PeopleContext)
+export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags }) => {
+    const {
+        activateStudent, setStudentCurrentAssessment,
+        getCohortStudents, untagStudent
+    } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
 
     const setAssessmentIndicatorBorder = (status) => {
@@ -55,13 +58,24 @@ export const Student = ({ student, toggleProjects, toggleStatuses }) => {
                     <h4 className="student__name">{student.name}</h4>
                     <div className="student__book">
                         {student.book.name} <EditIcon helpFunction={() => {
-                            toggleProjects(student)
                             activateStudent(student)
+                            toggleProjects()
                         }} />
                     </div>
                     <div className="student__project">
                         {student.book.project}
                     </div>
+                </div>
+                <div className="student__footer">
+                    {
+                        student.tags.map(tag => <span
+                            onClick={() => {
+                                untagStudent(tag.id).then(() => {
+                                    getCohortStudents(activeCohort.id)
+                                })
+                            }}
+                            className="student--tag">{tag.tag.name}</span>)
+                    }
                 </div>
                 <div className="student__footer">
                     <div>
@@ -83,7 +97,10 @@ export const Student = ({ student, toggleProjects, toggleStatuses }) => {
                         }
                     </div>
                     <div className="student__tag--add">
-                        <TagIcon tip="Add a tag to this student" />
+                        <TagIcon clickFunction={() => {
+                            activateStudent(student)
+                            toggleTags()
+                        }} tip="Add a tag to this student" />
                     </div>
                 </div>
             </div>

@@ -10,6 +10,7 @@ import "./CohortStudentList.css"
 import { BookProjectDialog } from "../dashboard/BookProjectDialog.js"
 import useModal from "../ui/useModal.js"
 import { AssessmentStatusDialog } from "../dashboard/AssessmentStatusDialog.js"
+import { TagDialog } from "../dashboard/TagDialog.js"
 
 export const StudentCardList = () => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
@@ -20,6 +21,7 @@ export const StudentCardList = () => {
     const [sortAsc, setSortAsc] = useState(true)
     let { toggleDialog: toggleProjects } = useModal("#dialog--projects")
     let { toggleDialog: toggleStatuses } = useModal("#dialog--statuses")
+    let { toggleDialog: toggleTags } = useModal("#dialog--tags")
 
     useEffect(() => {
 
@@ -66,6 +68,7 @@ export const StudentCardList = () => {
                         book.students.map(student => <Student
                             toggleProjects={toggleProjects}
                             toggleStatuses={toggleStatuses}
+                            toggleTags={toggleTags}
                             key={`student--${student.id}`}
                             student={student} />)
                     }
@@ -75,5 +78,6 @@ export const StudentCardList = () => {
 
         <BookProjectDialog toggleProjects={toggleProjects} />
         <AssessmentStatusDialog toggleStatuses={toggleStatuses} />
+        <TagDialog toggleTags={toggleTags} />
     </section>
 }

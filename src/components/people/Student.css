@@ -151,3 +151,13 @@
 .student__book {
     font-size: smaller;
 }
+
+.student--tag {
+    padding: 0.1rem 0.33rem;
+    background-color: rgb(247, 177, 255);
+    color: black;
+    border-radius: 0.25rem;
+    margin: 0.2rem 0.33rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+}

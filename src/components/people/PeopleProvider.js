@@ -7,6 +7,7 @@ export const PeopleContext = React.createContext()
 
 export const PeopleProvider = (props) => {
     const [students, setStudents] = useState([])
+    const [tags, setTags] = useState([])
     const [proposals, setProposals] = useState([])
     const [cohortStudents, setCohortStudents] = useState([])
     const [activeStudent, activateStudent] = useState({})
@@ -21,6 +22,24 @@ export const PeopleProvider = (props) => {
     const getCohortStudents = useCallback((cohortId) => {
         return fetchIt(`${Settings.apiHost}/students?cohort=${cohortId}`)
             .then(data => setCohortStudents(data.results))
+    }, [])
+
+    const getAllTags = useCallback(() => {
+        return fetchIt(`${Settings.apiHost}/tags`)
+            .then(data => setTags(data.results))
+    }, [])
+
+    const tagStudent = useCallback((student, tag) => {
+        return fetchIt(`${Settings.apiHost}/studenttags`, {
+            method: "POST",
+            body: JSON.stringify({ student, tag })
+        })
+    }, [])
+
+    const untagStudent = useCallback((studentTagId) => {
+        return fetchIt(`${Settings.apiHost}/studenttags/${studentTagId}`, {
+            method: "DELETE"
+        })
     }, [])
 
     const setStudentCurrentProject = useCallback((studentId, projectId) => {
@@ -87,7 +106,8 @@ export const PeopleProvider = (props) => {
             activeStudent, activateStudent, getCohortStudents,
             cohortStudents, getStudentProposals, proposals,
             setStudentCurrentProject, setStudentCurrentAssessment,
-            updateStudentCurrentAssessment
+            updateStudentCurrentAssessment, getAllTags, tags,
+            tagStudent, untagStudent
         }} >
             {props.children}
         </PeopleContext.Provider>
