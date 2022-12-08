@@ -138,3 +138,11 @@ fieldset {
     color: firebrick;
     font-size: 1rem;
 }
+
+.clickable {
+    cursor: pointer;
+}
+
+.delete {
+    margin: 0 0 0 0.33rem;
+}

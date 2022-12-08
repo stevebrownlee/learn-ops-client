@@ -102,6 +102,9 @@ dialog {
     margin: 2rem 0 2rem 0;
 }
 
+.tagDialog__newTag {
+    text-align: center;
+}
 
 .dialog--projects {
     width: 30%;

@@ -48,11 +48,29 @@ export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags })
                                     toggleStatuses()
                                 }
                             }
-                        } tip={`${student.assessment_status === 0 ? "Assign book assessment to student": "Update assessment status"}`} />
+                        } tip={`${student.assessment_status === 0 ? "Assign book assessment to student" : "Update assessment status"}`} />
                     </div>
                     <div className="action action--notes">
                         <NoteIcon tip="Enter in your notes about this student" />
                     </div>
+                </div>
+                <div className="student__score--mini">
+                    {student.score}
+                </div>
+                <div className="student__proposals">
+                    {
+                        student.proposals.map(p => {
+                            if (p.status === "submitted") {
+                                return <ProposalIcon color="red" />
+                            }
+                            else if (p.status === "reviewed") {
+                                return <ProposalIcon color="goldenrod" />
+                            }
+                            else if (p.status === "approved") {
+                                return <ProposalIcon color="dodgerblue" />
+                            }
+                        })
+                    }
                 </div>
                 <div className="student__header">
                     <h4 className="student__name">{student.name}</h4>
@@ -66,6 +84,31 @@ export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags })
                         {student.book.project}
                     </div>
                 </div>
+                <div className="student__footer">
+                    <div className="action action--assessments">
+                        <AssessmentIcon clickFunction={
+                            () => {
+                                activateStudent(student)
+                                if (student.assessment_status === 0) {
+                                    setStudentCurrentAssessment(student)
+                                        .then(() => getCohortStudents(activeCohort.id))
+                                }
+                                else {
+                                    toggleStatuses()
+                                }
+                            }
+                        } tip={`${student.assessment_status === 0 ? "Assign book assessment to student" : "Update assessment status"}`} />
+                    </div>
+                    <div className="action action--notes">
+                        <NoteIcon tip="Enter in your notes about this student" />
+                    </div>
+                    <div className="student__tag--add">
+                        <TagIcon clickFunction={() => {
+                            activateStudent(student)
+                            toggleTags()
+                        }} tip="Add a tag to this student" />
+                    </div>
+                </div>
                 <div className="student__tags">
                     {
                         student.tags.map(tag => <span
@@ -74,34 +117,19 @@ export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags })
                                     getCohortStudents(activeCohort.id)
                                 })
                             }}
-                            className="student--tag">{tag.tag.name}</span>)
+                            className="student--tag">
+                            {tag.tag.name}
+                            <span class="delete clickable"
+                                onClick={e => {
+                                    e.stopPropagation()
+                                    untagStudent(tag.id).then(() => {
+                                        getCohortStudents(activeCohort.id)
+                                    })
+                                }}
+                            >&times;</span>
+                            </span>
+                        )
                     }
-                </div>
-                <div className="student__footer">
-                    <div>
-                        {student.score}
-                    </div>
-                    <div>
-                        {
-                            student.proposals.map(p => {
-                                if (p.status === "submitted") {
-                                    return <ProposalIcon color="red" />
-                                }
-                                else if (p.status === "reviewed") {
-                                    return <ProposalIcon color="goldenrod" />
-                                }
-                                else if (p.status === "approved") {
-                                    return <ProposalIcon color="dodgerblue" />
-                                }
-                            })
-                        }
-                    </div>
-                    <div className="student__tag--add">
-                        <TagIcon clickFunction={() => {
-                            activateStudent(student)
-                            toggleTags()
-                        }} tip="Add a tag to this student" />
-                    </div>
                 </div>
             </div>
         </>

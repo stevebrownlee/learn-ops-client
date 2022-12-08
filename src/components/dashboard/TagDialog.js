@@ -32,7 +32,7 @@ export const TagDialog = ({ toggleTags }) => {
                             className="button button--isi button--border-thick button--round-m button--size-s button--assessment"
                             ><i className="button__icon icon icon-tag"></i>
                             <span>{tag.name}</span>
-                            <span class="delete"
+                            <span className="delete"
                             onClick={e => {
                                 e.stopPropagation()
                                 deleteTag(tag.id).then(() => {
@@ -47,7 +47,7 @@ export const TagDialog = ({ toggleTags }) => {
             }
         </section>
 
-        <section>
+        <section className="tagDialog__newTag">
             New tag: <input type="text" value={tag}
                 onChange={(e) => {
                     setTag(e.target.value)

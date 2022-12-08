@@ -16,9 +16,13 @@
 }
 
 .bookColumn__header {
-    border: 1px dotted darkmagenta;
-    background-color: lightpink;
+    border: 1px dotted rgb(50, 67, 50);
+    background-color: #b1e2a9;
     padding: 0.5rem 1rem;
     text-align: center;
     min-width: 5rem;
+    border-radius: 0.33rem;
+    color: rgb(74, 73, 73);
+    margin: 0 0 0.8rem 0;
+    box-shadow: 0.25rem 0.25rem 0.25rem rgb(156, 156, 156);
 }

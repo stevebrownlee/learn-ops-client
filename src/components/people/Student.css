@@ -1,12 +1,40 @@
-.student__header {
-    display: grid;
-    grid-template-columns: 6fr 1fr;
+.student {
+    border: 2px dotted rgb(137, 188, 188);
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin: 0.33rem 0 0.33rem 0;
+    max-width: 8rem;
+    position: relative;
+    box-shadow: 0.2rem 0.2rem 0.45rem rgb(188, 188, 188);
 }
+
 
 .student__info {
     margin-block-start: 0;
     margin-block-end: 0;
     margin-bottom: 0;
+}
+
+.student__score--mini {
+    font-family: "Patua One", serif;
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    font-size: 0.7rem;
+    color: #4a0d2f;
+    font-weight: bold;
+    letter-spacing: 2px;
+    background-color: #decdd6;
+    padding: 0.1rem;
+    border-radius: 0.7rem;
+}
+
+.student__proposals {
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
 }
 
 .student__score {
@@ -78,15 +106,6 @@
     background-color: #c2f0dd;
 }
 
-.student {
-    border: 2px dotted rgb(137, 188, 188);
-    padding: 0.5rem 0.75rem;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    margin: 0.33rem 0 0 0;
-    max-width: 8rem;
-}
 
 .student--takingAssessment {
     border: 2px solid rgb(251, 255, 30);
@@ -101,9 +120,16 @@
 }
 
 .student__actions {
-    display: flex;
+    display: none;
     flex-wrap: nowrap;
     border-bottom: 1px dotted darkgreen;
+}
+
+.student__header {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin-top: 0.75rem;
 }
 
 .student__name {
@@ -147,12 +173,6 @@
     line-height: 0;
 }
 
-.student__header {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-}
-
 .student__project {
     font-size: smaller;
     padding: 0 0 0.33rem 0;
@@ -164,10 +184,15 @@
 
 .student--tag {
     padding: 0.1rem 0.33rem;
-    background-color: rgb(247, 177, 255);
+    background-color: #e3c0ce;
     color: black;
     border-radius: 0.25rem;
     margin: 0.2rem 0.33rem;
     font-size: 0.75rem;
-    cursor: pointer;
+}
+
+
+.tag__name {
+    font-size: 0.55rem;
+    padding-left: 0;
 }
