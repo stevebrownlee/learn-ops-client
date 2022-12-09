@@ -19,20 +19,19 @@ export const TagDialog = ({ toggleTags }) => {
         <section className="tagButtons">
             {
                 tags.map(tag => {
-                    return <div>
-                        <button key={`tag--${tag.id}`}
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                tagStudent(activeStudent.id, tag.id)
-                                    .then(() => {
-                                        getCohortStudents(activeCohort.id)
-                                        toggleTags()
-                                    })
-                            }}
-                            className="button button--isi button--border-thick button--round-m button--size-s button--assessment"
-                            ><i className="button__icon icon icon-tag"></i>
-                            <span>{tag.name}</span>
-                            <span className="delete"
+                    return <button key={`tag--${tag.id}`}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            tagStudent(activeStudent.id, tag.id)
+                                .then(() => {
+                                    getCohortStudents(activeCohort.id)
+                                    toggleTags()
+                                })
+                        }}
+                        className="button button--isi button--border-thick button--round-m button--size-xs button--assessment"
+                    ><i className="button__icon icon icon-tag"></i>
+                        <span>{tag.name}</span>
+                        <span className="delete"
                             onClick={e => {
                                 e.stopPropagation()
                                 deleteTag(tag.id).then(() => {
@@ -40,9 +39,8 @@ export const TagDialog = ({ toggleTags }) => {
                                     getCohortStudents(activeCohort.id)
                                 })
                             }}
-                                >&times;</span>
-                        </button>
-                    </div>
+                        >&times;</span>
+                    </button>
                 })
             }
         </section>

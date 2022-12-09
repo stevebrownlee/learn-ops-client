@@ -6,19 +6,12 @@ import { fetchIt } from "../utils/Fetch"
 import "./CoreSkills.css"
 import { HumanDate } from "../utils/HumanDate"
 
-export const CoreSkillSliders = () => {
+export const CoreSkillSliders = ({ hideOverlay }) => {
     const { activeStudent, getStudent } = useContext(PeopleContext)
     const [note, setNote] = useState("")
-    const [changedRecord, updateChangedRecord] = useState(0)
     const [skillRecords, setSkillRecords] = useState([])
     const [chosenCoreSkill, setChosenCoreSkill] = useState(0)
-    let { toggleDialog: toggleCoreSkillNote } = useModal("#dialog--coreskillNote")
     let { toggleDialog: toggleSkillHistory } = useModal("#dialog--coreskillHistory")
-
-    const reset = () => {
-        setNote("")
-        toggleCoreSkillNote()
-    }
 
     useEffect(() => {
         if (chosenCoreSkill !== 0) {
@@ -30,29 +23,17 @@ export const CoreSkillSliders = () => {
 
     }, [chosenCoreSkill])
 
-    useEffect(() => {
-        if (changedRecord > 0) {
-            toggleCoreSkillNote()
-            document.getElementById("coreskillNoteText").focus()
-        }
-    }, [changedRecord])
-
     return <>
         <div className="sliders">
             {
-                activeStudent.core_skill_records.length
+                activeStudent?.core_skill_records?.length
                     ? activeStudent.core_skill_records.map(
                         record => <section className="slider" key={`coreskill--${record.id}`}>
-                            <i className="icon icon-eye icon--more"
-                                onClick={e => {
-                                    setChosenCoreSkill(record.id)
-                                    toggleSkillHistory()
-                                }}
-                            ></i>
                             <h4 className="slider__header">{record.skill.label} ({record.level})</h4>
                             <input type="range" min="1" max="10" defaultValue={record.level}
                                 className="slider__range slider--coreSkill"
                                 id={`record--${record.id}`}
+                                onClick={e => e.stopPropagation()}
                                 onMouseUp={(e) => {
                                     const updatedRecord = {
                                         student_id: activeStudent.id,
@@ -62,8 +43,6 @@ export const CoreSkillSliders = () => {
                                     fetchIt(`${Settings.apiHost}/coreskillrecords/${record.id}`, {
                                         method: "PUT",
                                         body: JSON.stringify(updatedRecord)
-                                    }).then(() => {
-                                        updateChangedRecord(record.id)
                                     })
                                 }}
                             />
@@ -98,64 +77,5 @@ export const CoreSkillSliders = () => {
                     </>
             }
         </div>
-
-        <dialog id="dialog--coreskillNote" className="dialog--coreskillNote">
-            <div className="form-group">
-                <label htmlFor="name">Why are you changing core skill?</label>
-                <input type="text" id="coreskillNoteText"
-                    className="form-control form-control--dialog"
-                    value={note}
-                    onChange={e => setNote(e.target.value)}
-                    onKeyDown={
-                        e => {
-                            if (e.key === "Enter") {
-                                if (e.target.value !== "") {
-                                    fetchIt(`${Settings.apiHost}/coreskillrecords/entries`, {
-                                        method: "POST",
-                                        body: JSON.stringify({ record: changedRecord, note })
-                                    }).then(() => {
-                                        getStudent()
-                                        reset()
-                                    })
-                                }
-                                else {
-                                    reset()
-                                }
-                            }
-                            else if (e.key === "Escape") {
-                                reset()
-                            }
-                        }
-                    } />
-            </div>
-        </dialog>
-
-        <dialog style={{ paddingTop: "1rem"}} id="dialog--coreskillHistory" className="dialog--coreskillHistory">
-            {
-                skillRecords.reverse().map(
-                    note => {
-                        return <React.Fragment key={`skillNote--${note.id}`}>
-                            <div className="status">
-                                <div className="status__note"> {note.note} </div>
-                                <div className="status__date">
-                                    Recorded on <HumanDate date={note.recorded_on.split("T")[0]} /> by {note.instructor}
-                                </div>
-                            </div>
-                            <div className="status__separator"></div>
-                        </React.Fragment>
-                    }
-                )
-            }
-            <button className="fakeLink" style={{
-                position: "absolute",
-                top: "0.33em",
-                right: "0.5em",
-                fontSize: "0.75rem"
-            }}
-                id="closeBtn"
-                onClick={toggleSkillHistory}>[ close ]</button>
-        </dialog>
-
-
     </>
 }

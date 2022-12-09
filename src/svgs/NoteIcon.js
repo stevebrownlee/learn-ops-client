@@ -1,8 +1,7 @@
 import React, { useState } from "react"
 
-export const NoteIcon = ({ tip, position }) => {
+export const NoteIcon = ({ tip, position, clickFunction }) => {
     const [visible, setVisible] = useState(false)
-    const [style, setStyle] = useState(false)
     const [delayHandler, setDelayHandler] = useState(null)
 
     const handleMouseEnter = event => {
@@ -16,23 +15,8 @@ export const NoteIcon = ({ tip, position }) => {
         clearTimeout(delayHandler)
     }
 
-    const tooltipStyle = {
-        position: "absolute",
-        top: "-4.25rem",
-        left: "-4rem",
-        border: "1px dashed gray",
-        padding: "0.75rem",
-        fontSize: "smaller",
-        backgroundColor: "lightgoldenrodyellow",
-        width: "10rem",
-        zIndex: 10
-    }
-
     const displayTip = () => {
-        if (position === "left") {
-            tooltipStyle.left = "-12rem"
-        }
-        return <div style={tooltipStyle}>{tip}</div>
+        return <div className="tooltip">{tip}</div>
     }
 
     return <span style={{ position: "relative" }}>
@@ -41,6 +25,7 @@ export const NoteIcon = ({ tip, position }) => {
         <svg xmlns="http://www.w3.org/2000/svg"
             onMouseOver={handleMouseEnter}
             onMouseOut={handleMouseLeave}
+            onClick={clickFunction}
             style={{ cursor: "pointer", marginLeft: "0.33rem", height: "1rem" }}
             viewBox="0 0 24 24">
             <g fill="none">

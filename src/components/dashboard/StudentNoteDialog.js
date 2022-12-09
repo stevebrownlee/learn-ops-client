@@ -1,51 +1,46 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
 import useKeyboardShortcut from "../ui/useKeyboardShortcut"
 import Settings from "../Settings"
 import useModal from "../ui/useModal"
 import { fetchIt } from "../utils/Fetch"
 
-export const DailyStatusDialog = () => {
+export const StudentNoteDialog = ({ toggleNote }) => {
     const { activeStudent } = useContext(PeopleContext)
     const [message, setMessage] = useState("")
-    let { toggleDialog: toggleStatus } = useModal("#dialog--status")
-    const dailyStatusLogger = useKeyboardShortcut('d', ({ activeStudent }) => {
-        if ("id" in activeStudent) {
-            toggleStatus()
-            document.getElementById("statusText").focus()
-            setMessage("")
-        }
-    }, { activeStudent })
-
+    const [notes, setNotes] = useState([])
+    const note = useRef()
 
     useEffect(() => {
-        document.addEventListener("keyup", dailyStatusLogger)
-        return () => document.removeEventListener("keyup", dailyStatusLogger)
-    }, [])
+        if (note && note.current) {
+            note.current.focus()
+        }
+    })
 
     const reset = () => {
         setMessage("")
-        toggleStatus()
+        toggleNote()
     }
 
-    const createStatusEntry = (e) => {
-        return fetchIt(`${Settings.apiHost}/students/${activeStudent.id}/status`, {
+    const createStudentNote = (e) => {
+        return fetchIt(`${Settings.apiHost}/notes`, {
             method: "POST",
-            body: JSON.stringify({ status: e.target.value })
+            body: JSON.stringify({ note: message, studentId: activeStudent.id })
         }).then(reset)
     }
 
-    return <dialog id="dialog--status" className="dialog--status">
+    return <dialog id="dialog--note" className="dialog--note">
         <div className="form-group">
-            <label htmlFor="name">Daily status:</label>
+            <label htmlFor="name">Note:</label>
             <input type="text" id="statusText"
                 className="form-control form-control--dialog"
+                ref={note}
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 onKeyDown={
                     e => {
                         if (e.key === "Enter") {
-                            e.target.value !== "" ? createStatusEntry(e) : reset()
+                            e.target.value !== "" ? createStudentNote() : reset()
                         } else if (e.key === "Escape") {
                             reset()
                         }

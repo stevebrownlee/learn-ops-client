@@ -92,12 +92,7 @@ export const CohortSearchField = () => {
 
     return (
         <>
-            <header>
-                <div className="titlebar">
-                    <h3>Find Cohort</h3>
-                </div>
-            </header>
-            <div className="search">
+            <div className="search cohortAction--large">
                 <input id="search__terms--cohort"
                     onKeyUp={search}
                     onChange={e => setTerms(e.target.value)}

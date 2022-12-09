@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState } from "react"
+import useModal from "../ui/useModal.js"
 import { Link } from "react-router-dom"
 import { CourseContext } from "../course/CourseProvider.js"
 import { PeopleContext } from "../people/PeopleProvider.js"
 import { CohortContext } from "./CohortProvider.js"
-import { CohortSearchField } from "./CohortSearchField.js"
 import { Student } from "../people/Student.js"
-import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
-import "./CohortStudentList.css"
 import { BookProjectDialog } from "../dashboard/BookProjectDialog.js"
-import useModal from "../ui/useModal.js"
 import { AssessmentStatusDialog } from "../dashboard/AssessmentStatusDialog.js"
 import { TagDialog } from "../dashboard/TagDialog.js"
+import { StudentNoteDialog } from "../dashboard/StudentNoteDialog.js"
+import "./CohortStudentList.css"
+import "./Tooltip.css"
+import { CohortDialog } from "../dashboard/CohortDialog.js"
 
 export const StudentCardList = () => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
@@ -22,6 +23,8 @@ export const StudentCardList = () => {
     let { toggleDialog: toggleProjects } = useModal("#dialog--projects")
     let { toggleDialog: toggleStatuses } = useModal("#dialog--statuses")
     let { toggleDialog: toggleTags } = useModal("#dialog--tags")
+    let { toggleDialog: toggleNote } = useModal("#dialog--note")
+    let { toggleDialog: toggleCohorts } = useModal("#dialog--cohorts")
 
     useEffect(() => {
 
@@ -43,19 +46,6 @@ export const StudentCardList = () => {
             return book
         })
 
-        const grouped = copy.reduce(
-            (theMap, currentStudent) => {
-                if (!theMap.has(currentStudent.book.name)) {
-                    theMap.set(currentStudent.book.name, [currentStudent])
-                }
-                else {
-                    theMap.get(currentStudent.book.name).push(currentStudent)
-                }
-                return theMap
-            },
-            new Map()
-        )
-
         setGroupedStudents(studentsPerBook)
     }, [cohortStudents])
 
@@ -69,6 +59,8 @@ export const StudentCardList = () => {
                             toggleProjects={toggleProjects}
                             toggleStatuses={toggleStatuses}
                             toggleTags={toggleTags}
+                            toggleNote={toggleNote}
+                            toggleCohorts={toggleCohorts}
                             key={`student--${student.id}`}
                             student={student} />)
                     }
@@ -79,5 +71,7 @@ export const StudentCardList = () => {
         <BookProjectDialog toggleProjects={toggleProjects} />
         <AssessmentStatusDialog toggleStatuses={toggleStatuses} />
         <TagDialog toggleTags={toggleTags} />
+        <StudentNoteDialog toggleNote={toggleNote} />
+        <CohortDialog toggleCohorts={toggleCohorts} />
     </section>
 }

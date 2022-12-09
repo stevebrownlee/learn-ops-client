@@ -102,6 +102,26 @@ dialog {
     margin: 2rem 0 2rem 0;
 }
 
+@media (max-width: 1300px) {
+    .tagButtons {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        margin: 2rem 0 2rem 0;
+    }
+}
+
+@media (max-width: 1000px) {
+    .tagButtons {
+        display: grid;
+        grid-template-columns: auto auto;
+        margin: 2rem 0 2rem 0;
+    }
+}
+
+.dialog--tags {
+    width: 50%;
+}
+
 .tagDialog__newTag {
     text-align: center;
 }

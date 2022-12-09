@@ -29,6 +29,10 @@ export const PeopleProvider = (props) => {
             .then(data => setTags(data.results))
     }, [])
 
+    const getStudentNotes = useCallback((studentId) => {
+        return fetchIt(`${Settings.apiHost}/notes?studentId=${studentId}`)
+    }, [])
+
     const tagStudent = useCallback((student, tag) => {
         return fetchIt(`${Settings.apiHost}/studenttags`, {
             method: "POST",
@@ -120,7 +124,8 @@ export const PeopleProvider = (props) => {
             cohortStudents, getStudentProposals, proposals,
             setStudentCurrentProject, setStudentCurrentAssessment,
             updateStudentCurrentAssessment, getAllTags, tags,
-            tagStudent, untagStudent, createNewTag, deleteTag
+            tagStudent, untagStudent, createNewTag, deleteTag,
+            getStudentNotes
         }} >
             {props.children}
         </PeopleContext.Provider>

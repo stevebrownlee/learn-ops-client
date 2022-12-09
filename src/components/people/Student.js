@@ -6,12 +6,20 @@ import { NoteIcon } from "../../svgs/NoteIcon.js"
 import { ProposalIcon } from "../../svgs/ProposalIcon.js"
 import { TagIcon } from "../../svgs/TagIcon.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
+import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
+import "./Student.css"
+import { StudentTabList } from "./StudentTabList.js"
 
-export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags }) => {
+export const Student = ({
+    student, toggleProjects,
+    toggleStatuses, toggleTags,
+    toggleNote, toggleCohorts
+}) => {
     const {
         activateStudent, setStudentCurrentAssessment,
-        getCohortStudents, untagStudent
+        getCohortStudents, untagStudent, activeStudent,
+        getStudentNotes
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
 
@@ -32,9 +40,16 @@ export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags })
         }
     }
 
+    const hideOverlay = (e) => {
+        if ("stopPropagation" in e) {
+            e.stopPropagation()
+        }
+        document.querySelector('.overlay').style.display = "none"
+    }
+
     return (
         <>
-            <div className={`personality--${student.personality} student ${setAssessmentIndicatorBorder(student.assessment_status)}`}>
+            <div className={`personality--${student.archetype} student ${setAssessmentIndicatorBorder(student.assessment_status)}`}>
                 <div className="student__actions">
                     <div className="action action--assessments">
                         <AssessmentIcon clickFunction={
@@ -61,19 +76,24 @@ export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags })
                     {
                         student.proposals.map(p => {
                             if (p.status === "submitted") {
-                                return <ProposalIcon color="red" />
+                                return <ProposalIcon key="pendingProposal" color="red" />
                             }
                             else if (p.status === "reviewed") {
-                                return <ProposalIcon color="goldenrod" />
+                                return <ProposalIcon key="reviewingProposal" color="goldenrod" />
                             }
                             else if (p.status === "approved") {
-                                return <ProposalIcon color="dodgerblue" />
+                                return <ProposalIcon key="completedProposal" color="dodgerblue" />
                             }
                         })
                     }
                 </div>
                 <div className="student__header">
-                    <h4 className="student__name">{student.name}</h4>
+                    <h4 className="student__name"
+                        onClick={() => {
+                            activateStudent(student)
+                            document.querySelector('.overlay').style.display = "block"
+                        }}
+                    >{student.name}</h4>
                     <div className="student__book">
                         {student.book.name} <EditIcon helpFunction={() => {
                             activateStudent(student)
@@ -100,7 +120,12 @@ export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags })
                         } tip={`${student.assessment_status === 0 ? "Assign book assessment to student" : "Update assessment status"}`} />
                     </div>
                     <div className="action action--notes">
-                        <NoteIcon tip="Enter in your notes about this student" />
+                        <NoteIcon clickFunction={() => {
+                            activateStudent(student)
+                            getStudentNotes(student.id)
+                            toggleNote()
+                        }}
+                            tip="Enter in your notes about this student" />
                     </div>
                     <div className="student__tag--add">
                         <TagIcon clickFunction={() => {
@@ -111,7 +136,7 @@ export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags })
                 </div>
                 <div className="student__tags">
                     {
-                        student.tags.map(tag => <span
+                        student.tags.map(tag => <span key={`tag--${tag.id}`}
                             onClick={() => {
                                 untagStudent(tag.id).then(() => {
                                     getCohortStudents(activeCohort.id)
@@ -119,7 +144,7 @@ export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags })
                             }}
                             className="student--tag">
                             {tag.tag.name}
-                            <span class="delete clickable"
+                            <span className="delete clickable"
                                 onClick={e => {
                                     e.stopPropagation()
                                     untagStudent(tag.id).then(() => {
@@ -127,9 +152,45 @@ export const Student = ({ student, toggleProjects, toggleStatuses, toggleTags })
                                     })
                                 }}
                             >&times;</span>
-                            </span>
+                        </span>
                         )
                     }
+                </div>
+            </div>
+
+            {/* <div className="overlay" onClick={hideOverlay}> */}
+            <div className="overlay">
+                <div className="card">
+                    <div className="card-body">
+                        <header className="student__header">
+                            <h2 className="card-title student__info">
+                                {activeStudent.name}
+                            </h2>
+                            <div className="student__score">
+                                {activeStudent.score}
+                            </div>
+                        </header>
+                        <div className="card-text">
+                            <div className="student__details">
+
+                                <div className="student__github">
+                                    Github: <a href={`https://www.github.com/${activeStudent.github}`}>
+                                        {`https://www.github.com/${activeStudent.github}`}</a>
+                                </div>
+                                <div className="student__cohort">
+                                    Cohort: <button className="fakeLink"
+                                        onClick={() => {
+                                            toggleCohorts()
+                                        }}>
+                                        {activeStudent?.cohorts?.map(c => c.name).join(", ")}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <CoreSkillSliders hideOverlay={hideOverlay} />
+                            <StudentTabList hideOverlay={hideOverlay} />
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

@@ -5,8 +5,8 @@ import { Record } from "../records/Record.js"
 import { PeopleContext } from "./PeopleProvider.js"
 import { HumanDate } from "../utils/HumanDate.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
-import "./Status.css"
 import { fetchIt } from "../utils/Fetch.js"
+import "./Status.css"
 
 export const StudentTabList = () => {
     const [chosenAssessment, chooseAssessment] = useState(0)
@@ -21,18 +21,19 @@ export const StudentTabList = () => {
         getStatuses, statuses, changeStatus, proposalStatuses,
         getProposalStatuses, addToProposalTimeline
     } = useContext(AssessmentContext)
+
     const history = useHistory()
 
     useEffect(() => {
-        getProposalStatuses()
-        getStatuses()
-        getAssessmentList()
+        // getProposalStatuses()
+        // getStatuses()
+        // getAssessmentList()
     }, [])
 
-    useEffect(() => {
-        getStudentAssessments(activeStudent.id)
-        getStudentProposals()
-    }, [activeStudent])
+    // useEffect(() => {
+    //     getStudentAssessments(activeStudent.id)
+    //     getStudentProposals()
+    // }, [activeStudent])
 
     const createStatus = (status) => {
         let className = ""
@@ -120,28 +121,6 @@ export const StudentTabList = () => {
                             })
                         }
                     </section>
-                </article>
-            </li>
-
-            <li>
-                <input type="radio" name="tabs" id="tab2" />
-                <label htmlFor="tab2" role="tab" aria-selected="true" aria-controls="panel2" tabIndex="0">Status</label>
-                <article id="tab-content2" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
-
-                    <h2>Daily Status</h2>
-
-                    {
-                        activeStudent.statuses.map(status => <React.Fragment key={`status--${status.id}`}>
-                            <div className="status">
-                                <div className="status__note"> {status.status} </div>
-                                <div className="status__date">
-                                    Recorded on <HumanDate date={status.created_on.split("T")[0]} /> by {status.author}
-                                </div>
-                            </div>
-                            <div className="status__separator"></div>
-                        </React.Fragment>)
-                    }
-
                 </article>
             </li>
 

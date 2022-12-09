@@ -1,8 +1,7 @@
 import React, { useState } from "react"
 
-export const GlobeIcon = ({ tip, position }) => {
+export const GlobeIcon = ({ tip }) => {
     const [visible, setVisible] = useState(false)
-    const [style, setStyle] = useState(false)
     const [delayHandler, setDelayHandler] = useState(null)
 
     const handleMouseEnter = event => {
@@ -16,23 +15,8 @@ export const GlobeIcon = ({ tip, position }) => {
         clearTimeout(delayHandler)
     }
 
-    const tooltipStyle = {
-        position: "absolute",
-        top: "-4.25rem",
-        left: "-4rem",
-        border: "1px dashed gray",
-        padding: "0.75rem",
-        fontSize: "smaller",
-        backgroundColor: "lightgoldenrodyellow",
-        width: "10rem",
-        zIndex: 10
-    }
-
     const displayTip = () => {
-        if (position === "left") {
-            tooltipStyle.left = "-12rem"
-        }
-        return <div style={tooltipStyle}>{tip}</div>
+        return <div className="tooltip">{tip}</div>
     }
 
     return <span style={{ position: "relative" }}>

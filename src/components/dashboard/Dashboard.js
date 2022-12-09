@@ -1,28 +1,29 @@
 import React from "react"
-import { StudentOverview } from "../people/StudentOverview"
-import { StudentSearch } from "../people/StudentSearch"
-import { DailyStatusDialog } from "./DailyStatusDialog"
-import { FeedbackDialog } from "./FeedbackDialog"
-import { CohortDialog } from "./CohortDialog"
-import { StudentCardList } from "../cohorts/StudentCardList"
 import useModal from "../ui/useModal"
-import "./Dashboard.css"
+import { FeedbackDialog } from "./FeedbackDialog"
+import { StudentCardList } from "../cohorts/StudentCardList"
 import { CohortSearchField } from "../cohorts/CohortSearchField"
+import { CohortOperations } from "../cohorts/CohortOperations"
+import "./Dashboard.css"
 
 export const Dashboard = () => {
-    let { toggleDialog: toggleCohorts } = useModal("#dialog--cohorts")
-
     return <main className="dashboard">
         {/* Immediately appear */}
-        <CohortSearchField />
+        <header>
+            <div className="titlebar">
+                <h3>Find Cohort</h3>
+            </div>
+        </header>
+
+        <section className="cohortActions">
+            <CohortSearchField />
+            <CohortOperations />
+        </section>
+
         <StudentCardList />
 
 
-
-
         {/* Appear when needed */}
-        <DailyStatusDialog />
         <FeedbackDialog />
-        <CohortDialog toggleCohorts={toggleCohorts} />
     </main>
 }

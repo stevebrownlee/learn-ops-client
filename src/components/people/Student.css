@@ -7,7 +7,7 @@
     margin: 0.33rem 0 0.33rem 0;
     max-width: 8rem;
     position: relative;
-    box-shadow: 0.2rem 0.2rem 0.45rem rgb(188, 188, 188);
+    box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
 }
 
 
@@ -136,6 +136,12 @@
     margin: 0 0 0.33rem 0;
 }
 
+.student__name:hover {
+    color: rgb(19, 81, 144);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .action {
     flex: 0 0 33%;
 }
@@ -196,3 +202,28 @@
     font-size: 0.55rem;
     padding-left: 0;
 }
+
+
+.overlay {
+    animation: createBox .25s;
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(232, 245, 255, 0.75); /* Black background with opacity */
+    z-index: 3; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+  }
+
+  @keyframes createBox {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
