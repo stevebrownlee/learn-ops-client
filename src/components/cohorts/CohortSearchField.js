@@ -47,7 +47,6 @@ export const CohortSearchField = () => {
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
             const id = parseInt(localStorage.getItem("activeCohort"))
-            getCohortStudents(id)
             getCohort(id)
             setActive(true)
         }

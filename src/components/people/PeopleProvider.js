@@ -9,6 +9,7 @@ export const PeopleProvider = (props) => {
     const [students, setStudents] = useState([])
     const [tags, setTags] = useState([])
     const [proposals, setProposals] = useState([])
+    const [coreSkills, setCoreSkills] = useState([])
     const [cohortStudents, setCohortStudents] = useState([])
     const [activeStudent, activateStudent] = useState({})
     const { getCurrentUser } = useSimpleAuth()
@@ -22,6 +23,11 @@ export const PeopleProvider = (props) => {
     const getCohortStudents = useCallback((cohortId) => {
         return fetchIt(`${Settings.apiHost}/students?cohort=${cohortId}`)
             .then(data => setCohortStudents(data.results))
+    }, [])
+
+    const getStudentCoreSkills = useCallback((studentId) => {
+        return fetchIt(`${Settings.apiHost}/coreskillrecords?studentId=${studentId}`)
+            .then(setCoreSkills)
     }, [])
 
     const getAllTags = useCallback(() => {
@@ -82,6 +88,7 @@ export const PeopleProvider = (props) => {
                 bookId: student.book.id
             })
         })
+            .catch(error => alert(error))
     }, [])
 
     const getStudent = useCallback((id = null) => {
@@ -125,7 +132,7 @@ export const PeopleProvider = (props) => {
             setStudentCurrentProject, setStudentCurrentAssessment,
             updateStudentCurrentAssessment, getAllTags, tags,
             tagStudent, untagStudent, createNewTag, deleteTag,
-            getStudentNotes
+            getStudentNotes, getStudentCoreSkills, coreSkills
         }} >
             {props.children}
         </PeopleContext.Provider>

@@ -27,7 +27,6 @@ export const StudentCardList = () => {
     let { toggleDialog: toggleCohorts } = useModal("#dialog--cohorts")
 
     useEffect(() => {
-
         if (localStorage.getItem("activeCohort")) {
             const id = parseInt(localStorage.getItem("activeCohort"))
             getCourses().then(() => {

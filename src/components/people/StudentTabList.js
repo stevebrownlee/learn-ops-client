@@ -100,7 +100,7 @@ export const StudentTabList = () => {
 
 
     return (
-        <ul className="tabs" role="tablist">
+        <ul className="tabs" role="tablist" onClick={e => e.stopPropagation()}>
             <li>
                 <input type="radio" name="tabs" id="tab1" defaultChecked />
                 <label htmlFor="tab1" role="tab" aria-selected="true" aria-controls="panel1" tabIndex="0">Objectives</label>
@@ -118,61 +118,6 @@ export const StudentTabList = () => {
                         {
                             activeStudent.records?.map(record => {
                                 return <Record key={`record--${record.id}`} record={record} />
-                            })
-                        }
-                    </section>
-                </article>
-            </li>
-
-            <li>
-                <input type="radio" name="tabs" id="tab3" />
-                <label htmlFor="tab3" role="tab" aria-selected="false" aria-controls="panel3" tabIndex="0">Assessments</label>
-                <article id="tab-content3" className="tab-content" role="tabpanel" aria-labelledby="specification" aria-hidden="true">
-                    <section className="records--overview">
-                        <div className="rightAlign">
-                            <select className="form-control"
-                                value={chosenAssessment}
-                                onChange={(e) => chooseAssessment(parseInt(e.target.value))}>
-                                <option value="0">Choose assessment...</option>
-                                {
-                                    allAssessments.map(asst => {
-                                        return <option key={`asst--${asst.id}`} value={asst.id}>{asst.name}</option>
-                                    })
-                                }
-                            </select>
-
-                            <button onClick={assign}
-                                className="button button--isi button--border-thick button--round-l button--size-s button--assessment">
-                                <i className="button__icon icon icon-book"></i>
-                                <span>Assign</span>
-                            </button>
-
-                        </div>
-
-                        {
-                            studentAssessments.map(assessment => {
-                                return <React.Fragment key={`assessment--${assessment.id}`}>
-                                    <div className="assessment__name">
-                                        {assessment.assessment.name}
-                                    </div>
-
-                                    <div className="assessment">
-
-                                        {createStatus(assessment.status)}
-
-                                        <div className="assessment__statusDropdown">
-                                            <select id="statuses"
-                                                onChange={(e) => updateAssessmentStatus(assessment.id, e.target.value)}>
-                                                <option value="0">Change status</option>
-                                                {
-                                                    statuses.map(s => {
-                                                        return <option key={`asst--${s.id}`} value={s.id}>{s.status}</option>
-                                                    })
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-                                </React.Fragment>
                             })
                         }
                     </section>

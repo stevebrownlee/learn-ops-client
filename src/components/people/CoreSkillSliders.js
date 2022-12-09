@@ -7,27 +7,17 @@ import "./CoreSkills.css"
 import { HumanDate } from "../utils/HumanDate"
 
 export const CoreSkillSliders = ({ hideOverlay }) => {
-    const { activeStudent, getStudent } = useContext(PeopleContext)
+    const { activeStudent, getStudent, coreSkills } = useContext(PeopleContext)
     const [note, setNote] = useState("")
     const [skillRecords, setSkillRecords] = useState([])
     const [chosenCoreSkill, setChosenCoreSkill] = useState(0)
     let { toggleDialog: toggleSkillHistory } = useModal("#dialog--coreskillHistory")
 
-    useEffect(() => {
-        if (chosenCoreSkill !== 0) {
-            const coreSkill = activeStudent.core_skill_records
-                .find(record => record.id === chosenCoreSkill)
-
-            setSkillRecords(coreSkill.notes.map(n => ({ ...n })).reverse())
-        }
-
-    }, [chosenCoreSkill])
-
     return <>
         <div className="sliders">
             {
-                activeStudent?.core_skill_records?.length
-                    ? activeStudent.core_skill_records.map(
+                coreSkills.length
+                    ? coreSkills.map(
                         record => <section className="slider" key={`coreskill--${record.id}`}>
                             <h4 className="slider__header">{record.skill.label} ({record.level})</h4>
                             <input type="range" min="1" max="10" defaultValue={record.level}

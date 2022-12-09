@@ -19,7 +19,7 @@ export const Student = ({
     const {
         activateStudent, setStudentCurrentAssessment,
         getCohortStudents, untagStudent, activeStudent,
-        getStudentNotes
+        getStudentNotes, getStudentCoreSkills
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
 
@@ -41,9 +41,6 @@ export const Student = ({
     }
 
     const hideOverlay = (e) => {
-        if ("stopPropagation" in e) {
-            e.stopPropagation()
-        }
         document.querySelector('.overlay').style.display = "none"
     }
 
@@ -91,6 +88,7 @@ export const Student = ({
                     <h4 className="student__name"
                         onClick={() => {
                             activateStudent(student)
+                            getStudentCoreSkills(student.id)
                             document.querySelector('.overlay').style.display = "block"
                         }}
                     >{student.name}</h4>
@@ -158,8 +156,8 @@ export const Student = ({
                 </div>
             </div>
 
-            {/* <div className="overlay" onClick={hideOverlay}> */}
-            <div className="overlay">
+            <div className="overlay" onClick={hideOverlay}>
+            {/* <div className="overlay"> */}
                 <div className="card">
                     <div className="card-body">
                         <header className="student__header">
