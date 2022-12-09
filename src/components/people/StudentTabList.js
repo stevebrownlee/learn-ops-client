@@ -11,10 +11,12 @@ import "./Status.css"
 export const StudentTabList = () => {
     const [chosenAssessment, chooseAssessment] = useState(0)
     const {
-        activeStudent, getStudentProposals,
+        activeCohort
+    } = useContext(CohortContext)
+    const {
+        activeStudent, getStudentProposals, personality,
         proposals, getCohortStudents, learningRecords
     } = useContext(PeopleContext)
-    const { activeCohort } = useContext(CohortContext)
     const {
         getStudentAssessments, getAssessmentList, revokeApproval,
         studentAssessments, allAssessments, saveStudentAssessment,
@@ -23,17 +25,6 @@ export const StudentTabList = () => {
     } = useContext(AssessmentContext)
 
     const history = useHistory()
-
-    useEffect(() => {
-        // getProposalStatuses()
-        // getStatuses()
-        // getAssessmentList()
-    }, [])
-
-    // useEffect(() => {
-    //     getStudentAssessments(activeStudent.id)
-    //     getStudentProposals()
-    // }, [activeStudent])
 
     const createStatus = (status) => {
         let className = ""
@@ -160,21 +151,21 @@ export const StudentTabList = () => {
                 <article id="tab-content5" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
 
                     <div className="persona">
-                        <section className={`persona__myers-briggs section--persona personality--${activeStudent?.personality?.briggs_myers_type?.description?.type}`}>
-                            <h2>{activeStudent?.personality?.briggs_myers_type.code}</h2>
+                        <section className={`persona__myers-briggs section--persona personality--${personality?.briggs_myers_type?.description?.type}`}>
+                            <h2>{personality?.briggs_myers_type?.code}</h2>
                             <h3>Summary</h3>
-                            <p>{activeStudent?.personality?.briggs_myers_type?.description?.summary}</p>
+                            <p>{personality?.briggs_myers_type?.description?.summary}</p>
                             <h3>Emotions &amp; Communication</h3>
-                            <p>{activeStudent?.personality?.briggs_myers_type?.description?.details}</p>
+                            <p>{personality?.briggs_myers_type?.description?.details}</p>
                         </section>
 
                         <section className="persona__bfi section--persona">
                             <h2>BFI</h2>
-                            <div>Extraversion: {activeStudent?.personality?.bfi_extraversion}</div>
-                            <div>Conscientiousness: {activeStudent?.personality?.bfi_conscientiousness}</div>
-                            <div>Neuroticism: {activeStudent?.personality?.bfi_neuroticism}</div>
-                            <div>Openness to Experience: {activeStudent?.personality?.bfi_openness}</div>
-                            <div>Agreeableness: {activeStudent?.personality?.bfi_agreeableness}</div>
+                            <div>Extraversion: {personality?.bfi_extraversion}</div>
+                            <div>Conscientiousness: {personality?.bfi_conscientiousness}</div>
+                            <div>Neuroticism: {personality?.bfi_neuroticism}</div>
+                            <div>Openness to Experience: {personality?.bfi_openness}</div>
+                            <div>Agreeableness: {personality?.bfi_agreeableness}</div>
                         </section>
                     </div>
 

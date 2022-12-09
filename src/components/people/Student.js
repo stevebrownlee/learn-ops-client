@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { AssessmentIcon } from "../../svgs/AssessmentIcon.js"
 import { EditIcon } from "../../svgs/EditIcon.js"
 import { GlobeIcon } from "../../svgs/GlobeIcon.js"
@@ -21,10 +21,12 @@ export const Student = ({
         activateStudent, setStudentCurrentAssessment,
         getCohortStudents, untagStudent, activeStudent,
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
-        proposals, getStudentLearningRecords
+        proposals, getStudentLearningRecords, getStudentPersonality
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
+
+    const [personality,setPersonality] = useState({})
 
     const setAssessmentIndicatorBorder = (status) => {
         switch (status) {
@@ -95,6 +97,7 @@ export const Student = ({
                             getStudentProposals(student.id)
                             getStudentLearningRecords(student.id)
                             getProposalStatuses()
+                            getStudentPersonality(student.id).then(setPersonality)
                             document.querySelector('.overlay').style.display = "block"
                         }}
                     >{student.name}</h4>
