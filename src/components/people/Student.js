@@ -5,6 +5,7 @@ import { GlobeIcon } from "../../svgs/GlobeIcon.js"
 import { NoteIcon } from "../../svgs/NoteIcon.js"
 import { ProposalIcon } from "../../svgs/ProposalIcon.js"
 import { TagIcon } from "../../svgs/TagIcon.js"
+import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
@@ -19,9 +20,11 @@ export const Student = ({
     const {
         activateStudent, setStudentCurrentAssessment,
         getCohortStudents, untagStudent, activeStudent,
-        getStudentNotes, getStudentCoreSkills
+        getStudentNotes, getStudentCoreSkills, getStudentProposals,
+        proposals, getStudentLearningRecords
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
+    const { getProposalStatuses } = useContext(AssessmentContext)
 
     const setAssessmentIndicatorBorder = (status) => {
         switch (status) {
@@ -73,13 +76,13 @@ export const Student = ({
                     {
                         student.proposals.map(p => {
                             if (p.status === "submitted") {
-                                return <ProposalIcon key="pendingProposal" color="red" />
+                                return <ProposalIcon key={`pendingProposal--${p.id}`} color="red" />
                             }
                             else if (p.status === "reviewed") {
-                                return <ProposalIcon key="reviewingProposal" color="goldenrod" />
+                                return <ProposalIcon key={`reviewingProposal--${p.id}`} color="goldenrod" />
                             }
                             else if (p.status === "approved") {
-                                return <ProposalIcon key="completedProposal" color="dodgerblue" />
+                                return <ProposalIcon key={`completedProposal--${p.id}`} color="dodgerblue" />
                             }
                         })
                     }
@@ -89,6 +92,9 @@ export const Student = ({
                         onClick={() => {
                             activateStudent(student)
                             getStudentCoreSkills(student.id)
+                            getStudentProposals(student.id)
+                            getStudentLearningRecords(student.id)
+                            getProposalStatuses()
                             document.querySelector('.overlay').style.display = "block"
                         }}
                     >{student.name}</h4>

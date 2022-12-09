@@ -12,7 +12,7 @@ export const StudentTabList = () => {
     const [chosenAssessment, chooseAssessment] = useState(0)
     const {
         activeStudent, getStudentProposals,
-        proposals, getCohortStudents
+        proposals, getCohortStudents, learningRecords
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
     const {
@@ -77,27 +77,23 @@ export const StudentTabList = () => {
         return proposalStatuses.map(s => {
             const statusExists = currentStatuses.find(cs => cs.status === s.status)
             if (!statusExists) {
-                return <button className="fakeLink button--capstoneStage" key={`asst--${s.id}`}
-                    onClick={(e) => {
-                        addToProposalTimeline(proposalId, s.id)
-                            .then(getStudentProposals)
-                            .then(() => {
-                                if ("id" in activeCohort) {
-                                    getCohortStudents(activeCohort.id)
-                                }
-                            })
-                    }}>{s.status}</button>
+                return <div key={`asst--${s.id}`}>
+                    <button className="fakeLink button--capstoneStage"
+                        onClick={(e) => {
+                            addToProposalTimeline(proposalId, s.id)
+                                .then(() => getStudentProposals(activeStudent.id))
+                                .then(() => getCohortStudents(activeCohort.id))
+                        }}>{s.status}</button>
+                </div>
             }
         })
     }
 
     const revoke = (timelineStatus) => {
         revokeApproval(timelineStatus)
-            .then(getStudentProposals)
+            .then(() => getStudentProposals(activeStudent.id))
             .then(() => getCohortStudents(activeCohort.id))
     }
-
-
 
     return (
         <ul className="tabs" role="tablist" onClick={e => e.stopPropagation()}>
@@ -116,7 +112,7 @@ export const StudentTabList = () => {
 
                     <section className="records--overview">
                         {
-                            activeStudent.records?.map(record => {
+                            learningRecords.map(record => {
                                 return <Record key={`record--${record.id}`} record={record} />
                             })
                         }
@@ -141,7 +137,7 @@ export const StudentTabList = () => {
                                             s.status === "Approved"
                                                 ? <button className="fakeLink small button--revoke"
                                                     onClick={() => revoke(s)}
-                                                    >[ revoke ]</button>
+                                                >[ revoke ]</button>
                                                 : <span className="button--revoke"> </span>
                                         }
 

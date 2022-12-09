@@ -38,7 +38,6 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }
                 throw new Error(JSON.stringify(json))
             })
         }
-        throw new Error("Unknown exception occurred")
 
     }
 
