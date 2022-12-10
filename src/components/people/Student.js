@@ -10,6 +10,7 @@ import { CohortContext } from "../cohorts/CohortProvider.js"
 import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
 import "./Student.css"
+import { StudentDetails } from "./StudentDetails.js"
 import { StudentTabList } from "./StudentTabList.js"
 
 export const Student = ({
@@ -21,7 +22,8 @@ export const Student = ({
         activateStudent, setStudentCurrentAssessment,
         getCohortStudents, untagStudent, activeStudent,
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
-        proposals, getStudentLearningRecords, getStudentPersonality
+        proposals, getStudentLearningRecords, getStudentPersonality,
+        getStudentObjectives
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
@@ -32,45 +34,22 @@ export const Student = ({
         switch (status) {
             case 0:
                 return ""
-                break;
+                break
             case 1:
                 return "student--takingAssessment"
-                break;
+                break
             case 2:
                 return "student--assessmentReviewNeeded"
-                break;
+                break
             case 3:
                 return "student--assessReviewComplete"
-                break;
+                break
         }
-    }
-
-    const hideOverlay = (e) => {
-        document.querySelector('.overlay').style.display = "none"
     }
 
     return (
         <>
             <div className={`personality--${student.archetype} student ${setAssessmentIndicatorBorder(student.assessment_status)}`}>
-                <div className="student__actions">
-                    <div className="action action--assessments">
-                        <AssessmentIcon clickFunction={
-                            () => {
-                                activateStudent(student)
-                                if (student.assessment_status === 0) {
-                                    setStudentCurrentAssessment(student)
-                                        .then(() => getCohortStudents(activeCohort.id))
-                                }
-                                else {
-                                    toggleStatuses()
-                                }
-                            }
-                        } tip={`${student.assessment_status === 0 ? "Assign book assessment to student" : "Update assessment status"}`} />
-                    </div>
-                    <div className="action action--notes">
-                        <NoteIcon tip="Enter in your notes about this student" />
-                    </div>
-                </div>
                 <div className="student__score--mini">
                     {student.score}
                 </div>
@@ -165,41 +144,7 @@ export const Student = ({
                 </div>
             </div>
 
-            <div className="overlay" onClick={hideOverlay}>
-            {/* <div className="overlay"> */}
-                <div className="card">
-                    <div className="card-body">
-                        <header className="student__header">
-                            <h2 className="card-title student__info">
-                                {activeStudent.name}
-                            </h2>
-                            <div className="student__score">
-                                {activeStudent.score}
-                            </div>
-                        </header>
-                        <div className="card-text">
-                            <div className="student__details">
-
-                                <div className="student__github">
-                                    Github: <a href={`https://www.github.com/${activeStudent.github}`}>
-                                        {`https://www.github.com/${activeStudent.github}`}</a>
-                                </div>
-                                <div className="student__cohort">
-                                    Cohort: <button className="fakeLink"
-                                        onClick={() => {
-                                            toggleCohorts()
-                                        }}>
-                                        {activeStudent?.cohorts?.map(c => c.name).join(", ")}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <CoreSkillSliders hideOverlay={hideOverlay} />
-                            <StudentTabList hideOverlay={hideOverlay} />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <StudentDetails toggleCohorts={toggleCohorts} />
         </>
     )
 }

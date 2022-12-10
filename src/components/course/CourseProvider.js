@@ -7,6 +7,7 @@ export const CourseContext = React.createContext()
 
 export const CourseProvider = (props) => {
     const [courses, setCourses] = useState([])
+    const [objectives, setObjectives] = useState([])
     const [course, setCourse] = useState({})
     const [activeCourse, setActiveCourse] = useState({})
 
@@ -27,10 +28,15 @@ export const CourseProvider = (props) => {
         [setCourses]
     )
 
+    const getLearningObjectives = useCallback(
+        (id) => fetchIt(`${Settings.apiHost}/weights?tiermin=1&tiermax=3`).then(setObjectives),
+        [setCourses]
+    )
+
     return (
         <CourseContext.Provider value={{
             getCourses, courses, activeCourse, setActiveCourse,
-            getCourse
+            getCourse, getLearningObjectives, objectives
         }} >
             {props.children}
         </CourseContext.Provider>

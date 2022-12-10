@@ -5,13 +5,28 @@ import useModal from "../ui/useModal"
 import { fetchIt } from "../utils/Fetch"
 import "./CoreSkills.css"
 import { HumanDate } from "../utils/HumanDate"
+import { CohortContext } from "../cohorts/CohortProvider"
 
 export const CoreSkillSliders = ({ hideOverlay }) => {
-    const { activeStudent, getStudent, coreSkills } = useContext(PeopleContext)
+    const {
+        activeStudent, activateStudent,
+        getStudent, getCohortStudents,
+        coreSkills, cohortStudents,
+        getStudentCoreSkills
+    } = useContext(PeopleContext)
+    const { activeCohort } = useContext(CohortContext)
     const [note, setNote] = useState("")
     const [skillRecords, setSkillRecords] = useState([])
     const [chosenCoreSkill, setChosenCoreSkill] = useState(0)
     let { toggleDialog: toggleSkillHistory } = useModal("#dialog--coreskillHistory")
+
+    useEffect(() => {
+        if ("id" in activeStudent) {
+            const student = cohortStudents.find(student => student.id === activeStudent.id)
+            activateStudent(student)
+        }
+    }, [cohortStudents])
+
 
     return <>
         <div className="sliders">
@@ -21,7 +36,7 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
                         record => <section className="slider" key={`coreskill--${record.id}`}>
                             <h4 className="slider__header">{record.skill.label} ({record.level})</h4>
                             <input type="range" min="1" max="10" defaultValue={record.level}
-                                className="slider__range slider--coreSkill"
+                                className="slider__range"
                                 id={`record--${record.id}`}
                                 onClick={e => e.stopPropagation()}
                                 onMouseUp={(e) => {
@@ -34,6 +49,7 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
                                         method: "PUT",
                                         body: JSON.stringify(updatedRecord)
                                     })
+                                        .then(() => getStudentCoreSkills(activeStudent.id))
                                 }}
                             />
                         </section>

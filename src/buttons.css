@@ -214,3 +214,54 @@
 	color: #444;
 	background-color: #fff
 }
+
+/* CSS */
+.button-28--achieved {
+	background-color: #3B3B3B;
+	color: snow;
+	border-radius: 15px;
+	border: 1px solid snow;
+	font-size: 0.75rem;
+	padding: 0.33rem 1rem;
+}
+.button-28 {
+	appearance: none;
+	background-color: transparent;
+	border: 1px solid #1A1A1A;
+	border-radius: 15px;
+	box-sizing: border-box;
+	color: #3B3B3B;
+	cursor: pointer;
+	font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	font-size: 0.75rem;
+	font-weight: 600;
+	line-height: normal;
+	margin: 0;
+	min-height: 2rem;
+	min-width: 0;
+	outline: none;
+	padding: 0.33rem 1rem;
+	text-align: center;
+	text-decoration: none;
+	transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+	will-change: transform;
+}
+
+.button-28:disabled {
+	pointer-events: none;
+}
+
+.button-28:hover {
+	color: #fff;
+	background-color: #1A1A1A;
+	box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+	transform: translateY(-2px);
+}
+
+.button-28:active {
+	box-shadow: none;
+	transform: translateY(0);
+}

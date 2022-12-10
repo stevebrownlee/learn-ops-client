@@ -14,7 +14,7 @@
 body, button, input, select, textarea {
     color: #404040;
     font-family: "Comfortaa", Arial, sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.9em;
     line-height: 1.5;
     padding: 0;
     margin: 0;
@@ -26,6 +26,12 @@ body {
     background-image: radial-gradient(#767dfb 0.5px, transparent 0.5px), radial-gradient(#767dfb 0.5px, #f5f5fa 0.5px);
     background-size: 20px 20px;
     background-position: 0 0, 10px 10px;
+}
+
+@media (max-width: 1000px) {
+    body {
+        font-size: 0.7em;
+    }
 }
 
 h1, h2, h3, h4, h5, h6 {

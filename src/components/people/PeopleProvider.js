@@ -132,10 +132,6 @@ export const PeopleProvider = (props) => {
         return fetchIt(`${Settings.apiHost}/students?q=${q}`)
     }, [])
 
-    const submitClientProposal = useCallback((q) => {
-        return fetchIt(`${Settings.apiHost}/proposal?course=javascript`)
-    }, [])
-
     return (
         <PeopleContext.Provider value={{
             getStudents, students, findStudent, getStudent,
