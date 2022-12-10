@@ -22,10 +22,14 @@ export const BookProjectDialog = ({ toggleProjects }) => {
     return <dialog id="dialog--projects" className="dialog--projects">
         <section className="bookButtons">
             {
-                activeCourse?.books?.map(book => <button key={`bk--${book.id}`}
-                    onClick={() => {
-                        setBook(book)
-                    }}>{book.name}</button>)
+                activeCourse?.books?.map(book => {
+                    if (book.name !== "Book 0") {
+                        return <button className="button-28" style={{ margin: "0.2rem" }} key={`bk--${book.id}`}
+                            onClick={() => {
+                                setBook(book)
+                            }}>{book.name}</button>
+                    }
+                })
             }
         </section>
 
