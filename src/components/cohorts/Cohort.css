@@ -1,3 +1,77 @@
+.cohorts {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 5rem;
+    font-size: small;
+    justify-content: space-between;
+}
+
+.cohort {
+    flex: 0 1 25%;
+    position: relative;
+    margin: 0.5rem 1rem;
+    padding: 0rem 1rem 0.5rem 1rem;
+    border: 1px dotted slateblue;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(254, 256, 255);
+}
+
+.cohort__header {
+    margin: 2.25rem 0 0.5rem 0;
+}
+
+.cohort__dates {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.cohort__join {
+    height: 1rem;
+    width: 4rem;
+    position: absolute;
+    top: 0.5rem;
+    right: -0.75rem;
+    cursor: pointer;
+}
+
+.cohort__footer {
+    border-top: 1px dotted slategray;
+    display: flex;
+    margin: 3rem 0 0 0;
+    padding: 0.5rem;
+    color: rgb(149, 149, 149);
+    justify-content: space-between;
+    margin-top: auto;
+    font-size: 0.75rem;
+}
+
+.cohort__coaches {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 1rem 0.5rem;
+}
+
+.instructor--badge {
+    padding: 0.33rem;
+    background-color: rgb(244, 215, 161);
+    color: black;
+    border-radius: 0.25rem;
+    margin: 0.2rem 0.25rem;
+    font-size: smaller;
+    max-width: 10rem;
+    text-align: center;
+}
+
+.icon--slack--cohort {
+    height: 1rem;
+    width: 1rem;
+    cursor: pointer;
+    margin: 0 0 0 0.35rem;
+}
+
 .search {
     position: relative;
 }

@@ -3,6 +3,7 @@ import { PeopleContext } from "../people/PeopleProvider"
 import "./Teams.css"
 import slackLogo from "./images/slack.png"
 import TeamsRepository from "./TeamsRepository"
+import { HelpIcon } from "../../svgs/Help"
 
 export const WeeklyTeams = () => {
     const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
@@ -18,7 +19,7 @@ export const WeeklyTeams = () => {
 
     const [teamCount, changeCount] = useState(6)
     const [feedback, setFeedback] = useState("")
-    const [weeklyPrefix, setWeeklyPrefix] = useState("C54")
+    const [weeklyPrefix, setWeeklyPrefix] = useState("")
     const [unassignedStudents, setUnassigned] = useState([])
     const [originalTeam, trackOriginalTeam] = useState(0)
     const [teams, updateTeams] = useState(initialTeamState)
@@ -220,9 +221,12 @@ export const WeeklyTeams = () => {
                         onChange={e => changeCount(parseInt(e.target.value))} />
                 </div>
                 <div>
-                    Slack channel prefix: <input type="text"
+                    Slack channel prefix:
+                    <HelpIcon tip="The string of '-team-n' will be added after what you specify at the prefix. For example, if your prefix is 'c58-week2' a Slack channel of 'c58-week2-team-1' will be created." />
+                    <input type="text"
                         className="teamsconfig__prefix"
                         value={weeklyPrefix}
+                        placeholder="e.g. c58-week3"
                         onChange={e => setWeeklyPrefix(e.target.value)} />
                 </div>
                 <div className="teamsconfig__auto">

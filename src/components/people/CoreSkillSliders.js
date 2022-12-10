@@ -5,7 +5,7 @@ import useModal from "../ui/useModal"
 import { fetchIt } from "../utils/Fetch"
 import "./CoreSkills.css"
 import { HumanDate } from "../utils/HumanDate"
-import { CohortContext } from "../cohorts/CohortProvider"
+import { HelpIcon } from "../../svgs/Help"
 
 export const CoreSkillSliders = ({ hideOverlay }) => {
     const {
@@ -14,11 +14,17 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
         coreSkills, cohortStudents,
         getStudentCoreSkills
     } = useContext(PeopleContext)
-    const { activeCohort } = useContext(CohortContext)
     const [note, setNote] = useState("")
     const [skillRecords, setSkillRecords] = useState([])
     const [chosenCoreSkill, setChosenCoreSkill] = useState(0)
     let { toggleDialog: toggleSkillHistory } = useModal("#dialog--coreskillHistory")
+
+    const coreSkillTips = [
+        "Once a problem is analyzed, understood, and deconstructed into functional units, algorithmic thinking develops a logical, efficient series of steps required to solve each unit. Each functional unit is broken down into basic operations (BO) or elementary operations (EO).",
+        "Use objective, logic-based approach to identify the functional units of a problem. Detect patterns, and using them to think creativity when presented with new challenges.",
+        "Communicate effectivly with both technical and non-technical language. Master complex communication during group-based work. Use correct vocabulary when describing technical concepts. Know how, and when to ask for help from a senior technical resource.",
+        "Efficient learners take the time to use every resource available to learn a new skill, or implement a non-mastered skill in a new context. Debugger, dev tools, web searches, and evaluating those search results."
+    ]
 
     useEffect(() => {
         if ("id" in activeStudent) {
@@ -33,8 +39,9 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
             {
                 coreSkills.length
                     ? coreSkills.map(
-                        record => <section className="slider" key={`coreskill--${record.id}`}>
+                        (record, index) => <section className="slider" key={`coreskill--${record.id}`}>
                             <h4 className="slider__header">{record.skill.label} ({record.level})</h4>
+                            <HelpIcon tip={coreSkillTips[index]} />
                             <input type="range" min="1" max="10" defaultValue={record.level}
                                 className="slider__range"
                                 id={`record--${record.id}`}
