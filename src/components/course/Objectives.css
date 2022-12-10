@@ -1,6 +1,22 @@
-.objectives {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    margin: 2rem 0;
+.section--objectives {
+    padding: 0 2rem;
 }
 
+.objectives {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+@media (max-width: 1000px) {
+    .objectives {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 800px) {
+    .objectives {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

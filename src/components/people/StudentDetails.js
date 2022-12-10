@@ -3,6 +3,7 @@ import { CohortContext } from "../cohorts/CohortProvider.js"
 import { LearningObjectives } from "../course/LearningObjectives.js"
 import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
+import { StudentPersonality } from "./StudentPersonality.js"
 
 export const StudentDetails = ({ student, toggleCohorts }) => {
     const { activeStudent } = useContext(PeopleContext)
@@ -51,6 +52,10 @@ export const StudentDetails = ({ student, toggleCohorts }) => {
 
                 <div className="card">
                     <LearningObjectives />
+                </div>
+
+                <div className="card">
+                    <StudentPersonality />
                 </div>
             </div>
         </>

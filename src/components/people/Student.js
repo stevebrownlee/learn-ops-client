@@ -28,8 +28,6 @@ export const Student = ({
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
 
-    const [personality,setPersonality] = useState({})
-
     const setAssessmentIndicatorBorder = (status) => {
         switch (status) {
             case 0:
@@ -76,7 +74,7 @@ export const Student = ({
                             getStudentProposals(student.id)
                             getStudentLearningRecords(student.id)
                             getProposalStatuses()
-                            getStudentPersonality(student.id).then(setPersonality)
+                            getStudentPersonality(student.id)
                             document.querySelector('.overlay').style.display = "block"
                         }}
                     >{student.name}</h4>
