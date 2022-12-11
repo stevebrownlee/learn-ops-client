@@ -15,8 +15,14 @@ export const StudentDetails = ({ student, toggleCohorts }) => {
 
     return (
         <>
-            <div className="overlay" onClick={hideOverlay}>
-                <div className="card">X</div>
+            <div className="overlay">
+                <div className="card" style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "1rem 0 0 0"
+                }}>
+                    <span onClick={hideOverlay} className="close hairline"></span>
+                </div>
                 <div className="card">
                     <div className="card-body">
                         <header className="student__header">

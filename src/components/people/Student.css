@@ -217,13 +217,64 @@
     background-color: rgba(232, 245, 255, 0.75);
     z-index: 3;
     cursor: pointer;
-  }
+}
 
-  @keyframes createBox {
+@keyframes createBox {
     from {
-      transform: scale(0);
+        transform: scale(0);
     }
+
     to {
-      transform: scale(1);
+        transform: scale(1);
     }
-  }
+}
+
+.close {
+    position: relative;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1px dotted white;
+}
+
+.close:hover {
+    border: 1px dotted rgb(62, 62, 62);
+
+}
+
+.close:hover::before, .close:hover::after {
+    background: #1ebcc5;
+}
+
+.close::before, .close::after {
+    content: "";
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    margin-top: -1px;
+    background: rgb(131, 130, 130);
+}
+
+.close::before {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.close::after {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.close.hairline::before, .close.hairline::after {
+    height: 1px;
+}
