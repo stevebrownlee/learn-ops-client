@@ -16,6 +16,7 @@ export const StudentDetails = ({ student, toggleCohorts }) => {
     return (
         <>
             <div className="overlay" onClick={hideOverlay}>
+                <div className="card">X</div>
                 <div className="card">
                     <div className="card-body">
                         <header className="student__header">

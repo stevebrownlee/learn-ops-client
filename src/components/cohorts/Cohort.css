@@ -7,7 +7,7 @@
 }
 
 .cohort {
-    flex: 0 1 25%;
+    flex: 0 1 20%;
     position: relative;
     margin: 0.5rem 1rem;
     padding: 0rem 1rem 0.5rem 1rem;
@@ -15,6 +15,8 @@
     display: flex;
     flex-direction: column;
     background-color: rgb(254, 256, 255);
+    box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
+    border-radius: 0.33rem;
 }
 
 .cohort__header {

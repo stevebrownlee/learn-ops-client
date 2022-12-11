@@ -30,6 +30,7 @@
 .cohortActions {
     display: flex;
     flex-wrap: nowrap;
+    margin: 1rem 0 0 0;
 }
 
 .cohortAction {
@@ -37,5 +38,5 @@
 }
 
 .cohortAction--large {
-    flex: 5;
+    flex: 3;
 }

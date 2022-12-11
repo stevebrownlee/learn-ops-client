@@ -91,7 +91,7 @@ export const CohortSearchField = () => {
 
     return (
         <>
-            <div className="search cohortAction--large">
+            <div className="search cohortAction">
                 <input id="search__terms--cohort"
                     onKeyUp={search}
                     onChange={e => setTerms(e.target.value)}
@@ -99,8 +99,8 @@ export const CohortSearchField = () => {
                     ref={cohortSearch}
                     className="form-control w-100"
                     type="search"
-                    placeholder="Search"
-                    aria-label="Search" />
+                    placeholder="Search cohorts"
+                    aria-label="Search cohorts" />
 
                 <CohortResults cohorts={cohorts} selectCohort={selectCohort} />
             </div>

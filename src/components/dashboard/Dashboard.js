@@ -1,36 +1,30 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import useModal from "../ui/useModal"
 import { FeedbackDialog } from "./FeedbackDialog"
 import { StudentCardList } from "../cohorts/StudentCardList"
 import { CohortSearchField } from "../cohorts/CohortSearchField"
 import { CohortOperations } from "../cohorts/CohortOperations"
 import { CourseContext } from "../course/CourseProvider"
+import { StudentSearch } from "../people/StudentSearch"
 import "./Dashboard.css"
 
 export const Dashboard = () => {
     const { getLearningObjectives } = useContext(CourseContext)
+    const [searchTerms, setSearchTerms] = useState([])
 
     useEffect(() => {
         getLearningObjectives()
     }, [])
 
     return <main className="dashboard">
-        {/* Immediately appear */}
-        <header>
-            <div className="titlebar">
-                <h3>Find Cohort</h3>
-            </div>
-        </header>
-
         <section className="cohortActions">
             <CohortSearchField />
+            <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
             <CohortOperations />
         </section>
 
-        <StudentCardList />
+        <StudentCardList searchTerms={searchTerms} />
 
-
-        {/* Appear when needed */}
         <FeedbackDialog />
     </main>
 }

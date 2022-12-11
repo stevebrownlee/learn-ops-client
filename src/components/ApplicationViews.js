@@ -10,7 +10,7 @@ import { CourseProvider } from "./course/CourseProvider"
 import { Dashboard } from "./dashboard/Dashboard"
 import { FeedbackForm } from "./people/FeedbackForm"
 import { PeopleProvider } from "./people/PeopleProvider"
-import { StudentList } from "./people/StudentList"
+import { CohortList } from "./cohorts/CohortList"
 import { RecordEntryForm } from "./records/RecordEntryForm"
 import { RecordForm } from "./records/RecordForm"
 import { RecordProvider } from "./records/RecordProvider"
@@ -27,8 +27,8 @@ export const ApplicationViews = () => {
                                 <Dashboard />
                             </Route>
 
-                            <Route exact path="/students">
-                                <StudentList />
+                            <Route exact path="/cohorts">
+                                <CohortList />
                             </Route>
 
                             <Route exact path="/teams">

@@ -21,8 +21,17 @@ export const StudentPersonality = () => {
             </section>
 
             <section className="persona__bfi section--persona">
-            <h3>Emotions &amp; Communication</h3>
+                <h3>Emotions &amp; Communication</h3>
                 <p>{personality?.briggs_myers_type?.description?.details}</p>
+            </section>
+
+            <section className="persona__bfi section--persona">
+                <h2>BFI</h2>
+                <div>Extraversion: {personality?.bfi_extraversion}</div>
+                <div>Conscientiousness: {personality?.bfi_conscientiousness}</div>
+                <div>Neuroticism: {personality?.bfi_neuroticism}</div>
+                <div>Openness to Experience: {personality?.bfi_openness}</div>
+                <div>Agreeableness: {personality?.bfi_agreeableness}</div>
             </section>
         </div>
     </section>

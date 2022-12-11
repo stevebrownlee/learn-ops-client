@@ -13,7 +13,7 @@ import "./CohortStudentList.css"
 import "./Tooltip.css"
 import { CohortDialog } from "../dashboard/CohortDialog.js"
 
-export const StudentCardList = () => {
+export const StudentCardList = ({ searchTerms }) => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
     const { getCourses, course, activeCourse } = useContext(CourseContext)
     const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
@@ -37,16 +37,26 @@ export const StudentCardList = () => {
 
     useEffect(() => {
         /* eslint-disable no-undef */
-        const copy = structuredClone(cohortStudents)
+        let copy = structuredClone(cohortStudents)
+
+        if (searchTerms !== "" && searchTerms.length > 2) {
+            copy = copy.filter(student => {
+                const hasTag = student.tags.find(tag => tag.tag.name.toLowerCase().includes(searchTerms.toLowerCase()))
+                const nameMatches = student.name.toLowerCase().includes(searchTerms.toLowerCase())
+
+                return hasTag || nameMatches
+            })
+            console.log(copy)
+        }
 
         const studentsPerBook = activeCourse?.books?.map(book => {
-            const students = cohortStudents.filter(student => student.book.id === book.id)
+            const students = copy.filter(student => student.book.id === book.id)
             book.students = students
             return book
         })
 
         setGroupedStudents(studentsPerBook)
-    }, [cohortStudents])
+    }, [cohortStudents, searchTerms])
 
     return <section className="cohortStudents">
         {
