@@ -16,8 +16,7 @@ export const HelpIcon = ({ tip }) => {
     }
 
     const displayTip = () => {
-        console.log('displaying tip', tip)
-        return <div className="tooltip">{tip}</div>
+        return <div className="tooltip--bottom">{tip}</div>
     }
 
     return <span style={{ position: "relative" }}>

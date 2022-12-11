@@ -215,8 +215,7 @@
     right: 0;
     bottom: 0;
     background-color: rgba(232, 245, 255, 0.75);
-    z-index: 3;
-    cursor: pointer;
+    z-index: 2;
 }
 
 @keyframes createBox {

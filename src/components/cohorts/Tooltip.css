@@ -7,5 +7,19 @@
     font-size: 0.75rem;
     background-color: lightgoldenrodyellow;
     width: 10rem;
-    z-index: 25;
+    z-index: 10;
+    cursor:pointer;
+}
+
+.tooltip--bottom {
+    position: absolute;
+    top: 2.25rem;
+    left: -4rem;
+    border: 1px dashed gray;
+    padding: 0.75rem;
+    font-size: 0.75rem;
+    background-color: lightgoldenrodyellow;
+    width: 10rem;
+    z-index: 10;
+    cursor:pointer;
 }
