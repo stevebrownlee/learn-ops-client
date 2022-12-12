@@ -9,13 +9,10 @@
 
 .assessments {
     z-index: 1;
-    min-height: 25rem;
     min-width: 50%;
-    max-width: 70%;
     padding: 0 5rem;
-    background-color: hsla(0,0%,100%,0.75);
-    background-blend-mode: overlay;
-    background-repeat: no-repeat;
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .assessment {
@@ -28,18 +25,25 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
+    margin: 0.5rem 1rem;
+    box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
+    border: 1px dotted rgb(137, 188, 188);
 }
 
 .assessment__name {
-    font-size: 1.1rem;
-    font-weight: bolder;
-    padding: 0.5rem 0;
-    flex: 3;
+    padding: 0.5rem 0 2rem 0;
+    font-size: 0.8rem;
 }
 
 .assessment__status {
     padding: 0 0.75rem;
     flex: 1;
+}
+
+.assessment__footer {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    border-top: 1px dotted rgb(137, 188, 188);
 }
 
 .assessment__statusDropdown {

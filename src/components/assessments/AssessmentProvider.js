@@ -45,6 +45,13 @@ export const AssessmentProvider = (props) => {
         )
     }
 
+    const deleteSelfAssessment = (assessmentId) => {
+        return fetchIt(
+            `${Settings.apiHost}/assessments/${assessmentId}`,
+            { method: "DELETE" }
+        )
+    }
+
     const getCourses = () => {
         return fetchIt(`${Settings.apiHost}/courses`)
     }
@@ -99,7 +106,7 @@ export const AssessmentProvider = (props) => {
             saveAssessment, allAssessments, saveStudentAssessment,
             getStatuses, statuses, changeStatus, getCourses, saveProposal,
             proposalStatuses, getProposalStatuses, addToProposalTimeline,
-            cohortCapstones, getCohortCapstones, revokeApproval
+            cohortCapstones, getCohortCapstones, revokeApproval, deleteSelfAssessment
         }} >
             {props.children}
         </AssessmentContext.Provider>

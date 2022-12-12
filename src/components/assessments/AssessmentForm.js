@@ -25,6 +25,10 @@ export const AssessmentForm = () => {
         getData()
     }, [])
 
+    useEffect(() => {
+        getBooks().then(setBooks)
+    }, [allAssessments])
+
     const updateState = (event) => {
         const copy = { ...assessment }
 
@@ -40,7 +44,9 @@ export const AssessmentForm = () => {
 
     const create = (evt) => {
         evt.preventDefault()
-        return saveAssessment(assessment).then(getData)
+        return saveAssessment(assessment).then(getData).then(() => {
+            changeAssessment(defaultState)
+        })
     }
 
     return (
