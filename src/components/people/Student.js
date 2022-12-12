@@ -9,9 +9,9 @@ import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
-import "./Student.css"
 import { StudentDetails } from "./StudentDetails.js"
 import { StudentTabList } from "./StudentTabList.js"
+import "./Student.css"
 
 export const Student = ({
     student, toggleProjects,
@@ -141,8 +141,6 @@ export const Student = ({
                     }
                 </div>
             </div>
-
-            <StudentDetails toggleCohorts={toggleCohorts} />
         </>
     )
 }

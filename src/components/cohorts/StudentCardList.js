@@ -12,6 +12,7 @@ import { StudentNoteDialog } from "../dashboard/StudentNoteDialog.js"
 import "./CohortStudentList.css"
 import "./Tooltip.css"
 import { CohortDialog } from "../dashboard/CohortDialog.js"
+import { StudentDetails } from "../people/StudentDetails.js"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
@@ -46,7 +47,6 @@ export const StudentCardList = ({ searchTerms }) => {
 
                 return hasTag || nameMatches
             })
-            console.log(copy)
         }
 
         const studentsPerBook = activeCourse?.books?.map(book => {
@@ -77,6 +77,7 @@ export const StudentCardList = ({ searchTerms }) => {
             })
         }
 
+        <StudentDetails toggleCohorts={toggleCohorts} />
         <BookProjectDialog toggleProjects={toggleProjects} />
         <AssessmentStatusDialog toggleStatuses={toggleStatuses} />
         <TagDialog toggleTags={toggleTags} />

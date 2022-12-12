@@ -20,13 +20,31 @@
 
 .button--capstoneStage {
     font-size: smaller;
+    margin: 0 0.5rem;
 }
 
 .button--revoke {
     margin-left: auto;
 }
 
-.proposalStatus {
+
+.proposals {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.proposal {
+    padding: 1rem;
+    border: 1px dotted darkslateblue;
+    margin: 0 0.25rem;
+}
+
+.proposalStatuses {
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.proposalStatus {
+    font-size: small;
 }

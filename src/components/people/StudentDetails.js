@@ -1,17 +1,32 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
+import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 import { LearningObjectives } from "../course/LearningObjectives.js"
 import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
+import { StudentNoteList } from "./StudentNoteList.js"
 import { StudentPersonality } from "./StudentPersonality.js"
+import { StudentProposals } from "./StudentProposals.js"
 
 export const StudentDetails = ({ student, toggleCohorts }) => {
     const { activeStudent } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
+    const {
+        getStudentAssessments, getAssessmentList, revokeApproval,
+        studentAssessments, allAssessments, saveStudentAssessment,
+        getStatuses, statuses, changeStatus, proposalStatuses,
+        getProposalStatuses, addToProposalTimeline
+    } = useContext(AssessmentContext)
 
     const hideOverlay = (e) => {
         document.querySelector('.overlay').style.display = "none"
     }
+
+    useEffect(() => {
+        if ("id" in activeStudent) {
+            getStudentAssessments(activeStudent.id)
+        }
+    }, [activeStudent])
 
     return (
         <>
@@ -54,11 +69,15 @@ export const StudentDetails = ({ student, toggleCohorts }) => {
                 </div>
 
                 <div className="card">
-                    <CoreSkillSliders hideOverlay={hideOverlay} />
+                    <CoreSkillSliders />
                 </div>
 
                 <div className="card">
                     <LearningObjectives />
+                </div>
+
+                <div className="card">
+                    <StudentProposals />
                 </div>
 
                 <div className="card">
