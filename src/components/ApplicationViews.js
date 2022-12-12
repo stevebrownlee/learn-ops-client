@@ -36,8 +36,10 @@ export const ApplicationViews = () => {
                             </Route>
 
                             <Route exact path="/assessments">
-                                <AssessmentList />
-                                <AssessmentForm />
+                                <article className="assessmentView">
+                                    <AssessmentForm />
+                                    <AssessmentList />
+                                </article>
                             </Route>
 
                             <Route exact path="/feedback/new">

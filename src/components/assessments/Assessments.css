@@ -1,37 +1,57 @@
+.assessmentView {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
 .container--assessmentForm {
+    flex: 2;
+}
+
+.container--assessmentList {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    align-items: center;
     justify-content: center;
+    flex: 4;
 }
 
 
 .assessments {
-    z-index: 1;
-    min-width: 50%;
-    padding: 0 5rem;
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 5rem;
+    font-size: small;
+    justify-content: space-between;
 }
+
+.assessments::after {
+    content: '';
+    flex: 0 1 15%;
+    margin: 0.5rem 1rem;
+    padding: 0rem 1rem 0.5rem 1rem;
+  }
 
 .assessment {
-    padding: 1rem;
-    display: flex;
-    flex-wrap: nowrap;
-}
-
-.assessment--listitem {
-    padding: 1rem;
+    flex: 0 1 15%;
+    position: relative;
+    margin: 0.5rem 1rem;
+    padding: 0rem 1rem 0.5rem 1rem;
+    border: 1px dotted slateblue;
+    background-color: rgb(254, 256, 255);
+    box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
+    border-radius: 0.33rem;
     display: flex;
     flex-direction: column;
-    margin: 0.5rem 1rem;
-    box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
-    border: 1px dotted rgb(137, 188, 188);
+}
+
+.assessment__header {
+    margin: 1.5rem 0 0 0;
 }
 
 .assessment__name {
-    padding: 0.5rem 0 2rem 0;
+    padding: 0.5rem 0 1.5rem 0;
     font-size: 0.8rem;
 }
 
@@ -63,15 +83,12 @@
 
 .assessment--readyForReview {
     background-color: rgb(255, 157, 175);
-
 }
 
 .assessment--reviewedSuccess {
     background-color: rgb(203, 255, 157);
-
 }
 
 .assessment--reviewedFail {
     background-color: rgb(147, 159, 113);
-
 }

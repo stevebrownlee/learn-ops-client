@@ -13,26 +13,23 @@ export const AssessmentList = () => {
         getAssessmentList()
     }, [])
 
-    return <>
-        <h1>Current Assessments</h1>
-        <article className="container--assessmentForm">
-            <section className="assessments">
-                {
-                    allAssessments.map(assessment => {
-                        return <div key={`assessment--${assessment.id}`} className="card assessment--listitem">
-                            <header className="assessment__header">
-                                <a href={assessment.source_url} target="_blank">{assessment.name}</a>
-                            </header>
-                            <section className="assessment__name">
-                                <div>{assessment.assigned_book.name} - {assessment.course.name}</div>
-                            </section>
-                            <footer className="assessment__footer">
-                                <DeleteIcon clickFunction={() => deleteSelfAssessment(assessment.id).then(getAssessmentList)} />
-                            </footer>
-                        </div>
-                    })
-                }
-            </section>
-        </article>
-    </>
+    return <article className="container--assessmentList">
+        <section className="assessments">
+            {
+                allAssessments.map(assessment => {
+                    return <div key={`assessment--${assessment.id}`} className="assessment">
+                        <header className="assessment__header">
+                            <a href={assessment.source_url} target="_blank">{assessment.name}</a>
+                        </header>
+                        <section className="assessment__name">
+                            <div>{assessment.assigned_book.name} - {assessment.course.name}</div>
+                        </section>
+                        <footer className="assessment__footer">
+                            <DeleteIcon clickFunction={() => deleteSelfAssessment(assessment.id).then(getAssessmentList)} />
+                        </footer>
+                    </div>
+                })
+            }
+        </section>
+    </article>
 }

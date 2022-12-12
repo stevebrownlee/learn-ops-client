@@ -50,7 +50,7 @@ export const AssessmentForm = () => {
     }
 
     return (
-        <article className="container--recordForm">
+        <article className="container--assessmentForm">
             <form className="recordForm">
                 <h1 className="recordForm__title">New Assessment</h1>
                 <fieldset>
