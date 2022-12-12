@@ -24,6 +24,12 @@
     flex-wrap: nowrap;
 }
 
+.assessment--listitem {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
 .assessment__name {
     font-size: 1.1rem;
     font-weight: bolder;

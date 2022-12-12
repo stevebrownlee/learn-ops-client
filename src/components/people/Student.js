@@ -118,28 +118,33 @@ export const Student = ({
                         }} tip="Add a tag to this student" />
                     </div>
                 </div>
-                <div className="student__tags">
-                    {
-                        student.tags.map(tag => <span key={`tag--${tag.id}`}
-                            onClick={() => {
-                                untagStudent(tag.id).then(() => {
-                                    getCohortStudents(activeCohort.id)
-                                })
-                            }}
-                            className="student--tag">
-                            {tag.tag.name}
-                            <span className="delete clickable"
-                                onClick={e => {
-                                    e.stopPropagation()
-                                    untagStudent(tag.id).then(() => {
-                                        getCohortStudents(activeCohort.id)
-                                    })
-                                }}
-                            >&times;</span>
-                        </span>
-                        )
-                    }
-                </div>
+                {
+                    student.tags.length > 0
+                        ? <div className="student__tags">
+                            {
+                                student.tags.map(tag => <span key={`tag--${tag.id}`}
+                                    onClick={() => {
+                                        untagStudent(tag.id).then(() => {
+                                            getCohortStudents(activeCohort.id)
+                                        })
+                                    }}
+                                    className="student--tag">
+                                    {tag.tag.name}
+                                    <span className="delete clickable"
+                                        onClick={e => {
+                                            e.stopPropagation()
+                                            untagStudent(tag.id).then(() => {
+                                                getCohortStudents(activeCohort.id)
+                                            })
+                                        }}
+                                    >&times;</span>
+                                </span>
+                                )
+                            }
+                        </div>
+                        : ""
+                }
+
             </div>
         </>
     )

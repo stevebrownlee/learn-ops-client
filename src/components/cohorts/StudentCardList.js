@@ -13,6 +13,7 @@ import "./CohortStudentList.css"
 import "./Tooltip.css"
 import { CohortDialog } from "../dashboard/CohortDialog.js"
 import { StudentDetails } from "../people/StudentDetails.js"
+import { PeopleIcon } from "../../svgs/PeopleIcon.js"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
@@ -62,7 +63,10 @@ export const StudentCardList = ({ searchTerms }) => {
         {
             groupedStudents?.map((book) => {
                 return <article key={`book--${book.id}`} className="bookColumn">
-                    <header className="bookColumn__header">{book.name}</header>
+                    <header className="bookColumn__header">
+                        {book.name}
+                        <span className="bookColumn__studentcount"><PeopleIcon height="0.8rem" /> {book.students.length}</span>
+                    </header>
                     {
                         book.students.map(student => <Student
                             toggleProjects={toggleProjects}

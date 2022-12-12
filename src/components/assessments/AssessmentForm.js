@@ -1,20 +1,25 @@
 import React, { useContext, useState, useEffect, useCallback } from "react"
 import { useHistory } from 'react-router-dom'
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
+import { CourseContext } from "../course/CourseProvider.js"
 
 
 export const AssessmentForm = () => {
     const defaultState = {
         name: "",
         sourceURL: "",
-        type: ""
+        bookId: 0
     }
     const { getAssessmentList, allAssessments, saveAssessment } = useContext(AssessmentContext)
+    const { getCourses, courses, getBooks } = useContext(CourseContext)
     const [assessment, changeAssessment] = useState(defaultState)
+
+    const [books, setBooks] = useState([])
 
     const getData = useCallback(() => {
         getAssessmentList()
-    }, [getAssessmentList])
+        getBooks().then(setBooks)
+    }, [getAssessmentList, getBooks])
 
     useEffect(() => {
         getData()
@@ -35,7 +40,7 @@ export const AssessmentForm = () => {
 
     const create = (evt) => {
         evt.preventDefault()
-        return saveAssessment(assessment).then(getAssessmentList)
+        return saveAssessment(assessment).then(getData)
     }
 
     return (
@@ -44,13 +49,20 @@ export const AssessmentForm = () => {
                 <h1 className="recordForm__title">New Assessment</h1>
                 <fieldset>
                     <div className="form-group">
-                        <select id="weight" className="form-control"
-                            value={assessment.type}
-                            controltype="string"
+                        <select id="bookId" className="form-control"
+                            value={assessment.bookId}
+                            controltype="number"
                             onChange={updateState}>
-                            <option value="">Select assessment type</option>
-                            <option value="SELF">Self Assessment</option>
-                            <option value="ASSIGNED">NSS Formative Assessment</option>
+                                <option value="0">Select book...</option>
+                                {
+                                    books.map(book => {
+                                        if (!book.has_assessment) {
+                                            return <option key={`book--${book.id}`} value={book.id}>
+                                                {book.course.name} - {book.name}
+                                            </option>
+                                        }
+                                    })
+                                }
                         </select>
                     </div>
                 </fieldset>
