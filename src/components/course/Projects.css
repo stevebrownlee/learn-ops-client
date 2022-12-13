@@ -1,0 +1,30 @@
+.projects {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 5rem;
+    font-size: small;
+    justify-content: space-between;
+}
+
+.project {
+    flex: 0 1 20%;
+    position: relative;
+    margin: 0.5rem 1rem;
+    padding: 0rem 1rem 0.5rem 1rem;
+    border: 1px dotted slateblue;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(254, 256, 255);
+    box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
+    border-radius: 0.33rem;
+}
+
+.project__footer {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    border-top: 1px dotted rgb(137, 188, 188);
+}
+
+.container--projectList {
+    margin: 1rem 3rem;
+}
