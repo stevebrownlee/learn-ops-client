@@ -10,10 +10,9 @@ export const StudentProposals = () => {
         getStudentProposals
     } = useContext(PeopleContext)
     const {
-        getStudentAssessments, getAssessmentList, revokeApproval,
-        studentAssessments, allAssessments, saveStudentAssessment,
-        getStatuses, statuses, changeStatus, proposalStatuses,
-        getProposalStatuses, addToProposalTimeline
+        getStudentAssessments, revokeApproval,
+        saveStudentAssessment, changeStatus, proposalStatuses,
+        addToProposalTimeline
     } = useContext(AssessmentContext)
     const [chosenAssessment, chooseAssessment] = useState(0)
 
