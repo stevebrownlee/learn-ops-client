@@ -18,7 +18,7 @@
 .bookColumn__header {
     border: 1px dotted rgb(50, 67, 50);
     background-color: #b1e2a9;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.33rem;
     text-align: center;
     min-width: 4rem;
     border-radius: 0.33rem;
@@ -26,11 +26,6 @@
     color: rgb(74, 73, 73);
     margin: 0 0 0.8rem 0;
     box-shadow: 0.25rem 0.25rem 0.25rem rgb(156, 156, 156);
-}
-
-.bookColumn__studentcount {
-    font-size: 0.6rem;
-    padding: 0 0 0 0.5rem;
 }
 
 .cohortActions {

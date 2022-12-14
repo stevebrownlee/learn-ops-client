@@ -9,11 +9,11 @@ import { BookProjectDialog } from "../dashboard/BookProjectDialog.js"
 import { AssessmentStatusDialog } from "../dashboard/AssessmentStatusDialog.js"
 import { TagDialog } from "../dashboard/TagDialog.js"
 import { StudentNoteDialog } from "../dashboard/StudentNoteDialog.js"
-import "./CohortStudentList.css"
-import "./Tooltip.css"
 import { CohortDialog } from "../dashboard/CohortDialog.js"
 import { StudentDetails } from "../people/StudentDetails.js"
 import { PeopleIcon } from "../../svgs/PeopleIcon.js"
+import "./CohortStudentList.css"
+import "./Tooltip.css"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { findCohort, getCohort, activeCohort } = useContext(CohortContext)
@@ -64,8 +64,9 @@ export const StudentCardList = ({ searchTerms }) => {
             groupedStudents?.map((book) => {
                 return <article key={`book--${book.id}`} className="bookColumn">
                     <header className="bookColumn__header">
-                        {book.name}
-                        <span className="bookColumn__studentcount"><PeopleIcon height="0.8rem" /> {book.students.length}</span>
+                        <div className="bookColumn__name">
+                            {book.name}
+                        </div>
                     </header>
                     {
                         book.students.map(student => <Student

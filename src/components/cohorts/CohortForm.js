@@ -1,12 +1,15 @@
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 import "./CohortForm.css"
 import { HelpIcon } from "../../svgs/Help.js"
+import { CourseContext } from "../course/CourseProvider.js"
 
 
 export const CohortForm = () => {
+    const [courses, setCourses] = useState([])
+    const [chosenCourses, setChosenCourses] = useState(new Set())
     const [cohort, updateCohort] = useState({
         name: "",
         startDate: "",
@@ -15,15 +18,26 @@ export const CohortForm = () => {
         breakEndDate: "",
         slackChannel: ""
     })
+    const { getBooks, getCourses } = useContext(CourseContext)
     const history = useHistory()
 
+    useEffect(() => {
+        getCourses().then(setCourses)
+    }, [])
+
     const constructNewCohort = () => {
-        fetchIt(`${Settings.apiHost}/cohorts`, { method: "POST", body: JSON.stringify(cohort)})
+        const courseArray = Array.from(chosenCourses)
+        const requestBody = {...cohort, courses: courseArray}
+        debugger
+        fetchIt(`${Settings.apiHost}/cohorts`, {
+            method: "POST",
+            body: JSON.stringify(requestBody)
+        })
             .then(() => history.push("/students"))
     }
 
     const handleUserInput = (event) => {
-        const copy = {...cohort}
+        const copy = { ...cohort }
         copy[event.target.id] = event.target.value
         updateCohort(copy)
     }
@@ -73,6 +87,31 @@ export const CohortForm = () => {
                         id="endDate" className="form-control"
                     />
                 </div>
+
+                <fieldset>
+                    <div className="form-group">
+                        {
+                            courses.map(course => {
+                                return <button key={`course--${course.id}`}
+                                    className={`${chosenCourses.has(course.id) ? "button-28--achieved" : "button-28"}`}
+                                    onClick={e => {
+                                        e.preventDefault()
+                                        const copy = new Set(chosenCourses)
+                                        if (copy.size < 2) {
+                                            copy.has(course.id) ? copy.delete(course.id) : copy.add(course.id)
+                                            setChosenCourses(copy)
+                                        }
+                                        else {
+                                            window.alert("A cohort can only have two courses")
+                                        }
+                                    }}>
+                                    {course.name}
+                                </button>
+                            })
+                        }
+                    </div>
+                </fieldset>
+
 
                 <button type="submit"
                     onClick={

@@ -1,28 +1,40 @@
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 import { HelpIcon } from "../../svgs/Help.js"
-import "./ProjectForm.css"
 import { CourseContext } from "./CourseProvider.js"
 
 
 export const ProjectForm = () => {
+    const [books, setBooks] = useState([])
+    const [courses, setCourses] = useState([])
     const { getBooks, getCourses } = useContext(CourseContext)
     const [project, updateProject] = useState({
         name: "",
         book: 0,
-        cohort: 0
+        course: 0,
+        implementation_url: ""
     })
     const history = useHistory()
 
+    useEffect(() => {
+        getCourses().then(setCourses)
+    }, [])
+
+    useEffect(() => {
+        if (project.course !== 0) {
+            getBooks(project.course).then(setBooks)
+        }
+    }, [project])
+
     const constructNewProject = () => {
-        fetchIt(`${Settings.apiHost}/projects`, { method: "POST", body: JSON.stringify(project)})
+        fetchIt(`${Settings.apiHost}/projects`, { method: "POST", body: JSON.stringify(project) })
             .then(() => history.push("/projects"))
     }
 
-    const handleUserInput = (event) => {
-        const copy = {...project}
+    const updateState = (event) => {
+        const copy = { ...project }
         copy[event.target.id] = event.target.value
         updateProject(copy)
     }
@@ -36,7 +48,7 @@ export const ProjectForm = () => {
                         Project name
                         <HelpIcon tip="Day Project 62, for example." />
                     </label>
-                    <input onChange={handleUserInput}
+                    <input onChange={updateState}
                         value={project.name}
                         type="text" required autoFocus
                         id="name" className="form-control"
@@ -45,40 +57,36 @@ export const ProjectForm = () => {
 
                 <fieldset>
                     <div className="form-group">
-                        <select id="bookId" className="form-control"
-                            value={assessment.bookId}
+                        <select id="course" className="form-control"
+                            value={project.course}
                             controltype="number"
                             onChange={updateState}>
-                                <option value="0">Select book...</option>
-                                {
-                                    books.map(book => {
-                                        if (!book.has_assessment) {
-                                            return <option key={`book--${book.id}`} value={book.id}>
-                                                {book.course.name} - {book.name}
-                                            </option>
-                                        }
-                                    })
-                                }
+                            <option value="0">Select course...</option>
+                            {
+                                courses.map(course => {
+                                    return <option key={`course--${course.id}`} value={course.id}>
+                                        {course.name}
+                                    </option>
+                                })
+                            }
                         </select>
                     </div>
                 </fieldset>
 
                 <fieldset>
                     <div className="form-group">
-                        <select id="bookId" className="form-control"
-                            value={assessment.bookId}
+                        <select id="book" className="form-control"
+                            value={project.book}
                             controltype="number"
                             onChange={updateState}>
-                                <option value="0">Select book...</option>
-                                {
-                                    books.map(book => {
-                                        if (!book.has_assessment) {
-                                            return <option key={`book--${book.id}`} value={book.id}>
-                                                {book.course.name} - {book.name}
-                                            </option>
-                                        }
-                                    })
-                                }
+                            <option value="0">Select book...</option>
+                            {
+                                books.map(book => {
+                                    return <option key={`book--${book.id}`} value={book.id}>
+                                        {book.name}
+                                    </option>
+                                })
+                            }
                         </select>
                     </div>
                 </fieldset>

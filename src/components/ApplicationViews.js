@@ -16,6 +16,7 @@ import { RecordForm } from "./records/RecordForm"
 import { RecordProvider } from "./records/RecordProvider"
 import { WeeklyTeams } from "./teams/WeeklyTeams"
 import { ProjectList } from "./course/ProjectList"
+import { ProjectForm } from "./course/ProjectForm"
 
 export const ApplicationViews = () => {
     return <>
@@ -36,7 +37,7 @@ export const ApplicationViews = () => {
                                 <ProjectList />
                             </Route>
                             <Route exact path="/projects/new">
-                                <CohortForm />
+                                <ProjectForm />
                             </Route>
 
 
@@ -53,9 +54,6 @@ export const ApplicationViews = () => {
 
                             <Route exact path="/feedback/new">
                                 <FeedbackForm />
-                            </Route>
-                            <Route exact path="/cohorts/new">
-                                <CohortForm />
                             </Route>
                             <Route exact path="/records/new/:studentId(\d+)">
                                 <RecordForm />

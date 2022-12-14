@@ -28,3 +28,13 @@
 .container--projectList {
     margin: 1rem 3rem;
 }
+
+.projects__header {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.projects__filter {
+    display: flex;
+    flex-wrap: nowrap;
+}

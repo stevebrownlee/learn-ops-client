@@ -20,6 +20,8 @@ export const CourseProvider = (props) => {
                 const course = data.find(c => c.id === parseInt(localStorage.getItem("activeCourse")))
                 setActiveCourse(course)
             }
+
+            return data
         }),
         [setCourses, setActiveCourse]
     )
@@ -29,9 +31,7 @@ export const CourseProvider = (props) => {
         [setCourses]
     )
 
-    const getCourses = useCallback( () => fetchIt(`${Settings.apiHost}/courses`), [])
-
-    const getBooks = useCallback( () => fetchIt(`${Settings.apiHost}/books`), [])
+    const getBooks = useCallback((courseId = null) => fetchIt(`${Settings.apiHost}/books${courseId ? `?courseId=${courseId}` : ""}`), [])
 
     const getProjects = useCallback(
         () => fetchIt(`${Settings.apiHost}/projects?expand=course&expand=book`),
