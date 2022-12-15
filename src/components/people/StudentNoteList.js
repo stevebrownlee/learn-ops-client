@@ -23,6 +23,5 @@ export const StudentNoteList = ({ notes }) => {
                 </div>
             </div>)
         }
-
     </section>
 }

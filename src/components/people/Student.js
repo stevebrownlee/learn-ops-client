@@ -43,8 +43,8 @@ export const Student = ({
             <div id={`student--${student.id}`}
                 ref={studentCard}
                 className={`personality--${student.archetype} student ${setAssessmentIndicatorBorder(student.assessment_status)}`}
-                onMouseEnter={e => studentFooter.current.classList.add("flex")}
-                onMouseLeave={e => studentFooter.current.classList.remove("flex")}
+                onMouseEnter={e => studentFooter.current.classList.add("grow")}
+                onMouseLeave={e => studentFooter.current.classList.remove("grow")}
             >
                 <div className="student__score--mini">
                     {student.score}
@@ -86,7 +86,35 @@ export const Student = ({
                         {student.book.project}
                     </div>
                 </div>
-                <div ref={studentFooter} className="student__footer hidden">
+
+                {
+                    student.tags.length > 0
+                        ? <div className="student__tags">
+                            {
+                                student.tags.map(tag => <span key={`tag--${tag.id}`}
+                                    onClick={() => {
+                                        untagStudent(tag.id).then(() => {
+                                            getCohortStudents(activeCohort.id)
+                                        })
+                                    }}
+                                    className="student--tag">
+                                    {tag.tag.name}
+                                    <span className="delete clickable"
+                                        onClick={e => {
+                                            e.stopPropagation()
+                                            untagStudent(tag.id).then(() => {
+                                                getCohortStudents(activeCohort.id)
+                                            })
+                                        }}
+                                    >&times;</span>
+                                </span>
+                                )
+                            }
+                        </div>
+                        : ""
+                }
+
+                <div ref={studentFooter} className="student__footer ">
                     <div className="action action--assessments">
                         <AssessmentIcon clickFunction={
                             () => {
@@ -116,32 +144,6 @@ export const Student = ({
                         }} tip="Add a tag to this student" />
                     </div>
                 </div>
-                {
-                    student.tags.length > 0
-                        ? <div className="student__tags">
-                            {
-                                student.tags.map(tag => <span key={`tag--${tag.id}`}
-                                    onClick={() => {
-                                        untagStudent(tag.id).then(() => {
-                                            getCohortStudents(activeCohort.id)
-                                        })
-                                    }}
-                                    className="student--tag">
-                                    {tag.tag.name}
-                                    <span className="delete clickable"
-                                        onClick={e => {
-                                            e.stopPropagation()
-                                            untagStudent(tag.id).then(() => {
-                                                getCohortStudents(activeCohort.id)
-                                            })
-                                        }}
-                                    >&times;</span>
-                                </span>
-                                )
-                            }
-                        </div>
-                        : ""
-                }
 
             </div>
         </>

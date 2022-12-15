@@ -8,8 +8,43 @@
     max-width: 10rem;
     position: relative;
     box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
+    transition: all .2s ease-in-out;
 }
 
+.student__header {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin-top: 0.75rem;
+}
+
+.student__name {
+    margin: 0 0 0.33rem 0;
+}
+
+.student__name:hover {
+    color: rgb(19, 81, 144);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.student__footer {
+    margin-top: auto;
+    font-size: smaller;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    transition: height 400ms ease 0ms;
+    height: 0;
+    overflow: hidden;
+}
+
+.student__footer.grow {
+    overflow: visible;
+    height: 1rem;
+    border-top: 1px dotted darkslategray;
+    padding: 0.5rem 0 0 0;
+}
 
 .student__info {
     margin-block-start: 0;
@@ -54,7 +89,6 @@
 .button--record {
     margin: 1rem 0;
 }
-
 
 .student__details {
     font-size: 0.7rem;
@@ -125,22 +159,6 @@
     border-bottom: 1px dotted darkgreen;
 }
 
-.student__header {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    margin-top: 0.75rem;
-}
-
-.student__name {
-    margin: 0 0 0.33rem 0;
-}
-
-.student__name:hover {
-    color: rgb(19, 81, 144);
-    text-decoration: underline;
-    cursor: pointer;
-}
 
 .action {
     flex: 0 0 33%;
@@ -152,16 +170,6 @@
     font-size: smaller;
     margin: 0 0 1rem 0;
     margin-top: auto;
-}
-
-.student__footer {
-    margin-top: auto;
-    border-top: 1px dotted darkslategray;
-    padding: 0.5rem 0 0 0;
-    font-size: smaller;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
 }
 
 .student__tags {
@@ -295,10 +303,3 @@
     padding: 0 2rem;
 }
 
-.hidden {
-    display: none;
-}
-
-.flex {
-    display: flex;
-}

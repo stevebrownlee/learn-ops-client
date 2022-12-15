@@ -22,12 +22,16 @@ export const CohortForm = () => {
     const history = useHistory()
 
     useEffect(() => {
-        getCourses().then(setCourses)
+        getCourses().then((data) => {
+            setCourses(data)
+            const clientSide = data.find(course => course.name.toLowerCase().includes("javascript"))
+            setChosenCourses(new Set([clientSide.id]))
+        })
     }, [])
 
     const constructNewCohort = () => {
         const courseArray = Array.from(chosenCourses)
-        const requestBody = {...cohort, courses: courseArray}
+        const requestBody = { ...cohort, courses: courseArray }
         debugger
         fetchIt(`${Settings.apiHost}/cohorts`, {
             method: "POST",
@@ -97,31 +101,31 @@ export const CohortForm = () => {
                                     onClick={e => {
                                         e.preventDefault()
                                         const copy = new Set(chosenCourses)
-                                        if (copy.size < 2) {
-                                            copy.has(course.id) ? copy.delete(course.id) : copy.add(course.id)
-                                            setChosenCourses(copy)
+                                        if (copy.has(course.id)) {
+                                            copy.delete(course.id)
                                         }
                                         else {
-                                            window.alert("A cohort can only have two courses")
+                                            copy.size < 2 ? copy.add(course.id) : window.alert("A cohort can only have two courses")
                                         }
+                                        setChosenCourses(copy)
                                     }}>
-                                    {course.name}
-                                </button>
+                            { course.name }
+                    </button>
                             })
                         }
-                    </div>
-                </fieldset>
+                </div>
+            </fieldset>
 
 
-                <button type="submit"
-                    onClick={
-                        evt => {
-                            evt.preventDefault()
-                            constructNewCohort()
-                        }
+            <button type="submit"
+                onClick={
+                    evt => {
+                        evt.preventDefault()
+                        constructNewCohort()
                     }
-                    className="btn btn-primary"> Create </button>
-            </form>
+                }
+                className="btn btn-primary"> Create </button>
+        </form>
         </>
     )
 }
