@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react"
-import useSimpleAuth from "../auth/useSimpleAuth.js"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 
@@ -7,7 +6,6 @@ export const CourseContext = React.createContext()
 
 export const CourseProvider = (props) => {
     const [courses, setCourses] = useState([])
-    const [books, setBooks] = useState([])
     const [objectives, setObjectives] = useState([])
     const [course, setCourse] = useState({})
     const [activeCourse, setActiveCourse] = useState({})
@@ -28,7 +26,7 @@ export const CourseProvider = (props) => {
 
     const getCourse = useCallback(
         (id) => fetchIt(`${Settings.apiHost}/courses/${id}`).then(setCourse),
-        [setCourses]
+        [setCourse]
     )
 
     const getBooks = useCallback((courseId = null) => fetchIt(`${Settings.apiHost}/books${courseId ? `?courseId=${courseId}` : ""}`), [])
@@ -45,14 +43,14 @@ export const CourseProvider = (props) => {
 
     const getLearningObjectives = useCallback(
         (id) => fetchIt(`${Settings.apiHost}/weights?tiermin=1&tiermax=3`).then(setObjectives),
-        [setCourses]
+        [setObjectives]
     )
 
     return (
         <CourseContext.Provider value={{
             getCourses, courses, activeCourse, setActiveCourse,
             getCourse, getLearningObjectives, objectives, getBooks,
-            books, getProjects, deleteProject
+            getProjects, deleteProject
         }} >
             {props.children}
         </CourseContext.Provider>

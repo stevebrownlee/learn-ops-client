@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
 import { AssessmentContext } from "../assessments/AssessmentProvider"
-import Settings from "../Settings"
 import { CohortContext } from "../cohorts/CohortProvider"
 
 export const AssessmentStatusDialog = ({ toggleStatuses }) => {
     const { activeStudent, getCohortStudents, updateStudentCurrentAssessment } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
-    const { getStatuses, statuses, changeStatus } = useContext(AssessmentContext)
+    const { getStatuses, statuses } = useContext(AssessmentContext)
 
     useEffect(() => {
         getStatuses()

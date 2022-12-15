@@ -1,11 +1,9 @@
 import React, { useContext } from "react"
-import { CohortContext } from "../cohorts/CohortProvider.js"
 import { PeopleContext } from "../people/PeopleProvider.js"
 import "./Personality.css"
 
 export const StudentPersonality = () => {
-    const { activeCohort } = useContext(CohortContext)
-    const { activeStudent, personality } = useContext(PeopleContext)
+    const { personality } = useContext(PeopleContext)
 
 
     return <section className="section--personality">

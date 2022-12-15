@@ -1,23 +1,16 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 import { PeopleContext } from "./PeopleProvider"
 import Settings from "../Settings"
-import useModal from "../ui/useModal"
 import { fetchIt } from "../utils/Fetch"
-import "./CoreSkills.css"
-import { HumanDate } from "../utils/HumanDate"
 import { HelpIcon } from "../../svgs/Help"
+import "./CoreSkills.css"
 
 export const CoreSkillSliders = ({ hideOverlay }) => {
     const {
         activeStudent, activateStudent,
-        getStudent, getCohortStudents,
-        coreSkills, cohortStudents,
+        getStudent, coreSkills, cohortStudents,
         getStudentCoreSkills
     } = useContext(PeopleContext)
-    const [note, setNote] = useState("")
-    const [skillRecords, setSkillRecords] = useState([])
-    const [chosenCoreSkill, setChosenCoreSkill] = useState(0)
-    let { toggleDialog: toggleSkillHistory } = useModal("#dialog--coreskillHistory")
 
     const coreSkillTips = [
         "Once a problem is analyzed, understood, and deconstructed into functional units, algorithmic thinking develops a logical, efficient series of steps required to solve each unit. Each functional unit is broken down into basic operations (BO) or elementary operations (EO).",

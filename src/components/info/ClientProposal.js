@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 
 export const ClientProposal = () => {
     const [courses, establishCourses] = useState([])
     const [url, setURL] = useState("")
     const [overview, setOverview] = useState("")
-    const [allChecked, updateAllChecked] = useState(0)
     const [course, setCourse] = useState(0)
 
     const { getCourses, saveProposal } = useContext(AssessmentContext)

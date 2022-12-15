@@ -1,29 +1,20 @@
-import Settings from "../Settings"
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import useSimpleAuth from "../auth/useSimpleAuth"
 import { CohortContext } from "./CohortProvider"
 import { PeopleContext } from "../people/PeopleProvider"
-import { HumanDate } from "../utils/HumanDate"
 import { EditIcon } from "../../svgs/Edit"
-import { PeopleIcon } from "../../svgs/PeopleIcon"
-import { fetchIt } from "../utils/Fetch"
-import { HelpIcon } from "../../svgs/Help"
 import "./CohortList.css"
 import "./Cohort.css"
 import { UnassignedStudents } from "./UnassignedStudents"
 
 
 export const CohortList = () => {
-    const [chosenCohort, setCohort] = useState(0)
     const [editSlack, setSlackEdit] = useState(0)
-    const [chosenStudents, updateStudents] = useState(new Set())
-    const { students, getStudents } = useContext(PeopleContext)
+    const { getStudents } = useContext(PeopleContext)
     const {
         getCohorts, cohorts, leaveCohort,
         joinCohort, updateCohort, activateCohort
     } = useContext(CohortContext)
-    const { getCurrentUser } = useSimpleAuth()
     const history = useHistory()
 
     useEffect(() => {
@@ -133,7 +124,6 @@ export const CohortList = () => {
 
                         <footer className="cohort__footer">
                             <div>
-                                <PeopleIcon /> {cohort.students}
                             </div>
                             <div>
                                 {

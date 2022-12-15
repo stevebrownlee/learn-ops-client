@@ -1,5 +1,4 @@
 import React from "react"
-import useSimpleAuth from "../auth/useSimpleAuth"
 
 export const ClientAssessment = () => {
     return <article className="dashboard--student">

@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
-import useKeyboardShortcut from "../ui/useKeyboardShortcut"
 import Settings from "../Settings"
-import useModal from "../ui/useModal"
 import { fetchIt } from "../utils/Fetch"
 import { StudentNoteList } from "../people/StudentNoteList"
 

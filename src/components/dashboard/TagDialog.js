@@ -5,8 +5,7 @@ import { CohortContext } from "../cohorts/CohortProvider"
 export const TagDialog = ({ toggleTags }) => {
     const {
         activeStudent, getCohortStudents, tags, tagStudent,
-        updateStudentCurrentAssessment, getAllTags, createNewTag,
-        deleteTag
+        getAllTags, createNewTag, deleteTag
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
     const [tag, setTag] = useState("")

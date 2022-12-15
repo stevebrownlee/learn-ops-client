@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect } from "react"
 import { useHistory } from "react-router-dom"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 import { PeopleContext } from "../people/PeopleProvider.js"
@@ -9,13 +9,11 @@ import "./Objectives.css"
 export const LearningObjectives = () => {
     const { objectives } = useContext(CourseContext)
     const { activeCohort } = useContext(CohortContext)
-    const { updateRecord, createRecordEntry, createRecord } = useContext(RecordContext)
+    const { updateRecord, createRecord } = useContext(RecordContext)
     const { activeStudent, learningRecords, getCohortStudents,
         getStudentLearningRecords, activateStudent,
         cohortStudents
     } = useContext(PeopleContext)
-
-    const history = useHistory()
 
     useEffect(() => {
         if ("id" in activeStudent) {

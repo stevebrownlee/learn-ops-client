@@ -10,51 +10,9 @@ export const StudentProposals = () => {
         getStudentProposals
     } = useContext(PeopleContext)
     const {
-        getStudentAssessments, revokeApproval,
-        saveStudentAssessment, changeStatus, proposalStatuses,
+        revokeApproval, proposalStatuses,
         addToProposalTimeline
     } = useContext(AssessmentContext)
-    const [chosenAssessment, chooseAssessment] = useState(0)
-
-
-
-    const createStatus = (status) => {
-        let className = ""
-
-        switch (status) {
-            case "In Progress":
-                className = "assessment--inProgress"
-                break
-            case "Ready for Review":
-                className = "assessment--readyForReview"
-                break
-            case "Reviewed and Complete":
-                className = "assessment--reviewedSuccess"
-                break
-            case "Reviewed and Incomplete":
-                className = "assessment--reviewedFail"
-                break
-        }
-
-        return (<div className={`assessment__status ${className}`}>
-            {status}
-        </div>)
-    }
-
-    const assign = () => {
-        if (chosenAssessment > 0) {
-            saveStudentAssessment(chosenAssessment, activeStudent.id)
-                .then(() => {
-                    getStudentAssessments(activeStudent.id)
-                    chooseAssessment(0)
-                })
-        }
-    }
-
-    const updateAssessmentStatus = (assessmentId, statusId) => {
-        changeStatus(assessmentId, statusId)
-            .then(() => getStudentAssessments(activeStudent.id))
-    }
 
     const capstoneStatuses = (proposalId, currentStatuses) => {
         return proposalStatuses.map(s => {

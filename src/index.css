@@ -12,7 +12,7 @@
 --------------------------------------------------------------*/
 
 body, button, input, select, textarea {
-    color: #404040;
+    color: #1b1b1b;
     font-family: "Comfortaa", Arial, sans-serif;
     font-size: 0.9em;
     line-height: 1.5;
@@ -94,10 +94,6 @@ code {
 
 .fakeLink:hover {
     font-weight: bold;
-}
-
-.hidden {
-    display: none;
 }
 
 .rightAlign {

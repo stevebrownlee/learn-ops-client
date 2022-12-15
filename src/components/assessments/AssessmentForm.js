@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect, useCallback } from "react"
-import { useHistory } from 'react-router-dom'
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { CourseContext } from "../course/CourseProvider.js"
 
@@ -11,7 +10,7 @@ export const AssessmentForm = () => {
         bookId: 0
     }
     const { getAssessmentList, allAssessments, saveAssessment } = useContext(AssessmentContext)
-    const { getCourses, courses, getBooks } = useContext(CourseContext)
+    const { getBooks } = useContext(CourseContext)
     const [assessment, changeAssessment] = useState(defaultState)
 
     const [books, setBooks] = useState([])

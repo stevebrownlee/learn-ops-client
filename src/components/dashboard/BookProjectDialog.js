@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
-import Settings from "../Settings"
-import { fetchIt } from "../utils/Fetch"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { CourseContext } from "../course/CourseProvider"
 
@@ -17,7 +15,7 @@ export const BookProjectDialog = ({ toggleProjects }) => {
             const projects = activeCourse.books.find(b => b.id === book.id).projects
             setBookProjects(projects)
         }
-    }, [book])
+    }, [book, activeCourse])
 
     return <dialog id="dialog--projects" className="dialog--projects">
         <section className="bookButtons">

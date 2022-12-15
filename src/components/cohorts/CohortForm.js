@@ -18,7 +18,7 @@ export const CohortForm = () => {
         breakEndDate: "",
         slackChannel: ""
     })
-    const { getBooks, getCourses } = useContext(CourseContext)
+    const { getCourses } = useContext(CourseContext)
     const history = useHistory()
 
     useEffect(() => {

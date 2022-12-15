@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react"
-import useModal from "../ui/useModal"
 import { FeedbackDialog } from "./FeedbackDialog"
 import { StudentCardList } from "../cohorts/StudentCardList"
 import { CohortSearchField } from "../cohorts/CohortSearchField"

@@ -1,16 +1,12 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useRef } from "react"
 import { AssessmentIcon } from "../../svgs/AssessmentIcon.js"
 import { EditIcon } from "../../svgs/EditIcon.js"
-import { GlobeIcon } from "../../svgs/GlobeIcon.js"
 import { NoteIcon } from "../../svgs/NoteIcon.js"
 import { ProposalIcon } from "../../svgs/ProposalIcon.js"
 import { TagIcon } from "../../svgs/TagIcon.js"
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
-import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
-import { StudentDetails } from "./StudentDetails.js"
-import { StudentTabList } from "./StudentTabList.js"
 import "./Student.css"
 
 export const Student = ({
@@ -20,34 +16,36 @@ export const Student = ({
 }) => {
     const {
         activateStudent, setStudentCurrentAssessment,
-        getCohortStudents, untagStudent, activeStudent,
+        getCohortStudents, untagStudent,
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
-        proposals, getStudentLearningRecords, getStudentPersonality,
-        getStudentObjectives
+        getStudentLearningRecords, getStudentPersonality
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
+    const studentCard = useRef()
+    const studentFooter = useRef()
 
     const setAssessmentIndicatorBorder = (status) => {
         switch (status) {
             case 0:
                 return ""
-                break
             case 1:
                 return "student--takingAssessment"
-                break
             case 2:
                 return "student--assessmentReviewNeeded"
-                break
             case 3:
                 return "student--assessReviewComplete"
-                break
         }
     }
 
     return (
         <>
-            <div className={`personality--${student.archetype} student ${setAssessmentIndicatorBorder(student.assessment_status)}`}>
+            <div id={`student--${student.id}`}
+                ref={studentCard}
+                className={`personality--${student.archetype} student ${setAssessmentIndicatorBorder(student.assessment_status)}`}
+                onMouseEnter={e => studentFooter.current.classList.add("flex")}
+                onMouseLeave={e => studentFooter.current.classList.remove("flex")}
+            >
                 <div className="student__score--mini">
                     {student.score}
                 </div>
@@ -88,7 +86,7 @@ export const Student = ({
                         {student.book.project}
                     </div>
                 </div>
-                <div className="student__footer">
+                <div ref={studentFooter} className="student__footer hidden">
                     <div className="action action--assessments">
                         <AssessmentIcon clickFunction={
                             () => {
