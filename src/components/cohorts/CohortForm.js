@@ -32,12 +32,12 @@ export const CohortForm = () => {
     const constructNewCohort = () => {
         const courseArray = Array.from(chosenCourses)
         const requestBody = { ...cohort, courses: courseArray }
-        debugger
+
         fetchIt(`${Settings.apiHost}/cohorts`, {
             method: "POST",
             body: JSON.stringify(requestBody)
         })
-            .then(() => history.push("/students"))
+            .then(() => history.push("/cohorts"))
     }
 
     const handleUserInput = (event) => {

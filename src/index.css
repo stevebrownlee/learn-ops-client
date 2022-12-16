@@ -157,3 +157,6 @@ fieldset {
     margin: 0 0 0 0.33rem;
 }
 
+.hidden {
+    display: none;
+}

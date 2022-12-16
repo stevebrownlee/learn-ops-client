@@ -6,6 +6,7 @@ import { EditIcon } from "../../svgs/Edit"
 import "./CohortList.css"
 import "./Cohort.css"
 import { UnassignedStudents } from "./UnassignedStudents"
+import { PeopleIcon } from "../../svgs/PeopleIcon"
 
 
 export const CohortList = () => {
@@ -56,10 +57,10 @@ export const CohortList = () => {
                 activateCohort({})
             })
             .catch(window.alert)
-        }
+    }
 
-        const join = (cohort) => {
-            joinCohort(cohort.id)
+    const join = (cohort) => {
+        joinCohort(cohort.id)
             .then(getLastFourCohorts)
             .then(() => {
                 localStorage.setItem("activeCohort", cohort.id)
@@ -124,6 +125,7 @@ export const CohortList = () => {
 
                         <footer className="cohort__footer">
                             <div>
+                                <PeopleIcon /> {cohort.students}
                             </div>
                             <div>
                                 {

@@ -11,17 +11,23 @@ export const CourseProvider = (props) => {
     const [activeCourse, setActiveCourse] = useState({})
 
     const getCourses = useCallback(
-        () => fetchIt(`${Settings.apiHost}/courses`).then((data) => {
-            setCourses(data)
+        (cohortId = null) => fetchIt(`${Settings.apiHost}/courses${cohortId ? `?cohortId=${cohortId}` : ""}`)
+            .then((data) => {
+                setCourses(data)
 
-            if (localStorage.getItem("activeCourse")) {
-                const course = data.find(c => c.id === parseInt(localStorage.getItem("activeCourse")))
-                setActiveCourse(course)
-            }
+                if (localStorage.getItem("activeCourse")) {
+                    const course = data.find(c => c.id === parseInt(localStorage.getItem("activeCourse")))
+                    setActiveCourse(course)
+                }
 
-            return data
-        }),
+                return data
+            }),
         [setCourses, setActiveCourse]
+    )
+
+    const getActiveCourse = useCallback(
+        (cohortId) => fetchIt(`${Settings.apiHost}/courses?cohortId=${cohortId}&active=true`),
+        []
     )
 
     const getCourse = useCallback(
@@ -50,7 +56,7 @@ export const CourseProvider = (props) => {
         <CourseContext.Provider value={{
             getCourses, courses, activeCourse, setActiveCourse,
             getCourse, getLearningObjectives, objectives, getBooks,
-            getProjects, deleteProject
+            getProjects, deleteProject, getActiveCourse
         }} >
             {props.children}
         </CourseContext.Provider>

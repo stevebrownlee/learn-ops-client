@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react"
+import React, { useContext, useRef, useState } from "react"
 import { AssessmentIcon } from "../../svgs/AssessmentIcon.js"
 import { EditIcon } from "../../svgs/EditIcon.js"
 import { NoteIcon } from "../../svgs/NoteIcon.js"
@@ -22,8 +22,20 @@ export const Student = ({
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
-    const studentCard = useRef()
+    const [delayHandler, setDelayHandler] = useState(null)
+
     const studentFooter = useRef()
+
+    const handleMouseEnter = event => {
+        setDelayHandler(setTimeout(() => {
+            studentFooter.current.classList.add("grow")
+        }, 600))
+    }
+
+    const handleMouseLeave = () => {
+        studentFooter.current.classList.remove("grow")
+        clearTimeout(delayHandler)
+    }
 
     const setAssessmentIndicatorBorder = (status) => {
         switch (status) {
@@ -41,10 +53,9 @@ export const Student = ({
     return (
         <>
             <div id={`student--${student.id}`}
-                ref={studentCard}
                 className={`personality--${student.archetype} student ${setAssessmentIndicatorBorder(student.assessment_status)}`}
-                onMouseEnter={e => studentFooter.current.classList.add("grow")}
-                onMouseLeave={e => studentFooter.current.classList.remove("grow")}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
             >
                 <div className="student__score--mini">
                     {student.score}
