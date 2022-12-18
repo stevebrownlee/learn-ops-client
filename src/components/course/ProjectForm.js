@@ -50,7 +50,7 @@ export const ProjectForm = () => {
             "string": event.target.value,
             "boolean": event.target.checked ? true : false,
             "number": parseInt(event.target.value)
-        }[event.target.attributes.type.value]
+        }[event.target.attributes.controltype.value]
 
         copy[event.target.id] = newValue
         updateProject(copy)
@@ -68,6 +68,7 @@ export const ProjectForm = () => {
                     <input onChange={updateState}
                         value={project.name}
                         type="text" required autoFocus
+                        controltype="string"
                         id="name" className="form-control"
                     />
                 </div>
@@ -118,6 +119,7 @@ export const ProjectForm = () => {
                     <input onChange={updateState}
                         value={project.index}
                         type="number" required
+                        controltype="number"
                         id="index" className="form-control"
                         style={{ maxWidth: "4rem" }}
                     />

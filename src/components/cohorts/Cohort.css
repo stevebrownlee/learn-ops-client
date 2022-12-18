@@ -65,6 +65,22 @@
     text-align: center;
 }
 
+.course--badge {
+    padding: 0.33rem;
+    background-color: rgb(253, 204, 255);
+    color: black;
+    border-radius: 0.25rem;
+    margin: 0.2rem 0.25rem;
+    font-size: smaller;
+    max-width: 10rem;
+    text-align: center;
+}
+
+.course--badge.active {
+    background-color: rgb(106, 55, 108);
+    color: rgb(255, 255, 255);
+}
+
 .icon--slack--cohort {
     height: 1rem;
     width: 1rem;

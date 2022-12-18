@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react"
 import { FeedbackDialog } from "./FeedbackDialog"
 import { StudentCardList } from "../cohorts/StudentCardList"
 import { CohortSearchField } from "../cohorts/CohortSearchField"
-import { CohortOperations } from "../cohorts/CohortOperations"
 import { CourseContext } from "../course/CourseProvider"
 import { StudentSearch } from "../people/StudentSearch"
 import "./Dashboard.css"
@@ -19,11 +18,9 @@ export const Dashboard = () => {
         <section className="cohortActions">
             <CohortSearchField />
             <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
-            <CohortOperations />
         </section>
 
         <StudentCardList searchTerms={searchTerms} />
-
         <FeedbackDialog />
     </main>
 }

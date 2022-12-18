@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
+import { useHistory } from "react-router-dom"
 import useModal from "../ui/useModal.js"
 import { CourseContext } from "../course/CourseProvider.js"
 import { PeopleContext } from "../people/PeopleProvider.js"
@@ -11,7 +12,6 @@ import { CohortDialog } from "../dashboard/CohortDialog.js"
 import { StudentDetails } from "../people/StudentDetails.js"
 import "./CohortStudentList.css"
 import "./Tooltip.css"
-import { useHistory } from "react-router-dom"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
@@ -35,15 +35,10 @@ export const StudentCardList = ({ searchTerms }) => {
         if (localStorage.getItem("activeCohort")) {
             const cohortId = parseInt(localStorage.getItem("activeCohort"))
 
-            if (!localStorage.getItem("activeCourse")) {
-                getActiveCourse(cohortId).then(course => {
-                    localStorage.setItem("activeCourse", course[0].id)
-                    getComponentData(cohortId)
-                })
-            }
-            else {
+            getActiveCourse(cohortId).then(course => {
+                localStorage.setItem("activeCourse", course.id)
                 getComponentData(cohortId)
-            }
+            })
         }
     }, [])
 
