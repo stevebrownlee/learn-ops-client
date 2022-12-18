@@ -2,6 +2,7 @@ import { useHistory } from "react-router-dom"
 import React, { useContext, useEffect, useState } from "react"
 import { CourseContext } from "./CourseProvider"
 import { DeleteIcon } from "../../svgs/DeleteIcon"
+import { EditIcon } from "../../svgs/EditIcon"
 import "./Projects.css"
 
 
@@ -89,11 +90,13 @@ export const ProjectList = () => {
                         <h3 className="project__header">{project.name}</h3>
 
                         <div className="project__info">
-                            <div>{project.course.name}</div>
-                            <div>{project.book.name}</div>
+                            <div>{project.course.name} - {project.book.name}</div>
+                            <div>Position: {project.index}</div>
                         </div>
 
                         <footer className="project__footer">
+                            <EditIcon clickFunction={() => history.push(`/projects/edit/${project.id}`)} />
+
                             <DeleteIcon clickFunction={() => deleteProject(project.id)
                                 .then(getProjects)
                                 .then(setProjects)} />

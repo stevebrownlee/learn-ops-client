@@ -8,14 +8,13 @@
 
 .projects::after {
     content: '';
-    flex: 0 1 20%;
+    flex: 0 1 15%;
     margin: 0.5rem 1rem;
     padding: 0rem 1rem 0.5rem 1rem;
 }
 
-
 .project {
-    flex: 0 1 20%;
+    flex: 0 1 15%;
     position: relative;
     margin: 0.5rem 1rem;
     padding: 0rem 1rem 0.5rem 1rem;
@@ -28,6 +27,8 @@
 }
 
 .project__footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     margin-top: auto;
     padding-top: 0.5rem;
     border-top: 1px dotted rgb(137, 188, 188);

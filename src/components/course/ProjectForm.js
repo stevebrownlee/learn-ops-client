@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 import { HelpIcon } from "../../svgs/Help.js"
@@ -9,18 +9,28 @@ import { CourseContext } from "./CourseProvider.js"
 export const ProjectForm = () => {
     const [books, setBooks] = useState([])
     const [courses, setCourses] = useState([])
-    const { getBooks, getCourses } = useContext(CourseContext)
+    const [mode, setMode] = useState("create")
+    const { getBooks, getCourses, getProject, editProject } = useContext(CourseContext)
     const [project, updateProject] = useState({
         name: "",
         book: 0,
         course: 0,
+        index: 0,
         implementation_url: ""
     })
     const history = useHistory()
+    const { projectId } = useParams()
 
     useEffect(() => {
         getCourses().then(setCourses)
     }, [])
+
+    useEffect(() => {
+        if (projectId) {
+            getProject(projectId).then(updateProject)
+            setMode("edit")
+        }
+    }, [projectId])
 
     useEffect(() => {
         if (project.course !== 0) {
@@ -35,7 +45,14 @@ export const ProjectForm = () => {
 
     const updateState = (event) => {
         const copy = { ...project }
-        copy[event.target.id] = event.target.value
+
+        const newValue = {
+            "string": event.target.value,
+            "boolean": event.target.checked ? true : false,
+            "number": parseInt(event.target.value)
+        }[event.target.attributes.type.value]
+
+        copy[event.target.id] = newValue
         updateProject(copy)
     }
 
@@ -57,6 +74,7 @@ export const ProjectForm = () => {
 
                 <fieldset>
                     <div className="form-group">
+                        <label htmlFor="course"> Course </label>
                         <select id="course" className="form-control"
                             value={project.course}
                             controltype="number"
@@ -75,6 +93,7 @@ export const ProjectForm = () => {
 
                 <fieldset>
                     <div className="form-group">
+                        <label htmlFor="course"> Book </label>
                         <select id="book" className="form-control"
                             value={project.book}
                             controltype="number"
@@ -91,14 +110,34 @@ export const ProjectForm = () => {
                     </div>
                 </fieldset>
 
+                <div className="form-group">
+                    <label htmlFor="index">
+                        Position in book
+                        <HelpIcon tip="First column project is 0. Second column is 1." />
+                    </label>
+                    <input onChange={updateState}
+                        value={project.index}
+                        type="number" required
+                        id="index" className="form-control"
+                        style={{ maxWidth: "4rem" }}
+                    />
+                </div>
+
+
                 <button type="submit"
                     onClick={
                         evt => {
                             evt.preventDefault()
-                            constructNewProject()
+
+                            if (mode === "create") {
+                                constructNewProject()
+                            }
+                            else {
+                                editProject(project).then(() => history.push("/projects"))
+                            }
                         }
                     }
-                    className="btn btn-primary"> Create </button>
+                    className="btn btn-primary"> Save </button>
             </form>
         </>
     )

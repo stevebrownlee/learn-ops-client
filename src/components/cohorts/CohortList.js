@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { CohortContext } from "./CohortProvider"
 import { PeopleContext } from "../people/PeopleProvider"
-import { EditIcon } from "../../svgs/Edit"
+import { EditIcon } from "../../svgs/EditIcon"
 import "./CohortList.css"
 import "./Cohort.css"
 import { UnassignedStudents } from "./UnassignedStudents"
@@ -23,7 +23,7 @@ export const CohortList = () => {
         getLastFourCohorts()
     }, [])
 
-    const getLastFourCohorts = () => getCohorts({ limit: 5 })
+    const getLastFourCohorts = () => getCohorts({ limit: 6 })
 
     const slackEditInput = (cohort) => {
         return <input type="text" autoFocus style={{ fontSize: "smaller" }} onKeyUp={e => {
@@ -43,9 +43,7 @@ export const CohortList = () => {
     const slackDisplay = (cohort) => {
         return <>
             {cohort.slack_channel}
-            <EditIcon helpFunction={() => {
-                setSlackEdit(cohort.id)
-            }} />
+            <EditIcon clickFunction={() => setSlackEdit(cohort.id)} />
         </>
     }
 

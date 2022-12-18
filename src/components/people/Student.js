@@ -1,12 +1,12 @@
 import React, { useContext, useRef, useState } from "react"
-import { AssessmentIcon } from "../../svgs/AssessmentIcon.js"
-import { EditIcon } from "../../svgs/EditIcon.js"
-import { NoteIcon } from "../../svgs/NoteIcon.js"
-import { ProposalIcon } from "../../svgs/ProposalIcon.js"
-import { TagIcon } from "../../svgs/TagIcon.js"
-import { AssessmentContext } from "../assessments/AssessmentProvider.js"
-import { CohortContext } from "../cohorts/CohortProvider.js"
-import { PeopleContext } from "./PeopleProvider.js"
+import { AssessmentIcon } from "../../svgs/AssessmentIcon"
+import { EditIcon } from "../../svgs/EditIcon"
+import { NoteIcon } from "../../svgs/NoteIcon"
+import { ProposalIcon } from "../../svgs/ProposalIcon"
+import { TagIcon } from "../../svgs/TagIcon"
+import { AssessmentContext } from "../assessments/AssessmentProvider"
+import { CohortContext } from "../cohorts/CohortProvider"
+import { PeopleContext } from "./PeopleProvider"
 import "./Student.css"
 
 export const Student = ({
@@ -88,7 +88,7 @@ export const Student = ({
                         }}
                     >{student.name}</h4>
                     <div className="student__book">
-                        {student.book.name} <EditIcon helpFunction={() => {
+                        {student.book.name} <EditIcon clickFunction={() => {
                             activateStudent(student)
                             toggleProjects()
                         }} />

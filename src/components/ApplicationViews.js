@@ -36,6 +36,9 @@ export const ApplicationViews = () => {
                             <Route exact path="/projects">
                                 <ProjectList />
                             </Route>
+                            <Route exact path="/projects/edit/:projectId">
+                                <ProjectForm />
+                            </Route>
                             <Route exact path="/projects/new">
                                 <ProjectForm />
                             </Route>

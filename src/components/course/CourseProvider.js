@@ -42,8 +42,21 @@ export const CourseProvider = (props) => {
         []
     )
 
+    const getProject = useCallback(
+        (id) => fetchIt(`${Settings.apiHost}/projects/${id}`),
+        []
+    )
+
     const deleteProject = useCallback(
         id => fetchIt(`${Settings.apiHost}/projects/${id}`, { method: "DELETE" }),
+        []
+    )
+
+    const editProject = useCallback(
+        project => fetchIt(`${Settings.apiHost}/projects/${project.id}`, {
+            method: "PUT",
+            body: JSON.stringify(project)
+        }),
         []
     )
 
@@ -56,7 +69,8 @@ export const CourseProvider = (props) => {
         <CourseContext.Provider value={{
             getCourses, courses, activeCourse, setActiveCourse,
             getCourse, getLearningObjectives, objectives, getBooks,
-            getProjects, deleteProject, getActiveCourse
+            getProjects, deleteProject, getActiveCourse, getProject,
+            editProject
         }} >
             {props.children}
         </CourseContext.Provider>

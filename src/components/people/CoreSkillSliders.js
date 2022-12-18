@@ -13,10 +13,10 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
     } = useContext(PeopleContext)
 
     const coreSkillTips = [
-        "Once a problem is analyzed, understood, and deconstructed into functional units, algorithmic thinking develops a logical, efficient series of steps required to solve each unit. Each functional unit is broken down into basic operations (BO) or elementary operations (EO).",
+        "Once a problem is understood, analyzed, and deconstructed into functional units, algorithmic thinking develops a logical, efficient series of steps required to solve each unit. Each functional unit is broken down into basic operations (BO) or elementary operations (EO).",
         "Use objective, logic-based approach to identify the functional units of a problem. Detect patterns, and using them to think creativity when presented with new challenges.",
-        "Communicate effectivly with both technical and non-technical language. Master complex communication during group-based work. Use correct vocabulary when describing technical concepts. Know how, and when to ask for help from a senior technical resource.",
-        "Efficient learners take the time to use every resource available to learn a new skill, or implement a non-mastered skill in a new context. Debugger, dev tools, web searches, and evaluating those search results."
+        "Communicate effectively with both technical and non-technical language. Master complex communication during group-based work. Use correct vocabulary when describing technical concepts. Know how, and when to ask for help from a senior technical resource.",
+        "Efficient learners take the time to use every resource available to learn a new skill, or implement a non-mastered skill in a new context. Debugger, dev tools, referencing previous solutions, searching the Web for resources and evaluating those search results."
     ]
 
     useEffect(() => {
