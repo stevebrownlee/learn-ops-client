@@ -74,7 +74,7 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
                                                 })
                                             )
                                         }
-                                        Promise.all(newRecordRequests).then(getStudent)
+                                        Promise.all(newRecordRequests).then(() => getStudentCoreSkills(activeStudent.id))
                                     })
                             }}>
                             <i className="button__icon icon icon-book"></i>
