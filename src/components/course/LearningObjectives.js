@@ -45,12 +45,12 @@ export const LearningObjectives = () => {
                                 else if (!studentRecord) {
                                     action = createRecord({
                                         weight: objective.id,
-                                        student: activeStudent.id,
+                                        student: activeStudent?.id,
                                         achieved: true,
                                         note: `Achieved on ${new Date().toLocaleDateString('en-US')}`
                                     })
                                 }
-                                action.then(() => getStudentLearningRecords(activeStudent.id))
+                                action.then(() => getStudentLearningRecords(activeStudent?.id))
                                     .then(() => getCohortStudents(activeCohort.id))
                             }}
                             className="button-28"

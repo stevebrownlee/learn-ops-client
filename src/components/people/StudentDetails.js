@@ -34,18 +34,18 @@ export const StudentDetails = ({ student, toggleCohorts }) => {
                     <div className="card-body">
                         <header className="student__header">
                             <h2 className="card-title student__info">
-                                {activeStudent.name}
+                                {activeStudent?.name}
                             </h2>
                             <div className="student__score">
-                                {activeStudent.score}
+                                {activeStudent?.score}
                             </div>
                         </header>
                         <div className="card-text">
                             <div className="student__details">
 
                                 <div className="student__github">
-                                    Github: <a href={`https://www.github.com/${activeStudent.github}`}>
-                                        {`https://www.github.com/${activeStudent.github}`}</a>
+                                    Github: <a href={`https://www.github.com/${activeStudent?.github}`}>
+                                        {`https://www.github.com/${activeStudent?.github}`}</a>
                                 </div>
                                 <div className="student__cohort">
                                     Cohort: <button className="fakeLink"

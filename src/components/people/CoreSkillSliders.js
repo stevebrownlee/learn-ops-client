@@ -41,7 +41,7 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
                                 onClick={e => e.stopPropagation()}
                                 onMouseUp={(e) => {
                                     const updatedRecord = {
-                                        student_id: activeStudent.id,
+                                        student_id: activeStudent?.id,
                                         skill_id: record.skill.id,
                                         level: parseInt(e.target.value)
                                     }
@@ -49,7 +49,7 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
                                         method: "PUT",
                                         body: JSON.stringify(updatedRecord)
                                     })
-                                        .then(() => getStudentCoreSkills(activeStudent.id))
+                                        .then(() => getStudentCoreSkills(activeStudent?.id))
                                 }}
                             />
                         </section>
@@ -66,7 +66,7 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
                                                 fetchIt(`${Settings.apiHost}/coreskillrecords`, {
                                                     method: "POST",
                                                     body: JSON.stringify({
-                                                        "student": activeStudent.id,
+                                                        "student": activeStudent?.id,
                                                         "skill": skill.id,
                                                         "note": "Initial record",
                                                         "level": 1
@@ -74,7 +74,7 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
                                                 })
                                             )
                                         }
-                                        Promise.all(newRecordRequests).then(() => getStudentCoreSkills(activeStudent.id))
+                                        Promise.all(newRecordRequests).then(() => getStudentCoreSkills(activeStudent?.id))
                                     })
                             }}>
                             <i className="button__icon icon icon-book"></i>

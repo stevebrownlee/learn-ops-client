@@ -21,7 +21,7 @@ export const StudentProposals = () => {
                 return <button key={`asst--${s.id}`} className="fakeLink button--capstoneStage"
                     onClick={(e) => {
                         addToProposalTimeline(proposalId, s.id)
-                            .then(() => getStudentProposals(activeStudent.id))
+                            .then(() => getStudentProposals(activeStudent?.id))
                             .then(() => getCohortStudents(activeCohort.id))
                     }}>{s.status}</button>
             }
@@ -30,7 +30,7 @@ export const StudentProposals = () => {
 
     const revoke = (timelineStatus) => {
         revokeApproval(timelineStatus)
-            .then(() => getStudentProposals(activeStudent.id))
+            .then(() => getStudentProposals(activeStudent?.id))
             .then(() => getCohortStudents(activeCohort.id))
     }
 
