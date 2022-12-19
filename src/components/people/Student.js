@@ -72,6 +72,9 @@ export const Student = ({
                             else if (p.status === "approved") {
                                 return <ProposalIcon key={`completedProposal--${p.id}`} color="dodgerblue" />
                             }
+                            else if (p.status === "mvp") {
+                                return <ProposalIcon key={`completedProposal--${p.id}`} color="green" />
+                            }
                         })
                     }
                 </div>
@@ -88,13 +91,13 @@ export const Student = ({
                         }}
                     >{student.name}</h4>
                     <div className="student__book">
-                        {student.book.name} <EditIcon clickFunction={() => {
+                        {student?.book?.name} <EditIcon clickFunction={() => {
                             activateStudent(student)
                             toggleProjects()
                         }} />
                     </div>
                     <div className="student__project">
-                        {student.book.project}
+                        {student?.book?.project}
                     </div>
                 </div>
 
