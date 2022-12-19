@@ -42,6 +42,8 @@ export const CourseProvider = (props) => {
 
     const getBooks = useCallback((courseId = null) => fetchIt(`${Settings.apiHost}/books${courseId ? `?courseId=${courseId}` : ""}`), [])
 
+    const getBook = useCallback((bookId) => fetchIt(`${Settings.apiHost}/books/${bookId}`), [])
+
     const getProjects = useCallback(
         () => fetchIt(`${Settings.apiHost}/projects?expand=course&expand=book`),
         []
@@ -64,6 +66,13 @@ export const CourseProvider = (props) => {
         }), []
     )
 
+    const editBook = useCallback(
+        book => fetchIt(`${Settings.apiHost}/books/${book.id}`, {
+            method: "PUT",
+            body: JSON.stringify(book)
+        }), []
+    )
+
     const migrateCohortToServerSide = useCallback(
         cohort => fetchIt(`${Settings.apiHost}/cohorts/${cohort.id}/migrate`, {
             method: "PUT"
@@ -71,7 +80,7 @@ export const CourseProvider = (props) => {
     )
 
     const getLearningObjectives = useCallback(
-        (id) => fetchIt(`${Settings.apiHost}/weights?tiermin=1&tiermax=3`).then(setObjectives),
+        (id) => fetchIt(`${Settings.apiHost}/weights`).then(setObjectives),
         [setObjectives]
     )
 
@@ -80,7 +89,7 @@ export const CourseProvider = (props) => {
             getCourses, courses, activeCourse, setActiveCourse,
             getCourse, getLearningObjectives, objectives, getBooks,
             getProjects, deleteProject, getActiveCourse, getProject,
-            editProject, migrateCohortToServerSide
+            editProject, migrateCohortToServerSide, getBook, editBook
         }} >
             {props.children}
         </CourseContext.Provider>

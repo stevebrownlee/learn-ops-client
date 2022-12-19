@@ -32,30 +32,33 @@ export const LearningObjectives = () => {
                     const studentRecord = learningRecords.find(rec => rec.objective === objective.id)
                     const achieved = studentRecord?.achieved ?? false
 
-                    return <button key={`objective--${objective.id}`}
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            let action = null
-                            if (studentRecord && !achieved) {
-                                action = updateRecord({ ...studentRecord, achieved: true })
+                    if (!achieved) {
+                        return <button key={`objective--${objective.id}`}
+                            onClick={(e) => {
+                                e.stopPropagation()
 
-                            }
-                            else if (!studentRecord) {
-                                action = createRecord({
-                                    weight: objective.id,
-                                    student: activeStudent.id,
-                                    achieved: true,
-                                    note: `Achieved on ${new Date().toLocaleDateString('en-US')}`
-                                })
-                            }
-                            action.then(() => getStudentLearningRecords(activeStudent.id))
-                                .then(() => getCohortStudents(activeCohort.id))
-                        }}
-                        className={`${achieved ? "button-28--achieved" : "button-28"}`}
-                        style={{ margin: "0.2rem 0.2rem" }}
-                    >
-                        <span>{objective.label}</span>
-                    </button>
+                                let action = null
+                                if (studentRecord && !achieved) {
+                                    action = updateRecord({ ...studentRecord, achieved: true })
+
+                                }
+                                else if (!studentRecord) {
+                                    action = createRecord({
+                                        weight: objective.id,
+                                        student: activeStudent.id,
+                                        achieved: true,
+                                        note: `Achieved on ${new Date().toLocaleDateString('en-US')}`
+                                    })
+                                }
+                                action.then(() => getStudentLearningRecords(activeStudent.id))
+                                    .then(() => getCohortStudents(activeCohort.id))
+                            }}
+                            className="button-28"
+                            style={{ margin: "0.2rem 0.2rem" }}
+                        >
+                            <span>{objective.label}</span>
+                        </button>
+                    }
                 })
             }
         </div>

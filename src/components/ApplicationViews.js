@@ -17,6 +17,8 @@ import { RecordProvider } from "./records/RecordProvider"
 import { WeeklyTeams } from "./teams/WeeklyTeams"
 import { ProjectList } from "./course/ProjectList"
 import { ProjectForm } from "./course/ProjectForm"
+import { BookList } from "./course/BookList"
+import { BookForm } from "./course/BookForm"
 
 export const ApplicationViews = () => {
     return <>
@@ -31,6 +33,16 @@ export const ApplicationViews = () => {
 
                             <Route exact path="/cohorts">
                                 <CohortList />
+                            </Route>
+
+                            <Route exact path="/books">
+                                <BookList />
+                            </Route>
+                            <Route exact path="/books/new">
+                                <BookForm />
+                            </Route>
+                            <Route exact path="/books/edit/:bookId">
+                                <BookForm />
                             </Route>
 
                             <Route exact path="/projects">

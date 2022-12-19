@@ -10,6 +10,7 @@ import { TagDialog } from "../dashboard/TagDialog.js"
 import { StudentNoteDialog } from "../dashboard/StudentNoteDialog.js"
 import { CohortDialog } from "../dashboard/CohortDialog.js"
 import { StudentDetails } from "../people/StudentDetails.js"
+import { Toast, configureToasts } from "toaster-js"
 import "./CohortStudentList.css"
 import "./Tooltip.css"
 
@@ -34,11 +35,16 @@ export const StudentCardList = ({ searchTerms }) => {
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
             const cohortId = parseInt(localStorage.getItem("activeCohort"))
+            new Toast(`Loading default cohort`, Toast.TYPE_INFO, Toast.TIME_SHORT);
 
             getActiveCourse(cohortId).then(course => {
                 localStorage.setItem("activeCourse", course.id)
                 getComponentData(cohortId)
             })
+        }
+        else {
+            history.push("/cohorts")
+            new Toast("You have not joined a cohort. Please choose one.", Toast.TYPE_WARNING, Toast.TIME_NORMAL);
         }
     }, [])
 

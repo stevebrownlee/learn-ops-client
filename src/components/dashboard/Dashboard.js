@@ -4,6 +4,7 @@ import { StudentCardList } from "../cohorts/StudentCardList"
 import { CohortSearchField } from "../cohorts/CohortSearchField"
 import { CourseContext } from "../course/CourseProvider"
 import { StudentSearch } from "../people/StudentSearch"
+import "toaster-js/default.css"
 import "./Dashboard.css"
 
 export const Dashboard = () => {
