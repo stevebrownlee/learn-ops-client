@@ -15,7 +15,7 @@ export const StudentDetails = ({ student, toggleCohorts }) => {
     }
 
     useEffect(() => {
-        if ("id" in activeStudent) {
+        if (activeStudent && "id" in activeStudent) {
             getStudentAssessments(activeStudent.id)
         }
     }, [activeStudent])

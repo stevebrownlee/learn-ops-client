@@ -20,7 +20,7 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
     ]
 
     useEffect(() => {
-        if ("id" in activeStudent) {
+        if (activeStudent && "id" in activeStudent) {
             const student = cohortStudents.find(student => student.id === activeStudent.id)
             activateStudent(student)
         }

@@ -17,7 +17,7 @@ export const CohortDialog = ({ toggleCohorts }) => {
     )
 
     useEffect(() => {
-        if ("cohorts" in activeStudent) {
+        if (activeStudent && "cohorts" in activeStudent) {
             const ids = activeStudent?.cohorts?.map(c => c.id) ?? []
             setCohortIds(ids)
         }

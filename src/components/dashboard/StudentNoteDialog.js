@@ -17,7 +17,7 @@ export const StudentNoteDialog = ({ toggleNote }) => {
     })
 
     useEffect(() => {
-        if ("id" in activeStudent) {
+        if (activeStudent && "id" in activeStudent) {
             getNotes()
         }
     }, [activeStudent])
