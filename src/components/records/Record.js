@@ -24,7 +24,7 @@ export const Record = ({ record }) => {
             .then(() => getStudent())
             .then(() => {
                 if ("id" in activeCohort) {
-                    getCohortStudents(activeCohort.id)
+                    getCohortStudents(activeCohort)
                 }
             })
     }
@@ -69,7 +69,7 @@ export const Record = ({ record }) => {
                                                     .then(getStudent)
                                                     .then(() => {
                                                         if ("id" in activeCohort) {
-                                                            getCohortStudents(activeCohort.id)
+                                                            getCohortStudents(activeCohort)
                                                         }
                                                     })
                                             }}

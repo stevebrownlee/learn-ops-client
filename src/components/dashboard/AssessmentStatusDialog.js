@@ -22,7 +22,7 @@ export const AssessmentStatusDialog = ({ toggleStatuses }) => {
                                 updateStudentCurrentAssessment(activeStudent, status.id)
                                     .then(() => {
                                         toggleStatuses()
-                                        getCohortStudents(activeCohort.id)
+                                        getCohortStudents(activeCohort)
                                     })
                             }}>{status.status}</button>
                     }

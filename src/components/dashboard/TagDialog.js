@@ -23,7 +23,7 @@ export const TagDialog = ({ toggleTags }) => {
                             e.stopPropagation()
                             tagStudent(activeStudent.id, tag.id)
                                 .then(() => {
-                                    getCohortStudents(activeCohort.id)
+                                    getCohortStudents(activeCohort)
                                     toggleTags()
                                 })
                         }}
@@ -35,7 +35,7 @@ export const TagDialog = ({ toggleTags }) => {
                                 e.stopPropagation()
                                 deleteTag(tag.id).then(() => {
                                     getAllTags()
-                                    getCohortStudents(activeCohort.id)
+                                    getCohortStudents(activeCohort)
                                 })
                             }}
                         >&times;</span>
@@ -57,7 +57,7 @@ export const TagDialog = ({ toggleTags }) => {
 
                                 return tagStudent(activeStudent.id, tag.id)
                                     .then(() => {
-                                        getCohortStudents(activeCohort.id)
+                                        getCohortStudents(activeCohort)
                                         toggleTags()
                                     })
                             })

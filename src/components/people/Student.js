@@ -108,7 +108,7 @@ export const Student = ({
                                 student.tags.map(tag => <span key={`tag--${tag.id}`}
                                     onClick={() => {
                                         untagStudent(tag.id).then(() => {
-                                            getCohortStudents(activeCohort.id)
+                                            getCohortStudents(activeCohort)
                                         })
                                     }}
                                     className="student--tag">
@@ -117,7 +117,7 @@ export const Student = ({
                                         onClick={e => {
                                             e.stopPropagation()
                                             untagStudent(tag.id).then(() => {
-                                                getCohortStudents(activeCohort.id)
+                                                getCohortStudents(activeCohort)
                                             })
                                         }}
                                     >&times;</span>
@@ -135,7 +135,7 @@ export const Student = ({
                                 activateStudent(student)
                                 if (student.assessment_status === 0) {
                                     setStudentCurrentAssessment(student)
-                                        .then(() => getCohortStudents(activeCohort.id))
+                                        .then(() => getCohortStudents(activeCohort))
                                 }
                                 else {
                                     toggleStatuses()

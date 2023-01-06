@@ -124,7 +124,7 @@ export const StudentCardList = () => {
                                     <a href="#"
                                         onClick={(e) => {
                                             e.preventDefault()
-                                            localStorage.setItem("activeCohort", activeCohort.id)
+                                            localStorage.setItem("activeCohort", activeCohort)
                                             setActive(true)
                                         }}
                                     >Set as my active cohort</a>

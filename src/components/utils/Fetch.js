@@ -33,7 +33,7 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }
             return res.json().then((json) => {
                 if ("reason" in json || "message" in json) {
                     const message = json.reason || json.message
-                    throw new Error(JSON.stringify(message))
+                    throw new Error(message)
                 }
                 throw new Error(JSON.stringify(json))
             })

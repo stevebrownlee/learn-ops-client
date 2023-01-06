@@ -22,7 +22,7 @@ export const StudentProposals = () => {
                     onClick={(e) => {
                         addToProposalTimeline(proposalId, s.id)
                             .then(() => getStudentProposals(activeStudent?.id))
-                            .then(() => getCohortStudents(activeCohort.id))
+                            .then(() => getCohortStudents(activeCohort))
                     }}>{s.status}</button>
             }
         })
@@ -31,7 +31,7 @@ export const StudentProposals = () => {
     const revoke = (timelineStatus) => {
         revokeApproval(timelineStatus)
             .then(() => getStudentProposals(activeStudent?.id))
-            .then(() => getCohortStudents(activeCohort.id))
+            .then(() => getCohortStudents(activeCohort))
     }
 
     return <section className="section--proposals">

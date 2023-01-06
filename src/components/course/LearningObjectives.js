@@ -51,7 +51,7 @@ export const LearningObjectives = () => {
                                     })
                                 }
                                 action.then(() => getStudentLearningRecords(activeStudent?.id))
-                                    .then(() => getCohortStudents(activeCohort.id))
+                                    .then(() => getCohortStudents(activeCohort))
                             }}
                             className="button-28"
                             style={{ margin: "0.2rem 0.2rem" }}

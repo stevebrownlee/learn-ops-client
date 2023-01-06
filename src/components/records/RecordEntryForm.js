@@ -83,7 +83,7 @@ export const RecordEntryForm = () => {
                             .then(() => getStudent(record.student.id))
                             .then(() => {
                                 if ("id" in activeCohort) {
-                                    getCohort(activeCohort.id)
+                                    getCohort(activeCohort)
                                 }
                             })
                             .then(() => history.push("/"))

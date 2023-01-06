@@ -64,7 +64,7 @@ export const RecordForm = () => {
             .then(() => getStudent(studentId))
             .then(() => {
                 if ("id" in activeCohort) {
-                    getCohortStudents(activeCohort.id)
+                    getCohortStudents(activeCohort)
                 }
             })
     }

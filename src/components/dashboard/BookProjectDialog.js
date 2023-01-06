@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { CourseContext } from "../course/CourseProvider"
+import { Toast } from "toaster-js"
 
 export const BookProjectDialog = ({ toggleProjects }) => {
     const { activeStudent, setStudentCurrentProject, getCohortStudents } = useContext(PeopleContext)
@@ -38,10 +39,23 @@ export const BookProjectDialog = ({ toggleProjects }) => {
                         onChange={(e) => {
                             setStudentCurrentProject(activeStudent.id, parseInt(e.target.value))
                                 .then(() => {
-                                    getCohortStudents(activeCohort.id)
+                                    getCohortStudents(activeCohort)
                                     toggleProjects()
                                     setBook({})
                                     setBookProjects([])
+                                })
+                                .catch(reason => {
+                                    let isDuplicate = false
+                                    try {
+                                        isDuplicate = reason.includes("duplicate key value")
+                                    }
+                                    catch (TypeError) {
+                                        isDuplicate = reason.message.includes("duplicate key value")
+                                    }
+
+                                    if (isDuplicate) {
+                                        new Toast("Student was previously assigned to that project", Toast.TYPE_ERROR, Toast.TIME_NORMAL)
+                                    }
                                 })
                         }}
                     >

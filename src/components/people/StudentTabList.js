@@ -73,7 +73,7 @@ export const StudentTabList = () => {
                         onClick={(e) => {
                             addToProposalTimeline(proposalId, s.id)
                                 .then(() => getStudentProposals(activeStudent.id))
-                                .then(() => getCohortStudents(activeCohort.id))
+                                .then(() => getCohortStudents(activeCohort))
                         }}>{s.status}</button>
                 </div>
             }
@@ -83,7 +83,7 @@ export const StudentTabList = () => {
     const revoke = (timelineStatus) => {
         revokeApproval(timelineStatus)
             .then(() => getStudentProposals(activeStudent.id))
-            .then(() => getCohortStudents(activeCohort.id))
+            .then(() => getCohortStudents(activeCohort))
     }
 
     return (
