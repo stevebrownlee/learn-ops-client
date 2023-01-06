@@ -55,6 +55,15 @@ export const StudentNoteDialog = ({ toggleNote }) => {
             />
         </div>
 
+        <button className="fakeLink" style={{
+            position: "absolute",
+            top: "0.33em",
+            right: "0.5em",
+            fontSize: "0.75rem"
+        }}
+            id="closeBtn"
+            onClick={() => toggleNote()}>[ close ]</button>
+
         <StudentNoteList notes={notes} />
     </dialog>
 }

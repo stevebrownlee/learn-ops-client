@@ -74,8 +74,6 @@ export const TagDialog = ({ toggleTags }) => {
             fontSize: "0.75rem"
         }}
             id="closeBtn"
-            onClick={() => {
-                toggleTags()
-            }}>[ close ]</button>
+            onClick={() => toggleTags()}>[ close ]</button>
     </dialog>
 }
