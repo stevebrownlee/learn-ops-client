@@ -13,9 +13,11 @@ import { StudentDetails } from "../people/StudentDetails.js"
 import { Toast, configureToasts } from "toaster-js"
 import "./CohortStudentList.css"
 import "./Tooltip.css"
+import { CohortContext } from "./CohortProvider.js"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
+    const { activeCohort } = useContext(CohortContext)
     const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
     const [groupedStudents, setGroupedStudents] = useState([])
     const history = useHistory()
@@ -27,20 +29,24 @@ export const StudentCardList = ({ searchTerms }) => {
     let { toggleDialog: toggleCohorts } = useModal("#dialog--cohorts")
 
     const getComponentData = (cohortId) => {
-        return getCourses().then(() => {
-            getCohortStudents(cohortId)
-        })
+        return getCourses()
+            .then(() => getActiveCourse(cohortId))
+            .then(course => {
+                localStorage.setItem("activeCourse", course.id)
+                getCohortStudents(cohortId)
+            })
     }
+
+    useEffect(() => {
+        if (activeCohort > 0) {
+            getComponentData(activeCohort)
+        }
+    }, [activeCohort])
 
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
             const cohortId = parseInt(localStorage.getItem("activeCohort"))
             new Toast(`Loading default cohort`, Toast.TYPE_INFO, Toast.TIME_SHORT);
-
-            getActiveCourse(cohortId).then(course => {
-                localStorage.setItem("activeCourse", course.id)
-                getComponentData(cohortId)
-            })
         }
         else {
             history.push("/cohorts")
@@ -68,7 +74,7 @@ export const StudentCardList = ({ searchTerms }) => {
         })
 
         setGroupedStudents(studentsPerBook)
-    }, [cohortStudents, searchTerms, activeCourse])
+    }, [cohortStudents, searchTerms])
 
     return <section className="cohortStudents">
         {

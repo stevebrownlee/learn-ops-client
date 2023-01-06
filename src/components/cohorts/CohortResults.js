@@ -6,9 +6,7 @@ export const CohortResults = ({ cohorts, selectCohort }) => {
             {
                 cohorts.map(cohort => {
                     return <div key={`cohort--${cohort.id}`} className="cohort--results"
-                        onClick={() => {
-                            selectCohort(cohort)
-                        }}
+                        onClick={() => selectCohort(cohort)}
                     >
                         { cohort.name }
                     </div>

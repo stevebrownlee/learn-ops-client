@@ -6,10 +6,9 @@ import { CohortResults } from "./CohortResults.js"
 import "./CohortStudentList.css"
 
 export const CohortSearchField = () => {
-    const { findCohort, getCohort } = useContext(CohortContext)
+    const { findCohort, getCohort, activateCohort } = useContext(CohortContext)
     const { getCohortStudents } = useContext(PeopleContext)
     const [terms, setTerms] = useState("")
-    const [active, setActive] = useState(false)
     const [cohorts, setCohorts] = useState([])
     const cohortSearch = useRef()
     const searchLogger = useKeyboardShortcut('c', () => {
@@ -28,23 +27,14 @@ export const CohortSearchField = () => {
     }, [terms, findCohort])
 
     const selectCohort = useCallback((cohort) => {
-        getCohortStudents(cohort.id)
-        getCohort(cohort.id)
+        activateCohort(cohort.id)
         setTerms("")
-
-        if (localStorage.getItem("activeCohort") && parseInt(localStorage.getItem("activeCohort")) === cohort.id) {
-            setActive(true)
-        }
-        else {
-            setActive(false)
-        }
     }, [])
 
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
             const id = parseInt(localStorage.getItem("activeCohort"))
             getCohort(id)
-            setActive(true)
         }
 
         document.addEventListener("keypress", searchLogger)

@@ -45,7 +45,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
             .then(getLastFourCohorts)
             .then(() => {
                 localStorage.removeItem("activeCohort")
-                activateCohort({})
+                activateCohort(0)
             })
             .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
     }
@@ -55,7 +55,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
             .then(getLastFourCohorts)
             .then(() => {
                 localStorage.setItem("activeCohort", cohort.id)
-                activateCohort(cohort)
+                activateCohort(cohort.id)
             })
             .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
     }

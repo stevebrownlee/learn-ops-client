@@ -7,7 +7,7 @@ export const CohortContext = React.createContext()
 
 export const CohortProvider = (props) => {
     const [cohorts, setCohorts] = useState([])
-    const [activeCohort, activateCohort] = useState({})
+    const [activeCohort, activateCohort] = useState(0)
 
     const { getCurrentUser } = useSimpleAuth()
     const user = getCurrentUser()
@@ -21,7 +21,7 @@ export const CohortProvider = (props) => {
 
     const getCohort = useCallback((id) => {
         return fetchIt(`${Settings.apiHost}/cohorts/${id}`)
-            .then(activateCohort)
+            .then((cohort) => activateCohort(cohort.id))
     }, [user])
 
     const leaveCohort = useCallback((cohortId) => {
