@@ -217,16 +217,12 @@ export const WeeklyTeams = () => {
 
     const clearTeams = () => {
         const tagsToDelete = []
-        const serializableMap = Array.from(teams)
 
-        for (const [id, studentSet] of serializableMap) {
-            for (const student of studentSet) {
-                const studentObject = JSON.parse(student)
-                if (studentObject.tags.length) {
-                    for (const tag of studentObject.tags) {
-                        if (tag.tag.name.toLowerCase().includes("team ")) {
-                            tagsToDelete.push(untagStudent(tag.id))
-                        }
+        for (const student of cohortStudents) {
+            if (student.tags.length) {
+                for (const tag of student.tags) {
+                    if (tag.tag.name.toLowerCase().includes("team ")) {
+                        tagsToDelete.push(untagStudent(tag.id))
                     }
                 }
             }
@@ -277,7 +273,7 @@ export const WeeklyTeams = () => {
                     <input type="text"
                         className="teamsconfig__prefix"
                         value={weeklyPrefix}
-                        placeholder="e.g. c58-week3"
+                        placeholder="e.g. c56"
                         onChange={e => setWeeklyPrefix(e.target.value)} />
                 </div>
                 <div className="teamsconfig__auto">
