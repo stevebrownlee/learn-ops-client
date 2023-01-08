@@ -29,7 +29,7 @@ export const Student = ({
     const handleMouseEnter = event => {
         setDelayHandler(setTimeout(() => {
             studentFooter.current.classList.add("grow")
-        }, 600))
+        }, 250))
     }
 
     const handleMouseLeave = () => {

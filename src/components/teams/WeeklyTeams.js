@@ -1,12 +1,17 @@
 import React, { useContext, useEffect, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
-import "./Teams.css"
-import slackLogo from "./images/slack.png"
+import { CohortContext } from "../cohorts/CohortProvider"
 import TeamsRepository from "./TeamsRepository"
 import { HelpIcon } from "../../svgs/Help"
+import slackLogo from "./images/slack.png"
+import "./Teams.css"
 
 export const WeeklyTeams = () => {
-    const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
+    const {
+        cohortStudents, getCohortStudents, tagStudentTeams,
+        untagStudent
+    } = useContext(PeopleContext)
+    const { activeCohort, activateCohort } = useContext(CohortContext)
 
     const initialTeamState = new Map([
         [1, new Set()],
@@ -28,6 +33,7 @@ export const WeeklyTeams = () => {
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
             const id = parseInt(localStorage.getItem("activeCohort"))
+            activateCohort(id)
             getCohortStudents(id)
         }
     }, [])
@@ -100,8 +106,8 @@ export const WeeklyTeams = () => {
 
     const makeSlackChannel = (teamNumber) => {
         const studentIds = Array.from(teams.get(teamNumber))
-                                .map(JSON.parse)
-                                .map(student => student.id)
+            .map(JSON.parse)
+            .map(student => student.id)
 
         TeamsRepository.createSlackChannel(
             `${weeklyPrefix}-team-${teamNumber}`,
@@ -209,6 +215,51 @@ export const WeeklyTeams = () => {
         updateTeams(teamsCopy)
     }
 
+    const clearTeams = () => {
+        const tagsToDelete = []
+        const serializableMap = Array.from(teams)
+
+        for (const [id, studentSet] of serializableMap) {
+            for (const student of studentSet) {
+                const studentObject = JSON.parse(student)
+                if (studentObject.tags.length) {
+                    for (const tag of studentObject.tags) {
+                        if (tag.tag.name.toLowerCase().includes("team ")) {
+                            tagsToDelete.push(untagStudent(tag.id))
+                        }
+                    }
+                }
+            }
+        }
+
+        return Promise.allSettled(tagsToDelete)
+    }
+
+    const saveTeams = () => {
+        const tagsToAdd = []
+
+        const serializableMap = Array.from(teams)
+        const convertible = serializableMap.map(
+            ([id, studentSet]) => {
+                for (const student of studentSet) {
+                    const studentObject = JSON.parse(student)
+                    tagsToAdd.push({
+                        "student": studentObject.id,
+                        "team": `Team ${id}`
+                    })
+                }
+
+                return {
+                    id,
+                    students: Array.from(studentSet)
+                }
+            }
+        )
+
+        localStorage.setItem("currentCohortTeams", JSON.stringify(convertible))
+        tagStudentTeams(tagsToAdd).then(() => getCohortStudents(activeCohort))
+    }
+
     return (
         <article className="view">
             <h1>Weekly Teams</h1>
@@ -240,20 +291,7 @@ export const WeeklyTeams = () => {
                     </button>
                 </div>
                 <div className="teamsconfig__save">
-                    <button onClick={() => {
-                        const serializableMap = Array.from(teams)
-                        const convertible = serializableMap.map(
-                            ([id, studentSet]) => {
-                                return {
-                                    id,
-                                    students: Array.from(studentSet)
-                                }
-                            }
-                        )
-                        localStorage.setItem("currentCohortTeams", JSON.stringify(convertible))
-                    }}>
-                        Save
-                    </button>
+                    <button onClick={saveTeams}> Save </button>
                 </div>
                 <div className="teamsconfig__clear">
                     <button onClick={() => {
@@ -261,6 +299,7 @@ export const WeeklyTeams = () => {
                         changeCount(6)
                         buildNewTeams()
                         setUnassigned(cohortStudents)
+                        clearTeams().then(() => getCohortStudents(activeCohort))
                     }}>
                         Clear
                     </button>
