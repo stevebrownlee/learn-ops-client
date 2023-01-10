@@ -93,6 +93,7 @@ export const CohortForm = () => {
                 </div>
 
                 <fieldset>
+                    <h3>Choose the 2 courses for this cohort</h3>
                     <div className="form-group">
                         {
                             courses.map(course => {

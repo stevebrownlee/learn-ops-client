@@ -21,6 +21,12 @@
     margin: 2.25rem 0 0.5rem 0;
 }
 
+.cohort__header:hover {
+    color: rgb(106, 26, 122);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .cohort__dates {
     display: flex;
     justify-content: space-between;

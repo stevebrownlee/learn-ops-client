@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
 import { CohortContext } from "./CohortProvider"
-import { PeopleContext } from "../people/PeopleProvider"
 import { EditIcon } from "../../svgs/EditIcon"
 import { PeopleIcon } from "../../svgs/PeopleIcon"
 import { HumanDate } from "../utils/HumanDate"
@@ -79,7 +78,10 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
 
 
     return <section key={`cohort--${cohort.id}`} className="cohort">
-        <h3 className="cohort__header">{cohort.name}</h3>
+        <h3 className="cohort__header fakeLink"
+            onClick={() => {
+                document.querySelector('.overlay--cohort').style.display = "block"
+            }}>{cohort.name}</h3>
         <div className="cohort__join">
             {
                 cohort.is_instructor === 1

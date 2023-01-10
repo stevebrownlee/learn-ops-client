@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom"
 import useModal from "../ui/useModal.js"
 import { CourseContext } from "../course/CourseProvider.js"
 import { PeopleContext } from "../people/PeopleProvider.js"
+import { CohortContext } from "./CohortProvider.js"
 import { Student } from "../people/Student.js"
 import { BookProjectDialog } from "../dashboard/BookProjectDialog.js"
 import { AssessmentStatusDialog } from "../dashboard/AssessmentStatusDialog.js"
@@ -13,7 +14,6 @@ import { StudentDetails } from "../people/StudentDetails.js"
 import { Toast, configureToasts } from "toaster-js"
 import "./CohortStudentList.css"
 import "./Tooltip.css"
-import { CohortContext } from "./CohortProvider.js"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)

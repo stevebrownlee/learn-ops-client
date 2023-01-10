@@ -11,7 +11,10 @@ export const WeeklyTeams = () => {
         cohortStudents, getCohortStudents, tagStudentTeams,
         untagStudent
     } = useContext(PeopleContext)
-    const { activeCohort, activateCohort } = useContext(CohortContext)
+    const {
+        activeCohort, activateCohort, getCohort,
+        activeCohortDetails
+    } = useContext(CohortContext)
 
     const initialTeamState = new Map([
         [1, new Set()],
@@ -29,12 +32,12 @@ export const WeeklyTeams = () => {
     const [originalTeam, trackOriginalTeam] = useState(0)
     const [teams, updateTeams] = useState(initialTeamState)
 
-
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
             const id = parseInt(localStorage.getItem("activeCohort"))
             activateCohort(id)
             getCohortStudents(id)
+            getCohort(id)
         }
     }, [])
 
@@ -105,10 +108,15 @@ export const WeeklyTeams = () => {
     }
 
     const makeSlackChannel = (teamNumber) => {
-        const studentIds = Array.from(teams.get(teamNumber))
+        // Get students
+        let studentIds = Array.from(teams.get(teamNumber))
             .map(JSON.parse)
             .map(student => student.id)
 
+        // Add instructors
+        studentIds = [...studentIds, ...activeCohortDetails.coaches.map(c => c.id)]
+
+        // Create channel
         TeamsRepository.createSlackChannel(
             `${weeklyPrefix}-team-${teamNumber}`,
             studentIds

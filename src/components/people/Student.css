@@ -212,7 +212,7 @@
 }
 
 
-.overlay {
+.overlay--student {
     animation: createBox .25s;
     position: fixed;
     display: none;

@@ -8,6 +8,7 @@ export const CohortContext = React.createContext()
 export const CohortProvider = (props) => {
     const [cohorts, setCohorts] = useState([])
     const [activeCohort, activateCohort] = useState(0)
+    const [activeCohortDetails, setCohortDetails] = useState({})
 
     const { getCurrentUser } = useSimpleAuth()
     const user = getCurrentUser()
@@ -21,7 +22,10 @@ export const CohortProvider = (props) => {
 
     const getCohort = useCallback((id) => {
         return fetchIt(`${Settings.apiHost}/cohorts/${id}`)
-            .then((cohort) => activateCohort(cohort.id))
+            .then((cohort) => {
+                setCohortDetails(cohort)
+                activateCohort(cohort.id)
+            })
     }, [user])
 
     const leaveCohort = useCallback((cohortId) => {
@@ -46,7 +50,7 @@ export const CohortProvider = (props) => {
     return (
         <CohortContext.Provider value={{
             getCohorts, cohorts, findCohort, activeCohort, activateCohort, getCohort,
-            leaveCohort, joinCohort, updateCohort
+            leaveCohort, joinCohort, updateCohort, activeCohortDetails
         }} >
             {props.children}
         </CohortContext.Provider>

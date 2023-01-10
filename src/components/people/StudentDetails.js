@@ -11,7 +11,7 @@ export const StudentDetails = ({ student, toggleCohorts }) => {
     const { getStudentAssessments } = useContext(AssessmentContext)
 
     const hideOverlay = (e) => {
-        document.querySelector('.overlay').style.display = "none"
+        document.querySelector('.overlay--student').style.display = "none"
     }
 
     useEffect(() => {
@@ -22,7 +22,7 @@ export const StudentDetails = ({ student, toggleCohorts }) => {
 
     return (
         <>
-            <div className="overlay">
+            <div className="overlay--student">
                 <div className="card" style={{
                     display: "flex",
                     alignItems: "center",

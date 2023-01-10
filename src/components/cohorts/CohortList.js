@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { CohortContext } from "./CohortProvider"
 import { PeopleContext } from "../people/PeopleProvider"
+import { Cohort } from "./Cohort"
+import { CohortDetails } from "./CohortDetails"
+import { UnassignedStudents } from "./UnassignedStudents"
+import { PeopleIcon } from "../../svgs/PeopleIcon"
 import { EditIcon } from "../../svgs/EditIcon"
 import "./CohortList.css"
 import "./Cohort.css"
-import { UnassignedStudents } from "./UnassignedStudents"
-import { PeopleIcon } from "../../svgs/PeopleIcon"
-import { Cohort } from "./Cohort"
 
 
 export const CohortList = () => {
@@ -42,5 +43,6 @@ export const CohortList = () => {
         </div>
 
         <UnassignedStudents getLastFourCohorts={getLastFourCohorts} />
+        <CohortDetails />
     </>
 }
