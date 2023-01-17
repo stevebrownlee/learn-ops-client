@@ -6,7 +6,7 @@ import { PeopleContext } from "./PeopleProvider.js"
 import { StudentPersonality } from "./StudentPersonality.js"
 import { StudentProposals } from "./StudentProposals.js"
 
-export const StudentDetails = ({ student, toggleCohorts }) => {
+export const StudentDetails = ({ toggleCohorts }) => {
     const { activeStudent } = useContext(PeopleContext)
     const { getStudentAssessments } = useContext(AssessmentContext)
 

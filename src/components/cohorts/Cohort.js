@@ -7,15 +7,17 @@ import { CourseContext } from "../course/CourseProvider"
 import { Toast } from "toaster-js"
 import "./Cohort.css"
 import "./CohortList.css"
+import { AssessmentIcon } from "../../svgs/AssessmentIcon"
+import { GridIcon } from "../../svgs/GridIcon"
+import { CertificateIcon } from "../../svgs/CertificateIcon"
 
 
 export const Cohort = ({ cohort, getLastFourCohorts }) => {
     const [editSlack, setSlackEdit] = useState(0)
     const {
-        getCohorts, cohorts, leaveCohort,
-        joinCohort, updateCohort, activateCohort
+        getCohorts, cohorts, leaveCohort, getCohortInfo,
+        joinCohort, updateCohort, activateCohort, setCohortDetails
     } = useContext(CohortContext)
-    const { migrateCohortToServerSide } = useContext(CourseContext)
 
     const slackEditInput = (cohort) => {
         return <input type="text" autoFocus style={{ fontSize: "smaller" }} onKeyUp={e => {
@@ -44,7 +46,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
             .then(getLastFourCohorts)
             .then(() => {
                 localStorage.removeItem("activeCohort")
-                activateCohort(0)
+                activateCohort(null)
             })
             .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
     }
@@ -59,27 +61,15 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
             .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
     }
 
-    const migrate = () => {
-        if (window.confirm("Verify that you want to migrate this cohort to server side mode. All students will be assigned to the first project of the server side course.")) {
-            migrateCohortToServerSide(cohort)
-                .then(getLastFourCohorts)
-                .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
-          }
-    }
-
-    const showMigrate = (courses) => {
-        const isClientSide = courses.find(course => course.course.name.includes("JavaScript") && course.active)
-        if (isClientSide) {
-            return <button onClick={migrate} className="fakeLink">Migrate</button>
-        }
-
-        return ""
-    }
-
-
     return <section key={`cohort--${cohort.id}`} className="cohort">
         <h3 className="cohort__header fakeLink"
             onClick={() => {
+                /*
+                    TODO: Get all info from API for use in overlay
+                */
+                setCohortDetails(cohort)
+                activateCohort(cohort.id)
+
                 document.querySelector('.overlay--cohort').style.display = "block"
             }}>{cohort.name}</h3>
         <div className="cohort__join">
@@ -96,25 +86,16 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
             <HumanDate date={cohort.end_date} weekday={false} />
         </div>
 
-        <h4>Coaches</h4>
         <div className="cohort__coaches">
             {
                 cohort.coaches.map(coach => <div key={`coach--${coach.name}`} className="instructor--badge cohort__coach">{coach.name}</div>)
             }
         </div>
 
-        <h4>Courses</h4>
-        <div className="cohort__coaches">
-            {
-                cohort.courses.map(course => {
-                    return <div
-                        key={`course--${course.id}`}
-                        className={`course--badge cohort__coach ${course.active ? "active" : ""}`}>
-                        {course.course.name}
-                    </div>
-                })
-            }
-            { showMigrate(cohort.courses) }
+        <div className="cohort__links">
+            <CertificateIcon tip={"Github Classroom"} />
+            <AssessmentIcon tip={"Cohort Github"} />
+            <GridIcon tip={"Attendance spreadsheet"} />
         </div>
 
         <footer className="cohort__footer">
