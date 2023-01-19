@@ -4,18 +4,18 @@
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    margin: 0.33rem 0 0.33rem 0;
-    max-width: 10rem;
+    width: 10rem;
     position: relative;
     box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
     transition: all .2s ease-in-out;
+    margin: 0.5rem auto;
 }
 
 .student__header {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    margin-top: 0.75rem;
+    /* margin-top: 0.75rem; */
 }
 
 .student__name {
@@ -161,7 +161,7 @@
 
 
 .action {
-    flex: 0 0 33%;
+    flex: 0 0 20%;
 }
 
 .student__coreskills {

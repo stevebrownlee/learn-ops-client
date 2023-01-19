@@ -57,9 +57,7 @@ export const Student = ({
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
             >
-                <div className="student__score--mini">
-                    {student.score}
-                </div>
+
                 <div className="student__proposals">
                     {
                         student.proposals.map(p => {
@@ -79,6 +77,9 @@ export const Student = ({
                     }
                 </div>
                 <div className="student__header">
+                <div className="student__score--mini">
+                    {student.score}
+                </div>
                     <h4 className="student__name"
                         onClick={() => {
                             activateStudent(student)
@@ -90,15 +91,6 @@ export const Student = ({
                             document.querySelector('.overlay').style.display = "block"
                         }}
                     >{student.name}</h4>
-                    <div className="student__book">
-                        {student?.book?.name} <EditIcon clickFunction={() => {
-                            activateStudent(student)
-                            toggleProjects()
-                        }} />
-                    </div>
-                    <div className="student__project">
-                        {student?.book?.project}
-                    </div>
                 </div>
 
                 {
@@ -128,7 +120,13 @@ export const Student = ({
                         : ""
                 }
 
-                <div ref={studentFooter} className="student__footer ">
+                <div ref={studentFooter} className="student__footer">
+                    <div className="action action--assessments">
+                    <EditIcon tip={"Change current project"} clickFunction={() => {
+                            activateStudent(student)
+                            toggleProjects()
+                        }} />
+                    </div>
                     <div className="action action--assessments">
                         <AssessmentIcon clickFunction={
                             () => {
