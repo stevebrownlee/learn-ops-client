@@ -68,33 +68,13 @@ export const StudentCardList = ({ searchTerms }) => {
             })
         }
 
-        /*
-        [
-            {
-                id: 0,
-                name: "",
-                project: ""
-
-                students: [{}, {}]
-            }
-        ]
-
-        */
-
-        const test = activeCourse?.books?.map(book => {
+        const studentsPerBook = activeCourse?.books?.map(book => {
             for (const project of book.projects) {
                 const students = copy.filter(student => student.book.id === book.id && student.book.project === project.name)
                 project.students = students
-
             }
-            return book
-        })
-
-        console.log(test)
-
-        const studentsPerBook = activeCourse?.books?.map(book => {
-            const students = copy.filter(student => student.book.id === book.id)
-            book.students = students
+            const bookStudents = copy.filter(student => student.book.id === book.id)
+            book.students = bookStudents
             return book
         })
 

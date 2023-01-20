@@ -6,7 +6,7 @@ import { EditIcon } from "../../svgs/EditIcon"
 import "./Books.css"
 
 export const BookList = () => {
-    const { getBooks, getCourses } = useContext(CourseContext)
+    const { getBooks, getCourses, deleteBook } = useContext(CourseContext)
     const [books, setBooks] = useState([])
     const [courses, setCourses] = useState([])
     const [course, setCourse] = useState(0)
