@@ -5,6 +5,7 @@ import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
 import { StudentPersonality } from "./StudentPersonality.js"
 import { StudentProposals } from "./StudentProposals.js"
+import "../people/Status.css"
 
 export const StudentDetails = ({ student, toggleCohorts }) => {
     const { activeStudent } = useContext(PeopleContext)
