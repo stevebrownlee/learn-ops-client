@@ -19,6 +19,8 @@ import { ProjectList } from "./course/ProjectList"
 import { ProjectForm } from "./course/ProjectForm"
 import { BookList } from "./course/BookList"
 import { BookForm } from "./course/BookForm"
+import { CourseList } from "./course/CourseList"
+import { CourseForm } from "./course/CourseForm"
 
 export const ApplicationViews = () => {
     return <>
@@ -33,6 +35,16 @@ export const ApplicationViews = () => {
 
                             <Route exact path="/cohorts">
                                 <CohortList />
+                            </Route>
+
+                            <Route exact path="/courses">
+                                <CourseList />
+                            </Route>
+                            <Route exact path="/courses/new">
+                                <CourseForm />
+                            </Route>
+                            <Route exact path="/courses/edit/:courseId">
+                                <CourseForm />
                             </Route>
 
                             <Route exact path="/books">

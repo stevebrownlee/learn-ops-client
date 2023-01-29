@@ -21,15 +21,31 @@ export const BookList = () => {
     useEffect(() => {
         /* eslint-disable no-undef */
         let copy = structuredClone(books)
-        copy = copy.sort((c,n) => c.index - n.index)
-        setFilteredBooks(copy)
+
+        const groupedBooks = copy.reduce(
+            (grouped, current) => {
+                console.log(current)
+                if (!grouped.has(current.course.name)) {
+                    grouped.set(current.course.name, [current])
+                }
+                else {
+                    const group = grouped.get(current.course.name)
+                    group.push(current)
+                    grouped.set(current.course.name, group)
+                }
+                return grouped
+            },
+            new Map()
+        )
+
+        setFilteredBooks(Array.from(groupedBooks.entries()))
     }, [books])
 
     useEffect(() => {
         if (course !== 0) {
             /* eslint-disable no-undef */
             let copy = structuredClone(books)
-            copy = copy.filter(book => book.course.id === course).sort((c,n) => c.index - n.index)
+            copy = copy.filter(book => book.course.id === course).sort((c, n) => c.index - n.index)
             setFilteredBooks(copy)
         }
         else {
@@ -62,28 +78,38 @@ export const BookList = () => {
                 </select>
             </div>
         </header>
-        <div className="books">
 
-            {
-                filteredBooks.map(book => {
-                    return <section key={`book--${book.id}`} className="book">
-                        <h3 className="book__header">{book.name}</h3>
+        {
+            filteredBooks.map(course => {
+                return <>
+                    <h2>{course[0]}</h2>
+                    <div className="books">
+                        {
+                            course[1].map(book => {
+                                return <section key={`book--${book.id}`} className="book">
+                                    <h3 className="book__header">{book.name}</h3>
 
-                        <div className="book__info">
-                            <div>Course: {book.course.name}</div>
-                            <div className="book__description">{book.description}</div>
-                        </div>
+                                    <div className="book__info">
+                                        <div className="book__description">{book.description}</div>
+                                    </div>
 
-                        <footer className="book__footer">
-                            <EditIcon clickFunction={() => history.push(`/books/edit/${book.id}`)} />
+                                    <footer className="book__footer">
+                                        <EditIcon clickFunction={() => history.push(`/books/edit/${book.id}`)} />
 
-                            <DeleteIcon clickFunction={() => deleteBook(book.id)
-                                .then(getBooks)
-                                .then(setBooks)} />
-                        </footer>
-                    </section>
-                })
-            }
-        </div>
+                                        <DeleteIcon clickFunction={() => deleteBook(book.id)
+                                            .then(getBooks)
+                                            .then(setBooks)} />
+
+                                        <div className="book__index">Index: { book.index }</div>
+                                    </footer>
+                                </section>
+
+                            })
+                        }
+                    </div>
+                </>
+
+            })
+        }
     </article>
 }

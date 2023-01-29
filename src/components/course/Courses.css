@@ -1,4 +1,4 @@
-.books {
+.courses {
     display: grid;
     grid-template-columns: auto auto auto auto auto;
     margin: 0 5rem;
@@ -6,15 +6,15 @@
     justify-content: space-between;
 }
 
-.books::after {
+.courses::after {
     content: '';
     flex: 0 1 15%;
     margin: 0.5rem 1rem;
     padding: 0rem 1rem 0.5rem 1rem;
 }
 
-.book {
-    min-width: 6rem;
+.course {
+    min-width: 12rem;
     max-width: 15rem;
     position: relative;
     margin: 0.5rem 1rem;
@@ -27,7 +27,7 @@
     border-radius: 0.33rem;
 }
 
-.book__footer {
+.course__footer {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     margin-top: auto;
@@ -35,25 +35,25 @@
     border-top: 1px dotted rgb(137, 188, 188);
 }
 
-.book__index {
+.course__index {
     margin-left: auto;
     color: rgb(183, 183, 183);
 }
 
-.container--bookList {
+.container--courseList {
     margin: 1rem 3rem;
 }
 
-.book__header {
+.course__header {
     display: flex;
     flex-wrap: nowrap;
 }
 
-.book__filter {
+.course__filter {
     display: flex;
     flex-wrap: nowrap;
 }
 
-.book__description {
+.course__description {
     margin: 0.5rem 0 0.33rem 0;
 }
