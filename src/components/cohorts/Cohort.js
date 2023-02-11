@@ -62,24 +62,6 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
             .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
     }
 
-    const migrate = () => {
-        if (window.confirm("Verify that you want to migrate this cohort to server side mode. All students will be assigned to the first project of the server side course.")) {
-            migrateCohortToServerSide(cohort)
-                .then(getLastFourCohorts)
-                .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
-          }
-    }
-
-    const showMigrate = (courses) => {
-        const isClientSide = courses.find(course => course.index === 0 && course.active)
-        if (isClientSide) {
-            return <button onClick={migrate} className="fakeLink">Migrate</button>
-        }
-
-        return ""
-    }
-
-
     return <section key={`cohort--${cohort.id}`} className="cohort">
         <h3 className="cohort__header fakeLink"
             onClick={() => {
@@ -108,7 +90,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
 
         <div className="cohort__links">
             <a href={cohort.github_classroom_url} target="_blank">Classroom</a>
-            <a href={cohort.student_organization_url} target="_blank">Github Org</a>
+            <a href={cohort.student_organization_url} target="_blank">Github</a>
             <a href={cohort.attendance_sheet_url} target="_blank">Attendance</a>
         </div>
 

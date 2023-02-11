@@ -3,6 +3,7 @@ import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { CohortContext } from "./CohortProvider.js"
 import { Toast, configureToasts } from "toaster-js"
 import { CourseContext } from "../course/CourseProvider.js"
+import { useHistory } from "react-router-dom"
 
 export const CohortDetails = () => {
     const initialState = {
@@ -17,6 +18,7 @@ export const CohortDetails = () => {
         getCohortInfo, saveCohortInfo, updateCohortInfo
     } = useContext(CohortContext)
     const { migrateCohortToServerSide } = useContext(CourseContext)
+    const history = useHistory()
 
     useEffect(() => {
         if (activeCohortDetails.info) {
@@ -61,6 +63,7 @@ export const CohortDetails = () => {
     const migrate = () => {
         if (window.confirm("Verify that you want to migrate this cohort to server side mode. All students will be assigned to the first project of the server side course.")) {
             migrateCohortToServerSide(activeCohortDetails.id)
+                .then(() => history.push("/"))
                 .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
         }
     }

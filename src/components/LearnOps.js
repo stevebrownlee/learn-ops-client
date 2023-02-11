@@ -51,13 +51,6 @@ export const LearnOps = () => {
             <Route path="/login">
                 <Login />
             </Route>
-
-            <CohortProvider>
-                <Route path="/register">
-                    <Register />
-                </Route>
-            </CohortProvider>
-
         </>
     )
 }

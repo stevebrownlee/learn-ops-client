@@ -89,7 +89,7 @@ export const CourseProvider = (props) => {
     )
 
     const migrateCohortToServerSide = useCallback(
-        cohort => fetchIt(`${Settings.apiHost}/cohorts/${cohort.id}/migrate`, {
+        cohortId => fetchIt(`${Settings.apiHost}/cohorts/${cohortId}/migrate`, {
             method: "PUT"
         }), []
     )

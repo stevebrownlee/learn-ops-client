@@ -1,17 +1,27 @@
 .cohorts {
-    display: grid;
-    grid-template-columns: auto auto auto auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     margin: 0 5rem;
     font-size: small;
 }
 
+.cohorts::after {
+    content: '';
+    flex: 0 1 20%;
+    margin: 0.5rem 1rem;
+    padding: 0rem 1rem 0.5rem 1rem;
+}
+
+
 .cohort {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 20%;
     position: relative;
     margin: 0.5rem 1rem;
     padding: 0rem 1rem 0.5rem 1rem;
     border: 1px dotted slateblue;
-    display: flex;
-    flex-direction: column;
     background-color: rgb(254, 256, 255);
     box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
     border-radius: 0.33rem;
@@ -71,6 +81,15 @@
     grid-template-columns: 1fr 1fr 1fr;
     padding: 0 0 1rem 0;
     font-size: 0.75rem;
+}
+
+@media (max-width: 1000px) {
+    .cohort__links {
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr;
+        padding: 0 0 1rem 0;
+        font-size: 0.75rem;
+    }
 }
 
 .instructor--badge {

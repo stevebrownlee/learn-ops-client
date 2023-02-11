@@ -9,9 +9,26 @@ export const BookList = () => {
     const { getBooks, getCourses, deleteBook } = useContext(CourseContext)
     const [books, setBooks] = useState([])
     const [courses, setCourses] = useState([])
-    const [course, setCourse] = useState(0)
+    const [selectedCourseId, setCourse] = useState(0)
     const [filteredBooks, setFilteredBooks] = useState([])
     const history = useHistory()
+
+    const groupBooks = () => {
+        /* eslint-disable no-undef */
+        let copy = structuredClone(books)
+
+        const groupedBooks = copy.reduce(
+            (grouped, current) => {
+                grouped.has(current.course.name)
+                    ? grouped.set(current.course.name, [...grouped.get(current.course.name), current])
+                    : grouped.set(current.course.name, [current])
+                return grouped
+            },
+            new Map()
+        )
+
+        return groupedBooks
+    }
 
     useEffect(() => {
         getBooks().then(setBooks)
@@ -19,39 +36,20 @@ export const BookList = () => {
     }, [])
 
     useEffect(() => {
-        /* eslint-disable no-undef */
-        let copy = structuredClone(books)
-
-        const groupedBooks = copy.reduce(
-            (grouped, current) => {
-                console.log(current)
-                if (!grouped.has(current.course.name)) {
-                    grouped.set(current.course.name, [current])
-                }
-                else {
-                    const group = grouped.get(current.course.name)
-                    group.push(current)
-                    grouped.set(current.course.name, group)
-                }
-                return grouped
-            },
-            new Map()
-        )
-
-        setFilteredBooks(Array.from(groupedBooks.entries()))
+        setFilteredBooks(Array.from(groupBooks().entries()))
     }, [books])
 
     useEffect(() => {
-        if (course !== 0) {
-            /* eslint-disable no-undef */
-            let copy = structuredClone(books)
-            copy = copy.filter(book => book.course.id === course).sort((c, n) => c.index - n.index)
+        if (selectedCourseId !== 0) {
+            const courseArray = Array.from(groupBooks().entries())
+            const copy = courseArray.filter(course => course[0] === courses.find(c => c.id === selectedCourseId).name)
+                .sort((c, n) => c.index - n.index)
             setFilteredBooks(copy)
         }
         else {
-            setFilteredBooks(books)
+            setFilteredBooks(Array.from(groupBooks().entries()))
         }
-    }, [course])
+    }, [selectedCourseId])
 
 
     return <article className="container--bookList">
@@ -64,7 +62,7 @@ export const BookList = () => {
 
             <div className="book__filter">
                 <select id="course" className="form-control"
-                    value={course}
+                    value={selectedCourseId}
                     controltype="number"
                     onChange={(e) => setCourse(parseInt(e.target.value))}>
                     <option value="0">Filter by course...</option>
@@ -77,11 +75,12 @@ export const BookList = () => {
                     }
                 </select>
             </div>
+            <button className="fakeLink" onClick={() => setCourse(0)}>Clear</button>
         </header>
 
         {
-            filteredBooks.map(course => {
-                return <React.Fragment key={`course--${course.id}`}>
+            filteredBooks.map((course, idx) => {
+                return <React.Fragment key={`course--${idx}`}>
                     <h2>{course[0]}</h2>
                     <div className="books">
                         {
@@ -100,7 +99,7 @@ export const BookList = () => {
                                             .then(getBooks)
                                             .then(setBooks)} />
 
-                                        <div className="book__index">Index: { book.index }</div>
+                                        <div className="book__index">Index: {book.index}</div>
                                     </footer>
                                 </section>
 

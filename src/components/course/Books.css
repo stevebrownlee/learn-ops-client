@@ -1,27 +1,26 @@
 .books {
-    display: grid;
-    grid-template-columns: auto auto auto auto auto;
-    margin: 0 5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0 2rem;
     font-size: small;
-    justify-content: space-between;
 }
 
 .books::after {
     content: '';
-    flex: 0 1 15%;
+    flex: 0 1 20%;
     margin: 0.5rem 1rem;
     padding: 0rem 1rem 0.5rem 1rem;
 }
 
 .book {
-    min-width: 6rem;
-    max-width: 15rem;
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 20%;
     position: relative;
     margin: 0.5rem 1rem;
     padding: 0rem 1rem 0.5rem 1rem;
     border: 1px dotted slateblue;
-    display: flex;
-    flex-direction: column;
     background-color: rgb(254, 256, 255);
     box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
     border-radius: 0.33rem;
