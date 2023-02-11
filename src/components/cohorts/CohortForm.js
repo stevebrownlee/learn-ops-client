@@ -9,7 +9,8 @@ import { CourseContext } from "../course/CourseProvider.js"
 
 export const CohortForm = () => {
     const [courses, setCourses] = useState([])
-    const [chosenCourses, setChosenCourses] = useState(new Set())
+    const [serverSideCourse, setServer] = useState(0)
+    const [clientSideCourse, setClient] = useState(0)
     const [cohort, updateCohort] = useState({
         name: "",
         startDate: "",
@@ -22,16 +23,11 @@ export const CohortForm = () => {
     const history = useHistory()
 
     useEffect(() => {
-        getCourses().then((data) => {
-            setCourses(data)
-            const clientSide = data.find(course => course.name.toLowerCase().includes("javascript"))
-            setChosenCourses(new Set([clientSide.id]))
-        })
+        getCourses().then(setCourses)
     }, [])
 
     const constructNewCohort = () => {
-        const courseArray = Array.from(chosenCourses)
-        const requestBody = { ...cohort, courses: courseArray }
+        const requestBody = { ...cohort, clientSide: clientSideCourse, serverSide: serverSideCourse }
 
         fetchIt(`${Settings.apiHost}/cohorts`, {
             method: "POST",
@@ -93,39 +89,50 @@ export const CohortForm = () => {
                 </div>
 
                 <fieldset>
+                    <h3 htmlFor="endDate">Client side</h3>
                     <div className="form-group">
                         {
                             courses.map(course => {
                                 return <button key={`course--${course.id}`}
-                                    className={`${chosenCourses.has(course.id) ? "button-28--achieved" : "button-28"}`}
+                                    className={`${clientSideCourse === course.id ? "button-28--achieved" : "button-28"}`}
                                     onClick={e => {
                                         e.preventDefault()
-                                        const copy = new Set(chosenCourses)
-                                        if (copy.has(course.id)) {
-                                            copy.delete(course.id)
-                                        }
-                                        else {
-                                            copy.size < 2 ? copy.add(course.id) : window.alert("A cohort can only have two courses")
-                                        }
-                                        setChosenCourses(copy)
+                                        setClient(course.id)
                                     }}>
-                            { course.name }
-                    </button>
+                                    {course.name}
+                                </button>
                             })
                         }
-                </div>
-            </fieldset>
+                    </div>
+                </fieldset>
 
+                <fieldset>
+                    <h3 htmlFor="endDate">Server side</h3>
+                    <div className="form-group">
+                        {
+                            courses.map(course => {
+                                return <button key={`course--${course.id}`}
+                                    className={`${serverSideCourse === course.id ? "button-28--achieved" : "button-28"}`}
+                                    onClick={e => {
+                                        e.preventDefault()
+                                        setServer(course.id)
+                                    }}>
+                                    {course.name}
+                                </button>
+                            })
+                        }
+                    </div>
+                </fieldset>
 
-            <button type="submit"
-                onClick={
-                    evt => {
-                        evt.preventDefault()
-                        constructNewCohort()
+                <button type="submit"
+                    onClick={
+                        evt => {
+                            evt.preventDefault()
+                            constructNewCohort()
+                        }
                     }
-                }
-                className="btn btn-primary"> Create </button>
-        </form>
+                    className="btn btn-primary"> Create </button>
+            </form>
         </>
     )
 }

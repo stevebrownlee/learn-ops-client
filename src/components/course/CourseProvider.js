@@ -35,10 +35,7 @@ export const CourseProvider = (props) => {
         []
     )
 
-    const getCourse = useCallback(
-        (id) => fetchIt(`${Settings.apiHost}/courses/${id}`).then(setCourse),
-        [setCourse]
-    )
+    const getCourse = id => fetchIt(`${Settings.apiHost}/courses/${id}`)
 
     const createCourse = course => {
         return fetchIt(`${Settings.apiHost}/courses`, { method: "POST", body: JSON.stringify(course) })

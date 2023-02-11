@@ -17,7 +17,9 @@ export const CourseForm = () => {
 
     useEffect(() => {
         if (courseId) {
-            getCourse(courseId).then(updateCourse)
+            getCourse(courseId).then(data => {
+                updateCourse(data)
+            })
             setMode("edit")
         }
     }, [courseId])
