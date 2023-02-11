@@ -36,6 +36,9 @@ export const NavBar = () => {
                     <li className="navbar__item">
                         {makeLink("/books", "Books")}
                     </li>
+                    <li className="navbar__item">
+                        {makeLink("/courses", "Courses")}
+                    </li>
                     {
                         isAuthenticated()
                             ? <li className="navbar__item navbar__logout">

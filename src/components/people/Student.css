@@ -4,18 +4,17 @@
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    margin: 0.33rem 0 0.33rem 0;
-    max-width: 10rem;
+    width: 8rem;
     position: relative;
     box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
     transition: all .2s ease-in-out;
+    margin: 0.75rem auto;
 }
 
 .student__header {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    margin-top: 0.75rem;
 }
 
 .student__name {
@@ -55,8 +54,8 @@
 .student__score--mini {
     font-family: "Patua One", serif;
     position: absolute;
-    top: 0.25rem;
-    right: 0.25rem;
+    top: -0.4rem;
+    right: -0.8rem;
     font-size: 0.7rem;
     color: #4a0d2f;
     font-weight: bold;
@@ -64,12 +63,15 @@
     background-color: #decdd6;
     padding: 0.1rem;
     border-radius: 0.7rem;
+    border: 1px solid lightskyblue;
 }
 
 .student__proposals {
     position: absolute;
-    top: 0.25rem;
-    left: 0.25rem;
+    top: 0rem;
+    left: -0.8rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .student__score {
@@ -161,7 +163,7 @@
 
 
 .action {
-    flex: 0 0 33%;
+    flex: 0 0 20%;
 }
 
 .student__coreskills {

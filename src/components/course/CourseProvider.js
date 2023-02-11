@@ -7,7 +7,6 @@ export const CourseContext = React.createContext()
 export const CourseProvider = (props) => {
     const [courses, setCourses] = useState([])
     const [objectives, setObjectives] = useState([])
-    const [course, setCourse] = useState({})
     const [activeCourse, setActiveCourse] = useState({})
 
     const getCourses = useCallback(
@@ -35,14 +34,30 @@ export const CourseProvider = (props) => {
         []
     )
 
-    const getCourse = useCallback(
-        (id) => fetchIt(`${Settings.apiHost}/courses/${id}`).then(setCourse),
-        [setCourse]
+    const getCourse = id => fetchIt(`${Settings.apiHost}/courses/${id}`)
+
+    const createCourse = course => {
+        return fetchIt(`${Settings.apiHost}/courses`, { method: "POST", body: JSON.stringify(course) })
+    }
+
+    const editCourse = useCallback(
+        course => fetchIt(`${Settings.apiHost}/courses/${course.id}`, {
+            method: "PUT",
+            body: JSON.stringify(course)
+        }), []
     )
 
-    const getBooks = useCallback((courseId = null) => fetchIt(`${Settings.apiHost}/books${courseId ? `?courseId=${courseId}` : ""}`), [])
+    const getBooks = useCallback((courseId = null) => {
+        const ordering = "?orderBy=course&orderBy=index"
+        return fetchIt(`${Settings.apiHost}/books${ordering}${courseId ? `&courseId=${courseId}` : ""}`)
+    }, [])
 
     const getBook = useCallback((bookId) => fetchIt(`${Settings.apiHost}/books/${bookId}`), [])
+
+    const deleteBook = useCallback(
+        id => fetchIt(`${Settings.apiHost}/books/${id}`, { method: "DELETE" }),
+        []
+    )
 
     const getProjects = useCallback(
         () => fetchIt(`${Settings.apiHost}/projects?expand=course&expand=book`),
@@ -89,7 +104,8 @@ export const CourseProvider = (props) => {
             getCourses, courses, activeCourse, setActiveCourse,
             getCourse, getLearningObjectives, objectives, getBooks,
             getProjects, deleteProject, getActiveCourse, getProject,
-            editProject, migrateCohortToServerSide, getBook, editBook
+            editProject, migrateCohortToServerSide, getBook, editBook,
+            deleteBook, createCourse, editCourse
         }} >
             {props.children}
         </CourseContext.Provider>

@@ -12,6 +12,7 @@ import { StudentNoteDialog } from "../dashboard/StudentNoteDialog.js"
 import { CohortDialog } from "../dashboard/CohortDialog.js"
 import { StudentDetails } from "../people/StudentDetails.js"
 import { Toast, configureToasts } from "toaster-js"
+import { PeopleIcon } from "../../svgs/PeopleIcon.js"
 import "./CohortStudentList.css"
 import "./Tooltip.css"
 
@@ -68,8 +69,12 @@ export const StudentCardList = ({ searchTerms }) => {
         }
 
         const studentsPerBook = activeCourse?.books?.map(book => {
-            const students = copy.filter(student => student.book.id === book.id)
-            book.students = students
+            for (const project of book.projects) {
+                const students = copy.filter(student => student.book.id === book.id && student.book.project === project.name)
+                project.students = students
+            }
+            const bookStudents = copy.filter(student => student.book.id === book.id)
+            book.students = bookStudents
             return book
         })
 
@@ -79,22 +84,48 @@ export const StudentCardList = ({ searchTerms }) => {
     return <section className="cohortStudents">
         {
             groupedStudents?.map((book) => {
-                return <article key={`book--${book.id}`} className="bookColumn">
+                return book.students.length === 0
+                    ? ""
+                    :  <article key={`book--${book.id}`} className="bookColumn">
                     <header className="bookColumn__header">
                         <div className="bookColumn__name">
+                            <div className="bookColumn__studentCount"> </div>
+                            <div>
                             {book.name}
+
+                            </div>
+                            <div className="bookColumn__studentCount">
+                                <PeopleIcon /> {book.students.length}
+
+                            </div>
                         </div>
                     </header>
-                    {
-                        book.students.map(student => <Student
-                            toggleProjects={toggleProjects}
-                            toggleStatuses={toggleStatuses}
-                            toggleTags={toggleTags}
-                            toggleNote={toggleNote}
-                            toggleCohorts={toggleCohorts}
-                            key={`student--${student.id}`}
-                            student={student} />)
-                    }
+                    <section className="bookColumn__projects">
+                        {
+                            book.projects.map(project => {
+                                if (project.students.length) {
+                                    return <div key={`book-project--${project.id}`} className="bookColumn__projectHeader">
+                                        <div className="bookColumn__project">
+                                            {project.name}
+                                        </div>
+
+                                        {
+                                            project.students.map(student => <Student
+                                                toggleProjects={toggleProjects}
+                                                toggleStatuses={toggleStatuses}
+                                                toggleTags={toggleTags}
+                                                toggleNote={toggleNote}
+                                                toggleCohorts={toggleCohorts}
+                                                key={`student--${student.id}`}
+                                                student={student} />)
+                                        }
+                                    </div>
+                                }
+                                return ""
+                            })
+                        }
+                    </section>
+
                 </article>
             })
         }

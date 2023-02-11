@@ -5,11 +5,11 @@ import { PeopleIcon } from "../../svgs/PeopleIcon"
 import { HumanDate } from "../utils/HumanDate"
 import { CourseContext } from "../course/CourseProvider"
 import { Toast } from "toaster-js"
-import "./Cohort.css"
-import "./CohortList.css"
 import { AssessmentIcon } from "../../svgs/AssessmentIcon"
 import { GridIcon } from "../../svgs/GridIcon"
 import { CertificateIcon } from "../../svgs/CertificateIcon"
+import "./Cohort.css"
+import "./CohortList.css"
 
 
 export const Cohort = ({ cohort, getLastFourCohorts }) => {
@@ -18,6 +18,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
         getCohorts, cohorts, leaveCohort, getCohortInfo,
         joinCohort, updateCohort, activateCohort, setCohortDetails
     } = useContext(CohortContext)
+    const { migrateCohortToServerSide } = useContext(CourseContext)
 
     const slackEditInput = (cohort) => {
         return <input type="text" autoFocus style={{ fontSize: "smaller" }} onKeyUp={e => {
@@ -60,6 +61,24 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
             })
             .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
     }
+
+    const migrate = () => {
+        if (window.confirm("Verify that you want to migrate this cohort to server side mode. All students will be assigned to the first project of the server side course.")) {
+            migrateCohortToServerSide(cohort)
+                .then(getLastFourCohorts)
+                .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
+          }
+    }
+
+    const showMigrate = (courses) => {
+        const isClientSide = courses.find(course => course.index === 0 && course.active)
+        if (isClientSide) {
+            return <button onClick={migrate} className="fakeLink">Migrate</button>
+        }
+
+        return ""
+    }
+
 
     return <section key={`cohort--${cohort.id}`} className="cohort">
         <h3 className="cohort__header fakeLink"

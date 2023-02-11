@@ -28,6 +28,41 @@
     box-shadow: 0.25rem 0.25rem 0.25rem rgb(156, 156, 156);
 }
 
+.bookColumn__name {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.bookColumn__studentCount {
+    margin-left: auto;
+}
+
+.bookColumn__projects {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    font-size: smaller;
+}
+
+.bookColumn__projectHeader {
+    margin: 0 0.5rem;
+}
+.bookColumn__project {
+    border: 1px dotted rgb(50, 67, 66);
+    background-color: #a9e2de;
+    padding: 0.25rem 0.25rem;
+    text-align: center;
+    min-width: 2rem;
+    border-radius: 0.33rem;
+    color: rgb(34, 34, 34);
+    margin: 0 1rem;
+    box-shadow: 0.25rem 0.25rem 0.25rem rgb(156, 156, 156);
+}
+
 .cohortActions {
     display: flex;
     flex-wrap: nowrap;
