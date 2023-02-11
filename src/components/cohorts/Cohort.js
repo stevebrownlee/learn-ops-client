@@ -83,12 +83,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
     return <section key={`cohort--${cohort.id}`} className="cohort">
         <h3 className="cohort__header fakeLink"
             onClick={() => {
-                /*
-                    TODO: Get all info from API for use in overlay
-                */
                 setCohortDetails(cohort)
-                activateCohort(cohort.id)
-
                 document.querySelector('.overlay--cohort').style.display = "block"
             }}>{cohort.name}</h3>
         <div className="cohort__join">
@@ -112,9 +107,9 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
         </div>
 
         <div className="cohort__links">
-            <CertificateIcon tip={"Github Classroom"} />
-            <AssessmentIcon tip={"Cohort Github"} />
-            <GridIcon tip={"Attendance spreadsheet"} />
+            <a href={cohort.github_classroom_url} target="_blank">Classroom</a>
+            <a href={cohort.student_organization_url} target="_blank">Github Org</a>
+            <a href={cohort.attendance_sheet_url} target="_blank">Attendance</a>
         </div>
 
         <footer className="cohort__footer">

@@ -18,7 +18,7 @@ import "./Tooltip.css"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
-    const { activeCohort } = useContext(CohortContext)
+    const { activeCohort, activateCohort } = useContext(CohortContext)
     const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
     const [groupedStudents, setGroupedStudents] = useState([])
     const history = useHistory()
@@ -47,6 +47,9 @@ export const StudentCardList = ({ searchTerms }) => {
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
             const cohortId = parseInt(localStorage.getItem("activeCohort"))
+            if (!activeCohort) {
+                activateCohort(cohortId)
+            }
             new Toast(`Loading default cohort`, Toast.TYPE_INFO, Toast.TIME_SHORT);
         }
         else {

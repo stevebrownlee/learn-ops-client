@@ -66,7 +66,7 @@ export const CohortDetails = () => {
     }
 
     const showMigrate = (courses) => {
-        const isClientSide = courses?.find(course => course.course.name.includes("JavaScript") && course.active)
+        const isClientSide = courses?.find(course => course.index === 0 && course.active)
         if (isClientSide) {
             return <button onClick={migrate} className="fakeLink">Migrate to server-side</button>
         }

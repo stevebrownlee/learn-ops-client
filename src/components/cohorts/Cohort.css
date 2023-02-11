@@ -19,6 +19,7 @@
 
 .cohort__header {
     margin: 2.25rem 0 0.5rem 0;
+    font-size: 1rem;
 }
 
 .cohort__header:hover {
@@ -68,6 +69,8 @@
 .cohort__links {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    padding: 0 0 1rem 0;
+    font-size: 0.75rem;
 }
 
 .instructor--badge {
