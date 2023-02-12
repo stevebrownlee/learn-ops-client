@@ -90,23 +90,6 @@ export const WeeklyTeams = () => {
 
     }, [cohortStudents])
 
-    const createStudentBadge = (student) => {
-        return <div key={`studentbadge--${student.id}`}
-            id={JSON.stringify(student)}
-            onDragStart={e => {
-                if (e.nativeEvent.path[1].hasAttribute("id")) {
-                    trackOriginalTeam(parseInt(e.nativeEvent.path[1].id.split("--")[1]))
-                }
-                else {
-                    trackOriginalTeam(0)
-                }
-                e.dataTransfer.setData("text/plain", e.target.id)
-            }}
-            draggable={true} className="student--badge">
-            {student.name}
-        </div>
-    }
-
     const makeSlackChannel = (teamNumber) => {
         // Get students
         let studentIds = Array.from(teams.get(teamNumber))
@@ -131,14 +114,42 @@ export const WeeklyTeams = () => {
             })
     }
 
+    /*
+    if ("id" in e.target) {
+                    const student = JSON.parse(e.target.id)
+                    const studentId = student.id
+                    trackOriginalTeam(studentId)
+                }
+                else {
+                    trackOriginalTeam(0)
+                }
+    */
+
+    const createStudentBadge = (student) => {
+        return <div key={`studentbadge--${student.id}`}
+            id={JSON.stringify(student)}
+            onDragStart={e => {
+                if ("id" in e.nativeEvent.target.parentElement) {
+                    trackOriginalTeam(parseInt(e.nativeEvent.target.parentElement.id.split("--")[1]))
+                }
+                else {
+                    trackOriginalTeam(0)
+                }
+                e.dataTransfer.setData("text/plain", e.target.id)
+            }}
+            draggable={true} className="student--badge">
+            {student.name}
+        </div>
+    }
+
+
     const makeTeamBoxes = () => {
         let boxes = []
 
         try {
-
-            for (let i = 1; i <= teamCount; i++) {
+            for (let teamNumber = 1; teamNumber <= teamCount; teamNumber++) {
                 boxes.push(
-                    <div id={`teambox--${i}`} key={`teambox--${i}`} className="team"
+                    <div id={`teambox--${teamNumber}`} key={`teambox--${teamNumber}`} className="team"
                         onDragOver={e => e.preventDefault()}
                         onDrop={e => {
                             e.preventDefault()
@@ -147,7 +158,7 @@ export const WeeklyTeams = () => {
 
                             // Add div to new team Set
                             const copy = new Map(teams)
-                            copy.get(i).add(data)
+                            copy.get(teamNumber).add(data)
 
                             const idx = unassignedStudents.findIndex(s => s.id === rawStudent.id)
                             const unassignedCopy = unassignedStudents.map(s => ({ ...s }))
@@ -162,11 +173,11 @@ export const WeeklyTeams = () => {
                             updateTeams(copy)
                         }}
                     >
-                        Team {i}
-                        <img onClick={() => makeSlackChannel(i)}
+                        Team {teamNumber}
+                        <img onClick={() => makeSlackChannel(teamNumber)}
                             className="icon--slack" src={slackLogo} alt="Create Slack team channel" />
                         {
-                            Array.from(teams.get(i)).map(
+                            Array.from(teams.get(teamNumber)).map(
                                 (studentJSON) => {
                                     const student = JSON.parse(studentJSON)
                                     return createStudentBadge(student)
