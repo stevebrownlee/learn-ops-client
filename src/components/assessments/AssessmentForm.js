@@ -50,12 +50,12 @@ export const AssessmentForm = () => {
 
         if (assessmentId) {
             return editAssessment({ ...assessment, objectives: Array.from(learningObjectives) })
-            // .then(() => history.push("/assessments"))
+            .then(() => history.push("/assessments"))
 
         }
         else {
             return saveAssessment({ ...assessment, objectives: Array.from(learningObjectives) })
-            // .then(() => history.push("/assessments"))
+            .then(() => history.push("/assessments"))
 
         }
     }
@@ -108,19 +108,20 @@ export const AssessmentForm = () => {
             </fieldset>
 
             <div className="assessment__objectives">
-                {
-                    objectives.map(objective => {
-                        const identifier = `objective--${objective.id}`
+            {
+                objectives.map(objective => {
+                    const identifier = `objective--${objective.id}`
 
-                        return <div className="assessment__objective" key={identifier}>
-                            <input type="checkbox" id={identifier}
-                                onClick={() => stateCheckboxSync(learningObjectives, setObjectives, objective.id)}
-                                style={{ margin: "0.2rem 0.2rem" }}
-                            />
-                            <label htmlFor={identifier}>{objective.label}</label>
-                        </div>
-                    })
-                }
+                    return <div className="assessment__objective" key={identifier}>
+                        <input type="checkbox" id={identifier}
+                            checked={learningObjectives.has(objective.id)}
+                            onClick={() => stateCheckboxSync(learningObjectives, setObjectives, objective.id)}
+                            style={{ margin: "0.2rem 0.2rem" }}
+                        />
+                        <label htmlFor={identifier}>{objective.label}</label>
+                    </div>
+                })
+            }
             </div>
 
             <div className="recordFormButtons">

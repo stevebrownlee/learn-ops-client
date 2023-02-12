@@ -47,6 +47,13 @@
     flex-wrap: wrap;
 }
 
+.assessment__objectives_list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 0 1rem 0;
+}
+
 .assessment__objective {
     flex: 0 1 20%;
 }
@@ -91,6 +98,18 @@
 .button--assessment {
     cursor: pointer;
     left: 1rem;
+}
+
+.objective__badge {
+    padding: 0.33rem;
+    background-color: rgb(244, 215, 161);
+    color: black;
+    border-radius: 0.25rem;
+    margin: 0.2rem 0.25rem;
+    font-size: smaller;
+    max-width: 10rem;
+    text-align: center;
+    border: 1px solid rgb(116, 102, 76);
 }
 
 .assessment--inProgress {

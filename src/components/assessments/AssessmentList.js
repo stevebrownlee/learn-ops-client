@@ -34,9 +34,11 @@ export const AssessmentList = () => {
                             <a href={assessment.source_url} target="_blank">{assessment.name}</a>
                         </header>
 
-                        <section className="assessment__objectives">
-
-
+                        <h3>Objectives</h3>
+                        <section className="assessment__objectives_list">
+                        {
+                            assessment.objectives.map(objective => <div className="objective__badge">{ objective.label }</div>)
+                        }
                         </section>
 
                         <footer className="assessment__footer">
