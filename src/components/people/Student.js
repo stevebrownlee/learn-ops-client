@@ -25,7 +25,6 @@ export const Student = ({
     const { getProposalStatuses } = useContext(AssessmentContext)
 
     const [delayHandler, setDelayHandler] = useState(null)
-    const [currentProject, trackCurrentProject] = useState(0)
 
     const studentFooter = useRef()
 
@@ -63,15 +62,11 @@ export const Student = ({
             `}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            draggable={true}
+            draggable={showAllProjects}
             onDragStart={e => {
-                if ("id" in e.nativeEvent.target.parentElement) {
-                    trackCurrentProject(parseInt(e.nativeEvent.target.parentElement.id.split("--")[1]))
-                }
-                else {
-                    trackCurrentProject(0)
-                }
-                e.dataTransfer.setData("text/plain", JSON.stringify(student))
+                const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
+                const transferStudent = {...student, currentProject: parseInt(currentProjectId)}
+                e.dataTransfer.setData("text/plain", JSON.stringify(transferStudent))
             }}
         >
 

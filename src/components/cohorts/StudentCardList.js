@@ -22,7 +22,7 @@ import "./Tooltip.css"
 export const StudentCardList = ({ searchTerms, showAllProjects }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
     const { activeCohort, activateCohort } = useContext(CohortContext)
-    const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
+    const { cohortStudents, getCohortStudents, setStudentCurrentProject } = useContext(PeopleContext)
     const [groupedStudents, setGroupedStudents] = useState([])
     const history = useHistory()
 
@@ -112,7 +112,9 @@ export const StudentCardList = ({ searchTerms, showAllProjects }) => {
                                         e.preventDefault()
                                         const data = e.dataTransfer.getData("text/plain")
                                         const rawStudent = JSON.parse(data)
-                                        console.log(rawStudent)
+
+                                        setStudentCurrentProject(rawStudent.id, project.id)
+                                            .then(() => getCohortStudents(activeCohort))
                                     }}
                                 >
 
