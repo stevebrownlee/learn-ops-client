@@ -13,6 +13,11 @@
     background-clip: border-box;
 }
 
+.card--row {
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
 .card--padded {
     padding: 3rem;
 }
