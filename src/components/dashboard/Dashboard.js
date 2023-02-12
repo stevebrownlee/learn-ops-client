@@ -1,16 +1,18 @@
 import React, { useContext, useEffect, useState } from "react"
+import { useHistory } from "react-router-dom"
 import { FeedbackDialog } from "./FeedbackDialog"
 import { StudentCardList } from "../cohorts/StudentCardList"
 import { CohortSearchField } from "../cohorts/CohortSearchField"
 import { CourseContext } from "../course/CourseProvider"
 import { StudentSearch } from "../people/StudentSearch"
-import { useHistory } from "react-router-dom"
+import { EyeIcon } from "../../svgs/EyeIcon"
 import "toaster-js/default.css"
 import "./Dashboard.css"
 
 export const Dashboard = () => {
     const { getLearningObjectives } = useContext(CourseContext)
     const [searchTerms, setSearchTerms] = useState([])
+    const [showAllProjects, toggleAllProjects] = useState(false)
     const history = useHistory()
 
     useEffect(() => {
@@ -23,10 +25,14 @@ export const Dashboard = () => {
         <section className="cohortActions">
             <CohortSearchField />
             <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
+            <button className={`fakeLink toggle--projects ${showAllProjects ? "on" : "off"}`}
+                onClick={() => toggleAllProjects(!showAllProjects) }>StandUp Mode</button>
             <button className="fakeLink" onClick={viewWeeklyTeams}>Weekly Teams</button>
         </section>
 
-        <StudentCardList searchTerms={searchTerms} />
+        <StudentCardList searchTerms={searchTerms} showAllProjects={showAllProjects} />
         <FeedbackDialog />
+
+
     </main>
 }

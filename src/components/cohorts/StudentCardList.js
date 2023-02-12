@@ -1,22 +1,25 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import useModal from "../ui/useModal.js"
-import { CourseContext } from "../course/CourseProvider.js"
-import { PeopleContext } from "../people/PeopleProvider.js"
-import { CohortContext } from "./CohortProvider.js"
-import { Student } from "../people/Student.js"
-import { BookProjectDialog } from "../dashboard/BookProjectDialog.js"
-import { AssessmentStatusDialog } from "../dashboard/AssessmentStatusDialog.js"
-import { TagDialog } from "../dashboard/TagDialog.js"
-import { StudentNoteDialog } from "../dashboard/StudentNoteDialog.js"
-import { CohortDialog } from "../dashboard/CohortDialog.js"
-import { StudentDetails } from "../people/StudentDetails.js"
+import useModal from "../ui/useModal"
+
+import { CourseContext } from "../course/CourseProvider"
+import { PeopleContext } from "../people/PeopleProvider"
+import { CohortContext } from "./CohortProvider"
+
+import { TagDialog } from "../dashboard/TagDialog"
+import { CohortDialog } from "../dashboard/CohortDialog"
+import { BookProjectDialog } from "../dashboard/BookProjectDialog"
+import { StudentNoteDialog } from "../dashboard/StudentNoteDialog"
+import { AssessmentStatusDialog } from "../dashboard/AssessmentStatusDialog"
+
+import { StudentDetails } from "../people/StudentDetails"
+import { PeopleIcon } from "../../svgs/PeopleIcon"
+import { Student } from "../people/Student"
 import { Toast, configureToasts } from "toaster-js"
-import { PeopleIcon } from "../../svgs/PeopleIcon.js"
 import "./CohortStudentList.css"
 import "./Tooltip.css"
 
-export const StudentCardList = ({ searchTerms }) => {
+export const StudentCardList = ({ searchTerms, showAllProjects }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
     const { activeCohort, activateCohort } = useContext(CohortContext)
     const { cohortStudents, getCohortStudents } = useContext(PeopleContext)
@@ -84,54 +87,46 @@ export const StudentCardList = ({ searchTerms }) => {
         setGroupedStudents(studentsPerBook)
     }, [cohortStudents, searchTerms])
 
-    return <section className="cohortStudents">
-        {
-            groupedStudents?.map((book) => {
-                return book.students.length === 0
-                    ? ""
-                    :  <article key={`book--${book.id}`} className="bookColumn">
+    return <section className="cohortStudents"> {
+        groupedStudents?.map((book) => {
+            return book.students.length === 0 && !showAllProjects
+                ? ""
+                : <article key={`book--${book.id}`} className="bookColumn">
                     <header className="bookColumn__header">
                         <div className="bookColumn__name">
                             <div className="bookColumn__studentCount"> </div>
-                            <div>
-                            {book.name}
-
-                            </div>
+                            <div> {book.name} </div>
                             <div className="bookColumn__studentCount">
                                 <PeopleIcon /> {book.students.length}
-
                             </div>
                         </div>
                     </header>
-                    <section className="bookColumn__projects">
-                        {
-                            book.projects.map(project => {
-                                if (project.students.length) {
-                                    return <div key={`book-project--${project.id}`} className="bookColumn__projectHeader">
-                                        <div className="bookColumn__project">
-                                            {project.name}
-                                        </div>
-
-                                        {
-                                            project.students.map(student => <Student
-                                                toggleProjects={toggleProjects}
-                                                toggleStatuses={toggleStatuses}
-                                                toggleTags={toggleTags}
-                                                toggleNote={toggleNote}
-                                                toggleCohorts={toggleCohorts}
-                                                key={`student--${student.id}`}
-                                                student={student} />)
-                                        }
+                    <section className="bookColumn__projects"> {
+                        book.projects.map(project => {
+                            if (showAllProjects || project.students.length) {
+                                return <div id={`book-project--${project.id}`} key={`book-project--${project.id}`} className="bookColumn__projectHeader">
+                                    <div className="bookColumn__project">
+                                        {project.name}
                                     </div>
-                                }
-                                return ""
-                            })
-                        }
-                    </section>
 
+                                    {
+                                        project.students.map(student => <Student
+                                            toggleProjects={toggleProjects}
+                                            toggleStatuses={toggleStatuses}
+                                            toggleTags={toggleTags}
+                                            toggleNote={toggleNote}
+                                            toggleCohorts={toggleCohorts}
+                                            key={`student--${student.id}`}
+                                            student={student} />)
+                                    }
+                                </div>
+                            }
+                            return ""
+                        })
+                    } </section>
                 </article>
-            })
-        }
+        })
+    }
 
         <StudentDetails toggleCohorts={toggleCohorts} />
         <BookProjectDialog toggleProjects={toggleProjects} />

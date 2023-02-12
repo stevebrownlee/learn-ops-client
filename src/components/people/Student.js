@@ -22,7 +22,9 @@ export const Student = ({
     } = useContext(PeopleContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
+
     const [delayHandler, setDelayHandler] = useState(null)
+    const [currentProject, trackCurrentProject] = useState(0)
 
     const studentFooter = useRef()
 
@@ -50,114 +52,123 @@ export const Student = ({
         }
     }
 
-    return (
-        <>
-            <div id={`student--${student.id}`}
-                className={`personality--${student.archetype} student ${setAssessmentIndicatorBorder(student.assessment_status)}`}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            >
+    return <>
+        <div id={`student--${student.id}`}
+            className={`personality--${student.archetype} student ${setAssessmentIndicatorBorder(student.assessment_status)}`}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            draggable={true}
+            onDragStart={e => {
+                if ("id" in e.nativeEvent.target.parentElement) {
+                    console.log(e.nativeEvent.target.parentElement)
+                    trackCurrentProject(parseInt(e.nativeEvent.target.parentElement.id.split("--")[1]))
+                }
+                else {
+                    trackCurrentProject(0)
+                }
+                e.dataTransfer.setData("text/plain", e.target.id)
+            }}
+        >
 
-                <div className="student__proposals">
-                    {
-                        student.proposals.map(p => {
-                            if (p.status === "submitted") {
-                                return <ProposalIcon key={`pendingProposal--${p.id}`} color="red" />
-                            }
-                            else if (p.status === "reviewed") {
-                                return <ProposalIcon key={`reviewingProposal--${p.id}`} color="goldenrod" />
-                            }
-                            else if (p.status === "approved") {
-                                return <ProposalIcon key={`completedProposal--${p.id}`} color="dodgerblue" />
-                            }
-                            else if (p.status === "mvp") {
-                                return <ProposalIcon key={`completedProposal--${p.id}`} color="green" />
-                            }
-                        })
-                    }
-                </div>
-                <div className="student__header">
+            <div className="student__proposals">
+                {
+                    student.proposals.map(p => {
+                        if (p.status === "submitted") {
+                            return <ProposalIcon key={`pendingProposal--${p.id}`} color="red" />
+                        }
+                        else if (p.status === "reviewed") {
+                            return <ProposalIcon key={`reviewingProposal--${p.id}`} color="goldenrod" />
+                        }
+                        else if (p.status === "approved") {
+                            return <ProposalIcon key={`completedProposal--${p.id}`} color="dodgerblue" />
+                        }
+                        else if (p.status === "mvp") {
+                            return <ProposalIcon key={`completedProposal--${p.id}`} color="green" />
+                        }
+                    })
+                }
+            </div>
+            <div className="student__header">
                 <div className="student__score--mini">
                     {student.score}
                 </div>
-                    <h4 className="student__name"
-                        onClick={() => {
-                            activateStudent(student)
-                            getStudentCoreSkills(student.id)
-                            getStudentProposals(student.id)
-                            getStudentLearningRecords(student.id)
-                            getProposalStatuses()
-                            getStudentPersonality(student.id)
-                            document.querySelector('.overlay--student').style.display = "block"
-                        }}
-                    >{student.name}</h4>
-                </div>
+                <h4 className="student__name"
+                    onClick={() => {
+                        activateStudent(student)
+                        getStudentCoreSkills(student.id)
+                        getStudentProposals(student.id)
+                        getStudentLearningRecords(student.id)
+                        getProposalStatuses()
+                        getStudentPersonality(student.id)
+                        document.querySelector('.overlay--student').style.display = "block"
+                    }}
+                >{student.name}</h4>
+            </div>
 
-                {
-                    student.tags.length > 0
-                        ? <div className="student__tags">
-                            {
-                                student.tags.map(tag => <span key={`tag--${tag.id}`}
-                                    onClick={() => {
+            {
+                student.tags.length > 0
+                    ? <div className="student__tags">
+                        {
+                            student.tags.map(tag => <span key={`tag--${tag.id}`}
+                                onClick={() => {
+                                    untagStudent(tag.id).then(() => {
+                                        getCohortStudents(activeCohort)
+                                    })
+                                }}
+                                className="student--tag">
+                                {tag.tag.name}
+                                <span className="delete clickable"
+                                    onClick={e => {
+                                        e.stopPropagation()
                                         untagStudent(tag.id).then(() => {
                                             getCohortStudents(activeCohort)
                                         })
                                     }}
-                                    className="student--tag">
-                                    {tag.tag.name}
-                                    <span className="delete clickable"
-                                        onClick={e => {
-                                            e.stopPropagation()
-                                            untagStudent(tag.id).then(() => {
-                                                getCohortStudents(activeCohort)
-                                            })
-                                        }}
-                                    >&times;</span>
-                                </span>
-                                )
-                            }
-                        </div>
-                        : ""
-                }
+                                >&times;</span>
+                            </span>
+                            )
+                        }
+                    </div>
+                    : ""
+            }
 
-                <div ref={studentFooter} className="student__footer">
-                    <div className="action action--assessments">
+            <div ref={studentFooter} className="student__footer">
+                <div className="action action--assessments">
                     <EditIcon tip={"Change current project"} clickFunction={() => {
-                            activateStudent(student)
-                            toggleProjects()
-                        }} />
-                    </div>
-                    <div className="action action--assessments">
-                        <AssessmentIcon clickFunction={
-                            () => {
-                                activateStudent(student)
-                                if (student.assessment_status === 0) {
-                                    setStudentCurrentAssessment(student)
-                                        .then(() => getCohortStudents(activeCohort))
-                                }
-                                else {
-                                    toggleStatuses()
-                                }
-                            }
-                        } tip={`${student.assessment_status === 0 ? "Assign book assessment to student" : "Update assessment status"}`} />
-                    </div>
-                    <div className="action action--notes">
-                        <NoteIcon clickFunction={() => {
-                            activateStudent(student)
-                            getStudentNotes(student.id)
-                            toggleNote()
-                        }}
-                            tip="Enter in your notes about this student" />
-                    </div>
-                    <div className="student__tag--add">
-                        <TagIcon clickFunction={() => {
-                            activateStudent(student)
-                            toggleTags()
-                        }} tip="Add a tag to this student" />
-                    </div>
+                        activateStudent(student)
+                        toggleProjects()
+                    }} />
                 </div>
-
+                <div className="action action--assessments">
+                    <AssessmentIcon clickFunction={
+                        () => {
+                            activateStudent(student)
+                            if (student.assessment_status === 0) {
+                                setStudentCurrentAssessment(student)
+                                    .then(() => getCohortStudents(activeCohort))
+                            }
+                            else {
+                                toggleStatuses()
+                            }
+                        }
+                    } tip={`${student.assessment_status === 0 ? "Assign book assessment to student" : "Update assessment status"}`} />
+                </div>
+                <div className="action action--notes">
+                    <NoteIcon clickFunction={() => {
+                        activateStudent(student)
+                        getStudentNotes(student.id)
+                        toggleNote()
+                    }}
+                        tip="Enter in your notes about this student" />
+                </div>
+                <div className="student__tag--add">
+                    <TagIcon clickFunction={() => {
+                        activateStudent(student)
+                        toggleTags()
+                    }} tip="Add a tag to this student" />
+                </div>
             </div>
-        </>
-    )
+
+        </div>
+    </>
 }

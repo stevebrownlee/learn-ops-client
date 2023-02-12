@@ -154,3 +154,16 @@ dialog {
 .projectSelect {
     text-align: center;
 }
+
+.toggle--projects {
+    padding: 0.25rem 1rem;
+    margin: 0 2rem 0 0;
+}
+
+.on {
+    background-color: rgb(201, 255, 119);
+}
+
+.off {
+    background-color: rgb(255, 177, 177);
+}

@@ -114,17 +114,6 @@ export const WeeklyTeams = () => {
             })
     }
 
-    /*
-    if ("id" in e.target) {
-                    const student = JSON.parse(e.target.id)
-                    const studentId = student.id
-                    trackOriginalTeam(studentId)
-                }
-                else {
-                    trackOriginalTeam(0)
-                }
-    */
-
     const createStudentBadge = (student) => {
         return <div key={`studentbadge--${student.id}`}
             id={JSON.stringify(student)}
@@ -141,7 +130,6 @@ export const WeeklyTeams = () => {
             {student.name}
         </div>
     }
-
 
     const makeTeamBoxes = () => {
         let boxes = []
