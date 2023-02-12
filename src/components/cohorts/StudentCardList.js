@@ -104,9 +104,11 @@ export const StudentCardList = ({ searchTerms, showAllProjects }) => {
                     <section className="bookColumn__projects"> {
                         book.projects.map(project => {
                             if (showAllProjects || project.students.length) {
-                                return <div id={`book-project--${project.id}`} key={`book-project--${project.id}`} className="bookColumn__projectHeader">
+                                return <div id={`book-project--${project.id}`} key={`book-project--${project.id}`}
+                                    className="bookColumn__projectHeader">
+
                                     <div className="bookColumn__project">
-                                        {project.name}
+                                        {showAllProjects ? project.name.split("").slice(0,4).join("")  : project.name}
                                     </div>
 
                                     {
@@ -115,6 +117,7 @@ export const StudentCardList = ({ searchTerms, showAllProjects }) => {
                                             toggleStatuses={toggleStatuses}
                                             toggleTags={toggleTags}
                                             toggleNote={toggleNote}
+                                            showAllProjects={showAllProjects}
                                             toggleCohorts={toggleCohorts}
                                             key={`student--${student.id}`}
                                             student={student} />)

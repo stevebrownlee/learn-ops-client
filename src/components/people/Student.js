@@ -12,7 +12,8 @@ import "./Student.css"
 export const Student = ({
     student, toggleProjects,
     toggleStatuses, toggleTags,
-    toggleNote, toggleCohorts
+    toggleNote, toggleCohorts,
+    showAllProjects
 }) => {
     const {
         activateStudent, setStudentCurrentAssessment,
@@ -54,7 +55,12 @@ export const Student = ({
 
     return <>
         <div id={`student--${student.id}`}
-            className={`personality--${student.archetype} student ${setAssessmentIndicatorBorder(student.assessment_status)}`}
+            className={`
+                personality--${student.archetype}
+                student
+                ${showAllProjects ? "student--mini" : "student--regular"}
+                ${setAssessmentIndicatorBorder(student.assessment_status)}
+            `}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             draggable={true}
