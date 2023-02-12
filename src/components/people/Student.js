@@ -66,13 +66,12 @@ export const Student = ({
             draggable={true}
             onDragStart={e => {
                 if ("id" in e.nativeEvent.target.parentElement) {
-                    console.log(e.nativeEvent.target.parentElement)
                     trackCurrentProject(parseInt(e.nativeEvent.target.parentElement.id.split("--")[1]))
                 }
                 else {
                     trackCurrentProject(0)
                 }
-                e.dataTransfer.setData("text/plain", e.target.id)
+                e.dataTransfer.setData("text/plain", JSON.stringify(student))
             }}
         >
 

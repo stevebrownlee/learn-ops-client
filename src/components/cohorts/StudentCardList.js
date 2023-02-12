@@ -104,11 +104,20 @@ export const StudentCardList = ({ searchTerms, showAllProjects }) => {
                     <section className="bookColumn__projects"> {
                         book.projects.map(project => {
                             if (showAllProjects || project.students.length) {
-                                return <div id={`book-project--${project.id}`} key={`book-project--${project.id}`}
-                                    className="bookColumn__projectHeader">
+                                return <div id={`book-project--${project.id}`}
+                                    key={`book-project--${project.id}`}
+                                    className="bookColumn__projectHeader"
+                                    onDragOver={e => e.preventDefault()}
+                                    onDrop={e => {
+                                        e.preventDefault()
+                                        const data = e.dataTransfer.getData("text/plain")
+                                        const rawStudent = JSON.parse(data)
+                                        console.log(rawStudent)
+                                    }}
+                                >
 
                                     <div className="bookColumn__project">
-                                        {showAllProjects ? project.name.split("").slice(0,4).join("")  : project.name}
+                                        {showAllProjects ? project.name.split("").slice(0, 4).join("") : project.name}
                                     </div>
 
                                     {
