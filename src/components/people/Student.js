@@ -65,7 +65,7 @@ export const Student = ({
             draggable={showAllProjects}
             onDragStart={e => {
                 const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
-                const transferStudent = {...student, currentProject: parseInt(currentProjectId)}
+                const transferStudent = { ...student, currentProject: parseInt(currentProjectId) }
                 e.dataTransfer.setData("text/plain", JSON.stringify(transferStudent))
             }}
         >
@@ -143,13 +143,7 @@ export const Student = ({
                     <AssessmentIcon clickFunction={
                         () => {
                             activateStudent(student)
-                            if (student.assessment_status === 0) {
-                                setStudentCurrentAssessment(student)
-                                    .then(() => getCohortStudents(activeCohort))
-                            }
-                            else {
-                                toggleStatuses()
-                            }
+                            toggleStatuses()
                         }
                     } tip={`${student.assessment_status === 0 ? "Assign book assessment to student" : "Update assessment status"}`} />
                 </div>

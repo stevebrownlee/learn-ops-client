@@ -33,6 +33,8 @@ export const AssessmentProvider = (props) => {
 
     const getAssessment = id => fetchIt(`${Settings.apiHost}/bookassessments/${id}`)
 
+    const getBookAssessment = bookId => fetchIt(`${Settings.apiHost}/bookassessments?bookId=${bookId}`)
+
     const saveAssessment = (assessment) => {
         return fetchIt(
             `${Settings.apiHost}/assessments`,
@@ -116,7 +118,7 @@ export const AssessmentProvider = (props) => {
             getStatuses, statuses, changeStatus, getCourses, saveProposal,
             proposalStatuses, getProposalStatuses, addToProposalTimeline,
             cohortCapstones, getCohortCapstones, revokeApproval, deleteSelfAssessment,
-            getAssessment, editAssessment
+            getAssessment, editAssessment, getBookAssessment
         }} >
             {props.children}
         </AssessmentContext.Provider>

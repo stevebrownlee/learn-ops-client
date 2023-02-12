@@ -103,12 +103,18 @@ dialog {
     -moz-transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+    max-width: 50%;
 }
 
-.statutsButtons {
+.statusButtons {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     margin: 2rem 0 2rem 0;
+}
+
+.statusButton {
+    margin: 0.5rem 1rem;
+    height: 3rem;
 }
 
 .tagButtons {
