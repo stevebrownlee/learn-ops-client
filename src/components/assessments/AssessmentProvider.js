@@ -31,6 +31,8 @@ export const AssessmentProvider = (props) => {
             .then(setAll)
     }, [setAssessments])
 
+    const getAssessment = id => fetchIt(`${Settings.apiHost}/bookassessments/${id}`)
+
     const saveAssessment = (assessment) => {
         return fetchIt(
             `${Settings.apiHost}/assessments`,
@@ -60,6 +62,13 @@ export const AssessmentProvider = (props) => {
         return fetchIt(
             `${Settings.apiHost}/assessments/${assessmentId}`,
             { method: "PUT", body: JSON.stringify({ status: statusId }) }
+        )
+    }
+
+    const editAssessment = (assessment) => {
+        return fetchIt(
+            `${Settings.apiHost}/bookassessments/${assessment.id}`,
+            { method: "PUT", body: JSON.stringify(assessment) }
         )
     }
 
@@ -106,7 +115,8 @@ export const AssessmentProvider = (props) => {
             saveAssessment, allAssessments, saveStudentAssessment,
             getStatuses, statuses, changeStatus, getCourses, saveProposal,
             proposalStatuses, getProposalStatuses, addToProposalTimeline,
-            cohortCapstones, getCohortCapstones, revokeApproval, deleteSelfAssessment
+            cohortCapstones, getCohortCapstones, revokeApproval, deleteSelfAssessment,
+            getAssessment, editAssessment
         }} >
             {props.children}
         </AssessmentContext.Provider>

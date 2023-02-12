@@ -72,11 +72,14 @@ export const ApplicationViews = () => {
                                 <WeeklyTeams />
                             </Route>
 
+                            <Route exact path="/assessments/new">
+                                <AssessmentForm />
+                            </Route>
+                            <Route exact path="/assessments/edit/:assessmentId">
+                                <AssessmentForm />
+                            </Route>
                             <Route exact path="/assessments">
-                                <article className="assessmentView">
-                                    <AssessmentForm />
-                                    <AssessmentList />
-                                </article>
+                                <AssessmentList />
                             </Route>
 
                             <Route exact path="/feedback/new">

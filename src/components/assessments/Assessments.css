@@ -1,40 +1,22 @@
-.assessmentView {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    justify-content: flex-start;
-}
-
-.container--assessmentForm {
-    flex: 2;
-}
-
-.container--assessmentList {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: center;
-    flex: 4;
-}
-
-
 .assessments {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
-    margin: 0 5rem;
+    margin: 0 2rem;
     font-size: small;
-    justify-content: space-between;
 }
 
 .assessments::after {
     content: '';
-    flex: 0 1 15%;
+    flex: 0 1 20%;
     margin: 0.5rem 1rem;
     padding: 0rem 1rem 0.5rem 1rem;
 }
 
 .assessment {
-    flex: 0 1 15%;
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 20%;
     position: relative;
     margin: 0.5rem 1rem;
     padding: 0rem 1rem 0.5rem 1rem;
@@ -42,8 +24,6 @@
     background-color: rgb(254, 256, 255);
     box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
     border-radius: 0.33rem;
-    display: flex;
-    flex-direction: column;
 }
 
 .assessment__header {
@@ -60,10 +40,46 @@
     flex: 1;
 }
 
+.assessment__objectives {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.assessment__objective {
+    flex: 0 1 20%;
+}
+
+.container--assessmentList {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin: 0 5rem;
+}
+
+.container--assessmentForm {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    margin: 0 5rem;
+}
+
+.assessment__objectives {
+    margin: 2rem 0;
+}
+
 .assessment__footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 4fr;
     margin-top: auto;
     padding-top: 0.5rem;
     border-top: 1px dotted rgb(137, 188, 188);
+}
+
+.assessment__book {
+    font-size: smaller;
+    text-align: right;
 }
 
 .assessment__statusDropdown {

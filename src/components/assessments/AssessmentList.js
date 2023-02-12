@@ -1,5 +1,7 @@
 import React, { useContext, useEffect } from "react"
+import { useHistory } from "react-router-dom"
 import { DeleteIcon } from "../../svgs/DeleteIcon"
+import { EditIcon } from "../../svgs/EditIcon"
 import { AssessmentContext } from "./AssessmentProvider"
 import "./Assessments.css"
 
@@ -9,11 +11,21 @@ export const AssessmentList = () => {
         allAssessments
     } = useContext(AssessmentContext)
 
+    const history = useHistory()
+
     useEffect(() => {
         getAssessmentList()
     }, [])
 
     return <article className="container--assessmentList">
+        <header className="assessment__header">
+            <button className="button button--isi button--border-thick button--round-l button--size-s"
+                onClick={() => history.push("/assessments/new")}>
+                <i className="button__icon icon icon-book"></i>
+                <span>Create Assessment</span>
+            </button>
+        </header>
+
         <section className="assessments">
             {
                 allAssessments.map(assessment => {
@@ -21,11 +33,17 @@ export const AssessmentList = () => {
                         <header className="assessment__header">
                             <a href={assessment.source_url} target="_blank">{assessment.name}</a>
                         </header>
-                        <section className="assessment__name">
-                            <div>{assessment.assigned_book.name} - {assessment.course.name}</div>
+
+                        <section className="assessment__objectives">
+
+
                         </section>
+
                         <footer className="assessment__footer">
+                            <EditIcon clickFunction={() => history.push(`/assessments/edit/${assessment.id}`)} />
                             <DeleteIcon clickFunction={() => deleteSelfAssessment(assessment.id).then(getAssessmentList)} />
+
+                            <div className="assessment__book">{assessment.assigned_book.name} - {assessment.course.name}</div>
                         </footer>
                     </div>
                 })
