@@ -10,7 +10,10 @@ const useSimpleAuth = () => {
             token = getCurrentUser().token
         }
         return fetchIt(`${Settings.apiHost}/profile`, {token})
-            .then(profile => storeCurrentUser(token, profile))
+            .then(profile => {
+                storeCurrentUser(token, profile)
+                localStorage.setItem("activeCohort", profile.person.active_cohort)
+            })
     }
 
     const register = (user) => {
