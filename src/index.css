@@ -96,6 +96,12 @@ code {
     font-weight: bold;
 }
 
+.readonly {
+    background-color: rgb(214, 226, 242);
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+}
+
 .rightAlign {
     display: flex;
     justify-content: flex-end;
