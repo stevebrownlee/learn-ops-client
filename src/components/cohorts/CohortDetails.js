@@ -4,6 +4,7 @@ import { CohortContext } from "./CohortProvider.js"
 import { Toast, configureToasts } from "toaster-js"
 import { CourseContext } from "../course/CourseProvider.js"
 import { useHistory } from "react-router-dom"
+import Settings from "../Settings.js"
 
 export const CohortDetails = () => {
     const initialState = {
@@ -134,9 +135,14 @@ export const CohortDetails = () => {
                             </div>
 
                             <div>
-                                <h3>Project/Assessment URLs</h3>
+                                <h3>Invitation Link</h3>
 
-                                <div>Record the self-assessment and group project links that you created in Github Classroom here</div>
+                                <div>
+                                    Send this link to incoming students to assign them to your cohort
+                                </div>
+                                <div className="fakeLink" style={{ margin: "1rem 0"}}>
+                                    {`${Settings.apiHost}/auth/github/url?cohort=${activeCohortDetails.id}&v=1`}
+                                </div>
                             </div>
 
                         </div>

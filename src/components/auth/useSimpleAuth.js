@@ -5,14 +5,24 @@ import { fetchIt } from "../utils/Fetch"
 const useSimpleAuth = () => {
     const isAuthenticated = () => sessionStorage.getItem("nss_token") !== null
 
-    const getProfile = (token=null) => {
+    const getProfile = (token=null, cohort=null, validate=null) => {
+        let url = `${Settings.apiHost}/profile`
+
+        if (cohort !== null) {
+            url = `${url}?cohort=${cohort}&validate=${validate}`
+        }
+
         if (token === null) {
             token = getCurrentUser().token
         }
-        return fetchIt(`${Settings.apiHost}/profile`, {token})
+
+        return fetchIt(url, {token})
             .then(profile => {
                 storeCurrentUser(token, profile)
-                localStorage.setItem("activeCohort", profile.person.active_cohort)
+                const activeCohort = profile?.person?.active_cohort
+                    ? profile.person.active_cohort
+                    : profile.cohorts[0]
+                localStorage.setItem("activeCohort", activeCohort)
             })
     }
 

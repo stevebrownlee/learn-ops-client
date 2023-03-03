@@ -5,14 +5,17 @@ import Settings from "../Settings"
 import "./Auth.css"
 
 export const Callback = () => {
-    const [code, set] = useState("")
+    const [code, setCode] = useState("")
+    const [cohort, setCohort] = useState(0)
+    const [validate, setValidate] = useState(0)
     const [token, storeToken] = useState("")
     const location = useLocation()
     const history = useHistory()
     const { getProfile } = useSimpleAuth()
 
     const fetchUser = () => {
-        getProfile(token).then(() => history.push("/"))
+        console.log(token, cohort, validate)
+        getProfile(token, cohort, validate).then(() => history.push("/"))
     }
 
     const fetchTokenWithCode = (accessCode) => {
@@ -39,9 +42,20 @@ export const Callback = () => {
 
     useEffect(() => {
         const params = new URLSearchParams(location.search)
+
         const accessCode = params.get("code")
-        if (accessCode) {
-            set(accessCode)
+        if (params.get("code")) {
+            setCode(accessCode)
+        }
+
+        const studentCohort = params.get("cohort")
+        if (studentCohort) {
+            setCohort(parseInt(studentCohort))
+        }
+
+        const validationFlag = params.get("validate")
+        if (validationFlag) {
+            setValidate(parseInt(validationFlag))
         }
 
     }, [location.search])
