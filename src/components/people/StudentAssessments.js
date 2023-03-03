@@ -11,7 +11,6 @@ export const StudentAssessments = () => {
 
         <div className="card card--row">
             <StudentProposals />
-            <StudentProposals />
         </div>
     </>
 }
