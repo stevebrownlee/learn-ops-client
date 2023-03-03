@@ -14,7 +14,7 @@ const useSimpleAuth = () => {
                 storeCurrentUser(token, profile)
                 const activeCohort = profile?.person?.active_cohort
                     ? profile.person.active_cohort
-                    : profile.cohorts[0]
+                    : profile.cohorts[0].id
 
                 localStorage.setItem("activeCohort", activeCohort)
             })
