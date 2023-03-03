@@ -5,6 +5,7 @@ import { Toast, configureToasts } from "toaster-js"
 import { CourseContext } from "../course/CourseProvider.js"
 import { useHistory } from "react-router-dom"
 import Settings from "../Settings.js"
+import { CopyIcon } from "../../svgs/CopyIcon.js"
 
 export const CohortDetails = () => {
     const initialState = {
@@ -137,12 +138,14 @@ export const CohortDetails = () => {
                             <div>
                                 <h3>Invitation Link</h3>
 
-                                <div>
+                                <div style={{ margin: "1rem 0"}}>
                                     Send this link to incoming students to assign them to your cohort
                                 </div>
-                                <div className="fakeLink" style={{ margin: "1rem 0"}}>
+
+                                <span className="fakeLink readonly">
                                     {`${Settings.apiHost}/auth/github/url?cohort=${activeCohortDetails.id}&v=1`}
-                                </div>
+                                    <CopyIcon text={`${Settings.apiHost}/auth/github/url?cohort=${activeCohortDetails.id}&v=1`} />
+                                </span>
                             </div>
 
                         </div>
