@@ -32,6 +32,11 @@
     font-size: 1rem;
 }
 
+.cohort__header--details {
+    margin: 0.5rem 0;
+
+}
+
 .cohort__header:hover {
     color: rgb(106, 26, 122);
     text-decoration: underline;
@@ -149,8 +154,37 @@
 }
 
 .cohort__details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.cohort__detail {
+    flex: 1;
+    margin: 0 3rem;
+}
+
+.cohort__detail--medium {
+    flex: 1.5;
+}
+
+.cohort__detail--large {
+    flex: 2;
+}
+
+@media (max-width: 1000px) {
+    .cohort__details {
+        display: block;
+    }
+}
+
+.cohort__urls {
+    margin: 0 2rem 0 0;
+}
+
+.cohort__studentList {
+    overflow-y: scroll;
+    max-height: 20rem;
 }
 
 .overlay--cohort {

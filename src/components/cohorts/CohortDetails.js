@@ -91,54 +91,54 @@ export const CohortDetails = () => {
                 <span onClick={hideOverlay} className="close hairline"></span>
             </div>
             <div className="card">
-                <div className="card-body">
-                    <header className="cohort__header">
-                        <h2 className="card-title cohort__info">{activeCohortDetails.name}</h2>
+                <div className="card-body" style={{ paddingTop: "0"}}>
+                    <header className="cohort__header cohort__header--details">
+                        <h1 className="card-title cohort__info">{activeCohortDetails.name}</h1>
                     </header>
 
                     <div className="card-text">
                         <div className="cohort__details">
 
-                            <div>
-                                <h3>General URLs</h3>
+                            <div className="cohort__detail cohort__urls cohort__detail--large">
+                                <h3>Resource URLs</h3>
 
-                                <div className="form-group">
-                                    <label htmlFor="name">Attendance Sheet URL</label>
+                                <div className="form-group form-group--row">
+                                    <label className="label--row" htmlFor="name">Attendance Sheet</label>
                                     <input
                                         onChange={updateState}
                                         value={info?.attendance_sheet_url}
                                         type="url" controltype="string"
-                                        id="attendance_sheet_url" className="form-control"
+                                        id="attendance_sheet_url" className="form-control form-control--row"
                                     />
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="name">Github Classroom URL</label>
+                                <div className="form-group form-group--row">
+                                    <label className="label--row" htmlFor="name">Github Classroom</label>
                                     <input
                                         onChange={updateState}
                                         value={info?.github_classroom_url}
                                         type="url" controltype="string"
-                                        id="github_classroom_url" className="form-control"
+                                        id="github_classroom_url" className="form-control form-control--row"
                                     />
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="name">Github Organization URL</label>
+                                <div className="form-group form-group--row">
+                                    <label className="label--row" htmlFor="name">Github Organization</label>
                                     <input
                                         onChange={updateState}
                                         value={info?.student_organization_url}
                                         type="url" controltype="string"
-                                        id="student_organization_url" className="form-control"
+                                        id="student_organization_url" className="form-control form-control--row"
                                     />
                                 </div>
 
                                 <button onClick={saveURLs}>Save URLs</button>
                             </div>
 
-                            <div>
+                            <div className="cohort__detail cohort__detail--medium">
                                 <h3>Invitation Link</h3>
 
-                                <div style={{ margin: "1rem 0"}}>
+                                <div style={{ margin: "1rem 0" }}>
                                     Send this link to incoming students to assign them to your cohort
                                 </div>
 
@@ -146,23 +146,52 @@ export const CohortDetails = () => {
                                     {`${Settings.apiHost}/auth/github/url?cohort=${activeCohortDetails.id}&v=1`}
                                     <CopyIcon text={`${Settings.apiHost}/auth/github/url?cohort=${activeCohortDetails.id}&v=1`} />
                                 </span>
+
+                                <h3 style={{ margin: "3rem 0 0 0" }}>Dates</h3>
+
+                                <div style={{ margin: "1rem 0" }}>
+                                    <div className="form-group form-group--row">
+                                        <label className="label--row" htmlFor="name">Starts</label>
+                                        <input
+                                            onChange={updateState}
+                                            value={activeCohortDetails.start_date}
+                                            type="date" controltype="string"
+                                            id="start_date" className="form-control form-control--row"
+                                        />
+                                    </div>
+
+                                    <div className="form-group form-group--row">
+                                        <label className="label--row" htmlFor="name">Ends</label>
+                                        <input
+                                            onChange={updateState}
+                                            value={activeCohortDetails.end_date}
+                                            type="date" controltype="string"
+                                            id="end_date" className="form-control form-control--row"
+                                        />
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div className="cohort__detail">
+                                <h3>Courses</h3>
+                                <div className="cohort__courses">
+                                    {
+                                        activeCohortDetails?.courses?.map(course => {
+                                            return <div
+                                                key={`course--${course.id}`}
+                                                className={`course--badge cohort__coach ${course.active ? "active" : ""}`}>
+                                                {course.course.name}
+                                            </div>
+                                        })
+                                    }
+                                </div>
+                                <div>{showMigrate(activeCohortDetails?.courses)}</div>
+
                             </div>
 
                         </div>
 
-                        <h3 style={{ marginTop: "3rem" }}>Courses</h3>
-                        <div className="cohort__courses">
-                            {
-                                activeCohortDetails?.courses?.map(course => {
-                                    return <div
-                                        key={`course--${course.id}`}
-                                        className={`course--badge cohort__coach ${course.active ? "active" : ""}`}>
-                                        {course.course.name}
-                                    </div>
-                                })
-                            }
-                        </div>
-                        <div>{showMigrate(activeCohortDetails?.courses)}</div>
 
                     </div>
                 </div>

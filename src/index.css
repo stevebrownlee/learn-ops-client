@@ -134,12 +134,28 @@ code {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+.form-control--row {
+    flex: 3
+}
+
 .form-control--dialog {
     width: 95%;
 }
 
 .form-group {
     margin: 1rem 0;
+}
+
+.form-group--row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+
+.label--row {
+    flex: 1;
+    padding: 0.75rem 0 0 0;
 }
 
 fieldset {
