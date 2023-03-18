@@ -123,10 +123,10 @@ export const StudentCardList = ({ searchTerms, showAllProjects }) => {
                                             evt.target.innerText = project.name
                                         }}
                                         onMouseOut={evt => {
-                                            evt.target.innerText =  showAllProjects ? project.name.split("").slice(0, 4).join("") : project.name
+                                            evt.target.innerText =  showAllProjects ? project.name.substring(0, 2) : project.name
                                         }}
                                     >
-                                        {showAllProjects ? project.name.split("").slice(0, 4).join("") : project.name}
+                                        {showAllProjects ? project.name.substring(0, 2) : project.name}
                                     </div>
 
                                     {

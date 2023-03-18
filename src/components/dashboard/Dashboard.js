@@ -34,15 +34,12 @@ export const Dashboard = () => {
         }
     }, [cohortStudents, activeCourse])
 
-    const viewWeeklyTeams = () => history.push("/teams")
-
     return <main className="dashboard">
         <section className="cohortActions">
             <CohortSearchField />
             <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
             <button className={`fakeLink toggle--projects ${showAllProjects ? "on" : "off"}`}
                 onClick={() => toggleAllProjects(!showAllProjects)}>StandUp Mode</button>
-            <button className="fakeLink" onClick={viewWeeklyTeams}>Weekly Teams</button>
             <section className="capstonePercent">
                 <div>{mvps} / {cohortStudents.length}</div>
             </section>
