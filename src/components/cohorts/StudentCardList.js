@@ -118,7 +118,14 @@ export const StudentCardList = ({ searchTerms, showAllProjects }) => {
                                     }}
                                 >
 
-                                    <div className="bookColumn__project">
+                                    <div className="bookColumn__project"
+                                        onMouseOver={evt => {
+                                            evt.target.innerText = project.name
+                                        }}
+                                        onMouseOut={evt => {
+                                            evt.target.innerText =  showAllProjects ? project.name.split("").slice(0, 4).join("") : project.name
+                                        }}
+                                    >
                                         {showAllProjects ? project.name.split("").slice(0, 4).join("") : project.name}
                                     </div>
 

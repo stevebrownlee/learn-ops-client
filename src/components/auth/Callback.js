@@ -14,7 +14,6 @@ export const Callback = () => {
     const { getProfile } = useSimpleAuth()
 
     const fetchUser = () => {
-        console.log(token, cohort, validate)
         getProfile(token, cohort, validate).then(() => history.push("/"))
     }
 

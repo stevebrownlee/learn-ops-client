@@ -151,6 +151,14 @@ dialog {
     width: 30%;
 }
 
+.capstonePercent {
+    padding: 0.5rem 0.5rem 0.25rem 0.5rem;
+    background-color: aquamarine;
+    margin: 0 -2rem 0 1rem;
+    text-align: center;
+    font-size: small;
+}
+
 .bookButtons {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
