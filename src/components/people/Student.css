@@ -155,11 +155,15 @@
 }
 
 .student--assessmentReviewNeeded {
-    border: 2px solid rgb(203, 53, 27);
+    border: 2px solid rgb(231, 52, 20);
+}
+
+.student--assessReviewIncomplete {
+    border: 2px solid rgb(211, 14, 198);
 }
 
 .student--assessReviewComplete {
-    border: 2px solid rgb(9, 228, 68);
+    border: 2px solid rgb(19, 241, 78);
 }
 
 .student__actions {

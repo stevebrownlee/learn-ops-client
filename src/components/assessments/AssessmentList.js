@@ -36,9 +36,12 @@ export const AssessmentList = () => {
 
                         <h3>Objectives</h3>
                         <section className="assessment__objectives_list">
-                        {
-                            assessment.objectives.map(objective => <div className="objective__badge">{ objective.label }</div>)
-                        }
+                            {
+                                assessment.objectives.map(objective => <div
+                                    key={`obj--${objective.id}`}
+                                    className="objective__badge">{objective.label}
+                                </div>)
+                            }
                         </section>
 
                         <footer className="assessment__footer">

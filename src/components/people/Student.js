@@ -7,13 +7,13 @@ import { TagIcon } from "../../svgs/TagIcon"
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { PeopleContext } from "./PeopleProvider"
+import { StandupContext } from "../dashboard/Dashboard"
 import "./Student.css"
 
 export const Student = ({
     student, toggleProjects,
     toggleStatuses, toggleTags,
-    toggleNote, toggleCohorts,
-    showAllProjects
+    toggleNote, toggleCohorts
 }) => {
     const {
         activateStudent, setStudentCurrentAssessment,
@@ -21,6 +21,7 @@ export const Student = ({
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
         getStudentLearningRecords, getStudentPersonality
     } = useContext(PeopleContext)
+    const showAllProjects = useContext(StandupContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
 
@@ -48,6 +49,8 @@ export const Student = ({
             case 2:
                 return "student--assessmentReviewNeeded"
             case 3:
+                return "student--assessReviewIncomplete"
+            case 4:
                 return "student--assessReviewComplete"
         }
     }

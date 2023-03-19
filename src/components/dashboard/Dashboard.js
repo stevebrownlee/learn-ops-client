@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { createContext, useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { CourseContext } from "../course/CourseProvider"
 import { PeopleContext } from "../people/PeopleProvider"
@@ -9,6 +9,8 @@ import { StudentSearch } from "../people/StudentSearch"
 import { EyeIcon } from "../../svgs/EyeIcon"
 import "toaster-js/default.css"
 import "./Dashboard.css"
+
+export const StandupContext = createContext()
 
 export const Dashboard = () => {
     const [searchTerms, setSearchTerms] = useState([])
@@ -45,7 +47,10 @@ export const Dashboard = () => {
             </section>
         </section>
 
-        <StudentCardList searchTerms={searchTerms} showAllProjects={showAllProjects} />
+        <StandupContext.Provider value={ showAllProjects }>
+            <StudentCardList searchTerms={searchTerms} />
+        </StandupContext.Provider>
+
         <FeedbackDialog />
 
 
