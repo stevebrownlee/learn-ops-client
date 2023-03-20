@@ -52,8 +52,9 @@ export const StudentCardList = ({ searchTerms }) => {
     }, [activeCohort])
 
     useEffect(() => {
-        if (localStorage.getItem("activeCohort")) {
-            const cohortId = parseInt(localStorage.getItem("activeCohort"))
+        const cohort = JSON.parse(localStorage.getItem("activeCohort"))
+        if (cohort) {
+            const cohortId = parseInt(cohort)
             if (!activeCohort) {
                 activateCohort(cohortId)
             }

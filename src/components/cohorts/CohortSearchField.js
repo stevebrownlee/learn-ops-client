@@ -32,7 +32,7 @@ export const CohortSearchField = () => {
     }, [])
 
     useEffect(() => {
-        if (localStorage.getItem("activeCohort")) {
+        if (JSON.parse(localStorage.getItem("activeCohort"))) {
             const id = parseInt(localStorage.getItem("activeCohort"))
             getCohort(id)
         }

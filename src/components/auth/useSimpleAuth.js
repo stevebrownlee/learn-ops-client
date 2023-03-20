@@ -19,11 +19,18 @@ const useSimpleAuth = () => {
         return fetchIt(url, {token})
             .then(profile => {
                 storeCurrentUser(token, profile)
-                const activeCohort = profile?.person?.active_cohort
-                    ? profile.person.active_cohort
-                    : profile.cohorts[0].id
 
-                localStorage.setItem("activeCohort", activeCohort)
+                try {
+                    const activeCohort = profile?.person?.active_cohort
+                        ? profile.person.active_cohort
+                        : profile.cohorts[0].id
+
+                    localStorage.setItem("activeCohort", activeCohort)
+
+                } catch (error) {
+                    localStorage.setItem("activeCohort", null)
+
+                }
             })
     }
 
