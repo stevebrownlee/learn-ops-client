@@ -34,6 +34,7 @@ export const ClientProposal = () => {
                             history.push("/")
                             window.alert("Proposal submitted")
                         })
+                        .catch(window.alert)
                 }
                 else {
                     window.alert("Choose a course, please")

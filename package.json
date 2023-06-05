@@ -6,13 +6,14 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "buffer": "^6.0.3",
     "env-cmd": "^10.1.0",
     "install": "^0.13.0",
     "npm": "^8.19.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
+    "react-scripts": "^5.0.1",
     "toaster-js": "^2.2.3"
   },
   "scripts": {

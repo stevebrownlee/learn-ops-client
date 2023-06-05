@@ -1,3 +1,5 @@
+import {Buffer} from 'buffer'
+
 export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }) => {
     const options = {
         headers: {}

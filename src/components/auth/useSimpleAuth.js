@@ -1,6 +1,6 @@
 import Settings from "../Settings"
 import { fetchIt } from "../utils/Fetch"
-
+import {Buffer} from 'buffer'
 
 const useSimpleAuth = () => {
     const isAuthenticated = () => sessionStorage.getItem("nss_token") !== null
