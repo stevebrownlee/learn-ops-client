@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import Logout from "./logout.png"
+import logo from "./nav-logo.png"
 import useSimpleAuth from "../auth/useSimpleAuth"
 import "./NavBar.css"
 
@@ -21,11 +22,15 @@ export const StudentNavBar = () => {
 
 
                 <div className="menu">
+                    <li className="navbar__logo">
+                        <img style={{maxHeight: "30px"}} src={logo} />
+                    </li>
+
                     <li className="navbar__item">
                         {makeLink("/", "Overview")}
                     </li>
                     <li className="navbar__item">
-                        {makeLink("/goals", "Learning Goals")}
+                        {makeLink("/goals", "Core Skills")}
                     </li>
                     <li className="navbar__item">
                         {makeLink("/assessment", "Capstones")}

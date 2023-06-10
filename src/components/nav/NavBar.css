@@ -30,6 +30,11 @@
     list-style-type: none;
 }
 
+.navbar__logo {
+    flex-basis: 5%;
+    list-style-type: none;
+}
+
 .navbar__link {
     background-color: inherit;
     color: blanchedalmond;

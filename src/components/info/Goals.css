@@ -15,3 +15,29 @@
 .proposal__checklist {
     list-style-type: none;
 }
+
+.coreSkills {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.coreSkill {
+    flex: 1;
+    margin: 0 1rem;
+    border: 1px dotted slateblue;
+    background-color: rgb(254, 256, 255);
+    box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
+    border-radius: 0.33rem;
+}
+
+.coreSkill__header {
+    background-color: rgb(224, 232, 244);
+    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+    margin-block-start: 0;
+}
+
+.coreSkill__body {
+    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+}

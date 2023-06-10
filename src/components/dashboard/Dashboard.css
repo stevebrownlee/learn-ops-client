@@ -27,9 +27,22 @@
     justify-content: space-evenly;
 }
 
+@media (max-width: 1000px) {
+    .dashboard--overview {
+        display: block;
+    }
+}
+
 .info {
     border: 1px solid rgb(185, 220, 255);
 }
+
+@media (max-width: 1000px) {
+    .info {
+        margin-bottom: 1rem;
+    }
+}
+
 
 .info__header {
     background-color: azure;
@@ -54,6 +67,13 @@
     justify-content: flex-start;
     flex-direction: row;
 }
+
+@media (max-width: 800px) {
+    .studentassessments {
+        flex-direction: column;
+    }
+}
+
 
 .assessmentlist {
     flex: 1;

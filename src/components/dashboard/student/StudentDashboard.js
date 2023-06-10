@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import useSimpleAuth from "../auth/useSimpleAuth"
-import Settings from "../Settings"
-import { fetchIt } from "../utils/Fetch"
-import "./Dashboard.css"
-import { GithubIcon } from "../../svgs/GithubIcon.js"
+import useSimpleAuth from "../../auth/useSimpleAuth"
+import Settings from "../../Settings"
+import { fetchIt } from "../../utils/Fetch"
+import "../Dashboard.css"
+import { GithubIcon } from "../../../svgs/GithubIcon.js"
 
 export const StudentDashboard = () => {
     const { getCurrentUser, getProfile } = useSimpleAuth()

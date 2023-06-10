@@ -3,15 +3,15 @@ import React from "react"
 import { Route } from "react-router-dom"
 import { AssessmentProvider } from "./assessments/AssessmentProvider"
 import { PeopleProvider } from "./people/PeopleProvider"
-import { Readme } from "./dashboard/Readme"
-import { SlackMemberId } from "./dashboard/SlackMemberId"
-import { StudentDashboard } from "./dashboard/StudentDashboard"
+import { Readme } from "./dashboard/student/Readme"
+import { SlackMemberId } from "./dashboard/student/SlackMemberId"
 import { Assessment } from "./info/Assessment"
 import { ClientProposal } from "./info/ClientProposal"
 import { ClientAssessment } from "./info/ClientSideRequirements"
 import { LearningGoals } from "./info/Goals"
 import { Repos } from "./info/Repos"
 import { ServerAssessment } from "./info/ServerSideRequirements"
+import { StudentDashboard } from "./dashboard/student/StudentDashboard.js"
 
 export const StudentViews = () => {
     return <>

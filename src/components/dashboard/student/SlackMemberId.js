@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
-import useSimpleAuth from "../auth/useSimpleAuth"
-import Settings from "../Settings"
-import { fetchIt } from "../utils/Fetch"
-import "./Dashboard.css"
+import useSimpleAuth from "../../auth/useSimpleAuth"
+import Settings from "../../Settings"
+import { fetchIt } from "../../utils/Fetch"
+import "../Dashboard.css"
 import MemberId from "./images/get-slack-member-id.gif"
 
 export const SlackMemberId = () => {

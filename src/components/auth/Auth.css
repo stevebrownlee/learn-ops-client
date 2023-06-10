@@ -38,7 +38,6 @@
 .form--login {
     background-size: 35rem;
     background-position-x: center;
-    background-image: url('./logo.png');
     z-index: 1;
     min-height: 25rem;
     min-width: 45rem;

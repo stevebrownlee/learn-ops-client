@@ -1,5 +1,5 @@
 import React from "react"
-import "./Dashboard.css"
+import "../Dashboard.css"
 
 export const Readme = () => {
     return <article className="view">
