@@ -4,6 +4,7 @@ import useSimpleAuth from "../auth/useSimpleAuth"
 import Settings from "../Settings"
 import { fetchIt } from "../utils/Fetch"
 import "./Dashboard.css"
+import { GithubIcon } from "../../svgs/GithubIcon.js"
 
 export const StudentDashboard = () => {
     const { getCurrentUser, getProfile } = useSimpleAuth()
@@ -59,112 +60,202 @@ export const StudentDashboard = () => {
         minHeight: "25rem"
     }
 
+    const cohortDates = (cohort) => {
+        const startDate = new Date(user.profile?.current_cohort?.start).toLocaleDateString("en-US", {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }
+        )
+        const endDate = new Date(user.profile?.current_cohort?.end).toLocaleDateString("en-US", {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }
+        )
 
-    return <article className="dashboard--student">
-        <h1>Welcome {user.profile?.name}</h1>
-        <div className="text--mini">This is your student dashboard where you can see all information about your cohort dates, notes from instructors, and general information about presentations, assessments, and shared projects.</div>
+        const dateDiff1 = Math.floor((new Date() - new Date(user.profile?.current_cohort?.start)) / (1000 * 60 * 60 * 24))
+        const dateDiff2 = Math.floor((new Date(user.profile?.current_cohort?.end) - new Date()) / (1000 * 60 * 60 * 24))
 
+        if (dateDiff2 < 1) {
+            return <div className="text--xmini">
+                <div>{startDate} - {endDate}</div>
+                <div>You have graduated!</div>
+            </div>
+        }
+        else {
+            return <div className="text--xmini">
+                <div><span className="prompt">Start date:</span> {startDate}</div>
+                <div>End date: {endDate}</div>
+                <div>{dateDiff1} days gone and {dateDiff2} days left</div>
+            </div>
 
+        }
+    }
 
-        <ul className="tabs" role="tablist">
-            <li>
-                <input type="radio" name="tabs" id="tab1" defaultChecked />
-                <label htmlFor="tab1" role="tab" aria-selected="true" aria-controls="panel1" tabIndex="0">Feedback</label>
-                <article id="tab-content1" className="tab-content"
-                    style={tabStyle}
-                    role="tabpanel" aria-labelledby="description" aria-hidden="false">
-
-                    <h2>Notes from instructors</h2>
-                    <div className="feedback">
-                        {
-                            user.profile?.feedback.length
-                                ? user.profile?.feedback.map(f => {
-                                    return <div className="feedback" key={`feedback--${f.id}`}>
-                                        <div>{f.notes}</div>
-                                        <div className="feedback__author">By {f.author} on {new Date(f.session_date).toLocaleDateString()}</div>
-                                    </div>
-                                })
-                                : "None yet"
-                        }
+    const personalityInfo = () => {
+        return <><h2>Personality Info</h2>
+            <div className="table table--smallPrompt">
+                <div className="cell">
+                    <a href="https://www.16personalities.com/free-personality-test" target="_blank">
+                        Myers-Briggs
+                    </a>
+                </div>
+                <div className="cell cell--centered">
+                    {createPersonalityInput("briggs_myers_type", "briggs", false)}
+                </div>
+                <div className="cell">
+                    <a href="https://www.outofservice.com/bigfive/" target="_blank">Big Five</a>
+                </div>
+                <div className="cell cell--centered">
+                    <div className="bfiRow">
+                        <div className="bfiRow__prompt">Openness to experiences:</div>
+                        <div className="bfiRow__input">{createPersonalityInput("bfi_openness", "bfio")}</div>
                     </div>
+                    <div className="bfiRow">
+                        <div className="bfiRow__prompt">Conscientiousness:</div>
+                        <div className="bfiRow__input">{createPersonalityInput("bfi_conscientiousness", "bfic")}</div>
+                    </div>
+                    <div className="bfiRow">
+                        <div className="bfiRow__prompt">Extraversion:</div>
+                        <div className="bfiRow__input">{createPersonalityInput("bfi_extraversion", "bfie")}</div>
+                    </div>
+                    <div className="bfiRow">
+                        <div className="bfiRow__prompt">Agreeableness:</div>
+                        <div className="bfiRow__input">{createPersonalityInput("bfi_agreeableness", "bfia")}</div>
+                    </div>
+                    <div className="bfiRow">
+                        <div className="bfiRow__prompt">Neuroticism:</div>
+                        <div className="bfiRow__input">{createPersonalityInput("bfi_neuroticism", "bfin")}</div>
+                    </div>
+                </div>
+            </div>
+        </>
+    }
 
-                </article>
-            </li>
+    const createAssessmentRow = (assmt) => {
+        let className = ""
 
-            <li>
-                <input type="radio" name="tabs" id="tab2" />
-                <label htmlFor="tab2" role="tab" aria-selected="true" aria-controls="panel2" tabIndex="0">General Info</label>
-                <article style={tabStyle} id="tab-content2" className="tab-content" role="tabpanel" aria-labelledby="description" aria-hidden="false">
+        switch (assmt.status) {
+            case "In Progress":
+                className = "assessment--inProgress"
+                break
+            case "Ready for Review":
+                className = "assessment--readyForReview"
+                break
+            case "Reviewed and Complete":
+                className = "assessment--reviewedSuccess"
+                break
+            case "Reviewed and Incomplete":
+                className = "assessment--reviewedFail"
+                break
+        }
 
-                    <h2>General Info</h2>
-                    <div className="table table--smallPrompt">
-                        <div className="cell" >Cohort</div>
-                        <div className="cell cell--centered">
-                            {
-                                user.profile?.cohorts.length
-                                    ? user.profile?.cohorts.map(cohort => {
-                                        return <div key={`cohort--${cohort.id}`}>{cohort.name} {" "}
-                                            <span className="text--mini">[{new Date(cohort.start_date).toLocaleDateString()} - {new Date(cohort.end_date).toLocaleDateString()}]</span>
-                                        </div>
-                                    })
-                                    : "Unassigned"
+        return <div key={`assmt--${assmt.id}`} className="bookassessments">
+            <div className="bookassessment">
+                <div className="bookassessment__name">{assmt.name}</div>
+                <div className={`bookassessment__status ${className}`}>{assmt.status}</div>
+            </div>
+        </div>
+
+    }
+
+    const createCapstoneRow = (capstone) => {
+        let statusClass = ""
+
+
+        return <div key={`capstone--${capstone.id}`} className="capstoneassessments">
+            <div className="capstoneassessment">
+                <div className="capstoneassessment__course">{capstone.course}</div>
+                <div className="capstoneassessment__statuses">
+                    {
+                        capstone.statuses.map(status => {
+                            switch (status.status__status) {
+                                case "Approved":
+                                    statusClass = "assessment--inProgress"
+                                    break
+                                case "In Review":
+                                    statusClass = "assessment--readyForReview"
+                                    break
+                                case "MVP":
+                                    statusClass = "assessment--reviewedSuccess"
+                                    break
+                                case "Requires Changes":
+                                    statusClass = "assessment--reviewedFail"
+                                    break
                             }
-                        </div>
-                        <div className="cell" >Github Id</div>
-                        <div className="cell cell--centered">{user.profile?.github}</div>
-                        <div className="cell" >Slack Id</div>
-                        <div className="cell cell--centered">{user.profile?.slack_handle} <button
-                            onClick={() => history.push("/slackUpdate")}
-                            className="fakeLink">Update</button></div>
+
+                            return <div key={`status--${status.status__status}`} className={`capstoneassessment__status ${statusClass}`}>
+                                {status.status__status} on {status.date}
+                            </div>
+                        })
+                    }
+                </div>
+
+            </div>
+        </div>
+
+    }
+
+
+    return <main>
+        <header className="studentDashboard__header">
+            <h1>Welcome {user.profile?.name}</h1>
+        </header>
+        <article className="dashboard--overview">
+            <section className="info">
+                <h2 className="info__header" style={{ marginBottom: 0 }}>{user.profile?.current_cohort?.name} Info</h2>
+                <div className="info__body">
+                    <div>
+                        <h3 style={{ marginTop: 0, marginBlockStart: 0 }}>Dates</h3>
+                        {cohortDates(user.profile?.current_cohort)}
                     </div>
-
-                </article>
-            </li>
-
-
-            <li>
-                <input type="radio" name="tabs" id="tab3" />
-                <label htmlFor="tab3" role="tab" aria-selected="false" aria-controls="panel3" tabIndex="0">Personality</label>
-                <article style={tabStyle} id="tab-content3" className="tab-content" role="tabpanel" aria-labelledby="specification" aria-hidden="true">
-
-                    <h2>Personality Info</h2>
-                    <div className="table table--smallPrompt">
-                        <div className="cell">
-                            <a href="https://www.16personalities.com/free-personality-test" target="_blank">
-                                Myers-Briggs
+                    <div>
+                        <h3>Repositories</h3>
+                        <div><a href={user.profile?.current_cohort?.client_course} target="_blank">Client side coursework</a></div>
+                        <div><a href={user.profile?.current_cohort?.server_course} target="_blank">Server side coursework</a></div>
+                        <div>
+                            <a href={`${user.profile?.current_cohort?.github_org}`} target="_blank">
+                                {user.profile?.current_cohort?.name} Github Organization
                             </a>
                         </div>
-                        <div className="cell cell--centered">
-                            {createPersonalityInput("briggs_myers_type", "briggs", false)}
-                        </div>
-                        <div className="cell">
-                            <a href="https://www.outofservice.com/bigfive/" target="_blank">Big Five</a>
-                        </div>
-                        <div className="cell cell--centered">
-                            <div className="bfiRow">
-                                <div className="bfiRow__prompt">Openness to experiences:</div>
-                                <div className="bfiRow__input">{createPersonalityInput("bfi_openness", "bfio")}</div>
-                            </div>
-                            <div className="bfiRow">
-                                <div className="bfiRow__prompt">Conscientiousness:</div>
-                                <div className="bfiRow__input">{createPersonalityInput("bfi_conscientiousness", "bfic")}</div>
-                            </div>
-                            <div className="bfiRow">
-                                <div className="bfiRow__prompt">Extraversion:</div>
-                                <div className="bfiRow__input">{createPersonalityInput("bfi_extraversion", "bfie")}</div>
-                            </div>
-                            <div className="bfiRow">
-                                <div className="bfiRow__prompt">Agreeableness:</div>
-                                <div className="bfiRow__input">{createPersonalityInput("bfi_agreeableness", "bfia")}</div>
-                            </div>
-                            <div className="bfiRow">
-                                <div className="bfiRow__prompt">Neuroticism:</div>
-                                <div className="bfiRow__input">{createPersonalityInput("bfi_neuroticism", "bfin")}</div>
-                            </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="info">
+                <h2 className="info__header" style={{ marginBottom: 0 }}>Your Info</h2>
+                <div className="info__body">
+                    <div>
+                        <h3 style={{ marginTop: 0, marginBlockStart: 0 }}>Repositories</h3>
+                        <div><a href={`https://www.github.com/${user.profile?.github}`} target="_blank">Personal Repositories</a></div>
+                    </div>
+                    <div>
+                        <h3>Slack ID</h3>
+                        <div>
+                            <div>{user.profile?.slack_handle} <button
+                                onClick={() => history.push("/slackUpdate")}
+                                className="fakeLink">Update</button></div>
                         </div>
                     </div>
-                </article>
-            </li>
-        </ul>
-    </article>
+                    <div className="studentassessments text--mini">
+                        <div className="assessmentlist">
+                            <h3>Book Assessments</h3>
+                            {user.profile?.assessment_overview.map(createAssessmentRow)}
+                        </div>
+                        <div className="assessmentlist">
+                            <h3>Capstones</h3>
+                            {user.profile?.capstones.map(createCapstoneRow)}
+                            <div>
+                                <button onClick={() => history.push("/proposal/client")}>Submit my proposal</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
 }

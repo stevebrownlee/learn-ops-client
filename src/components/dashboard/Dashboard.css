@@ -19,21 +19,86 @@
     line-height: 1.7rem;
 }
 
-/* @media (min-width: 768px) {
-    .dashboard {
-        display: grid;
-        grid-template-columns: 1fr 3fr;
-        grid-column-gap: 3rem;
-        padding: 0 3rem;
-        grid-auto-flow: column;
-    }
-} */
+.dashboard--overview {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    padding: 3rem 3rem;
+    line-height: 1.7rem;
+    justify-content: space-evenly;
+}
 
-.dashboard__component {}
+.info {
+    border: 1px solid rgb(185, 220, 255);
+}
 
-.dashboard__cohorts {}
+.info__header {
+    background-color: azure;
+    padding: 1rem;
+    margin-block-start: 0;
+}
 
-.dashboard__students {}
+.info__body {
+    padding: 1rem;
+}
+
+.studentDashboard__header {
+    display: flex;
+}
+
+.studentDashboard__icons {
+    margin: 1.75rem 0 0 2rem;
+}
+
+.studentassessments {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+
+.assessmentlist {
+    flex: 1;
+}
+
+.bookassessments {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.bookassessment, .capstoneassessment {
+    display: flex;
+    flex-direction: row;
+    border: 1px dotted lightsteelblue;
+    margin: 0 0.25rem 0.25rem 0.25rem;
+}
+
+.bookassessment__book {
+    flex: 1;
+    padding: 0 1rem;
+    background-color: rgb(231, 231, 231);
+}
+
+.bookassessment__name, .capstoneassessment__course {
+    flex: 1;
+    padding: 0 1rem;
+}
+
+.bookassessment__status {
+    flex: 2;
+    padding: 0 1rem;
+    border-top: 1px dotted rgb(137, 188, 188);
+}
+
+.capstoneassessment__statuses {
+    flex: 2;
+    border-top: 1px dotted rgb(137, 188, 188);
+}
+
+.capstoneassessment__status {
+    flex: 2;
+    padding: 0 1rem;
+    border-top: 1px dotted rgb(137, 188, 188);
+}
 
 .feedback {
     border: 1px dotted cadetblue;

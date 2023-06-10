@@ -3,7 +3,7 @@ import "./Dashboard.css"
 
 export const Readme = () => {
     return <article className="view">
-        <td class="d-block color-fg-default comment-body markdown-body wb-break-word js-comment-body">
+        <td className="d-block color-fg-default comment-body markdown-body wb-break-word js-comment-body">
             <h1 dir="auto">Project README Guidelines</h1>
             <p dir="auto">You can add a README file to your repository to tell other people why your project is useful, what they can do with your project, and how they can use it.</p>
             <h1 dir="auto">What's in a README?</h1>

@@ -23,7 +23,7 @@ export const LearnOps = () => {
                 if (isAuthenticated()) {
                     const user = getCurrentUser()
 
-                    if (user.profile.staff) {
+                    if (user.profile?.staff) {
                         return <>
                             <NavBar />
                             <ApplicationViews />

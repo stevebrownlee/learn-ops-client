@@ -28,6 +28,10 @@ body {
     background-position: 0 0, 10px 10px;
 }
 
+main {
+    margin: 0 2rem;
+}
+
 @media (max-width: 1000px) {
     body {
         font-size: 0.8em;
@@ -82,6 +86,10 @@ code {
     font-size: small;
 }
 
+.text--xmini {
+    font-size: smaller;
+}
+
 .fakeLink {
     color: -webkit-link;
     cursor: pointer;
@@ -92,7 +100,7 @@ code {
     font-size: inherit;
 }
 
-.fakeLink:hover {
+.fakeLink:hover, .prompt {
     font-weight: bold;
 }
 

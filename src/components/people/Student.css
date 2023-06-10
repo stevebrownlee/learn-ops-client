@@ -305,6 +305,10 @@
     height: 0.9rem
 }
 
+.svg--large {
+    height: 1.5rem
+}
+
 .section--notes {
     padding: 0 2rem;
     max-height: 10rem;
