@@ -37,6 +37,12 @@ main {
     }
 }
 
+@media (max-width: 800px) {
+    body {
+        font-size: 0.8em;
+    }
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: "Patua One", serif;
     letter-spacing: 2px;
