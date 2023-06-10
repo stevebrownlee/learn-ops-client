@@ -35,7 +35,6 @@ export const StudentInfo = ({ profile }) => {
 
                     <div style={{marginTop: "auto", marginLeft: "auto"}} >
                         <button className="button btn-github" onClick={() => history.push("/proposal/client")}>Submit Capstone Proposal</button>
-                        <button className="button btn-github" onClick={() => history.push("/proposal/client")}>Submit Capstone Proposal</button>
                     </div>
 
                 </div>
