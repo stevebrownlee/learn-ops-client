@@ -22,11 +22,11 @@ export const NavBar = () => {
 
 
                 <div className="menu">
-                    <li className="navbar__item">
-                        <img src={logo} />
+                    <li className="navbar__logo">
+                        <img style={{ maxHeight: "30px" }} src={logo} />
                     </li>
                     <li className="navbar__item">
-                        {makeLink("/", "Overview")}
+                        {makeLink("/", "Students")}
                     </li>
                     <li className="navbar__item">
                         {makeLink("/teams", "Weekly Teams")}

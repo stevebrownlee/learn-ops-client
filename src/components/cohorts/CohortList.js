@@ -42,7 +42,6 @@ export const CohortList = () => {
             }
         </div>
 
-        <UnassignedStudents getLastFourCohorts={getLastFourCohorts} />
         <CohortDetails />
     </>
 }

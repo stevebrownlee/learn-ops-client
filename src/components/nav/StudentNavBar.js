@@ -25,7 +25,6 @@ export const StudentNavBar = () => {
                     <li className="navbar__logo">
                         <img style={{maxHeight: "30px"}} src={logo} />
                     </li>
-
                     <li className="navbar__item">
                         {makeLink("/", "Overview")}
                     </li>

@@ -8,7 +8,10 @@ export const CohortContext = React.createContext()
 export const CohortProvider = (props) => {
     const [cohorts, setCohorts] = useState([])
     const [activeCohort, activateCohort] = useState(null)
-    const [activeCohortDetails, setCohortDetails] = useState({})
+    const [activeCohortDetails, setCohortDetails] = useState({
+        start_date: "",
+        end_date: ""
+    })
 
     const { getCurrentUser } = useSimpleAuth()
     const user = getCurrentUser()

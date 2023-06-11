@@ -11,7 +11,10 @@ export const CohortDetails = () => {
     const initialState = {
         attendance_sheet_url: "",
         github_classroom_url: "",
-        student_organization_url: ""
+        student_organization_url: "",
+        client_course_url: "",
+        server_course_url: "",
+        zoom_url: ""
     }
     const [info, setInfo] = useState(initialState)
 
@@ -91,7 +94,7 @@ export const CohortDetails = () => {
                 <span onClick={hideOverlay} className="close hairline"></span>
             </div>
             <div className="card">
-                <div className="card-body" style={{ paddingTop: "0"}}>
+                <div className="card-body" style={{ paddingTop: "0" }}>
                     <header className="cohort__header cohort__header--details">
                         <h1 className="card-title cohort__info">{activeCohortDetails.name}</h1>
                     </header>
@@ -103,32 +106,56 @@ export const CohortDetails = () => {
                                 <h3>Resource URLs</h3>
 
                                 <div className="form-group form-group--row">
-                                    <label className="label--row" htmlFor="name">Attendance Sheet</label>
-                                    <input
-                                        onChange={updateState}
-                                        value={info?.attendance_sheet_url}
+                                    <label className="label--smallrow" htmlFor="attendance_sheet_url">Attendance Sheet</label>
+                                    <input onChange={updateState}
+                                        value={info.attendance_sheet_url ?? ""}
                                         type="url" controltype="string"
-                                        id="attendance_sheet_url" className="form-control form-control--row"
+                                        id="attendance_sheet_url" className="form-control form-control--row form-control--small"
                                     />
                                 </div>
 
                                 <div className="form-group form-group--row">
-                                    <label className="label--row" htmlFor="name">Github Classroom</label>
-                                    <input
-                                        onChange={updateState}
-                                        value={info?.github_classroom_url}
+                                    <label className="label--smallrow" htmlFor="github_classroom_url">Github Classroom</label>
+                                    <input onChange={updateState}
+                                        value={info.github_classroom_url ?? ""}
                                         type="url" controltype="string"
-                                        id="github_classroom_url" className="form-control form-control--row"
+                                        id="github_classroom_url" className="form-control form-control--row form-control--small"
                                     />
                                 </div>
 
                                 <div className="form-group form-group--row">
-                                    <label className="label--row" htmlFor="name">Github Organization</label>
-                                    <input
-                                        onChange={updateState}
-                                        value={info?.student_organization_url}
+                                    <label className="label--smallrow" htmlFor="student_organization_url">Github Organization</label>
+                                    <input onChange={updateState}
+                                        value={info.student_organization_url ?? ""}
                                         type="url" controltype="string"
-                                        id="student_organization_url" className="form-control form-control--row"
+                                        id="student_organization_url" className="form-control form-control--row form-control--small"
+                                    />
+                                </div>
+
+                                <div className="form-group form-group--row">
+                                    <label className="label--smallrow" htmlFor="client_course_url">Client Side Coure</label>
+                                    <input onChange={updateState}
+                                        value={info.client_course_url ?? ""}
+                                        type="url" controltype="string"
+                                        id="client_course_url" className="form-control form-control--row form-control--small"
+                                    />
+                                </div>
+
+                                <div className="form-group form-group--row">
+                                    <label className="label--smallrow" htmlFor="server_course_url">Server Side Course</label>
+                                    <input onChange={updateState}
+                                        value={info.server_course_url ?? ""}
+                                        type="url" controltype="string"
+                                        id="server_course_url" className="form-control form-control--row form-control--small"
+                                    />
+                                </div>
+
+                                <div className="form-group form-group--row">
+                                    <label className="label--smallrow" htmlFor="zoom_url">Zoom Session</label>
+                                    <input onChange={updateState}
+                                        value={info.zoom_url ?? ""}
+                                        type="url" controltype="string"
+                                        id="zoom_url" className="form-control form-control--row form-control--small"
                                     />
                                 </div>
 
@@ -151,22 +178,20 @@ export const CohortDetails = () => {
 
                                 <div style={{ margin: "1rem 0" }}>
                                     <div className="form-group form-group--row">
-                                        <label className="label--row" htmlFor="name">Starts</label>
-                                        <input
-                                            onChange={updateState}
+                                        <label className="label--smallrow" htmlFor="start_date">Starts</label>
+                                        <input onChange={updateState}
                                             value={activeCohortDetails.start_date}
                                             type="date" controltype="string"
-                                            id="start_date" className="form-control form-control--row"
+                                            id="start_date" className="form-control form-control--row form-control--small"
                                         />
                                     </div>
 
                                     <div className="form-group form-group--row">
-                                        <label className="label--row" htmlFor="name">Ends</label>
-                                        <input
-                                            onChange={updateState}
+                                        <label className="label--smallrow" htmlFor="end_date">Ends</label>
+                                        <input onChange={updateState}
                                             value={activeCohortDetails.end_date}
                                             type="date" controltype="string"
-                                            id="end_date" className="form-control form-control--row"
+                                            id="end_date" className="form-control form-control--row form-control--small"
                                         />
                                     </div>
 
@@ -188,11 +213,15 @@ export const CohortDetails = () => {
                                 </div>
                                 <div>{showMigrate(activeCohortDetails?.courses)}</div>
 
+                                <h3>Coaches</h3>
+                                <div className="cohort__coaches">
+                                    {
+                                        activeCohortDetails.coaches?.map(coach => <div key={`coach--${coach.name}`} className="instructor--badge cohort__coach">{coach.name}</div>)
+                                    }
+                                </div>
+
                             </div>
-
                         </div>
-
-
                     </div>
                 </div>
             </div>

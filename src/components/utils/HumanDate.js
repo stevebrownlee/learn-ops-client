@@ -1,10 +1,10 @@
-export const HumanDate = ({ date, weekday=false }) => {
+export const HumanDate = ({ date, weekday=false, shortMonth=false }) => {
     let options = {}
     if (weekday) {
         options = {
             weekday: 'long',
             year: 'numeric',
-            month: 'long',
+            month: shortMonth ? 'short' : 'long',
             day: 'numeric',
             timeZone: 'America/Chicago'
         }
@@ -12,7 +12,7 @@ export const HumanDate = ({ date, weekday=false }) => {
     else {
         options = {
             year: 'numeric',
-            month: 'long',
+            month: shortMonth ? 'short' : 'long',
             day: 'numeric',
             timeZone: 'America/Chicago'
         }

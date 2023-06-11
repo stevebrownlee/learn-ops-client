@@ -8,6 +8,7 @@ import { Toast } from "toaster-js"
 import { AssessmentIcon } from "../../svgs/AssessmentIcon"
 import { GridIcon } from "../../svgs/GridIcon"
 import { CertificateIcon } from "../../svgs/CertificateIcon"
+import slackLogo from "../teams/images/slack.png"
 import "./Cohort.css"
 import "./CohortList.css"
 
@@ -38,7 +39,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
     const slackDisplay = (cohort) => {
         return <>
             {cohort.slack_channel}
-            <EditIcon clickFunction={() => setSlackEdit(cohort.id)} />
+            <EditIcon tip="Set instructor channel Slack ID" clickFunction={() => setSlackEdit(cohort.id)} />
         </>
     }
 
@@ -62,7 +63,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
             .catch(reason => new Toast(reason, Toast.TYPE_ERROR, Toast.TIME_NORMAL))
     }
 
-    return <section key={`cohort--${cohort.id}`} className="cohort">
+    return <section key={`cohort--${cohort.id}`} className={`cohort ${cohort.is_instructor === 1 ? "cohort--mine" : ""}`}>
         <h3 className="cohort__header fakeLink"
             onClick={() => {
                 setCohortDetails(cohort)
@@ -77,15 +78,9 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
 
         </div>
         <div className="cohort__dates">
-            <HumanDate date={cohort.start_date} weekday={false} />
-            <div style={{ width: "30%" }}><hr /></div>
-            <HumanDate date={cohort.end_date} weekday={false} />
-        </div>
-
-        <div className="cohort__coaches">
-            {
-                cohort.coaches.map(coach => <div key={`coach--${coach.name}`} className="instructor--badge cohort__coach">{coach.name}</div>)
-            }
+            <HumanDate date={cohort.start_date} weekday={false} shortMonth={true} />
+            <div style={{ width: "30%" }}>&nbsp;</div>
+            <HumanDate date={cohort.end_date} weekday={false} shortMonth={true} />
         </div>
 
         <div className="cohort__links">

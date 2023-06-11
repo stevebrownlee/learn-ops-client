@@ -27,6 +27,10 @@
     border-radius: 0.33rem;
 }
 
+.cohort--mine {
+    background-color: lightgoldenrodyellow;
+}
+
 .cohort__header {
     margin: 2.25rem 0 0.5rem 0;
     font-size: 1rem;
@@ -48,6 +52,7 @@
     justify-content: space-between;
     flex-direction: row;
     flex-wrap: nowrap;
+    margin: 0 0 2rem 0;
 }
 
 .cohort__join {
@@ -63,11 +68,15 @@
     border-top: 1px dotted slategray;
     display: flex;
     margin: 3rem 0 0 0;
-    padding: 0.5rem;
+    padding: 0.33rem 0;
     color: rgb(149, 149, 149);
     justify-content: space-between;
     margin-top: auto;
     font-size: 0.75rem;
+}
+
+.slack {
+    width: 1rem;
 }
 
 .cohort__coaches {
