@@ -27,11 +27,10 @@
 }
 
 .book__footer {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
     padding-top: 0.5rem;
-    border-top: 1px dotted rgb(137, 188, 188);
 }
 
 .book__index {

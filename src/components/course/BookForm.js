@@ -7,21 +7,38 @@ import { CourseContext } from "./CourseProvider.js"
 
 
 export const BookForm = () => {
-    const [courses, setCourses] = useState([])
-    const [mode, setMode] = useState("create")
-    const { getCourses, getBook, editBook } = useContext(CourseContext)
-    const [book, updateBook] = useState({
+    const { getCourses, getBook, editBook, activeCourse } = useContext(CourseContext)
+    const initialBookState = {
         name: "",
         description: "",
         course: 0,
         index: 0
-    })
+    }
+    const [courses, setCourses] = useState([])
+    const [mode, setMode] = useState("create")
+    const [book, updateBook] = useState(initialBookState)
+
     const history = useHistory()
-    const { bookId } = useParams()
+    const { bookId, courseId } = useParams()
 
     useEffect(() => {
-        getCourses().then(setCourses)
+        if (!(activeCourse && activeCourse.id === courseId)) {
+            localStorage.setItem("activeCourse", courseId)
+            getCourses().then(setCourses)
+        }
     }, [])
+
+    useEffect(() => {
+        if (activeCourse) {
+            updateBook({
+                ...book,
+                course: activeCourse.id,
+                index: "id" in activeCourse
+                    ? activeCourse.books[activeCourse.books.length - 1].index + 1
+                    : 0
+            })
+        }
+    }, [activeCourse])
 
     useEffect(() => {
         if (bookId) {
@@ -35,7 +52,7 @@ export const BookForm = () => {
 
     const constructNewBook = () => {
         fetchIt(`${Settings.apiHost}/books`, { method: "POST", body: JSON.stringify(book) })
-            .then(() => history.push("/books"))
+            .then(() => history.push(`/courses/${book.course}`))
     }
 
     const updateState = (event) => {
@@ -54,7 +71,12 @@ export const BookForm = () => {
     return (
         <>
             <form className="projectForm view">
-                <h2 className="projectForm__title">New Book</h2>
+                {
+                    courseId
+                        ? <h2 className="projectForm__title">New Book for {activeCourse?.name} Course</h2>
+                        : <h2 className="projectForm__title">Update Book</h2>
+                }
+
                 <div className="form-group">
                     <label htmlFor="name"> Book name </label>
                     <input onChange={updateState}
@@ -75,25 +97,6 @@ export const BookForm = () => {
                     />
                 </div>
 
-                <fieldset>
-                    <div className="form-group">
-                        <label htmlFor="course"> Course </label>
-                        <select id="course" className="form-control"
-                            value={book.course}
-                            controltype="number"
-                            onChange={updateState}>
-                            <option value="0">Select course...</option>
-                            {
-                                courses.map(course => {
-                                    return <option key={`course--${course.id}`} value={course.id}>
-                                        {course.name}
-                                    </option>
-                                })
-                            }
-                        </select>
-                    </div>
-                </fieldset>
-
                 <div className="form-group">
                     <label htmlFor="index">
                         Position in course
@@ -110,6 +113,7 @@ export const BookForm = () => {
 
 
                 <button type="submit"
+                    className="isometric-button blue"
                     onClick={
                         evt => {
                             evt.preventDefault()
@@ -118,11 +122,20 @@ export const BookForm = () => {
                                 constructNewBook()
                             }
                             else {
-                                editBook(book).then(() => history.push("/books"))
+                                editBook(book).then(() => history.push(`/courses/${book.course}`))
                             }
                         }
-                    }
-                    className="btn btn-primary"> Save </button>
+                    }> Save </button>
+
+                <button type="submit"
+                    style={{margin: "0 0 0 1rem"}}
+                    className="isometric-button blue"
+                    onClick={
+                        evt => {
+                            evt.preventDefault()
+                            history.push(`/courses/${book.course}`)
+                        }
+                    }> Cancel </button>
             </form>
         </>
     )

@@ -6,6 +6,7 @@ import { EditIcon } from "../../svgs/EditIcon"
 import "./Courses.css"
 import { NoteIcon } from "../../svgs/NoteIcon.js"
 import { GridIcon } from "../../svgs/GridIcon.js"
+import { CourseCard } from "./CourseCard.js"
 
 export const CourseList = () => {
     const { getCourses, createCourse } = useContext(CourseContext)
@@ -17,30 +18,19 @@ export const CourseList = () => {
     }, [])
 
     return <article className="container--bookList">
-        <header className="book__header">
-            <button className="button button--isi button--border-thick button--round-l button--size-s"
-                onClick={() => history.push("/courses/new")}>
-                <i className="button__icon icon icon-book"></i>
-                <span>Create Course</span>
-            </button>
-        </header>
 
         <div className="courses">
             {
-                courses.map(course => {
-                    return <section key={`course--${course.id}`} className="course">
-                        <h3 className="course__header">{course.name}</h3>
-
-                        <div> <NoteIcon /> {course.books.length} books </div>
-                        <div> <GridIcon /> {course.books.reduce((c,n) => {return c+n.projects.length}, 0)} projects </div>
-
-
-                        <footer className="course__footer">
-                            <EditIcon tip={"Edit this course"} clickFunction={() => history.push(`/courses/edit/${course.id}`)} />
-                        </footer>
-                    </section>
-                })
+                courses.map(course => <CourseCard course={course} />)
             }
         </div>
+
+        <footer className="book__header">
+            <button className="isometric-button blue"
+                style={{margin: "3rem 0 0 0"}}
+                onClick={() => history.push("/courses/new")}>
+                <span>Create Course</span>
+            </button>
+        </footer>
     </article>
 }

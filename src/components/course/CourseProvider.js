@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 
@@ -8,6 +8,12 @@ export const CourseProvider = (props) => {
     const [courses, setCourses] = useState([])
     const [objectives, setObjectives] = useState([])
     const [activeCourse, setActiveCourse] = useState({})
+
+    useEffect(() => {
+        if (activeCourse && "id" in activeCourse) {
+            localStorage.setItem("activeCourse", activeCourse.id)
+        }
+    }, [activeCourse])
 
     const getCourses = useCallback(
         (cohortId = null) => fetchIt(`${Settings.apiHost}/courses${cohortId ? `?cohortId=${cohortId}` : ""}`)
@@ -64,8 +70,13 @@ export const CourseProvider = (props) => {
         []
     )
 
+    const getBookProjects = useCallback(
+        (bookId) => fetchIt(`${Settings.apiHost}/projects?bookId=${bookId}`),
+        []
+    )
+
     const getProject = useCallback(
-        (id) => fetchIt(`${Settings.apiHost}/projects/${id}`),
+        (id) => fetchIt(`${Settings.apiHost}/projects/${id}?&expand=book&expand=course`),
         []
     )
 
@@ -105,7 +116,7 @@ export const CourseProvider = (props) => {
             getCourse, getLearningObjectives, objectives, getBooks,
             getProjects, deleteProject, getActiveCourse, getProject,
             editProject, migrateCohortToServerSide, getBook, editBook,
-            deleteBook, createCourse, editCourse
+            deleteBook, createCourse, editCourse, getBookProjects
         }} >
             {props.children}
         </CourseContext.Provider>

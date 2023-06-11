@@ -21,6 +21,9 @@ import { BookList } from "./course/BookList"
 import { BookForm } from "./course/BookForm"
 import { CourseList } from "./course/CourseList"
 import { CourseForm } from "./course/CourseForm"
+import { CourseDetails } from "./course/CourseDetails.js"
+import { BookDetails } from "./course/BookDetails.js"
+import { ProjectDetails } from "./course/ProjectDetails.js"
 
 export const ApplicationViews = () => {
     return <>
@@ -43,27 +46,33 @@ export const ApplicationViews = () => {
                             <Route exact path="/courses/new">
                                 <CourseForm />
                             </Route>
-                            <Route exact path="/courses/edit/:courseId">
-                                <CourseForm />
+                            <Route exact path="/courses/:courseId(\d+)">
+                                <CourseDetails />
                             </Route>
 
                             <Route exact path="/books">
                                 <BookList />
                             </Route>
-                            <Route exact path="/books/new">
+                            <Route exact path="/books/:bookId(\d+)">
+                                <BookDetails />
+                            </Route>
+                            <Route exact path="/books/new/:courseId(\d+)">
                                 <BookForm />
                             </Route>
-                            <Route exact path="/books/edit/:bookId">
+                            <Route exact path="/books/edit/:bookId(\d+)">
                                 <BookForm />
                             </Route>
 
                             <Route exact path="/projects">
                                 <ProjectList />
                             </Route>
+                            <Route exact path="/projects/:projectId(\d+)">
+                                <ProjectDetails />
+                            </Route>
                             <Route exact path="/projects/edit/:projectId">
                                 <ProjectForm />
                             </Route>
-                            <Route exact path="/projects/new">
+                            <Route exact path="/projects/new/:bookId(\d+)">
                                 <ProjectForm />
                             </Route>
 

@@ -9,8 +9,9 @@ import { CourseContext } from "./CourseProvider.js"
 export const ProjectForm = () => {
     const [books, setBooks] = useState([])
     const [courses, setCourses] = useState([])
+    const [title, setTitle] = useState("")
     const [mode, setMode] = useState("create")
-    const { getBooks, getCourses, getProject, editProject } = useContext(CourseContext)
+    const { getBooks, getCourses, getProject, editProject, getBook } = useContext(CourseContext)
     const [project, updateProject] = useState({
         name: "",
         book: 0,
@@ -19,7 +20,7 @@ export const ProjectForm = () => {
         implementation_url: ""
     })
     const history = useHistory()
-    const { projectId } = useParams()
+    const { projectId, bookId } = useParams()
 
     useEffect(() => {
         getCourses().then(setCourses)
@@ -27,20 +28,32 @@ export const ProjectForm = () => {
 
     useEffect(() => {
         if (projectId) {
-            getProject(projectId).then(updateProject)
+            getProject(projectId).then((project) => {
+                updateProject({ ...project, course: project.course.id, book: project.book.id })
+            })
             setMode("edit")
         }
     }, [projectId])
 
     useEffect(() => {
+        if (bookId) {
+            getBook(bookId).then((book) => {
+                updateProject({...project, book: book.id, course: book.course.id})
+                setTitle(`${book.course.name} > ${book.name} > New Project`)
+            })
+            setMode("create")
+        }
+    }, [bookId])
+
+    useEffect(() => {
         if (project.course !== 0) {
-            getBooks(project.course).then(setBooks)
+            getBooks(project.course.id).then(setBooks)
         }
     }, [project])
 
     const constructNewProject = () => {
         fetchIt(`${Settings.apiHost}/projects`, { method: "POST", body: JSON.stringify(project) })
-            .then(() => history.push("/projects"))
+            .then(() => history.push(`/books/${project.book}`))
     }
 
     const updateState = (event) => {
@@ -59,11 +72,11 @@ export const ProjectForm = () => {
     return (
         <>
             <form className="projectForm view">
-                <h2 className="projectForm__title">New Project</h2>
+                <h2 className="projectForm__title">{title}</h2>
+
                 <div className="form-group">
                     <label htmlFor="name">
                         Project name
-                        <HelpIcon tip="Day Project 62, for example." />
                     </label>
                     <input onChange={updateState}
                         value={project.name}
@@ -72,44 +85,6 @@ export const ProjectForm = () => {
                         id="name" className="form-control"
                     />
                 </div>
-
-                <fieldset>
-                    <div className="form-group">
-                        <label htmlFor="course"> Course </label>
-                        <select id="course" className="form-control"
-                            value={project.course}
-                            controltype="number"
-                            onChange={updateState}>
-                            <option value="0">Select course...</option>
-                            {
-                                courses.map(course => {
-                                    return <option key={`course--${course.id}`} value={course.id}>
-                                        {course.name}
-                                    </option>
-                                })
-                            }
-                        </select>
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <div className="form-group">
-                        <label htmlFor="course"> Book </label>
-                        <select id="book" className="form-control"
-                            value={project.book}
-                            controltype="number"
-                            onChange={updateState}>
-                            <option value="0">Select book...</option>
-                            {
-                                books.map(book => {
-                                    return <option key={`book--${book.id}`} value={book.id}>
-                                        {book.name}
-                                    </option>
-                                })
-                            }
-                        </select>
-                    </div>
-                </fieldset>
 
                 <div className="form-group">
                     <label htmlFor="index">
@@ -126,7 +101,7 @@ export const ProjectForm = () => {
                 </div>
 
 
-                <button type="submit"
+                <button type="submit" className="isometric-button blue"
                     onClick={
                         evt => {
                             evt.preventDefault()
@@ -135,11 +110,20 @@ export const ProjectForm = () => {
                                 constructNewProject()
                             }
                             else {
-                                editProject(project).then(() => history.push("/projects"))
+                                editProject(project).then(() => history.push(`/books/${project.book}`))
                             }
                         }
-                    }
-                    className="btn btn-primary"> Save </button>
+                    }> Save </button>
+
+                <button type="submit"
+                    style={{ margin: "0 0 0 1rem" }}
+                    className="isometric-button blue"
+                    onClick={
+                        evt => {
+                            evt.preventDefault()
+                            history.push(`/books/${project.book}`)
+                        }
+                    }> Cancel </button>
             </form>
         </>
     )

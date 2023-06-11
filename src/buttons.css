@@ -1,173 +1,58 @@
-/* Box colors */
-.bg-1 {
-	background: #ECEFF1;
-	color: #37474f;
-}
-
-.bg-2 {
-	background: #7986cb;
-	color: #ECEFF1;
-}
-
-.bg-3 {
-	background: #37474f;
-	color: #fff;
-}
-
-/* Common button styles */
-.button {
-	min-width: 150px;
-	max-width: 250px;
-	display: inline-block;
-	border: none;
-	background: none;
-	color: inherit;
-	vertical-align: middle;
+.isometric-button {
 	position: relative;
-	z-index: 1;
-	-webkit-backface-visibility: hidden;
-	-moz-osx-font-smoothing: grayscale;
+	display: inline-block;
+	padding: 0.5rem 1.5rem;
+	font-size: 0.8rem;
+	font-weight: bold;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 0.66rem;
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+	transition: background-color 0.2s, box-shadow 0.2s;
 }
 
-.button:focus {
-	outline: none;
+.isometric-button:hover {
+	filter: brightness(95%);
+	cursor:pointer;
 }
 
-.button>span {
-	vertical-align: middle;
+/* Color variations */
+.isometric-button.red {
+	background-color: firebrick;
+	color: white;
 }
 
-/* Text color adjustments (we could stick to the "inherit" but that does not work well in Safari) */
-.bg-1 .button {
-	color: #37474f;
-	border-color: #37474f;
+.isometric-button.yellow {
+	background-color: goldenrod;
+	color: black;
 }
 
-.bg-2 .button {
-	color: #ECEFF1;
-	border-color: #ECEFF1;
+.isometric-button.blue {
+	background-color: rgb(69, 161, 253);
+	color: white;
 }
 
-.bg-3 .button {
-	color: #fff;
-	border-color: #fff;
+.isometric-button.gray {
+	background-color: gray;
+	color: white;
 }
 
-/* Sizes */
-.button--size-xs {
-	font-size: 0.75rem;
-	max-width: 150px;
-}
 
-.button--size-s {
-	font-size: 0.75rem;
-}
 
-.button--size-m {
-	font-size: 0.9rem;
-}
 
-.button--size-l {
-	font-size: 1.1rem;
-}
 
-/* Typography and Roundedness */
-.button--text-upper {
-	letter-spacing: 2px;
-	text-transform: uppercase;
-}
 
-.button--text-thin {
-	font-weight: 300;
-}
 
-.button--text-medium {
-	font-weight: 500;
-}
 
-.button--text-thick {
-	font-weight: 600;
-}
 
-.button--round-s {
-	border-radius: 0.4rem;
-}
 
-.button--round-m {
-	border-radius: 0.75rem;
-}
 
-.button--round-l {
-	border-radius: 1.5rem;
-}
 
-/* Borders */
-.button--border-thin {
-	border: 1px solid;
-}
 
-.button--border-medium {
-	border: 2px solid;
-}
 
-.button--border-thick {
-	border: 3px solid;
-}
 
-.button--isi {
-	padding: 0.7em 1.5em;
-	color: #fff;
-	background: #7986cb;
-	overflow: hidden;
-}
 
-.button--isi::before {
-	content: '';
-	z-index: -1;
-	position: absolute;
-	top: 50%;
-	left: 100%;
-	margin: -15px 0 0 1px;
-	width: 30px;
-	height: 30px;
-	border-radius: 50%;
-	background: #3f51b5;
-	-webkit-transform-origin: 100% 50%;
-	transform-origin: 100% 50%;
-	-webkit-transform: scale3d(1, 2, 1);
-	transform: scale3d(1, 2, 1);
-	-webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
-	transition: transform 0.3s, opacity 0.3s;
-	-webkit-transition-timing-function: cubic-bezier(0.7, 0, 0.9, 1);
-	transition-timing-function: cubic-bezier(0.7, 0, 0.9, 1);
-}
 
-.button--isi .button__icon {
-	vertical-align: middle;
-}
-
-.button--isi .delete {
-	position: absolute;
-	right: 0.5rem;
-	top: -0.1rem;
-	bottom: 0;
-	line-height: 40px;
-}
-
-.button__icon--only {
-	font-size: 2rem;
-	cursor: pointer;
-}
-
-.button--isi>span {
-	vertical-align: middle;
-	padding-left: 0.75em;
-}
-
-.button--isi:hover::before {
-	-webkit-transform: scale3d(9, 9, 1);
-	transform: scale3d(9, 9, 1);
-}
 
 
 .btn-github {
@@ -213,59 +98,4 @@
 .btn-github .badge {
 	color: #444;
 	background-color: #fff
-}
-
-/* CSS */
-.button-28--achieved {
-	background-color: #3B3B3B;
-	color: snow;
-	border-radius: 15px;
-	border: 1px solid snow;
-	font-size: 0.75rem;
-	padding: 0.33rem 1rem;
-}
-.button-28 {
-	appearance: none;
-	background-color: transparent;
-	border: 1px solid #1A1A1A;
-	border-radius: 15px;
-	box-sizing: border-box;
-	color: #3B3B3B;
-	cursor: pointer;
-	font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-	font-size: 0.75rem;
-	font-weight: 600;
-	line-height: normal;
-	margin: 0;
-	min-height: 2rem;
-	min-width: 0;
-	outline: none;
-	padding: 0.33rem 1rem;
-	text-align: center;
-	text-decoration: none;
-	transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-	user-select: none;
-	-webkit-user-select: none;
-	touch-action: manipulation;
-	will-change: transform;
-}
-
-.button-28:disabled {
-	pointer-events: none;
-}
-
-.button-28:hover {
-	color: #fff;
-	background-color: #1A1A1A;
-	box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-	transform: translateY(-2px);
-}
-
-.button-28:active {
-	box-shadow: none;
-	transform: translateY(0);
-}
-
-.btn--capstoneSubmit {
-
 }
