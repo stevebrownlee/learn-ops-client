@@ -4,6 +4,8 @@ import { CourseContext } from "./CourseProvider"
 import { DeleteIcon } from "../../svgs/DeleteIcon"
 import { EditIcon } from "../../svgs/EditIcon"
 import "./Courses.css"
+import { NoteIcon } from "../../svgs/NoteIcon.js"
+import { GridIcon } from "../../svgs/GridIcon.js"
 
 export const CourseList = () => {
     const { getCourses, createCourse } = useContext(CourseContext)
@@ -28,6 +30,10 @@ export const CourseList = () => {
                 courses.map(course => {
                     return <section key={`course--${course.id}`} className="course">
                         <h3 className="course__header">{course.name}</h3>
+
+                        <div> <NoteIcon /> {course.books.length} books </div>
+                        <div> <GridIcon /> {course.books.reduce((c,n) => {return c+n.projects.length}, 0)} projects </div>
+
 
                         <footer className="course__footer">
                             <EditIcon tip={"Edit this course"} clickFunction={() => history.push(`/courses/edit/${course.id}`)} />
