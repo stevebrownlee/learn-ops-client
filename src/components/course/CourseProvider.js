@@ -53,6 +53,11 @@ export const CourseProvider = (props) => {
         }), []
     )
 
+    const deactivateCourse = useCallback(
+        courseId => fetchIt(`${Settings.apiHost}/courses/${courseId}`, { method: "DELETE" }),
+        []
+    )
+
     const getBooks = useCallback((courseId = null) => {
         const ordering = "?orderBy=course&orderBy=index"
         return fetchIt(`${Settings.apiHost}/books${ordering}${courseId ? `&courseId=${courseId}` : ""}`)
@@ -116,7 +121,8 @@ export const CourseProvider = (props) => {
             getCourse, getLearningObjectives, objectives, getBooks,
             getProjects, deleteProject, getActiveCourse, getProject,
             editProject, migrateCohortToServerSide, getBook, editBook,
-            deleteBook, createCourse, editCourse, getBookProjects
+            deleteBook, createCourse, editCourse, getBookProjects,
+            deactivateCourse
         }} >
             {props.children}
         </CourseContext.Provider>

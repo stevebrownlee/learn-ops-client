@@ -28,10 +28,9 @@ export const CohortList = () => {
     const getLastFourCohorts = () => getCohorts({ limit: 6 })
 
     return <>
-        <button className="button button--isi button--border-thick button--round-l button--size-s studentList__createCohort"
+        <button className="isometric-button blue studentList__createCohort"
             onClick={() => history.push("/cohorts/new")}>
-            <i className="button__icon icon icon-book"></i>
-            <span>Create Cohort</span>
+            Create Cohort
         </button>
         <div className="cohorts">
             {

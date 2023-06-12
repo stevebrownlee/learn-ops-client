@@ -22,9 +22,5 @@ export const CourseCard = ({ course }) => {
 
         <div> <NoteIcon /> {course.books.length} books </div>
         <div> <GridIcon /> {course.books.reduce((c, n) => c + n.projects.length, 0)} projects </div>
-
-        <footer className="course__footer">
-            <EditIcon tip={"Edit this course"} clickFunction={() => history.push(`/courses/edit/${course.id}`)} />
-        </footer>
     </section>
 }

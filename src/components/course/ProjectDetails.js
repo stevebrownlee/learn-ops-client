@@ -24,25 +24,29 @@ export const ProjectDetails = () => {
         getProject(projectId).then(changeProjectState)
     }, [projectId])
 
-    return <article  className="project--detail">
+    return <article className="project--detail">
         <h1 className="project__header">
             <Link to={`/courses/${project.course.id}`}>{project.course.name}</Link>&nbsp; &gt; &nbsp;
             <Link to={`/books/${project.book.id}`}>{project.book.name}</Link>&nbsp; &gt; &nbsp;
             {project.name}
         </h1>
-        <section key={`project--${project.id}`} className="project">
-            <div className="project__info">
-                <div>Name: {project.name}</div>
-                <div>Position: {project.index}</div>
-            </div>
+        <div className="project__info">
+            <div>Name: {project.name}</div>
+            <div>Position: {project.index}</div>
+        </div>
 
-            <footer className="project__footer">
-                <EditIcon clickFunction={() => history.push(`/projects/edit/${project.id}`)} />
+        <div className="project__footer">
+            <button style={{ marginTop: "2rem", marginLeft: "auto" }}
+                className="isometric-button yellow"
+                onClick={() => {
+                    history.push(`/projects/edit/${project.id}`)
+                }}>Edit Project</button>
 
-                <DeleteIcon clickFunction={() => deleteProject(project.id)
-                    .then(() => history.push(`/books/${project.book.id}`))
-                } />
-            </footer>
-        </section>
+            <button style={{ marginTop: "2rem" }}
+                className="isometric-button red"
+                onClick={() => {
+                    deleteProject(project.id).then(() => history.push(`/books/${project.book.id}`))
+                }}>Delete Project</button>
+        </div>
     </article>
 }

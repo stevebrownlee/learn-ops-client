@@ -53,7 +53,7 @@ export const BookDetails = () => {
             <button style={{ marginTop: "2rem", marginLeft: "auto" }}
                 className="isometric-button yellow"
                 onClick={() => {
-                    history.push(`/book/edit/${book.id}`)
+                    history.push(`/books/edit/${book.id}`)
                 }}>Edit Book</button>
 
             <button style={{ marginTop: "2rem" }}
@@ -61,7 +61,6 @@ export const BookDetails = () => {
                 onClick={() => {
                     deleteBook(book.id).then(() => history.push(`/courses/${activeCourse.id}`))
                 }}>Delete Book</button>
-
         </div>
     </section>
 }

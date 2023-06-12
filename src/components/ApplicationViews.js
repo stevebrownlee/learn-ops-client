@@ -15,9 +15,7 @@ import { RecordEntryForm } from "./records/RecordEntryForm"
 import { RecordForm } from "./records/RecordForm"
 import { RecordProvider } from "./records/RecordProvider"
 import { WeeklyTeams } from "./teams/WeeklyTeams"
-import { ProjectList } from "./course/ProjectList"
 import { ProjectForm } from "./course/ProjectForm"
-import { BookList } from "./course/BookList"
 import { BookForm } from "./course/BookForm"
 import { CourseList } from "./course/CourseList"
 import { CourseForm } from "./course/CourseForm"
@@ -50,9 +48,6 @@ export const ApplicationViews = () => {
                                 <CourseDetails />
                             </Route>
 
-                            <Route exact path="/books">
-                                <BookList />
-                            </Route>
                             <Route exact path="/books/:bookId(\d+)">
                                 <BookDetails />
                             </Route>
@@ -63,9 +58,6 @@ export const ApplicationViews = () => {
                                 <BookForm />
                             </Route>
 
-                            <Route exact path="/projects">
-                                <ProjectList />
-                            </Route>
                             <Route exact path="/projects/:projectId(\d+)">
                                 <ProjectDetails />
                             </Route>

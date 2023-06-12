@@ -27,14 +27,6 @@
     border-radius: 0.33rem;
 }
 
-.course__footer {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    margin-top: auto;
-    padding-top: 0.5rem;
-    border-top: 1px dotted rgb(137, 188, 188);
-}
-
 .course__index {
     margin-left: auto;
     color: rgb(183, 183, 183);
