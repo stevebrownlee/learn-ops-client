@@ -40,7 +40,7 @@ export const CourseForm = () => {
     return (
         <>
             <form className="courseForm view">
-                <h2 className="courseForm__title">New Course</h2>
+                <h2 className="courseForm__title">{mode === "edit" ? "Edit": "New"} Course</h2>
                 <div className="form-group">
                     <label htmlFor="name"> Course name </label>
                     <input onChange={updateState}
@@ -64,7 +64,7 @@ export const CourseForm = () => {
                             }
                         }
                     }
-                    className="btn btn-primary"> Save </button>
+                    className="isometric-button blue"> Save </button>
             </form>
         </>
     )

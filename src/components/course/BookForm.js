@@ -33,7 +33,7 @@ export const BookForm = () => {
             updateBook({
                 ...book,
                 course: activeCourse.id,
-                index: "id" in activeCourse
+                index: "id" in activeCourse && activeCourse.books.length
                     ? activeCourse.books[activeCourse.books.length - 1].index + 1
                     : 0
             })

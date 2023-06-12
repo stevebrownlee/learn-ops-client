@@ -44,6 +44,9 @@ export const ApplicationViews = () => {
                             <Route exact path="/courses/new">
                                 <CourseForm />
                             </Route>
+                            <Route exact path="/courses/edit/:courseId(\d+)">
+                                <CourseForm />
+                            </Route>
                             <Route exact path="/courses/:courseId(\d+)">
                                 <CourseDetails />
                             </Route>
