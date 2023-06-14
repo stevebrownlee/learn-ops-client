@@ -30,7 +30,10 @@ export const CourseDetails = () => {
     }, [activeCourse])
 
     return <section className="course--detail">
-        <h1 className="coursedetail__header">{activeCourse?.name}</h1>
+        <h1 className="coursedetail__header">
+            <Link to={`/courses`}>Courses</Link>&nbsp; &gt; &nbsp;
+            {activeCourse?.name}
+        </h1>
 
         <article className="course__books">
             {
@@ -64,8 +67,6 @@ export const CourseDetails = () => {
                 onClick={() => {
                     deactivateCourse(activeCourse.id).then(() => history.push(`/courses`))
                 }}>Delete Course</button>
-
         </div>
-
     </section>
 }

@@ -12,15 +12,19 @@ export const CourseCard = ({ course }) => {
     const history = useHistory()
     const { setActiveCourse } = useContext(CourseContext)
 
-    return <section key={`course--${course.id}`} className="course">
-        <h3 className="course__header">
-            <Link to={`/courses/${course.id}`}
-                onClick={() => {
-                    setActiveCourse(course)
-                }} >{course.name}</Link>
-        </h3>
-
-        <div> <NoteIcon /> {course.books.length} books </div>
-        <div> <GridIcon /> {course.books.reduce((c, n) => c + n.projects.length, 0)} projects </div>
+    return <section key={`course--${course.id}`} className="book__project"
+        onClick={() => {
+            setActiveCourse(course)
+            history.push(`/courses/${course.id}`)
+        }}
+    >
+        <div>{course.name}</div>
+        <div>
+            <i className="button__icon icon icon-book"></i>&nbsp;
+            {course.books.length} books
+        </div>
     </section>
 }
+
+
+

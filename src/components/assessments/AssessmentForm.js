@@ -13,6 +13,7 @@ export const AssessmentForm = () => {
     }
     const [assessment, changeAssessment] = useState(defaultState)
     const [books, setBooks] = useState([])
+    const [mode, setMode] = useState("create")
     const [learningObjectives, setObjectives] = useState(new Set())
 
     const { allAssessments, saveAssessment, getAssessment, editAssessment } = useContext(AssessmentContext)
@@ -21,19 +22,22 @@ export const AssessmentForm = () => {
     const { assessmentId } = useParams()
 
     const history = useHistory()
-    console.log(history)
 
     useEffect(() => {
         getBooks().then(setBooks)
 
-        if ("book" in history.location.state) {
-            changeAssessment({...assessment, bookId: history.location.state.book.id})
+        if ("state" in history.location) {
+            changeAssessment({...assessment, bookId: history.location?.state?.book?.id})
         }
 
         if (!objectives.length) {
             getLearningObjectives()
         }
 
+
+    }, [])
+
+    useEffect(() => {
         if (assessmentId) {
             getAssessment(assessmentId).then(data => {
                 changeAssessment({
@@ -45,8 +49,9 @@ export const AssessmentForm = () => {
                 const objectives = new Set(data.objectives.map(o => o.id))
                 setObjectives(objectives)
             })
+            setMode("edit")
         }
-    }, [])
+    }, [assessmentId])
 
     const updateState = (event) => stateSync(event, assessment, changeAssessment)
 
@@ -55,19 +60,19 @@ export const AssessmentForm = () => {
 
         if (assessmentId) {
             return editAssessment({ ...assessment, objectives: Array.from(learningObjectives) })
-            .then(() => history.push("/assessments"))
+            .then(() => history.push(`/books/${assessment.bookId}`))
 
         }
         else {
             return saveAssessment({ ...assessment, objectives: Array.from(learningObjectives) })
-            .then(() => history.push("/assessments"))
+            .then(() => history.push(`/books/${assessment.bookId}`))
 
         }
     }
 
     return <article className="container--assessmentForm">
         <form className="recordForm">
-            <h1 className="recordForm__title">New Assessment</h1>
+            <h1 className="recordForm__title">{mode === "create" ? "New" : "Edit"} Assessment</h1>
             <fieldset>
                 <div className="form-group">
                     <select id="bookId" className="form-control"
@@ -120,7 +125,7 @@ export const AssessmentForm = () => {
                     return <div className="assessment__objective" key={identifier}>
                         <input type="checkbox" id={identifier}
                             checked={learningObjectives.has(objective.id)}
-                            onClick={() => stateCheckboxSync(learningObjectives, setObjectives, objective.id)}
+                            onChange={() => stateCheckboxSync(learningObjectives, setObjectives, objective.id)}
                             style={{ margin: "0.2rem 0.2rem" }}
                         />
                         <label htmlFor={identifier}>{objective.label}</label>
@@ -132,7 +137,11 @@ export const AssessmentForm = () => {
             <div className="recordFormButtons">
                 <button type="submit"
                     onClick={create}
-                    className="isometric-button blue">Create</button>
+                    className="isometric-button blue">{ mode === "create" ? "Create" : "Update" }</button>
+
+                <button onClick={() => history.push(`/books/${assessment.bookId}`)}
+                    style={{margin: "0 0 0 2rem"}}
+                    className="isometric-button gray">Cancel</button>
             </div>
 
         </form>

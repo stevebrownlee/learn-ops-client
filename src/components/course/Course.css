@@ -15,10 +15,32 @@
     padding: 1rem;
 }
 
-.course__books, .book__projects {
+.course__books, .book__projects, .courses {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+}
+
+.courses {
+    margin: 1rem 4rem;
+}
+
+.book__asssessment {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border: 1px solid rgb(191, 213, 180);
+    padding: 0.33rem 0.5rem;
+    margin: 0 0 0.25rem 0;
+    background-color: rgb(247, 255, 243);
+}
+
+.book__asssessment:hover {
+    padding: 0.33rem 0.6rem;
+    background-color: rgb(235, 255, 226);
+    cursor: pointer;
+    text-decoration: underline;
+    color:blue;
 }
 
 .course__book, .book__project {

@@ -36,6 +36,7 @@ export const BookDetails = () => {
             {book.name}
         </h1>
 
+        <h3>Projects</h3>
         <div className="book__projects">
             {
                 projects.map(project => <section key={project.id} className="book__project"
@@ -48,20 +49,35 @@ export const BookDetails = () => {
             }
         </div>
 
+        {
+            book.has_assessment
+                ? <>
+                    <h3>Assessment</h3>
+                    <section key={"book--assessment"} className="book__asssessment"
+                        onClick={() => {
+                            history.push(`/assessments/edit/${book.assessments[0].id}`)
+                        }}
+                    >
+                        <div>{book.assessments[0].name}</div>
+                    </section>
+                </>
+                : ""
+        }
+
         <div className="book__footer">
             <button style={{ marginTop: "2rem" }}
                 className="isometric-button blue"
                 onClick={() => history.push(`/projects/new/${book.id}`)}>Add Project</button>
 
             {
-                "id" in assessment
+                book.has_assessment
                     ? ""
                     : <button style={{ margin: "2rem 0 0 2rem" }}
-                    className="isometric-button blue"
-                    onClick={() => history.push({
-                        pathname: `/assessments/new`,
-                        state: { book }
-                     })}>Add Self-Assessment</button>
+                        className="isometric-button blue"
+                        onClick={() => history.push({
+                            pathname: `/assessments/new`,
+                            state: { book }
+                        })}>Add Self-Assessment</button>
             }
 
 

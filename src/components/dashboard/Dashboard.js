@@ -51,7 +51,5 @@ export const Dashboard = () => {
         </StandupContext.Provider>
 
         <FeedbackDialog />
-
-
     </main>
 }

@@ -18,19 +18,19 @@ export const CourseList = () => {
     }, [])
 
     return <article className="container--bookList">
-        <header className="courses__header">
-            <button className="isometric-button blue"
-                style={{margin: "1rem 0 0 3rem"}}
-                onClick={() => history.push("/courses/new")}>
-                <span>Create Course</span>
-            </button>
-        </header>
-
         <div className="courses">
+            <h1 style={{ fontSize: "1.75rem" }}>Courses</h1>
             {
                 courses.map(course => <CourseCard key={course.id} course={course} />)
             }
         </div>
 
+        <div className="course__footer">
+            <button className="isometric-button blue"
+                style={{ margin: "1rem 0 0 3rem" }}
+                onClick={() => history.push("/courses/new")}>
+                <span>Create Course</span>
+            </button>
+        </div>
     </article>
 }
