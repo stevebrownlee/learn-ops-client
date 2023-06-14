@@ -21,9 +21,14 @@ export const AssessmentForm = () => {
     const { assessmentId } = useParams()
 
     const history = useHistory()
+    console.log(history)
 
     useEffect(() => {
         getBooks().then(setBooks)
+
+        if ("book" in history.location.state) {
+            changeAssessment({...assessment, bookId: history.location.state.book.id})
+        }
 
         if (!objectives.length) {
             getLearningObjectives()
@@ -127,7 +132,7 @@ export const AssessmentForm = () => {
             <div className="recordFormButtons">
                 <button type="submit"
                     onClick={create}
-                    className="btn btn-primary">Create</button>
+                    className="isometric-button blue">Create</button>
             </div>
 
         </form>

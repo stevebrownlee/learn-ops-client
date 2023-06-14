@@ -54,33 +54,31 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
                             />
                         </section>
                     )
-                    : <>
-                        <button className="button button--isi button--border-thick button--round-l button--size-s button--assessment"
-                            onClick={() => {
-                                fetchIt(`${Settings.apiHost}/coreskills`)
-                                    .then(skills => {
-                                        const newRecordRequests = []
+                    : <button className="isometric-button yellow"
+                        onClick={() => {
+                            fetchIt(`${Settings.apiHost}/coreskills`)
+                                .then(skills => {
+                                    const newRecordRequests = []
 
-                                        for (const skill of skills.results) {
-                                            newRecordRequests.push(
-                                                fetchIt(`${Settings.apiHost}/coreskillrecords`, {
-                                                    method: "POST",
-                                                    body: JSON.stringify({
-                                                        "student": activeStudent?.id,
-                                                        "skill": skill.id,
-                                                        "note": "Initial record",
-                                                        "level": 1
-                                                    })
+                                    for (const skill of skills.results) {
+                                        newRecordRequests.push(
+                                            fetchIt(`${Settings.apiHost}/coreskillrecords`, {
+                                                method: "POST",
+                                                body: JSON.stringify({
+                                                    "student": activeStudent?.id,
+                                                    "skill": skill.id,
+                                                    "note": "Initial record",
+                                                    "level": 1
                                                 })
-                                            )
-                                        }
-                                        Promise.all(newRecordRequests).then(() => getStudentCoreSkills(activeStudent?.id))
-                                    })
-                            }}>
-                            <i className="button__icon icon icon-book"></i>
-                            <span>Start Tracking Core Skills</span>
-                        </button>
-                    </>
+                                            })
+                                        )
+                                    }
+                                    Promise.all(newRecordRequests).then(() => getStudentCoreSkills(activeStudent?.id))
+                                })
+                        }}>
+                        <span>Start Tracking Core Skills</span>
+                    </button>
+
             }
         </div>
     </>

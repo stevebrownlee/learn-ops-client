@@ -21,7 +21,7 @@ export const Student = ({
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
         getStudentLearningRecords, getStudentPersonality
     } = useContext(PeopleContext)
-    const showAllProjects = useContext(StandupContext)
+    const {showAllProjects, toggleAllProjects} = useContext(StandupContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
 
@@ -39,6 +39,7 @@ export const Student = ({
         studentFooter.current.classList.remove("grow")
         clearTimeout(delayHandler)
     }
+
 
     const setAssessmentIndicatorBorder = (status) => {
         switch (status) {
@@ -65,11 +66,15 @@ export const Student = ({
             `}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            draggable={showAllProjects}
+            draggable={true}
             onDragStart={e => {
                 const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
                 const transferStudent = { ...student, currentProject: parseInt(currentProjectId) }
                 e.dataTransfer.setData("text/plain", JSON.stringify(transferStudent))
+
+                setTimeout(() => {
+                    toggleAllProjects(true)
+                }, 150)
             }}
         >
 

@@ -17,6 +17,11 @@
 }
 
 /* Color variations */
+.isometric-button.small {
+	font-size: smaller;
+	padding: 0.25rem 0.4rem;
+}
+
 .isometric-button.red {
 	background-color: firebrick;
 	color: white;

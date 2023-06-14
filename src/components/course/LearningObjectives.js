@@ -53,10 +53,16 @@ export const LearningObjectives = () => {
                                 action.then(() => getStudentLearningRecords(activeStudent?.id))
                                     .then(() => getCohortStudents(activeCohort))
                             }}
-                            className="button-28"
+                            className="isometric-button gray small"
                             style={{ margin: "0.2rem 0.2rem" }}
                         >
-                            <span>{objective.label}</span>
+                            <span onMouseOver={(evt) => {
+                                evt.target.innerText = objective.label
+                            }}
+                            onMouseOut={(evt) => {
+                                evt.target.innerText = objective.label.substr(0,15)
+                            }}
+                            >{objective.label.substr(0,15)}</span>
                         </button>
                     }
                 })

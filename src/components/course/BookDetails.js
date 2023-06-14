@@ -5,10 +5,12 @@ import { GridIcon } from "../../svgs/GridIcon"
 import { NoteIcon } from "../../svgs/NoteIcon"
 import { EditIcon } from "../../svgs/EditIcon"
 import { CourseContext } from "./CourseProvider.js"
+import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 
 
 export const BookDetails = () => {
     const [projects, changeProjectsState] = useState([])
+    const [assessment, changeAssessmentState] = useState({})
     const [book, changeBookState] = useState({})
     const history = useHistory()
     const { bookId } = useParams()
@@ -17,6 +19,7 @@ export const BookDetails = () => {
         getBookProjects, getBook, activeCourse,
         deleteBook
     } = useContext(CourseContext)
+    const { getBookAssessment } = useContext(AssessmentContext)
 
     useEffect(() => {
         getBook(bookId).then(changeBookState)
@@ -24,11 +27,12 @@ export const BookDetails = () => {
 
     useEffect(() => {
         getBookProjects(bookId).then(changeProjectsState)
+        getBookAssessment(bookId).then(changeAssessmentState)
     }, [book])
 
     return <section className="book--detail">
         <h1 className="book__header">
-            <Link to={`/courses/${activeCourse.id}`}>{activeCourse.name}</Link>&nbsp; &gt; &nbsp;
+            <Link to={`/courses/${book?.course?.id}`}>{book?.course?.name}</Link>&nbsp; &gt; &nbsp;
             {book.name}
         </h1>
 
@@ -48,6 +52,17 @@ export const BookDetails = () => {
             <button style={{ marginTop: "2rem" }}
                 className="isometric-button blue"
                 onClick={() => history.push(`/projects/new/${book.id}`)}>Add Project</button>
+
+            {
+                "id" in assessment
+                    ? ""
+                    : <button style={{ margin: "2rem 0 0 2rem" }}
+                    className="isometric-button blue"
+                    onClick={() => history.push({
+                        pathname: `/assessments/new`,
+                        state: { book }
+                     })}>Add Self-Assessment</button>
+            }
 
 
             <button style={{ marginTop: "2rem", marginLeft: "auto" }}

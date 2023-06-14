@@ -22,7 +22,7 @@ import "./Tooltip.css"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
-    const showAllProjects = useContext(StandupContext)
+    const { showAllProjects, toggleAllProjects } = useContext(StandupContext)
     const { activeCohort, activateCohort } = useContext(CohortContext)
     const { cohortStudents, getCohortStudents, setStudentCurrentProject } = useContext(PeopleContext)
     const [groupedStudents, setGroupedStudents] = useState([])
@@ -127,6 +127,8 @@ export const StudentCardList = ({ searchTerms }) => {
                                         onDragOver={e => e.preventDefault()}
                                         onDrop={e => {
                                             e.preventDefault()
+                                            toggleAllProjects(false)
+
                                             const data = e.dataTransfer.getData("text/plain")
                                             const rawStudent = JSON.parse(data)
 
@@ -148,10 +150,10 @@ export const StudentCardList = ({ searchTerms }) => {
                                                 evt.target.innerText = project.name
                                             }}
                                             onMouseOut={evt => {
-                                                evt.target.innerText = showAllProjects ? project.name.substring(0, 2) : project.name
+                                                evt.target.innerText = showAllProjects ? project.name.substring(0, 3) : project.name
                                             }}
                                         >
-                                            {showAllProjects ? project.name.substring(0, 2) : project.name}
+                                            {showAllProjects ? project.name.substring(0, 3) : project.name}
                                         </div>
 
                                         {

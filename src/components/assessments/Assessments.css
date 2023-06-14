@@ -56,6 +56,9 @@
 
 .assessment__objective {
     flex: 0 1 20%;
+    border: 1px solid lightyellow;
+    padding: 0.5rem;
+    background-color: rgb(255, 254, 243);
 }
 
 .container--assessmentList {
