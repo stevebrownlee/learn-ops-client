@@ -32,11 +32,6 @@ export const CohortSearchField = () => {
     }, [])
 
     useEffect(() => {
-        if (JSON.parse(localStorage.getItem("activeCohort"))) {
-            const id = parseInt(localStorage.getItem("activeCohort"))
-            getCohort(id)
-        }
-
         document.addEventListener("keypress", searchLogger)
         return () => document.removeEventListener("keypress", searchLogger)
     }, [])

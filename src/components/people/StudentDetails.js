@@ -5,12 +5,14 @@ import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
 import { StudentPersonality } from "./StudentPersonality.js"
 import { StudentProposals } from "./StudentProposals.js"
-import "../people/Status.css"
 import { StudentAssessments } from "./StudentAssessments.js"
+import { CourseContext } from "../course/CourseProvider.js"
+import "../people/Status.css"
 
 export const StudentDetails = ({ toggleCohorts }) => {
     const { activeStudent } = useContext(PeopleContext)
     const { getStudentAssessments } = useContext(AssessmentContext)
+    const { getLearningObjectives, activeCourse } = useContext(CourseContext)
 
     const hideOverlay = (e) => {
         document.querySelector('.overlay--student').style.display = "none"
@@ -19,6 +21,7 @@ export const StudentDetails = ({ toggleCohorts }) => {
     useEffect(() => {
         if (activeStudent && "id" in activeStudent) {
             getStudentAssessments(activeStudent.id)
+            getLearningObjectives()
         }
     }, [activeStudent])
 
@@ -44,8 +47,8 @@ export const StudentDetails = ({ toggleCohorts }) => {
                     <div className="student__details">
 
                         <div className="student__github">
-                            Github: <a href={`https://www.github.com/${activeStudent?.github}`}>
-                                {`https://www.github.com/${activeStudent?.github}`}</a>
+                            Github: <a href={`https://www.github.com/${activeStudent?.github_handle}`}>
+                                {`https://www.github.com/${activeStudent?.github_handle}`}</a>
                         </div>
                         <div className="student__cohort">
                             Cohort: <button className="fakeLink"

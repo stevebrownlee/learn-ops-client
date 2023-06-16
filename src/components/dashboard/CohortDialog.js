@@ -9,15 +9,9 @@ export const CohortDialog = ({ toggleCohorts }) => {
     const { getCohorts, cohorts } = useContext(CohortContext)
     const [cohortIds, setCohortIds] = useState([])
 
-    useEffect(
-        () => {
-            getCohorts()
-        },
-        []
-    )
-
     useEffect(() => {
         if (activeStudent && "cohorts" in activeStudent) {
+            getCohorts()
             const ids = activeStudent?.cohorts?.map(c => c.id) ?? []
             setCohortIds(ids)
         }

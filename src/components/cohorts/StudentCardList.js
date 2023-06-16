@@ -37,8 +37,7 @@ export const StudentCardList = ({ searchTerms }) => {
     let { toggleDialog: toggleCohorts } = useModal("#dialog--cohorts")
 
     const getComponentData = (cohortId) => {
-        return getCourses()
-            .then(() => getActiveCourse(cohortId))
+        return getActiveCourse(cohortId)
             .then(course => {
                 localStorage.setItem("activeCourse", course.id)
                 getCohortStudents(cohortId)

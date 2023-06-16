@@ -59,7 +59,7 @@ export const Student = ({
     return <>
         <div id={`student--${student.id}`}
             className={`
-                personality--${student.archetype}
+                personality--
                 student
                 ${showAllProjects ? "student--mini" : "student--regular"}
                 ${setAssessmentIndicatorBorder(student.assessment_status)}

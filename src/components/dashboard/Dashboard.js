@@ -17,14 +17,10 @@ export const Dashboard = () => {
     const [mvps, setMVPs] = useState(0)
     const [showAllProjects, toggleAllProjects] = useState(false)
 
-    const { getLearningObjectives, activeCourse } = useContext(CourseContext)
+    const { activeCourse } = useContext(CourseContext)
     const { cohortStudents } = useContext(PeopleContext)
 
     const history = useHistory()
-
-    useEffect(() => {
-        getLearningObjectives()
-    }, [])
 
     useEffect(() => {
         if (cohortStudents.length > 0 && "id" in activeCourse) {
