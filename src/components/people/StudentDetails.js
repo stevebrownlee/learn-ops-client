@@ -55,7 +55,7 @@ export const StudentDetails = ({ toggleCohorts }) => {
                                 onClick={() => {
                                     toggleCohorts()
                                 }}>
-                                {activeStudent?.cohorts?.map(c => c.name).join(", ")}
+                                {activeStudent?.current_cohort?.name}
                             </button>
                         </div>
                     </div>

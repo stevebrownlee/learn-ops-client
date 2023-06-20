@@ -7,13 +7,10 @@ import { CohortContext } from "../cohorts/CohortProvider"
 export const CohortDialog = ({ toggleCohorts }) => {
     const { activeStudent, getStudent } = useContext(PeopleContext)
     const { getCohorts, cohorts } = useContext(CohortContext)
-    const [cohortIds, setCohortIds] = useState([])
 
     useEffect(() => {
-        if (activeStudent && "cohorts" in activeStudent) {
+        if (activeStudent) {
             getCohorts()
-            const ids = activeStudent?.cohorts?.map(c => c.id) ?? []
-            setCohortIds(ids)
         }
     }, [activeStudent])
 
@@ -43,7 +40,7 @@ export const CohortDialog = ({ toggleCohorts }) => {
                         const action = changeEvent.target.checked ? assignStudent : removeStudent
                         action(cohort).then(getStudent)
                     }}
-                    checked={cohortIds.includes(cohort.id)} value={cohort.id} /> {cohort.name}
+                    checked={activeStudent?.current_cohort?.id === cohort.id} value={cohort.id} /> {cohort.name}
             </div>)
         }
         <button className="fakeLink" style={{
