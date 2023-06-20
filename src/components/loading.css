@@ -1,0 +1,237 @@
+.loading {
+    width: 30em;
+    height: 20em;
+    position: absolute;
+    text-align: center;
+    top: 40%;
+}
+
+.point {
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    margin: 0 2em 2em;
+    display: inline-block;
+}
+
+.point:nth-child(1) {
+    animation: color 1100ms infinite ease-in-out;
+}
+
+.row:nth-child(1) {
+    animation: opacity 1100ms infinite ease-in-out;
+}
+
+.point:nth-child(2) {
+    animation: color 1200ms infinite ease-in-out;
+}
+
+.row:nth-child(2) {
+    animation: opacity 1200ms infinite ease-in-out;
+}
+
+.point:nth-child(3) {
+    animation: color 1300ms infinite ease-in-out;
+}
+
+.row:nth-child(3) {
+    animation: opacity 1300ms infinite ease-in-out;
+}
+
+.point:nth-child(4) {
+    animation: color 1400ms infinite ease-in-out;
+}
+
+.row:nth-child(4) {
+    animation: opacity 1400ms infinite ease-in-out;
+}
+
+.point:nth-child(5) {
+    animation: color 1500ms infinite ease-in-out;
+}
+
+.row:nth-child(5) {
+    animation: opacity 1500ms infinite ease-in-out;
+}
+
+.point:nth-child(6) {
+    animation: color 1600ms infinite ease-in-out;
+}
+
+.row:nth-child(6) {
+    animation: opacity 1600ms infinite ease-in-out;
+}
+
+.point:nth-child(7) {
+    animation: color 1700ms infinite ease-in-out;
+}
+
+.row:nth-child(7) {
+    animation: opacity 1700ms infinite ease-in-out;
+}
+
+.point:nth-child(8) {
+    animation: color 1800ms infinite ease-in-out;
+}
+
+.row:nth-child(8) {
+    animation: opacity 1800ms infinite ease-in-out;
+}
+
+.point:nth-child(9) {
+    animation: color 1900ms infinite ease-in-out;
+}
+
+.row:nth-child(9) {
+    animation: opacity 1900ms infinite ease-in-out;
+}
+
+.point:nth-child(10) {
+    animation: color 2000ms infinite ease-in-out;
+}
+
+.row:nth-child(10) {
+    animation: opacity 2000ms infinite ease-in-out;
+}
+
+.point:nth-child(11) {
+    animation: color 2100ms infinite ease-in-out;
+}
+
+.row:nth-child(11) {
+    animation: opacity 2100ms infinite ease-in-out;
+}
+
+.point:nth-child(12) {
+    animation: color 2200ms infinite ease-in-out;
+}
+
+.row:nth-child(12) {
+    animation: opacity 2200ms infinite ease-in-out;
+}
+
+.point:nth-child(13) {
+    animation: color 2300ms infinite ease-in-out;
+}
+
+.row:nth-child(13) {
+    animation: opacity 2300ms infinite ease-in-out;
+}
+
+.point:nth-child(14) {
+    animation: color 2400ms infinite ease-in-out;
+}
+
+.row:nth-child(14) {
+    animation: opacity 2400ms infinite ease-in-out;
+}
+
+.point:nth-child(15) {
+    animation: color 2500ms infinite ease-in-out;
+}
+
+.row:nth-child(15) {
+    animation: opacity 2500ms infinite ease-in-out;
+}
+
+.point:nth-child(16) {
+    animation: color 2600ms infinite ease-in-out;
+}
+
+.row:nth-child(16) {
+    animation: opacity 2600ms infinite ease-in-out;
+}
+
+.point:nth-child(17) {
+    animation: color 2700ms infinite ease-in-out;
+}
+
+.row:nth-child(17) {
+    animation: opacity 2700ms infinite ease-in-out;
+}
+
+.point:nth-child(18) {
+    animation: color 2800ms infinite ease-in-out;
+}
+
+.row:nth-child(18) {
+    animation: opacity 2800ms infinite ease-in-out;
+}
+
+.point:nth-child(19) {
+    animation: color 2900ms infinite ease-in-out;
+}
+
+.row:nth-child(19) {
+    animation: opacity 2900ms infinite ease-in-out;
+}
+
+.point:nth-child(20) {
+    animation: color 3000ms infinite ease-in-out;
+}
+
+.row:nth-child(20) {
+    animation: opacity 3000ms infinite ease-in-out;
+}
+
+.point:nth-child(21) {
+    animation: color 3100ms infinite ease-in-out;
+}
+
+.row:nth-child(21) {
+    animation: opacity 3100ms infinite ease-in-out;
+}
+
+.point:nth-child(22) {
+    animation: color 3200ms infinite ease-in-out;
+}
+
+.row:nth-child(22) {
+    animation: opacity 3200ms infinite ease-in-out;
+}
+
+.point:nth-child(23) {
+    animation: color 3300ms infinite ease-in-out;
+}
+
+.row:nth-child(23) {
+    animation: opacity 3300ms infinite ease-in-out;
+}
+
+.point:nth-child(24) {
+    animation: color 3400ms infinite ease-in-out;
+}
+
+.row:nth-child(24) {
+    animation: opacity 3400ms infinite ease-in-out;
+}
+
+.point:nth-child(25) {
+    animation: color 3500ms infinite ease-in-out;
+}
+
+.row:nth-child(25) {
+    animation: opacity 3500ms infinite ease-in-out;
+}
+
+@keyframes opacity {
+    from, to {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes color {
+    from, to {
+        background: #ca3737;
+        -webkit-filter: blur(1px);
+    }
+
+    50% {
+        background: #4cd4ee;
+        -webkit-filter: blur(2px);
+    }
+}

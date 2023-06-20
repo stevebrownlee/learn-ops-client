@@ -13,7 +13,7 @@ import "./Dashboard.css"
 export const StandupContext = createContext()
 
 export const Dashboard = () => {
-    const [searchTerms, setSearchTerms] = useState([])
+    const [searchTerms, setSearchTerms] = useState("")
     const [mvps, setMVPs] = useState(0)
     const [showAllProjects, toggleAllProjects] = useState(false)
 
@@ -25,7 +25,7 @@ export const Dashboard = () => {
     useEffect(() => {
         if (cohortStudents.length > 0 && "id" in activeCourse) {
             const mvpReached = cohortStudents.reduce((count, student) => {
-                return student.proposals.find(p => p.status === "mvp" && p.course === activeCourse.id) ? ++count : count
+                return student.proposals.find(p => p.status === "MVP" && p.course === activeCourse.id) ? ++count : count
             }, 0)
 
             setMVPs(mvpReached)
@@ -33,7 +33,6 @@ export const Dashboard = () => {
     }, [cohortStudents, activeCourse])
 
     return <main className="dashboard">
-
         <section className="cohortActions">
             <CohortSearchField />
             <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />

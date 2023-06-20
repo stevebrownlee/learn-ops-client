@@ -19,6 +19,7 @@ import { StandupContext } from "../dashboard/Dashboard"
 import { Toast, configureToasts } from "toaster-js"
 import "./CohortStudentList.css"
 import "./Tooltip.css"
+import { Loading } from "../Loading.js"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
@@ -57,7 +58,7 @@ export const StudentCardList = ({ searchTerms }) => {
             if (!activeCohort) {
                 activateCohort(cohortId)
             }
-            new Toast(`Loading default cohort`, Toast.TYPE_INFO, Toast.TIME_SHORT);
+            // new Toast(`Loading default cohort`, Toast.TYPE_INFO, Toast.TIME_SHORT);
         }
         else {
             history.push("/cohorts")
@@ -97,83 +98,87 @@ export const StudentCardList = ({ searchTerms }) => {
 
         setCeilingBook(ceilingBookIndex)
         setFloorBook(floorBookIndex)
-        setGroupedStudents(studentsPerBook)
+        if (studentsPerBook) {
+            setGroupedStudents(studentsPerBook)
+        }
     }, [cohortStudents, searchTerms])
 
     return <section className="cohortStudents"> {
-        groupedStudents?.map((book) => {
-            return book.index <= (ceilingBook + 1) && (book.studentCount > 0 || (showAllProjects && book.index >= floorBook))
-                ? <article key={`book--${book.id}`} className="bookColumn">
-                    <header className="bookColumn__header">
-                        <div className="bookColumn__name">
-                            <div className="bookColumn__studentCount"> </div>
-                            <div> {book.name} </div>
-                            <div className="bookColumn__studentCount">
-                                <PeopleIcon /> {book.studentCount}
+        groupedStudents.length === 0
+            ? <Loading />
+            : groupedStudents?.map((book) => {
+                return book.index <= (ceilingBook + 1) && (book.studentCount > 0 || (showAllProjects && book.index >= floorBook))
+                    ? <article key={`book--${book.id}`} className="bookColumn">
+                        <header className="bookColumn__header">
+                            <div className="bookColumn__name">
+                                <div className="bookColumn__studentCount"> </div>
+                                <div> {book.name} </div>
+                                <div className="bookColumn__studentCount">
+                                    <PeopleIcon /> {book.studentCount}
+                                </div>
                             </div>
-                        </div>
-                    </header>
-                    <section className="bookColumn__projects"> {
-                        book.projects.map(project => {
-                            if (showAllProjects || project.students.length) {
-                                if (
-                                    (book.studentCount === 0 && project.index === 0) ||
-                                    book.studentCount > 0
-                                ) {
-                                    return <div id={`book-project--${project.id}`}
-                                        key={`book-project--${project.id}`}
-                                        className="bookColumn__projectHeader"
-                                        onDragOver={e => e.preventDefault()}
-                                        onDrop={e => {
-                                            e.preventDefault()
-                                            toggleAllProjects(false)
+                        </header>
+                        <section className="bookColumn__projects"> {
+                            book.projects.map(project => {
+                                if (showAllProjects || project.students.length) {
+                                    if (
+                                        (book.studentCount === 0 && project.index === 0) ||
+                                        book.studentCount > 0
+                                    ) {
+                                        return <div id={`book-project--${project.id}`}
+                                            key={`book-project--${project.id}`}
+                                            className="bookColumn__projectHeader"
+                                            onDragOver={e => e.preventDefault()}
+                                            onDrop={e => {
+                                                e.preventDefault()
+                                                toggleAllProjects(false)
 
-                                            const data = e.dataTransfer.getData("text/plain")
-                                            const rawStudent = JSON.parse(data)
+                                                const data = e.dataTransfer.getData("text/plain")
+                                                const rawStudent = JSON.parse(data)
 
-                                            setStudentCurrentProject(rawStudent.id, project.id)
-                                                .then(() => getCohortStudents(activeCohort))
-                                                .catch((error) => {
-                                                    if (error?.message?.includes("duplicate")) {
-                                                        new Toast("Student has previously been assigned to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
-                                                    }
-                                                    else {
-                                                        new Toast("Could not assign student to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
-                                                    }
-                                                })
-                                        }}
-                                    >
-
-                                        <div className="bookColumn__project"
-                                            onMouseOver={evt => {
-                                                evt.target.innerText = project.name
-                                            }}
-                                            onMouseOut={evt => {
-                                                evt.target.innerText = showAllProjects ? project.name.substring(0, 3) : project.name
+                                                setStudentCurrentProject(rawStudent.id, project.id)
+                                                    .then(() => getCohortStudents(activeCohort))
+                                                    .catch((error) => {
+                                                        if (error?.message?.includes("duplicate")) {
+                                                            new Toast("Student has previously been assigned to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                                                        }
+                                                        else {
+                                                            new Toast("Could not assign student to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                                                        }
+                                                    })
                                             }}
                                         >
-                                            {showAllProjects ? project.name.substring(0, 3) : project.name}
-                                        </div>
 
-                                        {
-                                            project.students.map(student => <Student
-                                                toggleProjects={toggleProjects}
-                                                toggleStatuses={toggleStatuses}
-                                                toggleTags={toggleTags}
-                                                toggleNote={toggleNote}
-                                                toggleCohorts={toggleCohorts}
-                                                key={`student--${student.id}`}
-                                                student={student} />)
-                                        }
-                                    </div>
+                                            <div className="bookColumn__project"
+                                                onMouseOver={evt => {
+                                                    evt.target.innerText = project.name
+                                                }}
+                                                onMouseOut={evt => {
+                                                    evt.target.innerText = showAllProjects ? project.name.substring(0, 3) : project.name
+                                                }}
+                                            >
+                                                {showAllProjects ? project.name.substring(0, 3) : project.name}
+                                            </div>
+
+                                            {
+                                                project.students.map(student => <Student
+                                                    toggleProjects={toggleProjects}
+                                                    toggleStatuses={toggleStatuses}
+                                                    toggleTags={toggleTags}
+                                                    toggleNote={toggleNote}
+                                                    toggleCohorts={toggleCohorts}
+                                                    key={`student--${student.id}`}
+                                                    student={student} />)
+                                            }
+                                        </div>
+                                    }
                                 }
-                            }
-                            return ""
-                        })
-                    } </section>
-                </article>
-                : ""
-        })
+                                return ""
+                            })
+                        } </section>
+                    </article>
+                    : ""
+            })
     }
 
         <StudentDetails toggleCohorts={toggleCohorts} />
