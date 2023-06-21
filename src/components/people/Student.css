@@ -11,11 +11,11 @@
 }
 
 .student--mini {
-    width: initial;
+    width: 5rem;
 }
 
 .student--regular {
-    width: 9rem;
+    width: 7rem;
 }
 
 .student__header {

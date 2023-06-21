@@ -23,7 +23,7 @@ import { Loading } from "../Loading.js"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
-    const { showAllProjects, toggleAllProjects } = useContext(StandupContext)
+    const { showAllProjects, toggleAllProjects, dragStudent, draggedStudent } = useContext(StandupContext)
     const { activeCohort, activateCohort } = useContext(CohortContext)
     const { cohortStudents, getCohortStudents, setStudentCurrentProject } = useContext(PeopleContext)
     const [groupedStudents, setGroupedStudents] = useState([])
@@ -79,18 +79,27 @@ export const StudentCardList = ({ searchTerms }) => {
             })
         }
 
-        let floorBookIndex = null
+        let floorBookIndex = -1
         let ceilingBookIndex = activeCourse?.books ? activeCourse?.books[activeCohort?.books?.length - 1]?.index : 0
 
         const studentsPerBook = activeCourse?.books?.map(book => {
             book.studentCount = 0
+            book.display = false
+
             for (const project of book.projects) {
-                const students = copy.filter(student => student.book.id === book.id && student.book.project === project.name)
-                project.students = students
-                book.studentCount += students.length
+                project.display = false
+                project.droppable = false
+                project.students = copy.filter(student => student.book.id === book.id && student.book.project === project.name)
+
+                if (project.students.length > 0) {
+                    book.display = true
+                    project.display = true
+                    book.studentCount += project.students.length
+                }
+                if ( (floorBookIndex > -1 && book.index >= floorBookIndex) || project.display) project.droppable = true
             }
 
-            if (book.studentCount && floorBookIndex === null) floorBookIndex = book.index
+            if (book.studentCount && floorBookIndex === -1) floorBookIndex = book.index
             if (book.studentCount > 0) ceilingBookIndex = book.index
 
             return book
@@ -103,15 +112,24 @@ export const StudentCardList = ({ searchTerms }) => {
         }
     }, [cohortStudents, searchTerms])
 
+    const showBook = (book) => {
+        const showInRegularMode = !showAllProjects && book.display
+        const isStudentCurrentBook = book.index === draggedStudent?.bookIndex
+        const isStudentNextBook = book.index === draggedStudent?.bookIndex + 1
+        const showInStandupMode = showAllProjects && (isStudentCurrentBook || isStudentNextBook)
+
+        return showInRegularMode || showInStandupMode
+    }
+
     return <section className="cohortStudents"> {
         groupedStudents.length === 0
             ? <Loading />
             : groupedStudents?.map((book) => {
-                return book.index <= (ceilingBook + 1) && (book.studentCount > 0 || (showAllProjects && book.index >= floorBook))
+                return showBook(book)
                     ? <article key={`book--${book.id}`} className="bookColumn">
                         <header className="bookColumn__header">
                             <div className="bookColumn__name">
-                                <div className="bookColumn__studentCount"> </div>
+                                <div className="bookColumn__studentCount">&nbsp;</div>
                                 <div> {book.name} </div>
                                 <div className="bookColumn__studentCount">
                                     <PeopleIcon /> {book.studentCount}
@@ -120,58 +138,57 @@ export const StudentCardList = ({ searchTerms }) => {
                         </header>
                         <section className="bookColumn__projects"> {
                             book.projects.map(project => {
-                                if (showAllProjects || project.students.length) {
-                                    if (
-                                        (book.studentCount === 0 && project.index === 0) ||
-                                        book.studentCount > 0
-                                    ) {
-                                        return <div id={`book-project--${project.id}`}
-                                            key={`book-project--${project.id}`}
-                                            className="bookColumn__projectHeader"
-                                            onDragOver={e => e.preventDefault()}
-                                            onDrop={e => {
-                                                e.preventDefault()
-                                                toggleAllProjects(false)
+                                if (
+                                    (showAllProjects && project.droppable)
+                                    || (!showAllProjects && project.display)
+                                ) {
+                                    return <div id={`book-project--${project.id}`}
+                                        key={`book-project--${project.id}`}
+                                        className="bookColumn__projectHeader"
+                                        onDragOver={e => e.preventDefault()}
+                                        onDrop={e => {
+                                            e.preventDefault()
+                                            toggleAllProjects(false)
+                                            dragStudent(null)
 
-                                                const data = e.dataTransfer.getData("text/plain")
-                                                const rawStudent = JSON.parse(data)
+                                            const data = e.dataTransfer.getData("text/plain")
+                                            const rawStudent = Object.assign(Object.create(null), JSON.parse(data))
 
-                                                setStudentCurrentProject(rawStudent.id, project.id)
-                                                    .then(() => getCohortStudents(activeCohort))
-                                                    .catch((error) => {
-                                                        if (error?.message?.includes("duplicate")) {
-                                                            new Toast("Student has previously been assigned to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
-                                                        }
-                                                        else {
-                                                            new Toast("Could not assign student to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
-                                                        }
-                                                    })
+                                            setStudentCurrentProject(rawStudent.id, project.id)
+                                                .then(() => getCohortStudents(activeCohort))
+                                                .catch((error) => {
+                                                    if (error?.message?.includes("duplicate")) {
+                                                        new Toast("Student has previously been assigned to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                                                    }
+                                                    else {
+                                                        new Toast("Could not assign student to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                                                    }
+                                                })
+                                        }}
+                                    >
+                                        <div className="bookColumn__project"
+                                            onMouseOver={evt => {
+                                                evt.target.innerText = project.name
+                                            }}
+                                            onMouseOut={evt => {
+                                                evt.target.innerText = showAllProjects ? project.name.substring(0, 3) : project.name
                                             }}
                                         >
-
-                                            <div className="bookColumn__project"
-                                                onMouseOver={evt => {
-                                                    evt.target.innerText = project.name
-                                                }}
-                                                onMouseOut={evt => {
-                                                    evt.target.innerText = showAllProjects ? project.name.substring(0, 3) : project.name
-                                                }}
-                                            >
-                                                {showAllProjects ? project.name.substring(0, 3) : project.name}
-                                            </div>
-
-                                            {
-                                                project.students.map(student => <Student
-                                                    toggleProjects={toggleProjects}
-                                                    toggleStatuses={toggleStatuses}
-                                                    toggleTags={toggleTags}
-                                                    toggleNote={toggleNote}
-                                                    toggleCohorts={toggleCohorts}
-                                                    key={`student--${student.id}`}
-                                                    student={student} />)
-                                            }
+                                            {showAllProjects ? project.name.substring(0, 14) : project.name}
                                         </div>
-                                    }
+
+                                        {
+                                            project.students.map(student => <Student
+                                                toggleProjects={toggleProjects}
+                                                toggleStatuses={toggleStatuses}
+                                                toggleTags={toggleTags}
+                                                toggleNote={toggleNote}
+                                                toggleCohorts={toggleCohorts}
+                                                key={`student--${student.id}`}
+                                                student={student} />)
+                                        }
+                                    </div>
+
                                 }
                                 return ""
                             })

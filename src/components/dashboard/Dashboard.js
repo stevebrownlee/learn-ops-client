@@ -16,6 +16,7 @@ export const Dashboard = () => {
     const [searchTerms, setSearchTerms] = useState("")
     const [mvps, setMVPs] = useState(0)
     const [showAllProjects, toggleAllProjects] = useState(false)
+    const [draggedStudent, dragStudent] = useState(null)
 
     const { activeCourse } = useContext(CourseContext)
     const { cohortStudents } = useContext(PeopleContext)
@@ -41,7 +42,7 @@ export const Dashboard = () => {
             </section>
         </section>
 
-        <StandupContext.Provider value={ {showAllProjects, toggleAllProjects} }>
+        <StandupContext.Provider value={ {showAllProjects, toggleAllProjects, dragStudent, draggedStudent} }>
             <StudentCardList searchTerms={searchTerms} />
         </StandupContext.Provider>
 

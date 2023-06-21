@@ -72,9 +72,5 @@ export const StudentDetails = ({ toggleCohorts }) => {
         </div>
 
         <StudentAssessments />
-
-        <div className="card">
-            <StudentPersonality />
-        </div>
     </div>
 }

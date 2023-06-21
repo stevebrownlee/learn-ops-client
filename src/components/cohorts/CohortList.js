@@ -21,7 +21,6 @@ export const CohortList = () => {
     const history = useHistory()
 
     useEffect(() => {
-        getStudents("unassigned")
         getLastFourCohorts()
     }, [])
 

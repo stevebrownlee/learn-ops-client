@@ -36,7 +36,7 @@ export const StudentProposals = () => {
 
     return <section className="section--proposals">
         <div className="card-title">
-            <h3>Capstone Proposals</h3>
+            <h3>Capstone Projects</h3>
         </div>
         <div className="proposals">
             {

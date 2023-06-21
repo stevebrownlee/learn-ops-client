@@ -21,7 +21,7 @@ export const Student = ({
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
         getStudentLearningRecords, getStudentPersonality
     } = useContext(PeopleContext)
-    const {showAllProjects, toggleAllProjects} = useContext(StandupContext)
+    const {showAllProjects, toggleAllProjects, dragStudent} = useContext(StandupContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
 
@@ -69,11 +69,17 @@ export const Student = ({
             draggable={true}
             onDragStart={e => {
                 const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
-                const transferStudent = { ...student, currentProject: parseInt(currentProjectId) }
+                const transferStudent = Object.assign(Object.create(null), {
+                    id: student.id,
+                    bookId: student.book.id,
+                    bookIndex: student.book.index,
+                    projectId: parseInt(currentProjectId)
+                })
                 e.dataTransfer.setData("text/plain", JSON.stringify(transferStudent))
 
                 setTimeout(() => {
                     toggleAllProjects(true)
+                    dragStudent(transferStudent)
                 }, 150)
             }}
         >
