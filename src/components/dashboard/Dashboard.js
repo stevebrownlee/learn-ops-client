@@ -26,7 +26,7 @@ export const Dashboard = () => {
     useEffect(() => {
         if (cohortStudents.length > 0 && "id" in activeCourse) {
             const mvpReached = cohortStudents.reduce((count, student) => {
-                return student.proposals.find(p => p.status === "MVP" && p.course === activeCourse.id) ? ++count : count
+                return student.proposals.find(p => p.current_status === "MVP" && p.course_name === activeCourse.name) ? ++count : count
             }, 0)
 
             setMVPs(mvpReached)

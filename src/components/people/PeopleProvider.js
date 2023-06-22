@@ -87,9 +87,7 @@ export const PeopleProvider = (props) => {
     const setStudentCurrentProject = useCallback((studentId, projectId) => {
         return fetchIt(`${Settings.apiHost}/students/${studentId}/project`, {
             method: "POST",
-            body: JSON.stringify({
-                projectId
-            })
+            body: JSON.stringify({ projectId })
         })
     }, [])
 
