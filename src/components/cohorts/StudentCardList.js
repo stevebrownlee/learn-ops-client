@@ -17,9 +17,10 @@ import { PeopleIcon } from "../../svgs/PeopleIcon"
 import { Student } from "../people/Student"
 import { StandupContext } from "../dashboard/Dashboard"
 import { Toast, configureToasts } from "toaster-js"
+import { Loading } from "../Loading.js"
+
 import "./CohortStudentList.css"
 import "./Tooltip.css"
-import { Loading } from "../Loading.js"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
