@@ -1,0 +1,23 @@
+
+.students--capstone{
+    width:70%;
+    margin: 0 auto;
+}
+
+.student__row {
+    display: grid;
+    grid-template-columns: 2fr 3fr 3fr 2fr;
+    margin-bottom: 0.33rem;
+    border-bottom: 1px solid rgb(229, 208, 153);
+    padding: 0.4rem 0 0.4rem 0;
+}
+
+.group {
+    border: 1px dashed gray;
+    padding: 1.5rem;
+    margin: 1rem 0;
+}
+
+.proposal__link {
+    font-size: 0.8rem;
+}

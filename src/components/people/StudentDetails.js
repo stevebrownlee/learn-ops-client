@@ -45,7 +45,6 @@ export const StudentDetails = ({ toggleCohorts }) => {
                 </header>
                 <div className="card-text">
                     <div className="student__details">
-
                         <div className="student__github">
                             Github: <a href={`https://www.github.com/${activeStudent?.github_handle}`}>
                                 {`https://www.github.com/${activeStudent?.github_handle}`}</a>

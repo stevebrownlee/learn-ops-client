@@ -40,7 +40,6 @@ export const Student = ({
         clearTimeout(delayHandler)
     }
 
-
     const setAssessmentIndicatorBorder = (status) => {
         switch (status) {
             case 0:
