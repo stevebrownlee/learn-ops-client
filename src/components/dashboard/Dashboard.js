@@ -50,7 +50,7 @@ export const Dashboard = () => {
         }}>
             {
                 capstoneSeason
-                    ? <StudentCapstoneList />
+                    ? <StudentCapstoneList searchTerms={searchTerms} />
                     : <StudentCardList searchTerms={searchTerms} />
             }
 

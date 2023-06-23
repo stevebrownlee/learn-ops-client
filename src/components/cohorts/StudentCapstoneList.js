@@ -17,7 +17,7 @@ import { Loading } from "../Loading.js"
 import "./CapstoneList.css"
 import "./Tooltip.css"
 
-export const StudentCapstoneList = () => {
+export const StudentCapstoneList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
     const { capstoneSeason, setCapstoneSeason } = useContext(StandupContext)
     const { activeCohort, activateCohort } = useContext(CohortContext)
@@ -43,13 +43,14 @@ export const StudentCapstoneList = () => {
 
     useEffect(() => {
         if (cohortStudents.length > 0) {
-            const grouping = new Map()
-            grouping.set(0, []) // Submitted but no action yet
-            grouping.set(1, []) // Instructor marked as in review
-            grouping.set(2, []) // Proposal requires changes
-            grouping.set(3, []) // Proposal approved
-            grouping.set(4, []) // Unsubmitted
-            grouping.set(5, []) // Student reached MVP
+            const grouping = new Map([
+                [0, []], // Submitted but no action yet
+                [1, []], // Instructor marked as in review
+                [2, []], // Proposal requires changes
+                [3, []], // Proposal approved
+                [4, []], // Unsubmitted
+                [5, []]  // Student reached MVP
+            ])
 
             for (const student of cohortStudents) {
                 const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
@@ -83,7 +84,6 @@ export const StudentCapstoneList = () => {
                 }
             }
 
-
             setGroupedProposals(grouping)
         }
     }, [cohortStudents])
@@ -103,67 +103,84 @@ export const StudentCapstoneList = () => {
         }
     }, [])
 
-    const displayStatus = (student) => {
-        const proposal = student.proposals.find(p => p?.course_name === activeCourse.name)
-        if (proposal) {
-            return proposal.current_status ?? "Submitted"
-        }
-        else {
-            return "Not submitted"
-        }
-    }
-
     const mapConverter = ([groupNumber, arrayOfStudents]) => ({ groupNumber, arrayOfStudents })
 
     const stageGrouping = ({ groupNumber, arrayOfStudents }) => {
-        return <div className="group" key={`group--${groupNumber}`}>
-            {
-                arrayOfStudents.map(student => {
-                    const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
+        const heading = {
+            0: "Submitted",
+            1: "Being Reviewed",
+            2: "Requires Changes",
+            3: "Approved",
+            4: "Not Submitted",
+            5: "MVP"
+        }[groupNumber]
 
-                    return <div key={`student--${student.id}`} className="student__row">
-                        <div>{student.name}</div>
-                        <div>{displayStatus(student)}</div>
-                        <div>
-                            <select value={currentProposal?.current_status_id ?? 0}
-                                onChange={(evt) => {
-                                    addToProposalTimeline(currentProposal.id, parseInt(evt.target.value))
-                                        .then(() => getCohortStudents(activeCohort))
-                                }}
-                            >
-                                <option value="0">-- choose status --</option>
-                                {
-                                    proposalStatuses.map(s => <option key={`status--${s.id}`} value={s.id}>{s.status}</option>)
-                                }
-                            </select>
-                        </div>
-                        <div>
-                            {
-                                student.proposals.map(proposal => {
-                                    return <a key={`proposal--${proposal.id}`} className="proposal__link" href={proposal?.proposal_url}>{proposal.course_name}</a>
-                                })
-                            }
-                        </div>
-                    </div>
-                })
+        // Sort student alphabetically by first name
+        arrayOfStudents.sort(
+            (c, n) => {
+                if (c.name < n.name) return -1;
+                if (c.name > n.name) return 1;
+                return 0;
             }
+        )
 
+        return <div key={`group--${groupNumber}`}>
+            <header className="group__heading">
+                <h3>{heading}</h3>
+                <div className="group__count">
+                    <PeopleIcon /> {arrayOfStudents.length}
+                </div>
+            </header>
+            <div className="group">
+
+                {
+                    arrayOfStudents.map(student => {
+                        const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
+
+                        return <div key={`student--${student.id}`} className="student__row">
+                            <div>{student.name}</div>
+                            <div>
+                                {
+                                    groupNumber === 5 || groupNumber === 4
+                                        ? ""
+                                        : <select value={currentProposal?.current_status_id ?? 0}
+                                            onChange={(evt) => {
+                                                addToProposalTimeline(currentProposal.id, parseInt(evt.target.value))
+                                                    .then(() => getCohortStudents(activeCohort))
+                                            }}
+                                        >
+                                            <option value="0">-- choose status --</option>
+                                            {
+                                                proposalStatuses.map(s => <option key={`status--${s.id}`} value={s.id}>{s.status}</option>)
+                                            }
+                                        </select>
+                                }
+                            </div>
+                            <div className="proposalLinks">
+                                {
+                                    student.proposals.map(proposal => {
+                                        return <a target="_blank" key={`proposal--${proposal.id}`} className="proposal__link" href={proposal?.proposal_url}>{proposal.course_name}</a>
+                                    })
+                                }
+                            </div>
+                        </div>
+                    })
+                }
+            </div>
         </div>
     }
 
 
     return <section className="students--capstone">
-        <div className="capstoneHeader">
-            <div>Student</div>
-            <div>Current Status</div>
-            <div>Options</div>
-            <div>Proposal Links</div>
+        <div className="capstoneHeader sticky">
+            <h4>Student</h4>
+            <h4>Options</h4>
+            <h4>Proposal Links</h4>
         </div>
         {
             groupedProposals.size === 0
                 ? <Loading />
                 : Array.from(groupedProposals, mapConverter).map(stageGrouping)
         }
-
     </section>
 }

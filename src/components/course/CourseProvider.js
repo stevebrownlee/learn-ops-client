@@ -11,7 +11,8 @@ export const CourseProvider = (props) => {
     const [capstoneSeason, setCapstoneSeason] = useState(false)
 
     useEffect(() => {
-        setCapstoneSeason(localStorage.getItem("capstoneSeason"))
+        const isCapstoneSeason = (localStorage.getItem("capstoneSeason") === "true")
+        setCapstoneSeason(isCapstoneSeason)
     }, [])
 
 

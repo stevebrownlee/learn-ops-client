@@ -194,27 +194,21 @@ export const CohortDetails = () => {
                                             id="end_date" className="form-control form-control--row form-control--small"
                                         />
                                     </div>
-
                                 </div>
 
-                                    <h2>Capstone Season</h2>
+                                <h2>Capstone Season</h2>
                                 <div className="capstoneToggle">
                                     <input defaultChecked={capstoneSeason}
                                         onChange={(evt) => {
                                         evt.target.ariaChecked = evt.target.checked
                                         setCapstoneSeason(evt.target.checked)
                                         localStorage.setItem("capstoneSeason", evt.target.checked)
-                                    }} id="toggle" class="toggle" type="checkbox" role="switch" name="toggle" value="on" />
-                                    <label htmlFor="toggle" class="slot">
-                                        <span class="slot__label">OFF</span>
-                                        <span class="slot__label">ON</span>
+                                    }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
+                                    <label htmlFor="toggle" className="slot">
+                                        <span className="slot__label">OFF</span>
+                                        <span className="slot__label">ON</span>
                                     </label>
-                                    <div class="curtain"></div>
-
-
-
-
-
+                                    <div className="curtain"></div>
                                 </div>
                             </div>
 
