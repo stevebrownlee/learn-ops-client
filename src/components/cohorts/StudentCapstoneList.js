@@ -55,31 +55,26 @@ export const StudentCapstoneList = ({ searchTerms }) => {
             for (const student of cohortStudents) {
                 const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
 
-                if (student.proposals.length === 0) {
+                if (student.proposals.length === 0 || !currentProposal) {
                     grouping.get(4).push(student)
                 }
                 else {
-                    if (!currentProposal) {
-                        grouping.get(0).push(student)
-                    }
-                    else {
-                        switch (currentProposal.current_status) {
-                            case "In Review":
-                                grouping.get(1).push(student)
-                                break;
-                            case "Requires Changes":
-                                grouping.get(2).push(student)
-                                break;
-                            case "Approved":
-                                grouping.get(3).push(student)
-                                break;
-                            case "MVP":
-                                grouping.get(5).push(student)
-                                break;
-                            default:
-                                grouping.get(0).push(student)
-                                break;
-                        }
+                    switch (currentProposal.current_status) {
+                        case "In Review":
+                            grouping.get(1).push(student)
+                            break;
+                        case "Requires Changes":
+                            grouping.get(2).push(student)
+                            break;
+                        case "Approved":
+                            grouping.get(3).push(student)
+                            break;
+                        case "MVP":
+                            grouping.get(5).push(student)
+                            break;
+                        default:
+                            grouping.get(0).push(student)
+                            break;
                     }
                 }
             }
