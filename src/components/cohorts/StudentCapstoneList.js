@@ -116,7 +116,6 @@ export const StudentCapstoneList = () => {
     const mapConverter = ([groupNumber, arrayOfStudents]) => ({ groupNumber, arrayOfStudents })
 
     const stageGrouping = ({ groupNumber, arrayOfStudents }) => {
-
         return <div className="group" key={`group--${groupNumber}`}>
             {
                 arrayOfStudents.map(student => {
@@ -141,7 +140,7 @@ export const StudentCapstoneList = () => {
                         <div>
                             {
                                 student.proposals.map(proposal => {
-                                    return <a key={`proposal--${proposal.id}`} className="proposal__link" href={proposal?.proposal_url}>{proposal.course_name} Proposal</a>
+                                    return <a key={`proposal--${proposal.id}`} className="proposal__link" href={proposal?.proposal_url}>{proposal.course_name}</a>
                                 })
                             }
                         </div>
@@ -153,12 +152,18 @@ export const StudentCapstoneList = () => {
     }
 
 
-    return <section className="students--capstone"> {
-
-        groupedProposals.size === 0
-            ? <Loading />
-            : Array.from(groupedProposals, mapConverter).map(stageGrouping)
-    }
+    return <section className="students--capstone">
+        <div className="capstoneHeader">
+            <div>Student</div>
+            <div>Current Status</div>
+            <div>Options</div>
+            <div>Proposal Links</div>
+        </div>
+        {
+            groupedProposals.size === 0
+                ? <Loading />
+                : Array.from(groupedProposals, mapConverter).map(stageGrouping)
+        }
 
     </section>
 }

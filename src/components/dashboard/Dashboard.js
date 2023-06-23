@@ -17,10 +17,10 @@ export const Dashboard = () => {
     const [searchTerms, setSearchTerms] = useState("")
     const [mvps, setMVPs] = useState(0)
     const [showAllProjects, toggleAllProjects] = useState(false)
-    const [capstoneSeason, setCapstoneSeason] = useState(false)
+
     const [draggedStudent, dragStudent] = useState(null)
 
-    const { activeCourse } = useContext(CourseContext)
+    const { activeCourse, capstoneSeason } = useContext(CourseContext)
     const { cohortStudents } = useContext(PeopleContext)
 
     const history = useHistory()
@@ -39,9 +39,6 @@ export const Dashboard = () => {
         <section className="cohortActions">
             <CohortSearchField />
             <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
-            <section>
-                <button onClick={() => setCapstoneSeason(!capstoneSeason)}>Capstone Season</button>
-            </section>
             <section className="capstonePercent">
                 <div>{mvps} / {cohortStudents.length} @ MVP</div>
             </section>
@@ -49,7 +46,7 @@ export const Dashboard = () => {
 
         <StandupContext.Provider value={{
             showAllProjects, toggleAllProjects, dragStudent,
-            draggedStudent, capstoneSeason, setCapstoneSeason
+            draggedStudent
         }}>
             {
                 capstoneSeason
