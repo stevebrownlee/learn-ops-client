@@ -5,7 +5,7 @@
 
 .capstoneHeader {
     display: grid;
-    grid-template-columns: 4fr 2fr 3fr;
+    grid-template-columns: 4fr 2fr 1fr 2fr;
     margin-bottom: 0.33rem;
     border-bottom: 1px solid rgb(142, 178, 165);
     padding: 0.4rem 0 0.4rem 0;
@@ -14,7 +14,7 @@
 
 .student__row {
     display: grid;
-    grid-template-columns: 4fr 2fr 3fr;
+    grid-template-columns: 4fr 2fr 1fr 2fr;
     border-bottom: 1px solid rgb(229, 208, 153);
     padding: 0.6rem 1rem 0.6rem 1rem;
 }

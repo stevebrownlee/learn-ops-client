@@ -58,6 +58,12 @@
     margin-bottom: 0;
 }
 
+.student__history {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
 .student__score--mini {
     font-family: "Patua One", serif;
     position: absolute;
@@ -195,6 +201,32 @@
     justify-content: space-between;
 }
 
+
+.studentnote {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 20%;
+    position: relative;
+    margin: 0.5rem 1rem;
+    padding: 1rem 1rem 0.5rem 1rem;
+    border: 1px dotted slateblue;
+    background-color: rgb(254, 256, 255);
+    box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
+    border-radius: 0.33rem;
+}
+
+.studentnote__header {}
+
+.studentnote__footer {
+    border-top: 1px dotted slategray;
+    display: flex;
+    margin: 1rem 0 0 0;
+    padding: 0.33rem 0;
+    color: rgb(149, 149, 149);
+    justify-content: space-between;
+    font-size: 0.75rem;
+}
+
 .footer__score {
     margin: 0;
     line-height: 0;
@@ -319,4 +351,3 @@
 .section--proposals {
     padding: 0 2rem;
 }
-

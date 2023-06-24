@@ -94,7 +94,6 @@ export const Student = ({
                         getStudentProposals(student.id)
                         getStudentLearningRecords(student.id)
                         getProposalStatuses()
-                        getStudentPersonality(student.id)
                         document.querySelector('.overlay--student').style.display = "block"
                     }}
                 >{student.name}</h4>

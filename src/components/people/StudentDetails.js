@@ -8,6 +8,7 @@ import { StudentProposals } from "./StudentProposals.js"
 import { StudentAssessments } from "./StudentAssessments.js"
 import { CourseContext } from "../course/CourseProvider.js"
 import "../people/Status.css"
+import { AssessmentRow } from "../dashboard/student/AssessmentRow.js"
 
 export const StudentDetails = ({ toggleCohorts }) => {
     const { activeStudent } = useContext(PeopleContext)
@@ -68,6 +69,17 @@ export const StudentDetails = ({ toggleCohorts }) => {
 
         <div className="card">
             <LearningObjectives />
+        </div>
+
+        <div className="card student__history">
+            <div>
+                <h3>Book Assessment Status</h3>
+                {
+                    activeStudent?.assessment_overview?.length > 0
+                        ? activeStudent?.assessment_overview?.map(assmt => <AssessmentRow key={`assmt--${assmt.id}`} assmt={assmt} />)
+                        : "No self-assessments submitted yet"
+                }
+            </div>
         </div>
     </div>
 }

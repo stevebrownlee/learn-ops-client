@@ -8,6 +8,7 @@ import { CohortContext } from "./CohortProvider"
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 
 import { StudentDetails } from "../people/StudentDetails"
+import { StudentNoteDialog } from "../dashboard/StudentNoteDialog.js"
 import { PeopleIcon } from "../../svgs/PeopleIcon"
 import { Student } from "../people/Student"
 import { StandupContext } from "../dashboard/Dashboard"
@@ -15,15 +16,24 @@ import { Toast, configureToasts } from "toaster-js"
 import { Loading } from "../Loading.js"
 
 import "./CapstoneList.css"
+import "../people/Student.css"
 import "./Tooltip.css"
 
 export const StudentCapstoneList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
     const { capstoneSeason, setCapstoneSeason } = useContext(StandupContext)
     const { activeCohort, activateCohort } = useContext(CohortContext)
-    const { cohortStudents, getCohortStudents, setCohortStudents } = useContext(PeopleContext)
+    const {
+        activateStudent, setStudentCurrentAssessment,
+        getCohortStudents, untagStudent,
+        getStudentNotes, getStudentCoreSkills, getStudentProposals,
+        getStudentLearningRecords, cohortStudents, setCohortStudents
+    } = useContext(PeopleContext)
     const [groupedProposals, setGroupedProposals] = useState(new Map())
     const { proposalStatuses, addToProposalTimeline, getProposalStatuses } = useContext(AssessmentContext)
+
+    let { toggleDialog: toggleCohorts } = useModal("#dialog--cohorts")
+    let { toggleDialog: toggleNote } = useModal("#dialog--note")
 
     const history = useHistory()
 
@@ -43,6 +53,18 @@ export const StudentCapstoneList = ({ searchTerms }) => {
 
     useEffect(() => {
         if (cohortStudents.length > 0) {
+            /* eslint-disable no-undef */
+            let studentsCopy = structuredClone(cohortStudents)
+
+            if (searchTerms !== "" && searchTerms.length > 2) {
+                studentsCopy = studentsCopy.filter(student => {
+                    const hasTag = student.tags.find(tag => tag.tag.name.toLowerCase().includes(searchTerms.toLowerCase()))
+                    const nameMatches = student.name.toLowerCase().includes(searchTerms.toLowerCase())
+
+                    return hasTag || nameMatches
+                })
+            }
+
             const grouping = new Map([
                 [0, []], // Submitted but no action yet
                 [1, []], // Instructor marked as in review
@@ -52,7 +74,7 @@ export const StudentCapstoneList = ({ searchTerms }) => {
                 [5, []]  // Student reached MVP
             ])
 
-            for (const student of cohortStudents) {
+            for (const student of studentsCopy) {
                 const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
 
                 if (student.proposals.length === 0 || !currentProposal) {
@@ -81,7 +103,7 @@ export const StudentCapstoneList = ({ searchTerms }) => {
 
             setGroupedProposals(grouping)
         }
-    }, [cohortStudents])
+    }, [cohortStudents, searchTerms])
 
     useEffect(() => {
         const cohort = JSON.parse(localStorage.getItem("activeCohort"))
@@ -134,7 +156,15 @@ export const StudentCapstoneList = ({ searchTerms }) => {
                             const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
 
                             return <div key={`student--${student.id}`} className="student__row">
-                                <div>{student.name}</div>
+                                <div className="student__name"
+                                    onClick={() => {
+                                        activateStudent(student)
+                                        getStudentCoreSkills(student.id)
+                                        getStudentLearningRecords(student.id)
+                                        getStudentNotes(student.id)
+                                        getProposalStatuses()
+                                        document.querySelector('.overlay--student').style.display = "block"
+                                    }}>{student.name}</div>
                                 <div>
                                     {
                                         groupNumber === 5 || groupNumber === 4
@@ -152,6 +182,13 @@ export const StudentCapstoneList = ({ searchTerms }) => {
                                             </select>
                                     }
                                 </div>
+                                <div>
+                                    <button className="fakeLink small" onClick={() => {
+                                        activateStudent(student)
+                                        getStudentNotes(student.id)
+                                        toggleNote()
+                                    }} >Notes</button>
+                                </div>
                                 <div className="proposalLinks">
                                     {
                                         student.proposals.map(proposal => {
@@ -167,11 +204,11 @@ export const StudentCapstoneList = ({ searchTerms }) => {
         }
     }
 
-
     return <section className="students--capstone">
         <div className="capstoneHeader sticky">
             <h4>Student</h4>
-            <h4>Options</h4>
+            <h4>Status</h4>
+            <h4>Actions</h4>
             <h4>Proposal Links</h4>
         </div>
         {
@@ -179,5 +216,7 @@ export const StudentCapstoneList = ({ searchTerms }) => {
                 ? <Loading />
                 : Array.from(groupedProposals, mapConverter).map(stageGrouping)
         }
+        <StudentDetails toggleCohorts={toggleCohorts} />
+        <StudentNoteDialog toggleNote={toggleNote} />
     </section>
 }
