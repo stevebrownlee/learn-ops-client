@@ -101,68 +101,70 @@ export const StudentCapstoneList = ({ searchTerms }) => {
     const mapConverter = ([groupNumber, arrayOfStudents]) => ({ groupNumber, arrayOfStudents })
 
     const stageGrouping = ({ groupNumber, arrayOfStudents }) => {
-        const heading = {
-            0: "Submitted",
-            1: "Being Reviewed",
-            2: "Requires Changes",
-            3: "Approved",
-            4: "Not Submitted",
-            5: "MVP"
-        }[groupNumber]
+        if (arrayOfStudents.length) {
+            const heading = {
+                0: "Submitted",
+                1: "Being Reviewed",
+                2: "Requires Changes",
+                3: "Approved",
+                4: "Not Submitted",
+                5: "MVP"
+            }[groupNumber]
 
-        // Sort student alphabetically by first name
-        arrayOfStudents.sort(
-            (c, n) => {
-                if (c.name < n.name) return -1;
-                if (c.name > n.name) return 1;
-                return 0;
-            }
-        )
-
-        return <div key={`group--${groupNumber}`}>
-            <header className="group__heading">
-                <h3>{heading}</h3>
-                <div className="group__count">
-                    <PeopleIcon /> {arrayOfStudents.length}
-                </div>
-            </header>
-            <div className="group">
-
-                {
-                    arrayOfStudents.map(student => {
-                        const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
-
-                        return <div key={`student--${student.id}`} className="student__row">
-                            <div>{student.name}</div>
-                            <div>
-                                {
-                                    groupNumber === 5 || groupNumber === 4
-                                        ? ""
-                                        : <select value={currentProposal?.current_status_id ?? 0}
-                                            onChange={(evt) => {
-                                                addToProposalTimeline(currentProposal.id, parseInt(evt.target.value))
-                                                    .then(() => getCohortStudents(activeCohort))
-                                            }}
-                                        >
-                                            <option value="0">-- choose status --</option>
-                                            {
-                                                proposalStatuses.map(s => <option key={`status--${s.id}`} value={s.id}>{s.status}</option>)
-                                            }
-                                        </select>
-                                }
-                            </div>
-                            <div className="proposalLinks">
-                                {
-                                    student.proposals.map(proposal => {
-                                        return <a target="_blank" key={`proposal--${proposal.id}`} className="proposal__link" href={proposal?.proposal_url}>{proposal.course_name}</a>
-                                    })
-                                }
-                            </div>
-                        </div>
-                    })
+            // Sort student alphabetically by first name
+            arrayOfStudents.sort(
+                (c, n) => {
+                    if (c.name < n.name) return -1;
+                    if (c.name > n.name) return 1;
+                    return 0;
                 }
+            )
+
+            return <div key={`group--${groupNumber}`}>
+                <header className="group__heading">
+                    <h3>{heading}</h3>
+                    <div className="group__count">
+                        <PeopleIcon /> {arrayOfStudents.length}
+                    </div>
+                </header>
+                <div className="group">
+
+                    {
+                        arrayOfStudents.map(student => {
+                            const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
+
+                            return <div key={`student--${student.id}`} className="student__row">
+                                <div>{student.name}</div>
+                                <div>
+                                    {
+                                        groupNumber === 5 || groupNumber === 4
+                                            ? ""
+                                            : <select value={currentProposal?.current_status_id ?? 0}
+                                                onChange={(evt) => {
+                                                    addToProposalTimeline(currentProposal.id, parseInt(evt.target.value))
+                                                        .then(() => getCohortStudents(activeCohort))
+                                                }}
+                                            >
+                                                <option value="0">-- choose status --</option>
+                                                {
+                                                    proposalStatuses.map(s => <option key={`status--${s.id}`} value={s.id}>{s.status}</option>)
+                                                }
+                                            </select>
+                                    }
+                                </div>
+                                <div className="proposalLinks">
+                                    {
+                                        student.proposals.map(proposal => {
+                                            return <a target="_blank" key={`proposal--${proposal.id}`} className="proposal__link" href={proposal?.proposal_url}>{proposal.course_name}</a>
+                                        })
+                                    }
+                                </div>
+                            </div>
+                        })
+                    }
+                </div>
             </div>
-        </div>
+        }
     }
 
 
