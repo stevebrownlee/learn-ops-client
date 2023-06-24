@@ -1,12 +1,16 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
+import useSimpleAuth from "../auth/useSimpleAuth"
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 
 export const ClientProposal = () => {
+    const { getCurrentUser, getProfile } = useSimpleAuth()
+
     const [courses, establishCourses] = useState([])
     const [url, setURL] = useState("")
     const [overview, setOverview] = useState("")
-    const [course, setCourse] = useState(0)
+    const [course, setCourse] = useState("")
+    const [user, setUser] = useState({})
 
     const { getCourses, saveProposal } = useContext(AssessmentContext)
 
@@ -14,50 +18,41 @@ export const ClientProposal = () => {
 
     useEffect(() => {
         getCourses().then(establishCourses)
+
+        getProfile().then(() => {
+            setUser(getCurrentUser())
+        })
     }, [])
 
+    useEffect(() => {
+        if (user?.profile) {
+            const courseName = user.profile.current_cohort?.courses?.find(course => course.active)?.course__name
+            setCourse(courseName)
+        }
+    }, [user])
+
     return <article className="dashboard--student">
-        <h2 className="cohortForm__title">Submit Your Proposal</h2>
+        <h2 className="cohortForm__title">Submit {course} Proposal</h2>
 
         <form className="cohortForm view"
             onSubmit={(evt) => {
                 evt.preventDefault()
 
-                if (course > 0) {
-                    saveProposal({
-                        "description": overview,
-                        "proposalURL": url,
-                        "repoURL": "",
-                        "course": parseInt(course)
+                const courseId = user.profile.current_cohort.courses.find(course => course.active).course__id
+
+                saveProposal({
+                    "description": overview,
+                    "proposalURL": url,
+                    "repoURL": "",
+                    "course": courseId
+                })
+                    .then(() => {
+                        history.push("/")
+                        window.alert("Proposal submitted")
                     })
-                        .then(() => {
-                            history.push("/")
-                            window.alert("Proposal submitted")
-                        })
-                        .catch(window.alert)
-                }
-                else {
-                    window.alert("Choose a course, please")
-                }
+                    .catch(window.alert)
             }}
         >
-
-            <fieldset>
-                <div className="form-group">
-                    <label htmlFor="name">Course</label>
-
-                    <select className="form-control"
-                        value={course}
-                        onChange={e => setCourse(e.target.value)}>
-
-                        <option value={0}>Choose course</option>
-                        {
-                            courses.map(c => <option key={`crs--${c.id}`} value={c.id}>{c.name}</option>)
-                        }
-                    </select>
-                </div>
-            </fieldset>
-
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="name">Proposal URL</label>

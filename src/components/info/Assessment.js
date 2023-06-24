@@ -22,9 +22,5 @@ export const Assessment = () => {
 
             <Link to="/assessment/server">Requirements</Link>
         </div>
-
-        <div style={{ position: "absolute", top: "9rem", right: "4rem" }}>
-            <button onClick={() => history.push("/proposal/client")}>Submit my proposal</button>
-        </div>
     </article>
 }

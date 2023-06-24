@@ -5,7 +5,9 @@ export const CapstoneRow = ({ capstone }) => {
 
     return <div className="capstoneassessments">
         <div className="capstoneassessment">
-            <div className="capstoneassessment__course">{capstone.course}</div>
+            <div className="capstoneassessment__course">
+                <a href={capstone.proposal} target="_blank">{capstone.course}</a>
+            </div>
             <div className="capstoneassessment__statuses">
                 {
                     capstone.statuses.map(status => {

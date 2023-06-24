@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { AssessmentRow } from "./AssessmentRow.js"
-import { CapstoneRow } from "./CapstoneRow.js"
+import { AssessmentRow } from "./AssessmentRow"
+import { CapstoneRow } from "./CapstoneRow"
 
 export const StudentInfo = ({ profile }) => {
     const history = useHistory()
