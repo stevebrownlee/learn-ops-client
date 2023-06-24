@@ -53,7 +53,6 @@ export const Dashboard = () => {
                     ? <StudentCapstoneList searchTerms={searchTerms} />
                     : <StudentCardList searchTerms={searchTerms} />
             }
-
         </StandupContext.Provider>
 
         <FeedbackDialog />

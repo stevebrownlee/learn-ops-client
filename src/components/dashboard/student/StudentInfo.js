@@ -7,7 +7,7 @@ export const StudentInfo = ({ profile }) => {
     const history = useHistory()
 
     return <section className="info">
-        <h2 className="info__header" style={{ marginBottom: 0 }}>Your Info</h2>
+        <h2 className="info__header" style={{ marginBottom: 0 }}>Personal Resources</h2>
         <div className="info__body">
             <div className="studentAccounts">
                 <div className="studentAccount">
@@ -22,21 +22,43 @@ export const StudentInfo = ({ profile }) => {
                             className="fakeLink">Update</button></div>
                     </div>
                 </div>
+                <div className="studentAccount">
+                    <h3 className="studentAccount__header">Capstone Proposals</h3>
+                    <div style={{ display: "flex" }}>
+                        <div style={{ margin: "0 1rem" }} >
+                            <button className="isometric-button blue small"
+                                style={{ padding: "0.5rem" }}
+                                onClick={() => window.open("https://docs.google.com/document/d/1FGMU-wQqIciig0JhtOBBKOORSPCROUW0Y27w9io4qMg/edit", "_blank")}>
+                                Start Proposal
+                            </button>
+                        </div>
 
+                        <div style={{ margin: "0 1rem" }} >
+                            <button className="isometric-button red small"
+                                style={{ padding: "0.5rem" }}
+                                onClick={() => history.push("/proposal/client")}>
+                                Submit Proposal
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className="studentassessments text--mini">
                 <div className="assessmentlist">
-                    <h3>Book Assessments</h3>
-                    {profile?.assessment_overview?.map(assmt => <AssessmentRow  key={`assmt--${assmt.id}`} assmt={assmt} />)}
+                    <h3>Book Assessment Status</h3>
+                    {
+                        profile?.assessment_overview?.length > 0
+                            ? profile?.assessment_overview?.map(assmt => <AssessmentRow key={`assmt--${assmt.id}`} assmt={assmt} />)
+                            : "No self-assessments submitted yet"
+                    }
                 </div>
                 <div className="assessmentlist">
-                    <h3>Capstone Assessments</h3>
-                    {profile?.capstones?.map(capstone => <CapstoneRow key={`capstone--${capstone.id}`} capstone={capstone} />)}
-
-                    <div style={{marginTop: "auto", marginLeft: "auto"}} >
-                        <button className="button btn-github" onClick={() => history.push("/proposal/client")}>Submit Capstone Proposal</button>
-                    </div>
-
+                    <h3>Capstone Assessment Status</h3>
+                    {
+                        profile?.capstones?.length > 0
+                            ? profile?.capstones?.map(capstone => <CapstoneRow key={`capstone--${capstone.capstone__id}`} capstone={capstone} />)
+                            : "No proposals submitted yet"
+                    }
                 </div>
             </div>
         </div>

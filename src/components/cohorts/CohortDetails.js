@@ -233,7 +233,6 @@ export const CohortDetails = () => {
                                         activeCohortDetails.coaches?.map(coach => <div key={`coach--${coach.name}`} className="instructor--badge cohort__coach">{coach.name}</div>)
                                     }
                                 </div>
-
                             </div>
                         </div>
                     </div>

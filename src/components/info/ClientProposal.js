@@ -18,33 +18,29 @@ export const ClientProposal = () => {
 
     useEffect(() => {
         getCourses().then(establishCourses)
-
-        getProfile().then(() => {
-            setUser(getCurrentUser())
-        })
+        getProfile().then(() => setUser(getCurrentUser()))
     }, [])
 
     useEffect(() => {
         if (user?.profile) {
-            const courseName = user.profile.current_cohort?.courses?.find(course => course.active)?.course__name
-            setCourse(courseName)
+            const activeCourse = user.profile.current_cohort?.courses?.find(course => course.active)
+            setCourse(activeCourse)
         }
     }, [user])
 
     return <article className="dashboard--student">
-        <h2 className="cohortForm__title">Submit {course} Proposal</h2>
+        <h2 className="cohortForm__title">Submit {course.course__name} Proposal</h2>
 
         <form className="cohortForm view"
             onSubmit={(evt) => {
                 evt.preventDefault()
-
                 const courseId = user.profile.current_cohort.courses.find(course => course.active).course__id
 
                 saveProposal({
                     "description": overview,
                     "proposalURL": url,
                     "repoURL": "",
-                    "course": courseId
+                    "course": course.course__id
                 })
                     .then(() => {
                         history.push("/")

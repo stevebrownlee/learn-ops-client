@@ -81,6 +81,7 @@
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
+    margin: 2rem 0 0 0;
 }
 
 @media (max-width: 800px) {
@@ -93,6 +94,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    margin: 0 0.5rem;
 }
 
 .bookassessments {
