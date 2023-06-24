@@ -147,7 +147,8 @@ export const PeopleProvider = (props) => {
             tagStudent, untagStudent, createNewTag, deleteTag,
             getStudentNotes, getStudentCoreSkills, coreSkills,
             getStudentLearningRecords, learningRecords,
-            getStudentPersonality, personality, tagStudentTeams
+            getStudentPersonality, personality, tagStudentTeams,
+            setCohortStudents
         }} >
             {props.children}
         </PeopleContext.Provider>

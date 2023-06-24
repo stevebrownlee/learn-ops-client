@@ -22,7 +22,7 @@ export const CohortDetails = () => {
         activeCohort, activeCohortDetails, getCohort,
         getCohortInfo, saveCohortInfo, updateCohortInfo
     } = useContext(CohortContext)
-    const { migrateCohortToServerSide } = useContext(CourseContext)
+    const { migrateCohortToServerSide, capstoneSeason, setCapstoneSeason } = useContext(CourseContext)
     const history = useHistory()
 
     useEffect(() => {
@@ -194,7 +194,21 @@ export const CohortDetails = () => {
                                             id="end_date" className="form-control form-control--row form-control--small"
                                         />
                                     </div>
+                                </div>
 
+                                <h2>Capstone Season</h2>
+                                <div className="capstoneToggle">
+                                    <input defaultChecked={capstoneSeason}
+                                        onChange={(evt) => {
+                                        evt.target.ariaChecked = evt.target.checked
+                                        setCapstoneSeason(evt.target.checked)
+                                        localStorage.setItem("capstoneSeason", evt.target.checked)
+                                    }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
+                                    <label htmlFor="toggle" className="slot">
+                                        <span className="slot__label">OFF</span>
+                                        <span className="slot__label">ON</span>
+                                    </label>
+                                    <div className="curtain"></div>
                                 </div>
                             </div>
 

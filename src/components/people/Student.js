@@ -40,7 +40,6 @@ export const Student = ({
         clearTimeout(delayHandler)
     }
 
-
     const setAssessmentIndicatorBorder = (status) => {
         switch (status) {
             case 0:
@@ -84,24 +83,6 @@ export const Student = ({
             }}
         >
 
-            <div className="student__proposals">
-                {
-                    student.proposals.map(p => {
-                        if (p.current_status === "Submitted") {
-                            return <ProposalIcon key={`pendingProposal--${p.id}`} color="red" />
-                        }
-                        else if (p.current_status === "Requires Changes") {
-                            return <ProposalIcon key={`reviewingProposal--${p.id}`} color="goldenrod" />
-                        }
-                        else if (p.current_status === "Approved") {
-                            return <ProposalIcon key={`completedProposal--${p.id}`} color="dodgerblue" />
-                        }
-                        else if (p.current_status === "MVP") {
-                            return <ProposalIcon key={`completedProposal--${p.id}`} color="green" />
-                        }
-                    })
-                }
-            </div>
             <div className="student__header">
                 <div className="student__score--mini">
                     {student.score}

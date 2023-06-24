@@ -8,6 +8,13 @@ export const CourseProvider = (props) => {
     const [courses, setCourses] = useState([])
     const [objectives, setObjectives] = useState([])
     const [activeCourse, setActiveCourse] = useState({})
+    const [capstoneSeason, setCapstoneSeason] = useState(false)
+
+    useEffect(() => {
+        const isCapstoneSeason = (localStorage.getItem("capstoneSeason") === "true")
+        setCapstoneSeason(isCapstoneSeason)
+    }, [])
+
 
     useEffect(() => {
         if (activeCourse && "id" in activeCourse) {
@@ -122,7 +129,7 @@ export const CourseProvider = (props) => {
             getProjects, deleteProject, getActiveCourse, getProject,
             editProject, migrateCohortToServerSide, getBook, editBook,
             deleteBook, createCourse, editCourse, getBookProjects,
-            deactivateCourse
+            deactivateCourse, capstoneSeason, setCapstoneSeason
         }} >
             {props.children}
         </CourseContext.Provider>
