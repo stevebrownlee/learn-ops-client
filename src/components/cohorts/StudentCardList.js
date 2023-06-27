@@ -97,7 +97,7 @@ export const StudentCardList = ({ searchTerms }) => {
                     project.display = true
                     book.studentCount += project.students.length
                 }
-                if ( (floorBookIndex > -1 && book.index >= floorBookIndex) || project.display) project.droppable = true
+                if ((floorBookIndex > -1 && book.index >= floorBookIndex) || project.display) project.droppable = true
             }
 
             if (book.studentCount && floorBookIndex === -1) floorBookIndex = book.index
@@ -120,6 +120,36 @@ export const StudentCardList = ({ searchTerms }) => {
         const showInStandupMode = showAllProjects && (isStudentCurrentBook || isStudentNextBook)
 
         return showInRegularMode || showInStandupMode
+    }
+
+    const handleDrop = (e, book, project) => {
+        e.preventDefault()
+        toggleAllProjects(false)
+        dragStudent(null)
+
+        const targetBook = book
+        const data = e.dataTransfer.getData("text/plain")
+        const rawStudent = Object.assign(Object.create(null), JSON.parse(data))
+
+        // Student being moved to another book yet assessment not marked as complete
+        if (
+            book.id !== rawStudent.bookId &&
+            rawStudent.assessment_status !== 4
+        ) {
+            new Toast("Self-assessment for this book not marked as reviewed and complete.", Toast.TYPE_WARNING, Toast.TIME_NORMAL);
+        }
+        else {
+            setStudentCurrentProject(rawStudent.id, project.id)
+                .then(() => getCohortStudents(activeCohort))
+                .catch((error) => {
+                    if (error?.message?.includes("duplicate")) {
+                        new Toast("Student has previously been assigned to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                    }
+                    else {
+                        new Toast("Could not assign student to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                    }
+                })
+        }
     }
 
     return <section className="cohortStudents"> {
@@ -147,25 +177,7 @@ export const StudentCardList = ({ searchTerms }) => {
                                         key={`book-project--${project.id}`}
                                         className="bookColumn__projectHeader"
                                         onDragOver={e => e.preventDefault()}
-                                        onDrop={e => {
-                                            e.preventDefault()
-                                            toggleAllProjects(false)
-                                            dragStudent(null)
-
-                                            const data = e.dataTransfer.getData("text/plain")
-                                            const rawStudent = Object.assign(Object.create(null), JSON.parse(data))
-
-                                            setStudentCurrentProject(rawStudent.id, project.id)
-                                                .then(() => getCohortStudents(activeCohort))
-                                                .catch((error) => {
-                                                    if (error?.message?.includes("duplicate")) {
-                                                        new Toast("Student has previously been assigned to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
-                                                    }
-                                                    else {
-                                                        new Toast("Could not assign student to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
-                                                    }
-                                                })
-                                        }}
+                                        onDrop={(e) => handleDrop(e, book, project)}
                                     >
                                         <div className="bookColumn__project"
                                             onMouseOver={evt => {

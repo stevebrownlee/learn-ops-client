@@ -72,7 +72,8 @@ export const Student = ({
                     id: student.id,
                     bookId: student.book.id,
                     bookIndex: student.book.index,
-                    projectId: parseInt(currentProjectId)
+                    projectId: parseInt(currentProjectId),
+                    assessment_status: student.assessment_status
                 })
                 e.dataTransfer.setData("text/plain", JSON.stringify(transferStudent))
 

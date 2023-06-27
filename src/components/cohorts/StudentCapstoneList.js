@@ -150,7 +150,6 @@ export const StudentCapstoneList = ({ searchTerms }) => {
                     </div>
                 </header>
                 <div className="group">
-
                     {
                         arrayOfStudents.map(student => {
                             const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
