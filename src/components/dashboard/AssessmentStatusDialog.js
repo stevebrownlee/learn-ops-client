@@ -19,7 +19,7 @@ export const AssessmentStatusDialog = ({ toggleStatuses }) => {
     }, [])
 
     useEffect(() => {
-        if (activeStudent.book) {
+        if (activeStudent?.book) {
             getBookAssessment(activeStudent?.book?.id).then(data => setAssessment(data[0]))
         }
     }, [activeStudent])
@@ -30,8 +30,8 @@ export const AssessmentStatusDialog = ({ toggleStatuses }) => {
         <section className="statusButtons">
             {
                 statuses.map(status => {
-                    if ((activeStudent.assessment_status > 0 && status.status !== "In Progress") ||
-                        (activeStudent.assessment_status === 0 && status.status === "In Progress")) {
+                    if ((activeStudent?.assessment_status > 0 && status.status !== "In Progress") ||
+                        (activeStudent?.assessment_status === 0 && status.status === "In Progress")) {
                         return <button className="statusButton" key={`st--${status.id}`}
                             onClick={() => {
                                 let operation = null
