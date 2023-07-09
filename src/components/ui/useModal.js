@@ -5,11 +5,13 @@ const useModal = (selector) => {
 
     const toggleDialog = () => {
         setIsOpen(!modalIsOpen)
+        const element = document.querySelector(`${selector}`)
 
         if (modalIsOpen) {
-            document.querySelector(`${selector}`).removeAttribute("open")
+            element.removeAttribute("open")
         } else {
-            document.querySelector(`${selector}`).setAttribute("open", true)
+            element.setAttribute("open", true)
+            element.focus()
         }
     }
 

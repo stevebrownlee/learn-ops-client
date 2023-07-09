@@ -10,6 +10,8 @@ import { EyeIcon } from "../../svgs/EyeIcon"
 import "toaster-js/default.css"
 import "./Dashboard.css"
 import { StudentCapstoneList } from "../cohorts/StudentCapstoneList.js"
+import { PeopleIcon } from "../../svgs/PeopleIcon.js"
+import { CohortContext } from "../cohorts/CohortProvider.js"
 
 export const StandupContext = createContext()
 
@@ -20,6 +22,7 @@ export const Dashboard = () => {
 
     const [draggedStudent, dragStudent] = useState(null)
 
+    const { activeCohort } = useContext(CohortContext)
     const { activeCourse, capstoneSeason } = useContext(CourseContext)
     const { cohortStudents } = useContext(PeopleContext)
 
@@ -49,7 +52,7 @@ export const Dashboard = () => {
             draggedStudent
         }}>
             {
-                capstoneSeason
+                capstoneSeason.active && capstoneSeason.id === activeCohort
                     ? <StudentCapstoneList searchTerms={searchTerms} />
                     : <StudentCardList searchTerms={searchTerms} />
             }

@@ -198,11 +198,16 @@ export const CohortDetails = () => {
 
                                 <h2>Capstone Season</h2>
                                 <div className="capstoneToggle">
-                                    <input defaultChecked={capstoneSeason}
+                                    <input defaultChecked={capstoneSeason.active}
                                         onChange={(evt) => {
                                         evt.target.ariaChecked = evt.target.checked
-                                        setCapstoneSeason(evt.target.checked)
-                                        localStorage.setItem("capstoneSeason", evt.target.checked)
+
+                                        const seasonObject = {
+                                            id: activeCohortDetails.id,
+                                            active: evt.target.checked
+                                        }
+                                        setCapstoneSeason(seasonObject)
+                                        localStorage.setItem("capstoneSeason", JSON.stringify(seasonObject))
                                     }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
                                     <label htmlFor="toggle" className="slot">
                                         <span className="slot__label">OFF</span>

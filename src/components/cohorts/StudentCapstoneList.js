@@ -21,7 +21,6 @@ import "./Tooltip.css"
 
 export const StudentCapstoneList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
-    const { capstoneSeason, setCapstoneSeason } = useContext(StandupContext)
     const { activeCohort, activateCohort } = useContext(CohortContext)
     const {
         activateStudent, setStudentCurrentAssessment,

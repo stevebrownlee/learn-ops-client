@@ -8,11 +8,13 @@ export const CourseProvider = (props) => {
     const [courses, setCourses] = useState([])
     const [objectives, setObjectives] = useState([])
     const [activeCourse, setActiveCourse] = useState({})
-    const [capstoneSeason, setCapstoneSeason] = useState(false)
+    const [capstoneSeason, setCapstoneSeason] = useState({ id: 0, active: false })
 
     useEffect(() => {
-        const isCapstoneSeason = (localStorage.getItem("capstoneSeason") === "true")
-        setCapstoneSeason(isCapstoneSeason)
+        const seasonObject = JSON.parse(localStorage.getItem("capstoneSeason"))
+        if (seasonObject) {
+            setCapstoneSeason(seasonObject)
+        }
     }, [])
 
 

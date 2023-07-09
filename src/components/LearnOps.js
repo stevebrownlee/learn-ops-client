@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Route, Redirect } from "react-router-dom"
 import { ApplicationViews } from "./ApplicationViews"
 import { NavBar } from "./nav/NavBar"
@@ -12,6 +12,7 @@ import { StudentViews } from "./StudentViews"
 import { StudentNavBar } from "./nav/StudentNavBar"
 
 export const LearnOps = () => {
+    const [mimic, changeMimic] = useState(false)
     const { isAuthenticated, getCurrentUser } = useSimpleAuth()
     const location = useLocation()
 
@@ -22,16 +23,17 @@ export const LearnOps = () => {
                 // Is authenticated
                 if (isAuthenticated()) {
                     const user = getCurrentUser()
+                    const isStaff = user.profile?.staff
 
-                    if (user.profile?.staff) {
+                    if (isStaff && !mimic) {
                         return <>
-                            <NavBar />
+                            <NavBar mimic={mimic} changeMimic={changeMimic} isStaff={isStaff} />
                             <ApplicationViews />
                         </>
                     }
                     else {
                         return <>
-                            <StudentNavBar />
+                            <StudentNavBar mimic={mimic} changeMimic={changeMimic} isStaff={isStaff} />
                             <StudentViews />
                         </>
                     }

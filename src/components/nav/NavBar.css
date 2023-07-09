@@ -64,22 +64,16 @@
         display: block;
     }
 
-    .navbar__logout {
-        cursor: pointer;
-    }
 }
 
 .img--logout {
+    cursor: pointer;
     width: 1.5rem;
     height: 1.5rem;
 }
 
 .navbar__logout {
-    cursor: pointer;
-}
-
-.navbar__logout {
-    cursor: pointer;
     margin-left: auto;
     padding: 0 1rem 0 0;
+    text-align: end;
 }

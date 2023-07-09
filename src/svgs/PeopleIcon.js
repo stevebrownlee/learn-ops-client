@@ -1,7 +1,8 @@
 import React from "react"
 
-export const PeopleIcon = ({ height = "1rem"}) => <svg
+export const PeopleIcon = ({ height = "1rem", clickFunction = () => {}}) => <svg
     className="svg"
+    onClick={clickFunction}
     style={{height: height}}
     xmlns="http://www.w3.org/2000/svg" viewBox="0 -8 32 32">
     <g fill="none">
