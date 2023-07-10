@@ -97,11 +97,14 @@ export const StudentCardList = ({ searchTerms }) => {
                     project.display = true
                     book.studentCount += project.students.length
                 }
-                if ((floorBookIndex > -1 && book.index >= floorBookIndex) || project.display) project.droppable = true
+                if ((floorBookIndex > -1 && book.index >= floorBookIndex) || (floorBookIndex === -1 && book.index === 0) || project.display) {
+                    project.droppable = true
+                }
             }
 
             if (book.studentCount && floorBookIndex === -1) floorBookIndex = book.index
             if (book.studentCount > 0) ceilingBookIndex = book.index
+
 
             return book
         })
