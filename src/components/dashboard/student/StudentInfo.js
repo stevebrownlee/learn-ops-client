@@ -8,7 +8,7 @@ export const StudentInfo = ({ profile }) => {
 
     return <section className="info">
         <h2 className="info__header" style={{ marginBottom: 0 }}>Personal Resources</h2>
-        <div className="info__body">
+        <div className="info__body info__body--student">
             <div className="studentAccounts">
                 <div className="studentAccount">
                     <h3 className="studentAccount__header">Repositories</h3>

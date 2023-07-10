@@ -31,15 +31,9 @@ main {
     margin: 0 2rem;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 780px) {
     body {
         font-size: 0.9em;
-    }
-}
-
-@media (max-width: 800px) {
-    body {
-        font-size: 0.8em;
     }
 }
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react"
-import useSimpleAuth from "../auth/useSimpleAuth.js"
+import simpleAuth from "../auth/simpleAuth.js"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 
@@ -13,7 +13,7 @@ export const CohortProvider = (props) => {
         end_date: ""
     })
 
-    const { getCurrentUser } = useSimpleAuth()
+    const { getCurrentUser } = simpleAuth()
     const user = getCurrentUser()
 
     const getCohorts = useCallback((options={}) => {

@@ -38,8 +38,11 @@ export const CohortInfo = ({ profile }) => {
 
     return <section className="info">
         <h2 className="info__header" style={{ marginBottom: 0 }}>{profile?.current_cohort?.name} Info</h2>
-        <div className="info__body">
-            <div><a href={profile?.current_cohort?.zoom_url} target="_blank">Zoom session</a></div>
+        <div className="info__body info__body--cohort">
+            <div>
+                <h3>Classroom</h3>
+                <a href={profile?.current_cohort?.zoom_url} target="_blank">Zoom session</a>
+            </div>
             <div>
                 <h3>Dates</h3>
                 {cohortDates(profile?.current_cohort)}

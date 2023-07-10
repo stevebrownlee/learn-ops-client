@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import useSimpleAuth from "../auth/useSimpleAuth"
+import simpleAuth from "../auth/simpleAuth"
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 
 export const ClientProposal = () => {
-    const { getCurrentUser, getProfile } = useSimpleAuth()
+    const { getCurrentUser, getProfile } = simpleAuth()
 
     const [courses, establishCourses] = useState([])
     const [url, setURL] = useState("")

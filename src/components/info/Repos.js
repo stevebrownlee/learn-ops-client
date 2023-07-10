@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
-import useSimpleAuth from "../auth/useSimpleAuth"
+import simpleAuth from "../auth/simpleAuth"
 import "./Repos.css"
 
 export const Repos = () => {
     const [repos, buildRepos] = useState([])
-    const { getCurrentUser } = useSimpleAuth()
+    const { getCurrentUser } = simpleAuth()
     const user = getCurrentUser()
 
     useEffect(() => {

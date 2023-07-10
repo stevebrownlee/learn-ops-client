@@ -27,22 +27,14 @@
     justify-content: space-evenly;
 }
 
-@media (max-width: 1000px) {
-    .dashboard--overview {
-        display: block;
-    }
-}
 
 .info {
     border: 1px solid rgb(185, 220, 255);
 }
 
-@media (max-width: 1000px) {
-    .info {
-        margin-bottom: 1rem;
-    }
+.info__date {
+    margin: 0 0 1rem 0;
 }
-
 
 .info__header {
     background-color: azure;
@@ -84,9 +76,33 @@
     margin: 2rem 0 0 0;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1100px) {
+    .dashboard--overview {
+        display: block;
+    }
+    .info {
+        margin-bottom: 1rem;
+    }
+    .info__body--cohort {
+        display: flex;
+        justify-content: space-around;
+    }
+}
+
+
+@media (max-width: 780px) {
     .studentassessments {
         flex-direction: column;
+    }
+    .info__body--cohort {
+        display: block;
+    }
+    .studentAccounts {
+        display: block;
+    }
+    .studentAccount__header {
+        margin-block-start: 1rem;
+        margin-top: 1rem;
     }
 }
 

@@ -1,6 +1,8 @@
 import {Buffer} from 'buffer'
+import simpleAuth from '../auth/simpleAuth.js'
 
 export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }) => {
+    const { getCurrentUser } = simpleAuth()
     const options = {
         headers: {}
     }
@@ -12,13 +14,8 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }
     }
     else {
         try {
-            const encoded = sessionStorage.getItem("nss_token")
-            const unencoded = Buffer.from(encoded, "base64").toString("utf8")
-            const parsed = JSON.parse(unencoded)
-            const bare = Object.assign(Object.create(null), parsed)
-
+            const bare = getCurrentUser()
             options.headers.Authorization = `Token ${bare.token}`
-
         } catch (error) {
             options.headers.Authorization = `Token none`
         }

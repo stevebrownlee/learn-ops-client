@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react"
-import useSimpleAuth from "../auth/useSimpleAuth.js"
+import simpleAuth from "../auth/simpleAuth.js"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 
@@ -14,7 +14,7 @@ export const PeopleProvider = (props) => {
     const [personality,setPersonality] = useState({})
     const [cohortStudents, setCohortStudents] = useState([])
     const [activeStudent, activateStudent] = useState({})
-    const { getCurrentUser } = useSimpleAuth()
+    const { getCurrentUser } = simpleAuth()
     const user = getCurrentUser()
 
     const getStudents = useCallback((status = "") => {

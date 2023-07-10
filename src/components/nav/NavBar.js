@@ -1,17 +1,19 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
+import { SettingsDialog } from "../people/SettingsDialog.js"
+import { SettingsContext } from "../LearnOps.js"
+import { SettingsIcon } from "../../svgs/SettingsIcon.js"
+import simpleAuth from "../auth/simpleAuth"
+import useModal from "../ui/useModal.js"
 import Logout from "./logout.png"
 import logo from "./nav-logo.png"
-import useSimpleAuth from "../auth/useSimpleAuth"
-import { SettingsIcon } from "../../svgs/SettingsIcon.js"
-import useModal from "../ui/useModal.js"
 import "./NavBar.css"
-import { SettingsDialog } from "../people/SettingsDialog.js"
 
-export const NavBar = ({ mimic, changeMimic, isStaff }) => {
+export const NavBar = () => {
     const history = useHistory()
     const [checked, setChecked] = useState("")
-    const { logout, isAuthenticated } = useSimpleAuth()
+    const { logout, isAuthenticated } = simpleAuth()
+    const { mimic, changeMimic } = useContext(SettingsContext)
     let { toggleDialog: toggleSettings } = useModal("#dialog--settings")
 
     const makeLink = (to, text) => {

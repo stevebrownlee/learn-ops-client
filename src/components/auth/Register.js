@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 import Settings from "../Settings.js"
 import "./Auth.css"
-import useSimpleAuth from "./useSimpleAuth.js"
+import simpleAuth from "./simpleAuth.js"
 
 
 export const Register = (props) => {
@@ -20,7 +20,7 @@ export const Register = (props) => {
     })
     const { getCohorts, cohorts } = useContext(CohortContext)
     const history = useHistory()
-    const { storeCurrentUser } = useSimpleAuth()
+    const { storeCurrentUser } = simpleAuth()
     const [token, setToken] = useState(null)
     const [profile, updateProfile] = useState({})
 

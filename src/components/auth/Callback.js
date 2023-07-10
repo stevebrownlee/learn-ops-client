@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useHistory, useLocation } from "react-router-dom"
-import useSimpleAuth from "./useSimpleAuth"
+import simpleAuth from "./simpleAuth"
 import Settings from "../Settings"
 import "./Auth.css"
 
@@ -11,7 +11,7 @@ export const Callback = () => {
     const [token, storeToken] = useState("")
     const location = useLocation()
     const history = useHistory()
-    const { getProfile } = useSimpleAuth()
+    const { getProfile } = simpleAuth()
 
     const fetchUser = () => {
         getProfile(token, cohort, validate).then(() => history.push("/"))

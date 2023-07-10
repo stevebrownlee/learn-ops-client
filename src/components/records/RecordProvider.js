@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react"
-import useSimpleAuth from "../auth/useSimpleAuth.js"
+import simpleAuth from "../auth/simpleAuth.js"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 
@@ -8,7 +8,7 @@ export const RecordContext = React.createContext()
 export const RecordProvider = (props) => {
     const [records, setRecords] = useState([])
     const [weights, setWeights] = useState([])
-    const { getCurrentUser } = useSimpleAuth()
+    const { getCurrentUser } = simpleAuth()
     const user = getCurrentUser()
 
     const getWeights = useCallback((studentId = null) => {
