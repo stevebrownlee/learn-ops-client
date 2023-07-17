@@ -27,9 +27,6 @@ export const StudentDashboard = () => {
     return <main>
         <header className="studentDashboard__header">
             <h1>Welcome {user.profile?.name}</h1>
-            <div className="card">
-                <textarea className="form-control"></textarea>
-            </div>
         </header>
         <article className="dashboard--overview">
             <CohortInfo profile={user.profile} />
