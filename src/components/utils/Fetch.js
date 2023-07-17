@@ -1,4 +1,3 @@
-import {Buffer} from 'buffer'
 import simpleAuth from '../auth/simpleAuth.js'
 
 export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null }) => {

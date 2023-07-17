@@ -47,7 +47,7 @@ export const NavBar = () => {
                         {
                             isAuthenticated()
                                 ? <>
-                                    <li className="navbar__item navbar__logout">
+                                    <li className="navbar__item  flex ml-auto mr-10 justify-end">
                                         <SettingsIcon clickFunction={toggleSettings} />
                                         <img alt="Project logo" className="img--logout" src={Logout}
                                             onClick={() => {

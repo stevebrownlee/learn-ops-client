@@ -14,7 +14,7 @@ export const TagDialog = ({ toggleTags }) => {
         getAllTags()
     }, [])
 
-    return <dialog id="dialog--tags" className="dialog--tags">
+    return <dialog id="dialog--tags" className="dialog--tags ">
         <section className="tagButtons">
             {
                 tags.map(tag => {

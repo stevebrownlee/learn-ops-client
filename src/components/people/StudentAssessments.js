@@ -1,9 +1,7 @@
-import React, { useContext, useState } from "react"
+import React from "react"
 import { StudentProposals } from "./StudentProposals"
 
 export const StudentAssessments = () => {
-
-
     return <>
         <div style={{margin: "0 0 0 2rem"}} className="card-title">
             <h2>Assessments</h2>

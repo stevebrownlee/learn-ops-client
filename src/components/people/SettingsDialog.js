@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from "react"
-import { PeopleIcon } from "../../svgs/PeopleIcon.js"
+import React from "react"
 
 export const SettingsDialog = ({ toggleSettings, changeMimic, mimic }) => {
-
-
-    return <dialog id="dialog--settings" className="dialog--settings"
+    return <dialog id="dialog--settings"
+        className="border-spacing-10 border-slate-800 p-5 rounded-sm shadow-gray-400 shadow-lg"
         onKeyDown={
             e => {
                 if (e.key === "Escape") {
@@ -15,19 +13,12 @@ export const SettingsDialog = ({ toggleSettings, changeMimic, mimic }) => {
     >
 
         <h1>User Settings</h1>
-
         <button onClick={() => changeMimic(!mimic)}>
             {
                 mimic ? "Instructor Interface" : "Student Interface"
             }
         </button>
-
-        <button className="fakeLink" style={{
-            position: "absolute",
-            top: "0.33em",
-            right: "0.5em",
-            fontSize: "0.75rem"
-        }}
+        <button className="fakeLink dialog__close"
             id="closeBtn"
             onClick={toggleSettings}>[ close ]</button>
     </dialog>

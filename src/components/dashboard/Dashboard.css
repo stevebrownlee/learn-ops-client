@@ -48,6 +48,7 @@
 
 .studentDashboard__header {
     display: flex;
+    justify-content: space-between;
 }
 
 .studentDashboard__icons {
@@ -256,6 +257,13 @@ dialog {
         grid-template-columns: auto auto;
         margin: 2rem 0 2rem 0;
     }
+}
+
+.dialog__close {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    font-size: 0.75rem;
 }
 
 .dialog--tags {

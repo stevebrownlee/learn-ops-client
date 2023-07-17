@@ -3,17 +3,14 @@ import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { LearningObjectives } from "../course/LearningObjectives.js"
 import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
-import { StudentPersonality } from "./StudentPersonality.js"
-import { StudentProposals } from "./StudentProposals.js"
-import { StudentAssessments } from "./StudentAssessments.js"
 import { CourseContext } from "../course/CourseProvider.js"
-import "../people/Status.css"
 import { AssessmentRow } from "../dashboard/student/AssessmentRow.js"
+import "../people/Status.css"
 
 export const StudentDetails = ({ toggleCohorts }) => {
     const { activeStudent } = useContext(PeopleContext)
     const { getStudentAssessments } = useContext(AssessmentContext)
-    const { getLearningObjectives, activeCourse } = useContext(CourseContext)
+    const { getLearningObjectives } = useContext(CourseContext)
 
     const hideOverlay = (e) => {
         document.querySelector('.overlay--student').style.display = "none"

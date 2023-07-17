@@ -1,18 +1,6 @@
-import React, { useState } from "react"
+import React from "react"
 
 export const ProposalIcon = ({ tip, color }) => {
-    const tooltipStyle = {
-        position: "absolute",
-        top: "-4.25rem",
-        left: "-4rem",
-        border: "1px dashed gray",
-        padding: "0.75rem",
-        fontSize: "smaller",
-        backgroundColor: "lightgoldenrodyellow",
-        width: "10rem",
-        zIndex: 10
-    }
-
     return <span style={{ position: "relative" }}>
         <svg xmlns="http://www.w3.org/2000/svg"
             className="svg"

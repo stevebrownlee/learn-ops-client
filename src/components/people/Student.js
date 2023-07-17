@@ -2,7 +2,6 @@ import React, { useContext, useRef, useState } from "react"
 import { AssessmentIcon } from "../../svgs/AssessmentIcon"
 import { EditIcon } from "../../svgs/EditIcon"
 import { NoteIcon } from "../../svgs/NoteIcon"
-import { ProposalIcon } from "../../svgs/ProposalIcon"
 import { TagIcon } from "../../svgs/TagIcon"
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
@@ -13,13 +12,13 @@ import "./Student.css"
 export const Student = ({
     student, toggleProjects,
     toggleStatuses, toggleTags,
-    toggleNote, toggleCohorts
+    toggleNote, toggleCohorts,
+    hasAssessment
 }) => {
     const {
-        activateStudent, setStudentCurrentAssessment,
-        getCohortStudents, untagStudent,
+        activateStudent, getCohortStudents, untagStudent,
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
-        getStudentLearningRecords, getStudentPersonality
+        getStudentLearningRecords
     } = useContext(PeopleContext)
     const {showAllProjects, toggleAllProjects, dragStudent} = useContext(StandupContext)
     const { activeCohort } = useContext(CohortContext)
@@ -52,6 +51,8 @@ export const Student = ({
                 return "student--assessReviewIncomplete"
             case 4:
                 return "student--assessReviewComplete"
+            default:
+                return ""
         }
     }
 
@@ -73,7 +74,8 @@ export const Student = ({
                     bookId: student.book.id,
                     bookIndex: student.book.index,
                     projectId: parseInt(currentProjectId),
-                    assessment_status: student.assessment_status
+                    assessment_status: student.assessment_status,
+                    hasAssessment
                 })
                 e.dataTransfer.setData("text/plain", JSON.stringify(transferStudent))
 

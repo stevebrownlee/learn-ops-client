@@ -28,8 +28,6 @@ export const StudentCardList = ({ searchTerms }) => {
     const { activeCohort, activateCohort } = useContext(CohortContext)
     const { cohortStudents, getCohortStudents, setStudentCurrentProject } = useContext(PeopleContext)
     const [groupedStudents, setGroupedStudents] = useState([])
-    const [floorBook, setFloorBook] = useState(0)
-    const [ceilingBook, setCeilingBook] = useState(null)
     const history = useHistory()
 
     let { toggleDialog: toggleProjects } = useModal("#dialog--projects")
@@ -59,7 +57,6 @@ export const StudentCardList = ({ searchTerms }) => {
             if (!activeCohort) {
                 activateCohort(cohortId)
             }
-            // new Toast(`Loading default cohort`, Toast.TYPE_INFO, Toast.TIME_SHORT);
         }
         else {
             history.push("/cohorts")
@@ -109,8 +106,6 @@ export const StudentCardList = ({ searchTerms }) => {
             return book
         })
 
-        setCeilingBook(ceilingBookIndex)
-        setFloorBook(floorBookIndex)
         if (studentsPerBook) {
             setGroupedStudents(studentsPerBook)
         }
@@ -136,6 +131,7 @@ export const StudentCardList = ({ searchTerms }) => {
 
         // Student being moved to another book yet assessment not marked as complete
         if (
+            rawStudent.hasAssessment &&
             book.id !== rawStudent.bookId &&
             rawStudent.assessment_status !== 4
         ) {
@@ -155,7 +151,7 @@ export const StudentCardList = ({ searchTerms }) => {
         }
     }
 
-    return <section className="cohortStudents"> {
+    return <section className="flex flex-nowrap justify-evenly"> {
         groupedStudents.length === 0
             ? <Loading />
             : groupedStudents?.map((book) => {
@@ -199,12 +195,12 @@ export const StudentCardList = ({ searchTerms }) => {
                                                 toggleStatuses={toggleStatuses}
                                                 toggleTags={toggleTags}
                                                 toggleNote={toggleNote}
+                                                hasAssessment={book.assessments.length > 0}
                                                 toggleCohorts={toggleCohorts}
                                                 key={`student--${student.id}`}
                                                 student={student} />)
                                         }
                                     </div>
-
                                 }
                                 return ""
                             })

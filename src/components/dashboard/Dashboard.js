@@ -7,11 +7,11 @@ import { StudentCardList } from "../cohorts/StudentCardList"
 import { CohortSearchField } from "../cohorts/CohortSearchField"
 import { StudentSearch } from "../people/StudentSearch"
 import { EyeIcon } from "../../svgs/EyeIcon"
-import "toaster-js/default.css"
-import "./Dashboard.css"
 import { StudentCapstoneList } from "../cohorts/StudentCapstoneList.js"
 import { PeopleIcon } from "../../svgs/PeopleIcon.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
+import "toaster-js/default.css"
+import "./Dashboard.css"
 
 export const StandupContext = createContext()
 
