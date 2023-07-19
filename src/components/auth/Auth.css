@@ -59,8 +59,3 @@
     position: relative;
     bottom: -2rem;
 }
-
-.dialog {
-    min-width: 15rem;
-    min-height: 5rem;
-}

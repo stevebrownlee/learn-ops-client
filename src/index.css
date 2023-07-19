@@ -7,9 +7,9 @@
 @import './dropdown.css';
 @import './tabs.css';
 @import './position.css';
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
 /*Typography
 --------------------------------------------------------------*/
@@ -52,6 +52,15 @@ h4 {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;
+}
+
+dialog {
+    padding: 1rem;
+    min-width: 15rem;
+    min-height: 5rem;
+    z-index: 12;
+    width: 70%;
+    top: 10rem;
 }
 
 .invisible {

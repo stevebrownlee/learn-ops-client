@@ -68,14 +68,7 @@ export const StudentCardList = ({ searchTerms }) => {
         /* eslint-disable no-undef */
         let copy = structuredClone(cohortStudents)
 
-        if (searchTerms !== "" && searchTerms.length > 2) {
-            copy = copy.filter(student => {
-                const hasTag = student.tags.find(tag => tag.tag.name.toLowerCase().includes(searchTerms.toLowerCase()))
-                const nameMatches = student.name.toLowerCase().includes(searchTerms.toLowerCase())
 
-                return hasTag || nameMatches
-            })
-        }
 
         let floorBookIndex = -1
         let ceilingBookIndex = activeCourse?.books ? activeCourse?.books[activeCohort?.books?.length - 1]?.index : 0
@@ -89,11 +82,22 @@ export const StudentCardList = ({ searchTerms }) => {
                 project.droppable = false
                 project.students = copy.filter(student => student.book.id === book.id && student.book.project === project.name)
 
+
                 if (project.students.length > 0) {
                     book.display = true
                     project.display = true
                     book.studentCount += project.students.length
                 }
+
+                if (searchTerms !== "" && searchTerms.length > 2) {
+                    project.students = project.students.filter(student => {
+                        const hasTag = student.tags.find(tag => tag.tag.name.toLowerCase().includes(searchTerms.toLowerCase()))
+                        const nameMatches = student.name.toLowerCase().includes(searchTerms.toLowerCase())
+
+                        return hasTag || nameMatches
+                    })
+                }
+
                 if ((floorBookIndex > -1 && book.index >= floorBookIndex) || (floorBookIndex === -1 && book.index === 0) || project.display) {
                     project.droppable = true
                 }
@@ -101,7 +105,6 @@ export const StudentCardList = ({ searchTerms }) => {
 
             if (book.studentCount && floorBookIndex === -1) floorBookIndex = book.index
             if (book.studentCount > 0) ceilingBookIndex = book.index
-
 
             return book
         })
@@ -151,7 +154,7 @@ export const StudentCardList = ({ searchTerms }) => {
         }
     }
 
-    return <section className="flex flex-nowrap justify-evenly"> {
+    return <section className="cohortStudents"> {
         groupedStudents.length === 0
             ? <Loading />
             : groupedStudents?.map((book) => {

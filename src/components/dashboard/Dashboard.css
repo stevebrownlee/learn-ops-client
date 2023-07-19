@@ -209,12 +209,6 @@
     padding: 0.2rem 0.3rem;
 }
 
-dialog {
-    z-index: 12;
-    width: 70%;
-    top: 10rem;
-}
-
 .dialog--statuses {
     position: fixed;
     left: 50%;
