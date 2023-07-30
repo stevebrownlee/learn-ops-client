@@ -164,8 +164,9 @@ export const StudentCardList = ({ searchTerms }) => {
                             <div className="bookColumn__name">
                                 <div className="bookColumn__studentCount">&nbsp;</div>
                                 <div> {book.name} </div>
-                                <div className="bookColumn__studentCount">
-                                    <PeopleIcon /> {book.studentCount}
+                                <div className="bookColumn__studentCount flex">
+                                    <PeopleIcon />
+                                    <div className="pt-1 pl-1 pr-1">{book.studentCount}</div>
                                 </div>
                             </div>
                         </header>

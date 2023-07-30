@@ -8,6 +8,7 @@ import { CohortContext } from "../cohorts/CohortProvider"
 import { PeopleContext } from "./PeopleProvider"
 import { StandupContext } from "../dashboard/Dashboard"
 import "./Student.css"
+import { StudentDropdown } from "./StudentDropdown.js"
 
 export const Student = ({
     student, toggleProjects,
@@ -20,7 +21,7 @@ export const Student = ({
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
         getStudentLearningRecords
     } = useContext(PeopleContext)
-    const {showAllProjects, toggleAllProjects, dragStudent} = useContext(StandupContext)
+    const { showAllProjects, toggleAllProjects, dragStudent } = useContext(StandupContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
 
@@ -57,7 +58,7 @@ export const Student = ({
     }
 
     return <>
-        <div id={`student--${student.id}`}
+        <div id={`relative student--${student.id}`}
             className={`
                 personality--
                 student
@@ -86,21 +87,18 @@ export const Student = ({
             }}
         >
 
-            <div className="student__header">
-                <div className="student__score--mini">
-                    {student.score}
-                </div>
-                <h4 className="student__name"
-                    onClick={() => {
-                        activateStudent(student)
-                        getStudentCoreSkills(student.id)
-                        getStudentProposals(student.id)
-                        getStudentLearningRecords(student.id)
-                        getProposalStatuses()
-                        document.querySelector('.overlay--student').style.display = "block"
-                    }}
-                >{student.name}</h4>
-            </div>
+            <StudentDropdown />
+            <div className="pl-2 pt-1 font-bold text-base"
+                onClick={() => {
+                    activateStudent(student)
+                    getStudentCoreSkills(student.id)
+                    getStudentProposals(student.id)
+                    getStudentLearningRecords(student.id)
+                    getProposalStatuses()
+                    document.querySelector('.overlay--student').style.display = "block"
+                }}
+            >{student.name}</div>
+
 
             {
                 student.tags.length > 0
