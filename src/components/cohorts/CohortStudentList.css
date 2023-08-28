@@ -38,6 +38,7 @@
 
 .bookColumn__studentCount {
     margin-left: auto;
+    display: flex;
 }
 
 .bookColumn__projects {

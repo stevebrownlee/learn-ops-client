@@ -65,7 +65,7 @@ export const CohortProvider = (props) => {
     }
 
     const findCohort = useCallback((q) => {
-        return fetchIt(`${Settings.apiHost}/cohorts?q=${q}`)
+        return fetchIt(`${Settings.apiHost}/cohorts?q=${q}&active=true`)
     }, [user])
 
     return (

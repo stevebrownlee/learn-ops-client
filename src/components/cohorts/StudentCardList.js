@@ -30,7 +30,6 @@ export const StudentCardList = ({ searchTerms }) => {
     const [groupedStudents, setGroupedStudents] = useState([])
     const history = useHistory()
 
-    let { toggleDialog: toggleProjects } = useModal("#dialog--projects")
     let { toggleDialog: toggleStatuses } = useModal("#dialog--statuses")
     let { toggleDialog: toggleTags } = useModal("#dialog--tags")
     let { toggleDialog: toggleNote } = useModal("#dialog--note")
@@ -164,9 +163,11 @@ export const StudentCardList = ({ searchTerms }) => {
                             <div className="bookColumn__name">
                                 <div className="bookColumn__studentCount">&nbsp;</div>
                                 <div> {book.name} </div>
-                                <div className="bookColumn__studentCount flex">
+                                <div className="bookColumn__studentCount">
                                     <PeopleIcon />
-                                    <div className="pt-1 pl-1 pr-1">{book.studentCount}</div>
+                                    <div style={{
+                                        padding: "0.2rem 0.33rem 0 0.33rem",
+                                    }}>{book.studentCount}</div>
                                 </div>
                             </div>
                         </header>
@@ -195,7 +196,6 @@ export const StudentCardList = ({ searchTerms }) => {
 
                                         {
                                             project.students.map(student => <Student
-                                                toggleProjects={toggleProjects}
                                                 toggleStatuses={toggleStatuses}
                                                 toggleTags={toggleTags}
                                                 toggleNote={toggleNote}
@@ -215,7 +215,6 @@ export const StudentCardList = ({ searchTerms }) => {
     }
 
         <StudentDetails toggleCohorts={toggleCohorts} />
-        <BookProjectDialog toggleProjects={toggleProjects} />
         <AssessmentStatusDialog toggleStatuses={toggleStatuses} />
         <TagDialog toggleTags={toggleTags} />
         <StudentNoteDialog toggleNote={toggleNote} />

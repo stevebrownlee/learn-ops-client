@@ -117,7 +117,8 @@ button {
 }
 
 .IconButton:hover {
-    background-color: var(--violet-3);
+    font-weight: bolder;
+    transform: scale(1.5);
 }
 
 .RightSlot {
@@ -183,13 +184,14 @@ button {
 }
 
 .student {
-    border: 2px dotted rgb(137, 188, 188);
-    padding: 0 0.33rem 0.5rem 0.75rem;
+    border: 1px solid rgb(137, 188, 188);
+    padding: 0 0.33rem 0.3rem 0.5rem;
+    border-radius: 0.2rem;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     position: relative;
-    box-shadow: 0.25rem 0.25rem 0.5rem 0 rgb(180, 179, 179);
+    box-shadow: 0.20rem 0.2rem 0.5rem 0 rgb(180, 179, 179);
     transition: all .2s ease-in-out;
     margin: 0.75rem auto;
 }
@@ -203,7 +205,9 @@ button {
 }
 
 .student__name {
-    margin: 0 0 0.33rem 0;
+    margin: 0 0 0 0;
+    font-size: 0.8rem;
+    padding: 0.33rem 0 0 0.75rem;
 }
 
 .student__name:hover {
@@ -425,7 +429,7 @@ button {
     color: black;
     border-radius: 0.25rem;
     margin: 0.2rem 0.33rem;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 }
 
 
@@ -521,10 +525,30 @@ button {
 
 .section--notes {
     padding: 0 2rem;
-    max-height: 10rem;
+    max-height: 20rem;
     overflow: scroll;
     border: 1px dotted lightsteelblue;
 }
+
+.dialog--note {
+    height: fit-content;
+}
+
+.note {
+    border-top: 1px solid rgb(191, 231, 231);
+    padding: 0.4rem 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.note__date {
+    font-size: small;
+}
+
+.note:nth-child(even) {
+    background-color: rgb(241, 252, 249);
+}
+
 
 .section--proposals {
     padding: 0 2rem;

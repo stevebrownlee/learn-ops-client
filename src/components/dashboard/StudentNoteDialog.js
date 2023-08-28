@@ -8,13 +8,14 @@ export const StudentNoteDialog = ({ toggleNote }) => {
     const { activeStudent, getStudentNotes } = useContext(PeopleContext)
     const [message, setMessage] = useState("")
     const [notes, setNotes] = useState([])
-    const note = useRef()
+    const note = useRef(null)
 
     useEffect(() => {
         if (note && note.current) {
+            console.log(note.current)
             note.current.focus()
         }
-    })
+    }, [])
 
     useEffect(() => {
         if (activeStudent && "id" in activeStudent) {
@@ -23,7 +24,7 @@ export const StudentNoteDialog = ({ toggleNote }) => {
     }, [activeStudent])
 
     const getNotes = () => {
-        getStudentNotes(activeStudent.id).then(setNotes)
+        getStudentNotes(activeStudent.id).then(setNotes).then(() => note.current.focus())
     }
 
     const createStudentNote = (e) => {
@@ -35,10 +36,11 @@ export const StudentNoteDialog = ({ toggleNote }) => {
 
     return <dialog id="dialog--note" className="dialog--note">
         <div className="form-group">
-            <label htmlFor="name">Note:</label>
+            <label htmlFor="studentNote">Add Note:</label>
             <input type="text" id="statusText"
                 className="form-control form-control--dialog"
                 ref={note}
+                id="studentNote"
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 onKeyDown={

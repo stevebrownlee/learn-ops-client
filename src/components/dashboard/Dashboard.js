@@ -57,7 +57,5 @@ export const Dashboard = () => {
                     : <StudentCardList searchTerms={searchTerms} />
             }
         </StandupContext.Provider>
-
-        <FeedbackDialog />
     </main>
 }

@@ -284,20 +284,20 @@ export const WeeklyTeams = () => {
                         onChange={e => setWeeklyPrefix(e.target.value)} />
                 </div>
                 <div className="teamsconfig__auto">
-                    <button onClick={() => autoAssignStudents()}>
+                    <button className="isometric-button yellow" onClick={() => autoAssignStudents()}>
                         Assign By Score
                     </button>
                 </div>
-                <div className="teamsconfig__auto">
-                    <button onClick={() => autoAssignStudents(true)}>
+                <div className="teamsconfig__random">
+                    <button className="isometric-button yellow" onClick={() => autoAssignStudents(true)}>
                         Random
                     </button>
                 </div>
                 <div className="teamsconfig__save">
-                    <button onClick={saveTeams}> Save </button>
+                    <button className="isometric-button blue" onClick={saveTeams}> Save </button>
                 </div>
                 <div className="teamsconfig__clear">
-                    <button onClick={() => {
+                    <button className="isometric-button red" onClick={() => {
                         localStorage.removeItem("currentCohortTeams")
                         changeCount(6)
                         buildNewTeams()

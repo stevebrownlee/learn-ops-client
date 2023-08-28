@@ -27,7 +27,11 @@ export const TagDialog = ({ toggleTags }) => {
                                     toggleTags()
                                 })
                         }}
-                        className="button button--isi button--border-thick button--round-m button--size-xs"
+                        className="isometric-button small pink"
+                        style={{
+                            maxWidth: "10rem",
+                            margin: "0.5rem 0.5rem"
+                        }}
                     ><i className="button__icon icon icon-tag"></i>
                         <span>{tag.name}</span>
                         <span className="delete"

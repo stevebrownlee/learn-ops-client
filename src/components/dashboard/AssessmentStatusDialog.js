@@ -32,7 +32,7 @@ export const AssessmentStatusDialog = ({ toggleStatuses }) => {
                 statuses.map(status => {
                     if ((activeStudent?.assessment_status > 0 && status.status !== "In Progress") ||
                         (activeStudent?.assessment_status === 0 && status.status === "In Progress")) {
-                        return <button className="statusButton" key={`st--${status.id}`}
+                        return <button className="statusButton isometric-button small blue" key={`st--${status.id}`}
                             onClick={() => {
                                 let operation = null
                                 if (activeStudent.assessment_status === 0) {

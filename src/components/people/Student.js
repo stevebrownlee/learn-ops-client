@@ -29,17 +29,6 @@ export const Student = ({
 
     const studentFooter = useRef()
 
-    const handleMouseEnter = event => {
-        setDelayHandler(setTimeout(() => {
-            studentFooter.current.classList.add("grow")
-        }, 250))
-    }
-
-    const handleMouseLeave = () => {
-        studentFooter.current.classList.remove("grow")
-        clearTimeout(delayHandler)
-    }
-
     const setAssessmentIndicatorBorder = (status) => {
         switch (status) {
             case 0:
@@ -65,8 +54,6 @@ export const Student = ({
                 ${showAllProjects ? "student--mini" : "student--regular"}
                 ${setAssessmentIndicatorBorder(student.assessment_status)}
             `}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
             draggable={true}
             onDragStart={e => {
                 const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
@@ -87,8 +74,13 @@ export const Student = ({
             }}
         >
 
-            <StudentDropdown />
-            <div className="pl-2 pt-1 font-bold text-base"
+            <StudentDropdown toggleStatuses={toggleStatuses}
+                key={`dropdown--${student.id}`}
+                student={student}
+                toggleNote={toggleNote}
+                toggleTags={toggleTags}
+                getStudentNotes={getStudentNotes} />
+            <div className="student__name"
                 onClick={() => {
                     activateStudent(student)
                     getStudentCoreSkills(student.id)
@@ -126,38 +118,6 @@ export const Student = ({
                     </div>
                     : ""
             }
-
-            <div ref={studentFooter} className="student__footer">
-                <div className="action action--assessments">
-                    <EditIcon tip={"Change current project"} clickFunction={() => {
-                        activateStudent(student)
-                        toggleProjects()
-                    }} />
-                </div>
-                <div className="action action--assessments">
-                    <AssessmentIcon clickFunction={
-                        () => {
-                            activateStudent(student)
-                            toggleStatuses()
-                        }
-                    } tip={`${student.assessment_status === 0 ? "Assign book assessment to student" : "Update assessment status"}`} />
-                </div>
-                <div className="action action--notes">
-                    <NoteIcon clickFunction={() => {
-                        activateStudent(student)
-                        getStudentNotes(student.id)
-                        toggleNote()
-                    }}
-                        tip="Enter in your notes about this student" />
-                </div>
-                <div className="student__tag--add">
-                    <TagIcon clickFunction={() => {
-                        activateStudent(student)
-                        toggleTags()
-                    }} tip="Add a tag to this student" />
-                </div>
-            </div>
-
         </div>
     </>
 }

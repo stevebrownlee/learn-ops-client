@@ -7,9 +7,6 @@
 @import './dropdown.css';
 @import './tabs.css';
 @import './position.css';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 /*Typography
 --------------------------------------------------------------*/

@@ -1,40 +1,85 @@
-import React, { useContext, useRef, useState } from "react"
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import React, { useContext, useEffect, useRef, useState } from "react"
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import {
-    PlusCircledIcon,
     DotFilledIcon,
     CheckIcon,
     ChevronRightIcon,
-} from '@radix-ui/react-icons';
+    DropdownMenuIcon,
+    CaretDownIcon,
+} from '@radix-ui/react-icons'
+import { PeopleContext } from "./PeopleProvider.js"
+import { CourseContext } from "../course/CourseProvider.js"
+import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
 
-export const StudentDropdown = () => {
-    const [bookmarksChecked, setBookmarksChecked] = React.useState(true);
-    const [urlsChecked, setUrlsChecked] = React.useState(false);
-    const [person, setPerson] = React.useState('pedro');
+export const StudentDropdown = ({ toggleStatuses, student, getStudentNotes, toggleNote, toggleTags }) => {
+    const { activateStudent, activeStudent } = useContext(PeopleContext)
+    const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
+    const [bookmarksChecked, setBookmarksChecked] = React.useState(true)
+    const [urlsChecked, setUrlsChecked] = React.useState(false)
+    const [person, setPerson] = React.useState('')
+
+    const switcher = (e) => {
+        switch (e.key) {
+            case "n":
+                toggleNote()
+                break;
+            case "a":
+                toggleStatuses()
+                break;
+
+            default:
+                break;
+        }
+    }
 
     return (
-        <DropdownMenu.Root>
+        <DropdownMenu.Root onOpenChange={(open) => {
+            if (open) {
+                activateStudent(student)
+                document.addEventListener("keyup", switcher)
+            }
+            else {
+                document.removeEventListener("keyup", switcher)
+            }
+        }}>
             <DropdownMenu.Trigger asChild >
-                <button className="IconButton" aria-label="Customise options">
-                    <PlusCircledIcon />
+                <button className="IconButton" aria-label="Student options">
+                    <CaretDownIcon />
                 </button>
             </DropdownMenu.Trigger>
 
             <DropdownMenu.Portal>
                 <DropdownMenu.Content className="DropdownMenuContent" sideOffset={5}>
-                    <DropdownMenu.Item className="DropdownMenuItem">
+                    <DropdownMenu.Item className="DropdownMenuItem" onClick={() => {
+                        toggleNote()
+                    }}>
                         Add Note
+                    </DropdownMenu.Item>
+                    <DropdownMenu.Item className="DropdownMenuItem" onClick={() => {
+                        toggleTags()
+                    }}>
+                        Add Tag
                     </DropdownMenu.Item>
 
                     <DropdownMenu.Separator className="DropdownMenuSeparator" />
                     <DropdownMenu.Label className="DropdownMenuLabel">Book Assessment</DropdownMenu.Label>
                     <DropdownMenu.Item className="DropdownMenuItem">
-                        Mark Started
+                        Send Link
                     </DropdownMenu.Item>
 
+                    <DropdownMenu.Item className="DropdownMenuItem"
+                        onClick={() => {
+                            toggleStatuses()
+                        }}>
+                        Set status
+                    </DropdownMenu.Item>
+
+                    <DropdownMenu.Separator className="DropdownMenuSeparator" />
+                    <DropdownMenu.Label className="DropdownMenuLabel">Current Project</DropdownMenu.Label>
+
                     <DropdownMenu.Sub>
-                        <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger" disabled>
-                            Set status
+                        <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
+                            Move to column...
                             <div className="RightSlot">
                                 <ChevronRightIcon />
                             </div>
@@ -45,61 +90,33 @@ export const StudentDropdown = () => {
                                 sideOffset={2}
                                 alignOffset={-5}
                             >
-                                <DropdownMenu.Item className="DropdownMenuItem">
-                                    Save Page As… <div className="RightSlot">⌘+S</div>
-                                </DropdownMenu.Item>
-                                <DropdownMenu.Item className="DropdownMenuItem">Create Shortcut…</DropdownMenu.Item>
-                                <DropdownMenu.Item className="DropdownMenuItem">Name Window…</DropdownMenu.Item>
-                                <DropdownMenu.Separator className="DropdownMenu.Separator" />
-                                <DropdownMenu.Item className="DropdownMenuItem">Developer Tools</DropdownMenu.Item>
+                                {
+                                    activeCourse.books.map(book => {
+                                        return <DropdownMenu.Sub key={`subbook--${book.id}`}>
+                                            <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
+                                                {book.name}
+                                                <div className="RightSlot"> <ChevronRightIcon /> </div>
+                                            </DropdownMenu.SubTrigger>
+                                            <DropdownMenu.SubContent
+                                                className="DropdownMenuSubContent"
+                                                sideOffset={2}
+                                                alignOffset={-5}
+                                            >
+                                                {
+                                                    book.projects.map(project => {
+                                                        return <DropdownMenu.Item key={`subproject--${project.id}`} className="DropdownMenuItem">{project.name}</DropdownMenu.Item>
+                                                    })
+                                                }
+                                            </DropdownMenu.SubContent>
+                                        </DropdownMenu.Sub>
+                                    })
+                                }
                             </DropdownMenu.SubContent>
                         </DropdownMenu.Portal>
                     </DropdownMenu.Sub>
 
-                    <DropdownMenu.Separator className="DropdownMenuSeparator" />
-
-                    <DropdownMenu.CheckboxItem
-                        className="DropdownMenuCheckboxItem"
-                        checked={bookmarksChecked}
-                        onCheckedChange={setBookmarksChecked}
-                    >
-                        <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
-                            <CheckIcon />
-                        </DropdownMenu.ItemIndicator>
-                        Show Bookmarks <div className="RightSlot">⌘+B</div>
-                    </DropdownMenu.CheckboxItem>
-                    <DropdownMenu.CheckboxItem
-                        className="DropdownMenuCheckboxItem"
-                        checked={urlsChecked}
-                        onCheckedChange={setUrlsChecked}
-                    >
-                        <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
-                            <CheckIcon />
-                        </DropdownMenu.ItemIndicator>
-                        Show Full URLs
-                    </DropdownMenu.CheckboxItem>
-
-                    <DropdownMenu.Separator className="DropdownMenuSeparator" />
-
-                    <DropdownMenu.Label className="DropdownMenuLabel">People</DropdownMenu.Label>
-                    <DropdownMenu.RadioGroup value={person} onValueChange={setPerson}>
-                        <DropdownMenu.RadioItem className="DropdownMenuRadioItem" value="pedro">
-                            <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
-                                <DotFilledIcon />
-                            </DropdownMenu.ItemIndicator>
-                            Pedro Duarte
-                        </DropdownMenu.RadioItem>
-                        <DropdownMenu.RadioItem className="DropdownMenuRadioItem" value="colm">
-                            <DropdownMenu.ItemIndicator className="DropdownMenuItemIndicator">
-                                <DotFilledIcon />
-                            </DropdownMenu.ItemIndicator>
-                            Colm Tuite
-                        </DropdownMenu.RadioItem>
-                    </DropdownMenu.RadioGroup>
-
-                    <DropdownMenu.Arrow className="DropdownMenuArrow" />
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>
         </DropdownMenu.Root>
-    );
+    )
 }

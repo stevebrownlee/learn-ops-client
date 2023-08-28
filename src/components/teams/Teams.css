@@ -4,10 +4,6 @@
     margin: 0 0 1rem 0;
 }
 
-.teamsconfig button {
-    padding: 0.2rem 0.3rem;
-}
-
 .teamsconfig__prefix {
     padding: 0.2rem 0.3rem;
     width: 8rem;
@@ -18,9 +14,12 @@
     margin-right: 0.75rem;
 }
 
+.teamsconfig__random {
+    margin: 0 0.5rem;
+}
+
 .teamsconfig__auto {
     margin-left: auto;
-    margin-right: 0.75rem;
 }
 
 .teamsconfig__clear {
