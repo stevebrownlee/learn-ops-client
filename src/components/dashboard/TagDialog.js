@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
 
-export const TagDialog = ({ toggleTags }) => {
+export const TagDialog = ({ toggleTags, tagIsOpen }) => {
     const {
         activeStudent, getCohortStudents, tags, tagStudent,
         getAllTags, createNewTag, deleteTag
@@ -14,7 +14,7 @@ export const TagDialog = ({ toggleTags }) => {
         getAllTags()
     }, [])
 
-    return <dialog id="dialog--tags" className="dialog--tags ">
+    return <dialog id="dialog--tags" className="dialog--tags" open={tagIsOpen}>
         <section className="tagButtons">
             {
                 tags.map(tag => {

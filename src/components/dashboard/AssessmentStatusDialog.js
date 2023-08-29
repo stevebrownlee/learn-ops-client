@@ -3,7 +3,7 @@ import { PeopleContext } from "../people/PeopleProvider"
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
 
-export const AssessmentStatusDialog = ({ toggleStatuses }) => {
+export const AssessmentStatusDialog = ({ toggleStatuses, statusIsOpen }) => {
     const {
         activeStudent, getCohortStudents,
         updateStudentCurrentAssessment,
@@ -24,7 +24,7 @@ export const AssessmentStatusDialog = ({ toggleStatuses }) => {
         }
     }, [activeStudent])
 
-    return <dialog id="dialog--statuses" className="dialog--statuses">
+    return <dialog id="dialog--statuses" className="dialog--statuses" open={statusIsOpen}>
         <h2>{activeStudent?.name} is {activeStudent?.assessment_status === 0 ? "not assigned to the assessment" : `working on the self-assessment for ${activeStudent?.book?.name}`} </h2>
         <h4>Update Self-Assessment Status</h4>
         <section className="statusButtons">

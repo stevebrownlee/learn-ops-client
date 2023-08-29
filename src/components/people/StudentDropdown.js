@@ -11,7 +11,11 @@ import { PeopleContext } from "./PeopleProvider.js"
 import { CourseContext } from "../course/CourseProvider.js"
 import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
 
-export const StudentDropdown = ({ toggleStatuses, student, getStudentNotes, toggleNote, toggleTags }) => {
+export const StudentDropdown = ({
+    toggleStatuses, student,
+    getStudentNotes, toggleNote,
+    toggleTags, assignStudentToProject
+}) => {
     const { activateStudent, activeStudent } = useContext(PeopleContext)
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
     const [bookmarksChecked, setBookmarksChecked] = React.useState(true)
@@ -75,11 +79,11 @@ export const StudentDropdown = ({ toggleStatuses, student, getStudentNotes, togg
                     </DropdownMenu.Item>
 
                     <DropdownMenu.Separator className="DropdownMenuSeparator" />
-                    <DropdownMenu.Label className="DropdownMenuLabel">Current Project</DropdownMenu.Label>
+                    <DropdownMenu.Label className="DropdownMenuLabel">Progress Tracking</DropdownMenu.Label>
 
                     <DropdownMenu.Sub>
                         <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
-                            Move to column...
+                            Assign to project
                             <div className="RightSlot">
                                 <ChevronRightIcon />
                             </div>
@@ -92,23 +96,29 @@ export const StudentDropdown = ({ toggleStatuses, student, getStudentNotes, togg
                             >
                                 {
                                     activeCourse.books.map(book => {
-                                        return <DropdownMenu.Sub key={`subbook--${book.id}`}>
-                                            <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
-                                                {book.name}
-                                                <div className="RightSlot"> <ChevronRightIcon /> </div>
-                                            </DropdownMenu.SubTrigger>
-                                            <DropdownMenu.SubContent
-                                                className="DropdownMenuSubContent"
-                                                sideOffset={2}
-                                                alignOffset={-5}
-                                            >
-                                                {
-                                                    book.projects.map(project => {
-                                                        return <DropdownMenu.Item key={`subproject--${project.id}`} className="DropdownMenuItem">{project.name}</DropdownMenu.Item>
-                                                    })
-                                                }
-                                            </DropdownMenu.SubContent>
-                                        </DropdownMenu.Sub>
+                                        if (book.index >= student.book.index) {
+                                            return <DropdownMenu.Sub key={`subbook--${book.id}`}>
+                                                <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
+                                                    {book.name}
+                                                    <div className="RightSlot"> <ChevronRightIcon /> </div>
+                                                </DropdownMenu.SubTrigger>
+                                                <DropdownMenu.SubContent
+                                                    className="DropdownMenuSubContent"
+                                                    sideOffset={2}
+                                                    alignOffset={-5}
+                                                >
+                                                    {
+                                                        book.projects.map(project => {
+                                                            return <DropdownMenu.Item key={`subproject--${project.id}`}
+                                                                onClick={() => assignStudentToProject(student.id, project.id)}
+                                                                className="DropdownMenuItem">
+                                                                {project.name}
+                                                            </DropdownMenu.Item>
+                                                        })
+                                                    }
+                                                </DropdownMenu.SubContent>
+                                            </DropdownMenu.Sub>
+                                        }
                                     })
                                 }
                             </DropdownMenu.SubContent>

@@ -4,18 +4,17 @@ import Settings from "../Settings"
 import { fetchIt } from "../utils/Fetch"
 import { StudentNoteList } from "../people/StudentNoteList"
 
-export const StudentNoteDialog = ({ toggleNote }) => {
+export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
     const { activeStudent, getStudentNotes } = useContext(PeopleContext)
     const [message, setMessage] = useState("")
     const [notes, setNotes] = useState([])
     const note = useRef(null)
 
     useEffect(() => {
-        if (note && note.current) {
-            console.log(note.current)
+        if (note && note.current && noteIsOpen) {
             note.current.focus()
         }
-    }, [])
+    }, [noteIsOpen])
 
     useEffect(() => {
         if (activeStudent && "id" in activeStudent) {
@@ -34,13 +33,12 @@ export const StudentNoteDialog = ({ toggleNote }) => {
         })
     }
 
-    return <dialog id="dialog--note" className="dialog--note">
+    return <dialog id="dialog--note" className="dialog--note" open={noteIsOpen}>
         <div className="form-group">
-            <label htmlFor="studentNote">Add Note:</label>
+            <label>Add Note:</label>
             <input type="text" id="statusText"
                 className="form-control form-control--dialog"
                 ref={note}
-                id="studentNote"
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 onKeyDown={

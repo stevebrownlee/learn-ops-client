@@ -4,7 +4,7 @@ import Settings from "../Settings"
 import { fetchIt } from "../utils/Fetch"
 import { CohortContext } from "../cohorts/CohortProvider"
 
-export const CohortDialog = ({ toggleCohorts }) => {
+export const CohortDialog = ({ toggleCohorts, cohortIsOpen }) => {
     const { activeStudent, getStudent } = useContext(PeopleContext)
     const { getCohorts, cohorts } = useContext(CohortContext)
 
@@ -32,7 +32,7 @@ export const CohortDialog = ({ toggleCohorts }) => {
         })
     }
 
-    return <dialog id="dialog--cohorts" className="dialog--cohorts">
+    return <dialog id="dialog--cohorts" className="dialog--cohorts" open={cohortIsOpen}>
         {
             cohorts.map(cohort => <div key={`cohort--${cohort.id}`}>
                 <input type="checkbox"

@@ -344,14 +344,29 @@ button {
 
 .student--assessmentReviewNeeded {
     border: 2px solid rgb(231, 52, 20);
+    animation: attention 4s linear infinite;
 }
 
 .student--assessReviewIncomplete {
-    border: 2px solid rgb(211, 14, 198);
+    border: 2px solid rgb(175, 22, 165);
 }
 
 .student--assessReviewComplete {
     border: 2px solid rgb(19, 241, 78);
+}
+
+@keyframes attention {
+    0% {
+        border-color: red;
+    }
+
+    50% {
+        border-color: rgb(99, 0, 0);
+    }
+
+    100% {
+        border-color: red;
+    }
 }
 
 .student__actions {

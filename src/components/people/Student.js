@@ -14,7 +14,7 @@ export const Student = ({
     student, toggleProjects,
     toggleStatuses, toggleTags,
     toggleNote, toggleCohorts,
-    hasAssessment
+    hasAssessment, assignStudentToProject
 }) => {
     const {
         activateStudent, getCohortStudents, untagStudent,
@@ -51,7 +51,7 @@ export const Student = ({
             className={`
                 personality--
                 student
-                ${showAllProjects ? "student--mini" : "student--regular"}
+                ${showAllProjects ? "student--regular" : "student--regular"}
                 ${setAssessmentIndicatorBorder(student.assessment_status)}
             `}
             draggable={true}
@@ -78,6 +78,7 @@ export const Student = ({
                 key={`dropdown--${student.id}`}
                 student={student}
                 toggleNote={toggleNote}
+                assignStudentToProject={assignStudentToProject}
                 toggleTags={toggleTags}
                 getStudentNotes={getStudentNotes} />
             <div className="student__name"

@@ -8,7 +8,6 @@ import { CohortContext } from "./CohortProvider"
 
 import { TagDialog } from "../dashboard/TagDialog"
 import { CohortDialog } from "../dashboard/CohortDialog"
-import { BookProjectDialog } from "../dashboard/BookProjectDialog"
 import { StudentNoteDialog } from "../dashboard/StudentNoteDialog"
 import { AssessmentStatusDialog } from "../dashboard/AssessmentStatusDialog"
 
@@ -30,10 +29,10 @@ export const StudentCardList = ({ searchTerms }) => {
     const [groupedStudents, setGroupedStudents] = useState([])
     const history = useHistory()
 
-    let { toggleDialog: toggleStatuses } = useModal("#dialog--statuses")
-    let { toggleDialog: toggleTags } = useModal("#dialog--tags")
-    let { toggleDialog: toggleNote } = useModal("#dialog--note")
-    let { toggleDialog: toggleCohorts } = useModal("#dialog--cohorts")
+    let { toggleDialog: toggleStatuses, modalIsOpen: statusIsOpen } = useModal("#dialog--statuses")
+    let { toggleDialog: toggleTags, modalIsOpen: tagIsOpen } = useModal("#dialog--tags")
+    let { toggleDialog: toggleNote, modalIsOpen: noteIsOpen } = useModal("#dialog--note")
+    let { toggleDialog: toggleCohorts, modalIsOpen: cohortIsOpen } = useModal("#dialog--cohorts")
 
     const getComponentData = (cohortId) => {
         return getActiveCourse(cohortId)
@@ -122,6 +121,19 @@ export const StudentCardList = ({ searchTerms }) => {
         return showInRegularMode || showInStandupMode
     }
 
+    const assignStudentToProject = (studentId, projectId) => {
+        setStudentCurrentProject(studentId, projectId)
+            .then(() => getCohortStudents(activeCohort))
+            .catch((error) => {
+                if (error?.message?.includes("duplicate")) {
+                    new Toast("Student has previously been assigned to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                }
+                else {
+                    new Toast("Could not assign student to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                }
+            })
+    }
+
     const handleDrop = (e, book, project) => {
         e.preventDefault()
         toggleAllProjects(false)
@@ -140,16 +152,7 @@ export const StudentCardList = ({ searchTerms }) => {
             new Toast("Self-assessment for this book not marked as reviewed and complete.", Toast.TYPE_WARNING, Toast.TIME_NORMAL);
         }
         else {
-            setStudentCurrentProject(rawStudent.id, project.id)
-                .then(() => getCohortStudents(activeCohort))
-                .catch((error) => {
-                    if (error?.message?.includes("duplicate")) {
-                        new Toast("Student has previously been assigned to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
-                    }
-                    else {
-                        new Toast("Could not assign student to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
-                    }
-                })
+            assignStudentToProject(rawStudent.id, project.id)
         }
     }
 
@@ -199,6 +202,7 @@ export const StudentCardList = ({ searchTerms }) => {
                                                 toggleStatuses={toggleStatuses}
                                                 toggleTags={toggleTags}
                                                 toggleNote={toggleNote}
+                                                assignStudentToProject={assignStudentToProject}
                                                 hasAssessment={book.assessments.length > 0}
                                                 toggleCohorts={toggleCohorts}
                                                 key={`student--${student.id}`}
@@ -215,9 +219,9 @@ export const StudentCardList = ({ searchTerms }) => {
     }
 
         <StudentDetails toggleCohorts={toggleCohorts} />
-        <AssessmentStatusDialog toggleStatuses={toggleStatuses} />
-        <TagDialog toggleTags={toggleTags} />
-        <StudentNoteDialog toggleNote={toggleNote} />
-        <CohortDialog toggleCohorts={toggleCohorts} />
+        <AssessmentStatusDialog toggleStatuses={toggleStatuses} statusIsOpen={statusIsOpen} />
+        <TagDialog toggleTags={toggleTags} tagIsOpen={tagIsOpen} />
+        <StudentNoteDialog toggleNote={toggleNote} noteIsOpen={noteIsOpen} />
+        <CohortDialog toggleCohorts={toggleCohorts} cohortIsOpen={cohortIsOpen} />
     </section>
 }

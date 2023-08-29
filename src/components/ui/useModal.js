@@ -4,15 +4,9 @@ const useModal = (selector) => {
     const [modalIsOpen, setIsOpen] = useState(false)
 
     const toggleDialog = () => {
-        setIsOpen(!modalIsOpen)
-        const element = document.querySelector(`${selector}`)
-
-        if (modalIsOpen) {
-            element.removeAttribute("open")
-        } else {
-            element.setAttribute("open", true)
-            element.focus()
-        }
+        setTimeout(() => {
+            setIsOpen(!modalIsOpen)
+        }, 100);
     }
 
     return { toggleDialog, modalIsOpen }
