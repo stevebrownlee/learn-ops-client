@@ -9,7 +9,6 @@ import {
 } from '@radix-ui/react-icons'
 import { PeopleContext } from "./PeopleProvider.js"
 import { CourseContext } from "../course/CourseProvider.js"
-import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
 
 export const StudentDropdown = ({
     toggleStatuses, student,
@@ -22,28 +21,10 @@ export const StudentDropdown = ({
     const [urlsChecked, setUrlsChecked] = React.useState(false)
     const [person, setPerson] = React.useState('')
 
-    const switcher = (e) => {
-        switch (e.key) {
-            case "n":
-                toggleNote()
-                break;
-            case "a":
-                toggleStatuses()
-                break;
-
-            default:
-                break;
-        }
-    }
-
     return (
         <DropdownMenu.Root onOpenChange={(open) => {
             if (open) {
                 activateStudent(student)
-                document.addEventListener("keyup", switcher)
-            }
-            else {
-                document.removeEventListener("keyup", switcher)
             }
         }}>
             <DropdownMenu.Trigger asChild >

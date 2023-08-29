@@ -11,7 +11,7 @@ export const CohortSearchField = () => {
     const [terms, setTerms] = useState("")
     const [cohorts, setCohorts] = useState([])
     const cohortSearch = useRef()
-    const searchLogger = useKeyboardShortcut('c', () => {
+    const searchLogger = useKeyboardShortcut('s', 'c', () => {
         cohortSearch.current.focus()
         setTerms("")
     })
@@ -54,7 +54,7 @@ export const CohortSearchField = () => {
                     ref={cohortSearch}
                     className="form-control w-100"
                     type="search"
-                    placeholder="Search cohorts"
+                    placeholder="Search cohorts (s c)"
                     aria-label="Search cohorts" />
 
                 <CohortResults cohorts={cohorts} selectCohort={selectCohort} />

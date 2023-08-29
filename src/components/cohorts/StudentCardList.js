@@ -17,6 +17,7 @@ import { Student } from "../people/Student"
 import { StandupContext } from "../dashboard/Dashboard"
 import { Toast, configureToasts } from "toaster-js"
 import { Loading } from "../Loading.js"
+import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
 
 import "./CohortStudentList.css"
 import "./Tooltip.css"
@@ -25,7 +26,7 @@ export const StudentCardList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
     const { showAllProjects, toggleAllProjects, dragStudent, draggedStudent } = useContext(StandupContext)
     const { activeCohort, activateCohort } = useContext(CohortContext)
-    const { cohortStudents, getCohortStudents, setStudentCurrentProject } = useContext(PeopleContext)
+    const { cohortStudents, getCohortStudents, setStudentCurrentProject, activeStudent } = useContext(PeopleContext)
     const [groupedStudents, setGroupedStudents] = useState([])
     const history = useHistory()
 
@@ -33,6 +34,21 @@ export const StudentCardList = ({ searchTerms }) => {
     let { toggleDialog: toggleTags, modalIsOpen: tagIsOpen } = useModal("#dialog--tags")
     let { toggleDialog: toggleNote, modalIsOpen: noteIsOpen } = useModal("#dialog--note")
     let { toggleDialog: toggleCohorts, modalIsOpen: cohortIsOpen } = useModal("#dialog--cohorts")
+
+    const updateNotes = useKeyboardShortcut('u', 'n', () => {
+        if ('id' in activeStudent) {
+            toggleNote()
+        }
+        else {
+            new Toast("There is no active student.", Toast.TYPE_WARNING, Toast.TIME_NORMAL);
+        }
+    })
+
+    useEffect(() => {
+        document.addEventListener("keyup", updateNotes)
+        return () => document.removeEventListener("keyup", updateNotes)
+    }, [activeStudent])
+
 
     const getComponentData = (cohortId) => {
         return getActiveCourse(cohortId)

@@ -1,17 +1,20 @@
 import { useRef } from "react"
 
-const useKeyboardShortcut = (activatorKey, handler=()=>{}, state={}) => {
+const useKeyboardShortcut = (contextKey, activatorKey, handler = () => { }, state = {}) => {
     const stateRef = useRef()
-    const acceptedKeys = new Set(['\\', activatorKey])
+    const keyMap = new Set([contextKey, activatorKey])
     stateRef.current = {
         ready: false,
         state: state
     }
 
     const keyLogger = (e) => {
-        if (acceptedKeys.has(e.key)) {
-            if (e.key === "\\") {
+        if (keyMap.has(e.key)) {
+            if (e.key === contextKey) {
                 stateRef.current.ready = true
+                setTimeout(() => {
+                    stateRef.current.ready = false
+                }, 1000);
             }
             else if (stateRef.current.ready && e.key === activatorKey) {
                 stateRef.current.ready = false

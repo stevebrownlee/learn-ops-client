@@ -4,7 +4,7 @@ import "./Search.css"
 
 export const StudentSearch = ({ setSearchTerms, searchTerms }) => {
     const studentSearch = useRef()
-    const searchLogger = useKeyboardShortcut('s', () => studentSearch.current.focus())
+    const searchLogger = useKeyboardShortcut('s', 'l', () => studentSearch.current.focus())
 
     useEffect(() => {
         document.addEventListener("keyup", searchLogger)
@@ -15,13 +15,13 @@ export const StudentSearch = ({ setSearchTerms, searchTerms }) => {
         <>
             <div className="search cohortAction--large">
                 <input id="search__terms"
-                    ref={studentSearch}
-                    onChange={e => setSearchTerms(e.target.value)}
-                    value={searchTerms}
-                    className="form-control w-100"
                     type="search"
-                    placeholder="Search students &amp; tags"
-                    aria-label="Search students &amp; tags" />
+                    ref={studentSearch}
+                    value={searchTerms}
+                    onChange={e => setSearchTerms(e.target.value)}
+                    className="form-control w-100"
+                    placeholder="Search learners &amp; tags (s l)"
+                    aria-label="Search learners &amp; tags" />
             </div>
         </>
     )
