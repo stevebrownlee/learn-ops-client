@@ -1,14 +1,12 @@
 import React, { useContext, useRef, useState } from "react"
-import { AssessmentIcon } from "../../svgs/AssessmentIcon"
-import { EditIcon } from "../../svgs/EditIcon"
-import { NoteIcon } from "../../svgs/NoteIcon"
-import { TagIcon } from "../../svgs/TagIcon"
+
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { PeopleContext } from "./PeopleProvider"
 import { StandupContext } from "../dashboard/Dashboard"
-import "./Student.css"
 import { StudentDropdown } from "./StudentDropdown.js"
+import "./Student.css"
+import { StudentNotePopup } from "./StudentNotePopup.js"
 
 export const Student = ({
     student, toggleProjects,
@@ -26,6 +24,7 @@ export const Student = ({
     const { getProposalStatuses } = useContext(AssessmentContext)
 
     const [delayHandler, setDelayHandler] = useState(null)
+
 
     const studentFooter = useRef()
 
@@ -91,6 +90,9 @@ export const Student = ({
                     document.querySelector('.overlay--student').style.display = "block"
                 }}
             >{student.name}</div>
+
+
+            <StudentNotePopup student={student} />
 
 
             {

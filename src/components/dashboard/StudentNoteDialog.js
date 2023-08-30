@@ -17,10 +17,10 @@ export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
     }, [noteIsOpen])
 
     useEffect(() => {
-        if (activeStudent && "id" in activeStudent) {
+        if (noteIsOpen && activeStudent && "id" in activeStudent) {
             getNotes()
         }
-    }, [activeStudent])
+    }, [noteIsOpen])
 
     const getNotes = () => {
         getStudentNotes(activeStudent.id).then(setNotes).then(() => note.current.focus())

@@ -35,7 +35,7 @@ export const StudentCardList = ({ searchTerms }) => {
     let { toggleDialog: toggleNote, modalIsOpen: noteIsOpen } = useModal("#dialog--note")
     let { toggleDialog: toggleCohorts, modalIsOpen: cohortIsOpen } = useModal("#dialog--cohorts")
 
-    const updateNotes = useKeyboardShortcut('u', 'n', () => {
+    const updateNotes = useKeyboardShortcut('s', 'n', () => {
         if ('id' in activeStudent) {
             toggleNote()
         }
@@ -104,9 +104,11 @@ export const StudentCardList = ({ searchTerms }) => {
                 }
 
                 if (searchTerms !== "" && searchTerms.length > 2) {
+                    let reg = searchTerms.split("").reduce((r,c) => `${r}.*${c}`, "")
+                    const regex = new RegExp(reg, "gi")
                     project.students = project.students.filter(student => {
                         const hasTag = student.tags.find(tag => tag.tag.name.toLowerCase().includes(searchTerms.toLowerCase()))
-                        const nameMatches = student.name.toLowerCase().includes(searchTerms.toLowerCase())
+                        const nameMatches = student.name.match(regex)
 
                         return hasTag || nameMatches
                     })

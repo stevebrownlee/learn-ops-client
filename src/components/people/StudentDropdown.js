@@ -6,6 +6,7 @@ import {
     ChevronRightIcon,
     DropdownMenuIcon,
     CaretDownIcon,
+    DotsHorizontalIcon,
 } from '@radix-ui/react-icons'
 import { PeopleContext } from "./PeopleProvider.js"
 import { CourseContext } from "../course/CourseProvider.js"
@@ -29,7 +30,7 @@ export const StudentDropdown = ({
         }}>
             <DropdownMenu.Trigger asChild >
                 <button className="IconButton" aria-label="Student options">
-                    <CaretDownIcon />
+                    <DotsHorizontalIcon />
                 </button>
             </DropdownMenu.Trigger>
 
@@ -38,12 +39,12 @@ export const StudentDropdown = ({
                     <DropdownMenu.Item className="DropdownMenuItem" onClick={() => {
                         toggleNote()
                     }}>
-                        Add Note
+                        Learner Notes
                     </DropdownMenu.Item>
                     <DropdownMenu.Item className="DropdownMenuItem" onClick={() => {
                         toggleTags()
                     }}>
-                        Add Tag
+                        Tag Learner
                     </DropdownMenu.Item>
 
                     <DropdownMenu.Separator className="DropdownMenuSeparator" />
