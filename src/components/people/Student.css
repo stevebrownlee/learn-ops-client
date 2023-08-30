@@ -9,16 +9,23 @@ button {
 }
 
 .student {
-    border: 1px solid rgb(137, 188, 188);
+    /* border: 1px solid rgb(137, 188, 188); */
+    border: 1px solid #E9DACB;
     padding: 0 0.33rem 0.3rem 0.5rem;
-    border-radius: 0.2rem;
+    border-radius: 0.15rem;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     position: relative;
-    box-shadow: 0.20rem 0.2rem 0.5rem 0 rgb(180, 179, 179);
+    /* box-shadow: 0.20rem 0.2rem 0.5rem 0 rgb(180, 179, 179); */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1), -2px -2px 8px rgba(255, 255, 255, 0.7);
+    /* box-shadow:
+        2px 2px 0 #D9CAB9,
+        6px 6px 0 #C9BAB8; */
+    background: radial-gradient(circle 4rem at center, #ffffff, #f9f6f1);
     transition: all .2s ease-in-out;
-    margin: 0.15rem 0;
+    margin: 0.15rem 0.15rem;
+    z-index: 10;
 }
 
 .student--mini {
@@ -26,7 +33,7 @@ button {
 }
 
 .student--regular {
-    width: 12rem;
+    width: 11rem;
 }
 
 .student__name {

@@ -24,7 +24,7 @@ export const CohortList = () => {
         getRecentCohorts()
     }, [])
 
-    const getRecentCohorts = () => getCohorts({ limit: 8 })
+    const getRecentCohorts = () => getCohorts({ limit: 10 })
 
     return <>
         <button className="isometric-button blue studentList__createCohort"

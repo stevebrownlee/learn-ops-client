@@ -21,7 +21,7 @@ export const Student = ({
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
         getStudentLearningRecords
     } = useContext(PeopleContext)
-    const { showAllProjects, toggleAllProjects, dragStudent } = useContext(StandupContext)
+    const { showAllProjects, toggleAllProjects, dragStudent, showTags, showAvatars } = useContext(StandupContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
     const [delayHandler, setDelayHandler] = useState(null)
@@ -45,6 +45,9 @@ export const Student = ({
     }
 
     const displayTags = (student) => {
+        if (!showTags) {
+            return ""
+        }
         return student.tags.length > 0
             ? <div className="student__tags">
                 {
@@ -106,7 +109,12 @@ export const Student = ({
         }}
     >
         <Flex gap="3" align="center">
-            <Avatar size="3" src={student.avatar} radius="full" fallback="T" />
+            {
+                showAvatars
+                    ? <Avatar size="3" src={student.avatar} radius="full" fallback="T" />
+                    : ""
+            }
+
             <Box>
                 <Text as="div" size="2" weight="bold">
                     <StudentDropdown toggleStatuses={toggleStatuses}

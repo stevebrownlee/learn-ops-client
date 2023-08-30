@@ -82,8 +82,6 @@ export const StudentCardList = ({ searchTerms }) => {
         /* eslint-disable no-undef */
         let copy = structuredClone(cohortStudents)
 
-
-
         let floorBookIndex = -1
         let ceilingBookIndex = activeCourse?.books ? activeCourse?.books[activeCohort?.books?.length - 1]?.index : 0
 
