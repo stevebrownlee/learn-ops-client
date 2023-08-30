@@ -18,7 +18,7 @@ button {
     position: relative;
     box-shadow: 0.20rem 0.2rem 0.5rem 0 rgb(180, 179, 179);
     transition: all .2s ease-in-out;
-    margin: 0.4rem 0.3rem;
+    margin: 0.15rem 0;
 }
 
 .student--mini {
@@ -26,7 +26,7 @@ button {
 }
 
 .student--regular {
-    width: 9rem;
+    width: 12rem;
 }
 
 .student__name {

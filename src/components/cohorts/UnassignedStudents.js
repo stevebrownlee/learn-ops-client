@@ -7,7 +7,7 @@ import "./CohortList.css"
 import "./Cohort.css"
 
 
-export const UnassignedStudents = ({ getLastFourCohorts }) => {
+export const UnassignedStudents = ({ getRecentCohorts }) => {
     const [chosenCohort, setCohort] = useState(0)
     const [chosenStudents, updateStudents] = useState(new Set())
     const { students, getStudents } = useContext(PeopleContext)
@@ -46,7 +46,7 @@ export const UnassignedStudents = ({ getLastFourCohorts }) => {
 
                     Promise.all(fetches)
                         .then(() => getStudents("unassigned"))
-                        .then(getLastFourCohorts)
+                        .then(getRecentCohorts)
                 }}>
                 <i className="button__icon icon icon-book"></i>
                 <span>Assign Students</span>

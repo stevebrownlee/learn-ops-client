@@ -69,7 +69,7 @@
 
 .projectColumn__students {
     flex: 1;
-    height: 70vh;
+    height: 80vh;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;

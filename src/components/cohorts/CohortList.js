@@ -21,10 +21,10 @@ export const CohortList = () => {
     const history = useHistory()
 
     useEffect(() => {
-        getLastFourCohorts()
+        getRecentCohorts()
     }, [])
 
-    const getLastFourCohorts = () => getCohorts({ limit: 6 })
+    const getRecentCohorts = () => getCohorts({ limit: 8 })
 
     return <>
         <button className="isometric-button blue studentList__createCohort"
@@ -36,7 +36,7 @@ export const CohortList = () => {
                 cohorts.map(cohort => <Cohort
                     key={`cohort--${cohort.id}`}
                     cohort={cohort}
-                    getLastFourCohorts={getLastFourCohorts} />)
+                    getRecentCohorts={getRecentCohorts} />)
             }
         </div>
 

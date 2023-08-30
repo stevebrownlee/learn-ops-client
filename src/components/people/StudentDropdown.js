@@ -30,7 +30,7 @@ export const StudentDropdown = ({
         }}>
             <DropdownMenu.Trigger asChild >
                 <button className="IconButton" aria-label="Student options">
-                    <DotsHorizontalIcon />
+                    <CaretDownIcon />
                 </button>
             </DropdownMenu.Trigger>
 

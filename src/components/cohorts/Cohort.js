@@ -13,7 +13,7 @@ import "./Cohort.css"
 import "./CohortList.css"
 
 
-export const Cohort = ({ cohort, getLastFourCohorts }) => {
+export const Cohort = ({ cohort, getRecentCohorts }) => {
     const [editSlack, setSlackEdit] = useState(0)
     const {
         getCohorts, cohorts, leaveCohort, getCohortInfo,
@@ -26,7 +26,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
             if (e.key === "Enter") {
                 const updatedCohort = { ...cohort, slack_channel: e.target.value }
                 updateCohort(updatedCohort).then(() => {
-                    getLastFourCohorts()
+                    getRecentCohorts()
                     setSlackEdit(0)
                 })
             }
@@ -45,7 +45,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
 
     const leave = (cohort) => {
         leaveCohort(cohort.id)
-            .then(getLastFourCohorts)
+            .then(getRecentCohorts)
             .then(() => {
                 localStorage.removeItem("activeCohort")
                 activateCohort(null)
@@ -55,7 +55,7 @@ export const Cohort = ({ cohort, getLastFourCohorts }) => {
 
     const join = (cohort) => {
         joinCohort(cohort.id)
-            .then(getLastFourCohorts)
+            .then(getRecentCohorts)
             .then(() => {
                 localStorage.setItem("activeCohort", cohort.id)
                 activateCohort(cohort.id)
