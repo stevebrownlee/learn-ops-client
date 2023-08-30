@@ -30,14 +30,12 @@ button {
 }
 
 .student__name {
-    margin: 0 0 0 0;
-    font-size: 0.8rem;
-    padding: 0.8rem 0.5rem 0.4rem 0.4rem;
-    text-align: center;
-}
+    color: rgb(5, 50, 95);
+
+ }
 
 .student__name:hover {
-    color: rgb(19, 81, 144);
+    color: rgb(30, 93, 156);
     text-decoration: underline;
     cursor: pointer;
 }

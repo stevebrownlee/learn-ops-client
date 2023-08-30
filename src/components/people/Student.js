@@ -24,10 +24,7 @@ export const Student = ({
     const { showAllProjects, toggleAllProjects, dragStudent } = useContext(StandupContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
-
     const [delayHandler, setDelayHandler] = useState(null)
-
-
     const studentFooter = useRef()
 
     const setAssessmentIndicatorBorder = (status) => {
@@ -74,142 +71,60 @@ export const Student = ({
             : ""
     }
 
-    return <>
-        <Card className={`
+    const showStudentDetails = () => {
+        activateStudent(student)
+        getStudentCoreSkills(student.id)
+        getStudentProposals(student.id)
+        getStudentLearningRecords(student.id)
+        getProposalStatuses()
+        document.querySelector('.overlay--student').style.display = "block"
+    }
+
+    return <Card className={`
                 personality--
                 student
                 student--regular
                 ${setAssessmentIndicatorBorder(student.assessment_status)}
             `}
-            draggable={true}
-            onDragStart={e => {
-                const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
-                const transferStudent = Object.assign(Object.create(null), {
-                    id: student.id,
-                    bookId: student.book.id,
-                    bookIndex: student.book.index,
-                    projectId: parseInt(currentProjectId),
-                    assessment_status: student.assessment_status,
-                    hasAssessment
-                })
-                e.dataTransfer.setData("text/plain", JSON.stringify(transferStudent))
+        draggable={true}
+        onDragStart={e => {
+            const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
+            const transferStudent = Object.assign(Object.create(null), {
+                id: student.id,
+                bookId: student.book.id,
+                bookIndex: student.book.index,
+                projectId: parseInt(currentProjectId),
+                assessment_status: student.assessment_status,
+                hasAssessment
+            })
+            e.dataTransfer.setData("text/plain", JSON.stringify(transferStudent))
 
-                setTimeout(() => {
-                    toggleAllProjects(true)
-                    dragStudent(transferStudent)
-                }, 150)
-            }}
-        >
-            <Flex gap="3" align="center">
-                <Avatar size="3" src={student.avatar} radius="full" fallback="T" />
-                <Box>
-                    <Text as="div" size="2" weight="bold">
-                        <StudentDropdown toggleStatuses={toggleStatuses}
-                            key={`dropdown--${student.id}`}
-                            student={student}
-                            toggleNote={toggleNote}
-                            assignStudentToProject={assignStudentToProject}
-                            toggleTags={toggleTags}
-                            getStudentNotes={getStudentNotes} />
+            setTimeout(() => {
+                toggleAllProjects(true)
+                dragStudent(transferStudent)
+            }, 150)
+        }}
+    >
+        <Flex gap="3" align="center">
+            <Avatar size="3" src={student.avatar} radius="full" fallback="T" />
+            <Box>
+                <Text as="div" size="2" weight="bold">
+                    <StudentDropdown toggleStatuses={toggleStatuses}
+                        key={`dropdown--${student.id}`}
+                        student={student}
+                        toggleNote={toggleNote}
+                        assignStudentToProject={assignStudentToProject}
+                        toggleTags={toggleTags}
+                        getStudentNotes={getStudentNotes} />
 
-                        <div
-                            onClick={() => {
-                                activateStudent(student)
-                                getStudentCoreSkills(student.id)
-                                getStudentProposals(student.id)
-                                getStudentLearningRecords(student.id)
-                                getProposalStatuses()
-                                document.querySelector('.overlay--student').style.display = "block"
-                            }}
-                        >{student.name}</div>
+                    <div onClick={showStudentDetails} className="student__name">{student.name}</div>
 
-
-                        <StudentNotePopup student={student} />
-                    </Text>
-                    <Text as="div" size="2" color="gray">
-                        {displayTags(student)}
-                    </Text>
-                </Box>
-            </Flex>
-        </Card>
-
-
-        {/* <div id={`relative student--${student.id}`}
-            className={`
-                personality--
-                student
-                student--regular
-                ${setAssessmentIndicatorBorder(student.assessment_status)}
-            `}
-            draggable={true}
-            onDragStart={e => {
-                const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
-                const transferStudent = Object.assign(Object.create(null), {
-                    id: student.id,
-                    bookId: student.book.id,
-                    bookIndex: student.book.index,
-                    projectId: parseInt(currentProjectId),
-                    assessment_status: student.assessment_status,
-                    hasAssessment
-                })
-                e.dataTransfer.setData("text/plain", JSON.stringify(transferStudent))
-
-                setTimeout(() => {
-                    toggleAllProjects(true)
-                    dragStudent(transferStudent)
-                }, 150)
-            }}
-        >
-
-            <StudentDropdown toggleStatuses={toggleStatuses}
-                key={`dropdown--${student.id}`}
-                student={student}
-                toggleNote={toggleNote}
-                assignStudentToProject={assignStudentToProject}
-                toggleTags={toggleTags}
-                getStudentNotes={getStudentNotes} />
-
-            <div className="student__name"
-                onClick={() => {
-                    activateStudent(student)
-                    getStudentCoreSkills(student.id)
-                    getStudentProposals(student.id)
-                    getStudentLearningRecords(student.id)
-                    getProposalStatuses()
-                    document.querySelector('.overlay--student').style.display = "block"
-                }}
-            >{student.name}</div>
-
-
-            <StudentNotePopup student={student} />
-
-
-            {
-                student.tags.length > 0
-                    ? <div className="student__tags">
-                        {
-                            student.tags.map(tag => <span key={`tag--${tag.id}`}
-                                onClick={() => {
-                                    untagStudent(tag.id).then(() => {
-                                        getCohortStudents(activeCohort)
-                                    })
-                                }}
-                                className="student--tag">
-                                {tag.tag.name}
-                                <span className="delete clickable"
-                                    onClick={e => {
-                                        e.stopPropagation()
-                                        untagStudent(tag.id).then(() => {
-                                            getCohortStudents(activeCohort)
-                                        })
-                                    }}
-                                >&times;</span>
-                            </span>
-                            )
-                        }
-                    </div>
-                    : ""
-            }
-        </div> */}
-    </>
+                    <StudentNotePopup student={student} />
+                </Text>
+                <Text as="div" size="2" color="gray">
+                    {displayTags(student)}
+                </Text>
+            </Box>
+        </Flex>
+    </Card>
 }
