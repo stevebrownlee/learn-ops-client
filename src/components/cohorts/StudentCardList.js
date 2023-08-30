@@ -104,7 +104,7 @@ export const StudentCardList = ({ searchTerms }) => {
                 }
 
                 if (searchTerms !== "" && searchTerms.length > 2) {
-                    let reg = searchTerms.split("").reduce((r,c) => `${r}.*${c}`, "")
+                    let reg = searchTerms.split("").reduce((r, c) => `${r}.*${c}`, "")
                     const regex = new RegExp(reg, "gi")
                     project.students = project.students.filter(student => {
                         const hasTag = student.tags.find(tag => tag.tag.name.toLowerCase().includes(searchTerms.toLowerCase()))
@@ -114,9 +114,15 @@ export const StudentCardList = ({ searchTerms }) => {
                     })
                 }
 
-                if ((floorBookIndex > -1 && book.index >= floorBookIndex) || (floorBookIndex === -1 && book.index === 0) || project.display) {
+                if (
+                    (floorBookIndex > -1 && book.index >= floorBookIndex)
+                    || (book.studentCount && floorBookIndex === -1)
+                    || (floorBookIndex === -1 && book.index === 0)
+                    || project.display
+                ) {
                     project.droppable = true
                 }
+                console.log(floorBookIndex, book.index, project.name)
             }
 
             if (book.studentCount && floorBookIndex === -1) floorBookIndex = book.index
@@ -124,6 +130,7 @@ export const StudentCardList = ({ searchTerms }) => {
 
             return book
         })
+
 
         if (studentsPerBook) {
             setGroupedStudents(studentsPerBook)
