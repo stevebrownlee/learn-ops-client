@@ -18,7 +18,7 @@ button {
     position: relative;
     box-shadow: 0.20rem 0.2rem 0.5rem 0 rgb(180, 179, 179);
     transition: all .2s ease-in-out;
-    margin: 0.75rem auto;
+    margin: 0.4rem 0.3rem;
 }
 
 .student--mini {
@@ -169,7 +169,7 @@ button {
 }
 
 .student--assessmentReviewNeeded {
-    border: 2px solid rgb(231, 52, 20);
+    border: 3px solid rgb(231, 52, 20);
     animation: attention 4s linear infinite;
 }
 
@@ -187,7 +187,7 @@ button {
     }
 
     50% {
-        border-color: rgb(99, 0, 0);
+        border-color: rgb(255, 164, 164);
     }
 
     100% {

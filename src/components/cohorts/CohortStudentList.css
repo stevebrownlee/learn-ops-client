@@ -49,10 +49,13 @@
     font-size: smaller;
 }
 
-.bookColumn__projectHeader {
+.projectColumn {
     margin: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
 }
-.bookColumn__project {
+
+.projectColumn__header {
     border: 1px dotted rgb(50, 67, 66);
     background-color: #a9e2de;
     padding: 0.25rem 0.25rem;
@@ -62,6 +65,17 @@
     color: rgb(34, 34, 34);
     margin: 0 1rem;
     box-shadow: 0.25rem 0.25rem 0.25rem rgb(156, 156, 156);
+}
+
+.projectColumn__students {
+    flex: 1;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0.5rem auto 0 auto;
+    align-items: center;
 }
 
 .cohortActions {

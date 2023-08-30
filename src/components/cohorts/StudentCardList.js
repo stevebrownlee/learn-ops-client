@@ -122,7 +122,6 @@ export const StudentCardList = ({ searchTerms }) => {
                 ) {
                     project.droppable = true
                 }
-                console.log(floorBookIndex, book.index, project.name)
             }
 
             if (book.studentCount && floorBookIndex === -1) floorBookIndex = book.index
@@ -181,6 +180,34 @@ export const StudentCardList = ({ searchTerms }) => {
         }
     }
 
+    const showStudentCardsForProject = (book, project) => {
+        const columnSize = 5
+        if (project.students.length > columnSize) {
+            const baseTeamCount = Math.round(project.students.length / columnSize)
+            const numberOfColumns = project.students.length % columnSize === 0
+                                        ? baseTeamCount
+                                        : baseTeamCount + 1
+            const columns = []
+            for (let index = 0; index < numberOfColumns; index++) {
+                const start = index * columnSize
+                const end = start + columnSize
+                const studentSlice = project.students.slice(start, end)
+                if (studentSlice.length) {
+                    columns.push(studentSlice)
+                }
+            }
+        }
+        return project.students.map(student => <Student
+            toggleStatuses={toggleStatuses}
+            toggleTags={toggleTags}
+            toggleNote={toggleNote}
+            assignStudentToProject={assignStudentToProject}
+            hasAssessment={book.assessments.length > 0}
+            toggleCohorts={toggleCohorts}
+            key={`student--${student.id}`}
+            student={student} />)
+    }
+
     return <section className="cohortStudents"> {
         groupedStudents.length === 0
             ? <Loading />
@@ -207,11 +234,11 @@ export const StudentCardList = ({ searchTerms }) => {
                                 ) {
                                     return <div id={`book-project--${project.id}`}
                                         key={`book-project--${project.id}`}
-                                        className="bookColumn__projectHeader"
+                                        className="projectColumn"
                                         onDragOver={e => e.preventDefault()}
                                         onDrop={(e) => handleDrop(e, book, project)}
                                     >
-                                        <div className="bookColumn__project"
+                                        <div className="projectColumn__header"
                                             onMouseOver={evt => {
                                                 evt.target.innerText = project.name
                                             }}
@@ -222,17 +249,10 @@ export const StudentCardList = ({ searchTerms }) => {
                                             {showAllProjects ? project.name.substring(0, 14) : project.name}
                                         </div>
 
-                                        {
-                                            project.students.map(student => <Student
-                                                toggleStatuses={toggleStatuses}
-                                                toggleTags={toggleTags}
-                                                toggleNote={toggleNote}
-                                                assignStudentToProject={assignStudentToProject}
-                                                hasAssessment={book.assessments.length > 0}
-                                                toggleCohorts={toggleCohorts}
-                                                key={`student--${student.id}`}
-                                                student={student} />)
-                                        }
+                                        <div className="projectColumn__students">
+                                            { showStudentCardsForProject(book, project) }
+                                        </div>
+
                                     </div>
                                 }
                                 return ""
