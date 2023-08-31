@@ -118,7 +118,7 @@ export const WeeklyTeams = () => {
         return <div key={`studentbadge--${student.id}`}
             id={JSON.stringify(student)}
             onDragStart={e => {
-                if ("id" in e.nativeEvent.target.parentElement) {
+                if ("id" in e.nativeEvent.target.parentElement && e.nativeEvent.target.parentElement.id !== "") {
                     trackOriginalTeam(parseInt(e.nativeEvent.target.parentElement.id.split("--")[1]))
                 }
                 else {
@@ -144,21 +144,23 @@ export const WeeklyTeams = () => {
                             const data = e.dataTransfer.getData("text/plain")
                             const rawStudent = JSON.parse(data)
 
-                            // Add div to new team Set
-                            const copy = new Map(teams)
-                            copy.get(teamNumber).add(data)
+                            if (teamNumber !== originalTeam) {
+                                // Add div to new team Set
+                                const copy = new Map(teams)
+                                copy.get(teamNumber).add(data)
 
-                            const idx = unassignedStudents.findIndex(s => s.id === rawStudent.id)
-                            const unassignedCopy = unassignedStudents.map(s => ({ ...s }))
-                            unassignedCopy.splice(idx, 1)
-                            setUnassigned(unassignedCopy)
+                                const idx = unassignedStudents.findIndex(s => s.id === rawStudent.id)
+                                const unassignedCopy = unassignedStudents.map(s => ({ ...s }))
+                                unassignedCopy.splice(idx, 1)
+                                setUnassigned(unassignedCopy)
 
-                            // If dragged from another team, remove from original
-                            if (originalTeam !== 0) {
-                                copy.get(originalTeam).delete(data)
+                                // If dragged from another team, remove from original
+                                if (originalTeam !== 0) {
+                                    copy.get(originalTeam).delete(data)
+                                }
+
+                                updateTeams(copy)
                             }
-
-                            updateTeams(copy)
                         }}
                     >
                         Team {teamNumber}
