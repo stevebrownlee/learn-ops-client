@@ -24,7 +24,10 @@ import "./Tooltip.css"
 
 export const StudentCardList = ({ searchTerms }) => {
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
-    const { showAllProjects, toggleAllProjects, dragStudent, draggedStudent } = useContext(StandupContext)
+    const {
+        showAllProjects, toggleAllProjects, dragStudent,
+        draggedStudent, showTags, showAvatars
+    } = useContext(StandupContext)
     const { activeCohort, activateCohort } = useContext(CohortContext)
     const { cohortStudents, getCohortStudents, setStudentCurrentProject, activeStudent } = useContext(PeopleContext)
     const [groupedStudents, setGroupedStudents] = useState([])
@@ -34,20 +37,6 @@ export const StudentCardList = ({ searchTerms }) => {
     let { toggleDialog: toggleTags, modalIsOpen: tagIsOpen } = useModal("#dialog--tags")
     let { toggleDialog: toggleNote, modalIsOpen: noteIsOpen } = useModal("#dialog--note")
     let { toggleDialog: toggleCohorts, modalIsOpen: cohortIsOpen } = useModal("#dialog--cohorts")
-
-    const updateNotes = useKeyboardShortcut('s', 'n', () => {
-        if ('id' in activeStudent) {
-            toggleNote()
-        }
-        else {
-            new Toast("There is no active student.", Toast.TYPE_WARNING, Toast.TIME_NORMAL);
-        }
-    })
-
-    useEffect(() => {
-        document.addEventListener("keyup", updateNotes)
-        return () => document.removeEventListener("keyup", updateNotes)
-    }, [activeStudent])
 
 
     const getComponentData = (cohortId) => {
@@ -132,7 +121,7 @@ export const StudentCardList = ({ searchTerms }) => {
         if (studentsPerBook) {
             setGroupedStudents(studentsPerBook)
         }
-    }, [cohortStudents, searchTerms])
+    }, [cohortStudents, searchTerms, showTags, showAvatars])
 
     const showBook = (book) => {
         const showInRegularMode = !showAllProjects && book.display
@@ -179,22 +168,6 @@ export const StudentCardList = ({ searchTerms }) => {
     }
 
     const showStudentCardsForProject = (book, project) => {
-        const columnSize = 5
-        if (project.students.length > columnSize) {
-            const baseTeamCount = Math.round(project.students.length / columnSize)
-            const numberOfColumns = project.students.length % columnSize === 0
-                                        ? baseTeamCount
-                                        : baseTeamCount + 1
-            const columns = []
-            for (let index = 0; index < numberOfColumns; index++) {
-                const start = index * columnSize
-                const end = start + columnSize
-                const studentSlice = project.students.slice(start, end)
-                if (studentSlice.length) {
-                    columns.push(studentSlice)
-                }
-            }
-        }
         return project.students.map(student => <Student
             toggleStatuses={toggleStatuses}
             toggleTags={toggleTags}
@@ -211,7 +184,7 @@ export const StudentCardList = ({ searchTerms }) => {
             ? <Loading />
             : groupedStudents?.map((book) => {
                 return showBook(book)
-                    ? <article key={`book--${book.id}`} className="bookColumn">
+                    ? <article key={`book--${book.id}--${showTags}--${showAvatars}`} className="bookColumn">
                         <header className="bookColumn__header">
                             <div className="bookColumn__name">
                                 <div className="bookColumn__studentCount">&nbsp;</div>

@@ -86,7 +86,7 @@ export const Student = ({
     return <Card className={`
                 personality--
                 student
-                student--regular
+                ${showAvatars ? "student--regular" : "student-mini"}
                 ${setAssessmentIndicatorBorder(student.assessment_status)}
             `}
         draggable={true}
