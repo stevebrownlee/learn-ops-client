@@ -14,7 +14,7 @@ export const NavBar = () => {
     const [checked, setChecked] = useState("")
     const { logout, isAuthenticated } = simpleAuth()
     const { mimic, changeMimic } = useContext(SettingsContext)
-    let { toggleDialog: toggleSettings } = useModal("#dialog--settings")
+    let { toggleDialog: toggleSettings, modalIsOpen: settingsIsOpen } = useModal("#dialog--settings")
 
     const makeLink = (to, text) => {
         return <Link className="navbar__link" to={to} onClick={() => setChecked("")}>{text}</Link>
@@ -63,7 +63,9 @@ export const NavBar = () => {
                 </ul>
             </nav>
 
-            <SettingsDialog toggleSettings={toggleSettings} mimic={mimic} changeMimic={changeMimic} />
+            <SettingsDialog toggleSettings={toggleSettings}
+                settingsIsOpen={settingsIsOpen}
+                mimic={mimic} changeMimic={changeMimic} />
         </>
     )
 }

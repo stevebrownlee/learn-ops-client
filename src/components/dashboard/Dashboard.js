@@ -107,10 +107,10 @@ export const Dashboard = () => {
             {
                 capstoneSeason.active && capstoneSeason.id === activeCohort
                     ? <StudentCapstoneList searchTerms={searchTerms} />
-                    : <StudentCardList searchTerms={searchTerms} />
+                    : <><StudentCardList searchTerms={searchTerms} /><Shortcuts /></>
             }
         </StandupContext.Provider>
 
-        <Shortcuts />
+
     </main>
 }

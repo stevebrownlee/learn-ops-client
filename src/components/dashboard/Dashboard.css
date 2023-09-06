@@ -265,6 +265,18 @@
     width: 50%;
 }
 
+.dialog--settings {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    max-width: 50%;
+}
+
+
 .tagDialog__newTag {
     text-align: center;
 }

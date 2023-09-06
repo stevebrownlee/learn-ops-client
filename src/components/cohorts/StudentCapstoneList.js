@@ -31,8 +31,8 @@ export const StudentCapstoneList = ({ searchTerms }) => {
     const [groupedProposals, setGroupedProposals] = useState(new Map())
     const { proposalStatuses, addToProposalTimeline, getProposalStatuses } = useContext(AssessmentContext)
 
-    let { toggleDialog: toggleCohorts } = useModal("#dialog--cohorts")
-    let { toggleDialog: toggleNote } = useModal("#dialog--note")
+    let { toggleDialog: toggleCohorts, modalIsOpen: cohortIsOpen } = useModal("#dialog--cohorts")
+    let { toggleDialog: toggleNote, modalIsOpen: noteIsOpen } = useModal("#dialog--note")
 
     const history = useHistory()
 
@@ -214,7 +214,7 @@ export const StudentCapstoneList = ({ searchTerms }) => {
                 ? <Loading />
                 : Array.from(groupedProposals, mapConverter).map(stageGrouping)
         }
-        <StudentDetails toggleCohorts={toggleCohorts} />
-        <StudentNoteDialog toggleNote={toggleNote} />
+        <StudentDetails toggleCohorts={toggleCohorts} cohortIsOpen={cohortIsOpen} />
+        <StudentNoteDialog toggleNote={toggleNote} noteIsOpen={noteIsOpen} />
     </section>
 }

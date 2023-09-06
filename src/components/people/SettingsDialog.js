@@ -1,8 +1,9 @@
 import React from "react"
 
-export const SettingsDialog = ({ toggleSettings, changeMimic, mimic }) => {
+export const SettingsDialog = ({ toggleSettings, settingsIsOpen, changeMimic, mimic }) => {
     return <dialog id="dialog--settings"
-        className="border-spacing-10 border-slate-800 p-5 rounded-sm shadow-gray-400 shadow-lg"
+        open={settingsIsOpen}
+        className="dialog--settings"
         onKeyDown={
             e => {
                 if (e.key === "Escape") {
@@ -13,7 +14,7 @@ export const SettingsDialog = ({ toggleSettings, changeMimic, mimic }) => {
     >
 
         <h1>User Settings</h1>
-        <button onClick={() => changeMimic(!mimic)}>
+        <button onClick={() => changeMimic(!mimic)} className="isometric-button yellow">
             {
                 mimic ? "Instructor Interface" : "Student Interface"
             }
