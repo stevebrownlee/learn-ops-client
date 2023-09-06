@@ -175,7 +175,8 @@ export const StudentCapstoneList = ({ searchTerms }) => {
                                             >
                                                 <option value="0">-- choose status --</option>
                                                 {
-                                                    proposalStatuses.map(s => <option key={`status--${s.id}`} value={s.id}>{s.status}</option>)
+                                                    proposalStatuses.map(s => <option key={`status--${s.id}`}
+                                                        value={s.id}>{s.status}</option>)
                                                 }
                                             </select>
                                     }
@@ -190,7 +191,9 @@ export const StudentCapstoneList = ({ searchTerms }) => {
                                 <div className="proposalLinks">
                                     {
                                         student.proposals.map(proposal => {
-                                            return <a target="_blank" key={`proposal--${proposal.id}`} className="proposal__link" href={proposal?.proposal_url}>{proposal.course_name}</a>
+                                            return <a target="_blank" style={{margin: "0 0.75rem 0 0"}} key={`proposal--${proposal.id}`}
+                                                className="proposal__link"
+                                                href={proposal?.proposal_url}>{proposal.course_name}</a>
                                         })
                                     }
                                 </div>
