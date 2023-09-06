@@ -14,7 +14,7 @@ export const StudentNavBar = () => {
     const [checked, setChecked] = useState("")
     const { logout, isAuthenticated, getCurrentUser } = simpleAuth()
     const { mimic, changeMimic } = useContext(SettingsContext)
-    let { toggleDialog: toggleSettings, modalIsOpen: settingsIsOpen } = useModal("#dialog--settings")
+    let [toggleSettings, settingsIsOpen] = useModal("#dialog--settings")
     const isStaff = getCurrentUser().profile.staff
 
     const makeLink = (to, text) => {

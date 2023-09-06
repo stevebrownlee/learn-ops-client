@@ -14,14 +14,15 @@ export const Student = ({
     student, toggleProjects,
     toggleStatuses, toggleTags,
     toggleNote, toggleCohorts,
-    hasAssessment, assignStudentToProject
+    hasAssessment, assignStudentToProject,
+    showTags, showAvatars
 }) => {
     const {
         activateStudent, getCohortStudents, untagStudent,
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
         getStudentLearningRecords
     } = useContext(PeopleContext)
-    const { showAllProjects, toggleAllProjects, dragStudent, showTags, showAvatars } = useContext(StandupContext)
+    const { showAllProjects, toggleAllProjects, dragStudent } = useContext(StandupContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
     const [delayHandler, setDelayHandler] = useState(null)

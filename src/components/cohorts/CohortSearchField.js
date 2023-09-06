@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider.js"
-import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
+import keyboardShortcut from "../ui/keyboardShortcut.js"
 import { CohortContext } from "./CohortProvider.js"
 import { CohortResults } from "./CohortResults.js"
 import "./CohortStudentList.css"
@@ -11,7 +11,7 @@ export const CohortSearchField = () => {
     const [terms, setTerms] = useState("")
     const [cohorts, setCohorts] = useState([])
     const cohortSearch = useRef()
-    const searchLogger = useKeyboardShortcut('s', 'c', () => {
+    const searchLogger = keyboardShortcut('s', 'c', () => {
         cohortSearch.current.focus()
         setTerms("")
     })

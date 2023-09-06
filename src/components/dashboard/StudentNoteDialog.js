@@ -14,9 +14,6 @@ export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
         if (note && note.current && noteIsOpen) {
             note.current.focus()
         }
-    }, [noteIsOpen])
-
-    useEffect(() => {
         if (noteIsOpen && activeStudent && "id" in activeStudent) {
             getNotes()
         }

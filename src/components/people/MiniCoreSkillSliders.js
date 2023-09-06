@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { PeopleContext } from "./PeopleProvider"
 import Settings from "../Settings"
-import useModal from "../ui/useModal"
 import { fetchIt } from "../utils/Fetch"
 import "./CoreSkills.css"
 import { HumanDate } from "../utils/HumanDate"

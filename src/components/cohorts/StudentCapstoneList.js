@@ -31,8 +31,8 @@ export const StudentCapstoneList = ({ searchTerms }) => {
     const [groupedProposals, setGroupedProposals] = useState(new Map())
     const { proposalStatuses, addToProposalTimeline, getProposalStatuses } = useContext(AssessmentContext)
 
-    let { toggleDialog: toggleCohorts, modalIsOpen: cohortIsOpen } = useModal("#dialog--cohorts")
-    let { toggleDialog: toggleNote, modalIsOpen: noteIsOpen } = useModal("#dialog--note")
+    let [ toggleCohorts, cohortIsOpen ] = useModal("#dialog--cohorts")
+    let [ toggleNote, noteIsOpen ] = useModal("#dialog--note")
 
     const history = useHistory()
 

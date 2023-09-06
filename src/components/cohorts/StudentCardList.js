@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { useHistory } from "react-router-dom"
 import useModal from "../ui/useModal"
 
@@ -17,27 +17,78 @@ import { Student } from "../people/Student"
 import { StandupContext } from "../dashboard/Dashboard"
 import { Toast, configureToasts } from "toaster-js"
 import { Loading } from "../Loading.js"
-import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
+import keyboardShortcut from "../ui/keyboardShortcut.js"
 
 import "./CohortStudentList.css"
 import "./Tooltip.css"
 
+const persistSettings = (setting, value) => {
+    let settings = localStorage.getItem("lp_settings")
+
+    if (settings) {
+        settings = JSON.parse(settings)
+        settings[setting] = value
+        localStorage.setItem("lp_settings", JSON.stringify(settings))
+    }
+    else {
+        localStorage.setItem("lp_settings", JSON.stringify({ [setting]: value }))
+    }
+}
+
 export const StudentCardList = ({ searchTerms }) => {
-    const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
-    const {
-        showAllProjects, toggleAllProjects, dragStudent,
-        draggedStudent, showTags, showAvatars
-    } = useContext(StandupContext)
+    let initial_show_tags_state = true
+    let initial_show_avatars_state = true
+
+    let settings = localStorage.getItem("lp_settings")
+    if (settings) {
+        settings = JSON.parse(settings)
+        if ("tags" in settings) {
+            initial_show_tags_state = settings.tags
+        }
+        if ("avatars" in settings) {
+            initial_show_avatars_state = settings.avatars
+        }
+    }
+
     const { activeCohort, activateCohort } = useContext(CohortContext)
+    const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
+    const { showAllProjects, toggleAllProjects, dragStudent, draggedStudent } = useContext(StandupContext)
     const { cohortStudents, getCohortStudents, setStudentCurrentProject, activeStudent } = useContext(PeopleContext)
+
+    const [showTags, toggleTags] = useState(initial_show_tags_state)
     const [groupedStudents, setGroupedStudents] = useState([])
+    const [showAvatars, toggleAvatars] = useState(initial_show_avatars_state)
+
     const history = useHistory()
 
-    let { toggleDialog: toggleStatuses, modalIsOpen: statusIsOpen } = useModal("#dialog--statuses")
-    let { toggleDialog: toggleTags, modalIsOpen: tagIsOpen } = useModal("#dialog--tags")
-    let { toggleDialog: toggleNote, modalIsOpen: noteIsOpen } = useModal("#dialog--note")
-    let { toggleDialog: toggleCohorts, modalIsOpen: cohortIsOpen } = useModal("#dialog--cohorts")
+    let [toggleStatuses, statusIsOpen] = useModal("#dialog--statuses")
+    let [toggleTagDialog, tagIsOpen] = useModal("#dialog--tags")
+    let [toggleNote, noteIsOpen] = useModal("#dialog--note")
+    let [toggleCohorts, cohortIsOpen] = useModal("#dialog--cohorts")
 
+    // See footnote (1)
+    const noteOpenStateRef = useRef(noteIsOpen)
+    const avatarsStateRef = useRef(showAvatars)
+    const tagsStateRef = useRef(showTags)
+    useEffect(() => {
+        noteOpenStateRef.current = noteIsOpen
+        avatarsStateRef.current = showAvatars
+        tagsStateRef.current = showTags
+    });
+
+    const toggleTagsShortcut = keyboardShortcut('t', 'g', () => {
+        if (!noteOpenStateRef.current) {
+            persistSettings('tags', !tagsStateRef.current)
+            toggleTags(!tagsStateRef.current)
+        }
+    })
+
+    const toggleAvatarsShortcut = keyboardShortcut('t', 'a', () => {
+        if (!noteOpenStateRef.current) {
+            persistSettings('avatars', !avatarsStateRef.current)
+            toggleAvatars(!avatarsStateRef.current)
+        }
+    })
 
     const getComponentData = (cohortId) => {
         return getActiveCourse(cohortId)
@@ -64,6 +115,13 @@ export const StudentCardList = ({ searchTerms }) => {
         else {
             history.push("/cohorts")
             new Toast("You have not joined a cohort. Please choose one.", Toast.TYPE_WARNING, Toast.TIME_NORMAL);
+        }
+
+        document.addEventListener("keyup", toggleTagsShortcut)
+        document.addEventListener("keyup", toggleAvatarsShortcut)
+        return () => {
+            document.removeEventListener("keyup", toggleTagsShortcut)
+            document.removeEventListener("keyup", toggleAvatarsShortcut)
         }
     }, [])
 
@@ -169,8 +227,10 @@ export const StudentCardList = ({ searchTerms }) => {
 
     const showStudentCardsForProject = (book, project) => {
         return project.students.map(student => <Student
+            showTags={showTags}
+            showAvatars={showAvatars}
             toggleStatuses={toggleStatuses}
-            toggleTags={toggleTags}
+            toggleTags={toggleTagDialog}
             toggleNote={toggleNote}
             assignStudentToProject={assignStudentToProject}
             hasAssessment={book.assessments.length > 0}
@@ -221,7 +281,7 @@ export const StudentCardList = ({ searchTerms }) => {
                                         </div>
 
                                         <div className="projectColumn__students">
-                                            { showStudentCardsForProject(book, project) }
+                                            {showStudentCardsForProject(book, project)}
                                         </div>
 
                                     </div>
@@ -236,8 +296,26 @@ export const StudentCardList = ({ searchTerms }) => {
 
         <StudentDetails toggleCohorts={toggleCohorts} />
         <AssessmentStatusDialog toggleStatuses={toggleStatuses} statusIsOpen={statusIsOpen} />
-        <TagDialog toggleTags={toggleTags} tagIsOpen={tagIsOpen} />
+        <TagDialog toggleTags={toggleTagDialog} tagIsOpen={tagIsOpen} />
         <StudentNoteDialog toggleNote={toggleNote} noteIsOpen={noteIsOpen} />
         <CohortDialog toggleCohorts={toggleCohorts} cohortIsOpen={cohortIsOpen} />
     </section>
 }
+
+
+
+/*
+    Footnotes
+    ===========================
+
+    (1)
+    ------------
+    The keyboard shortcut of `ta` will toggle the avatar images in the student cards.
+    However, if someone has the StudentNoteDialog component open, the sequence of `ta`
+    should not trigger the avatar toggling. Since I am using a regular DOM event
+    listener, the current value of the state variable (in this case, `noteIsOpen`) is
+    not up to date when the event fires.
+
+    The solution is to track that state in a ref, whose current value will be accessible
+    in the listener callback function.
+*/

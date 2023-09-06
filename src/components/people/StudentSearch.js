@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react"
-import useKeyboardShortcut from "../ui/useKeyboardShortcut.js"
+import keyboardShortcut from "../ui/keyboardShortcut.js"
 import "./Search.css"
 
 export const StudentSearch = ({ setSearchTerms, searchTerms }) => {
     const studentSearch = useRef()
-    const searchLogger = useKeyboardShortcut('s', 'l', () => studentSearch.current.focus())
+    const searchLogger = keyboardShortcut('s', 'l', () => studentSearch.current.focus())
 
     useEffect(() => {
         document.addEventListener("keyup", searchLogger)
