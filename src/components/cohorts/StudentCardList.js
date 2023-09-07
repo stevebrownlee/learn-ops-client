@@ -52,7 +52,10 @@ export const StudentCardList = ({ searchTerms }) => {
 
     const { activeCohort, activateCohort } = useContext(CohortContext)
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
-    const { showAllProjects, toggleAllProjects, dragStudent, draggedStudent } = useContext(StandupContext)
+    const {
+        showAllProjects, toggleAllProjects, dragStudent, draggedStudent,
+        enteringNote
+    } = useContext(StandupContext)
     const { cohortStudents, getCohortStudents, setStudentCurrentProject, activeStudent } = useContext(PeopleContext)
 
     const [showTags, toggleTags] = useState(initial_show_tags_state)
@@ -70,21 +73,23 @@ export const StudentCardList = ({ searchTerms }) => {
     const noteOpenStateRef = useRef(noteIsOpen)
     const avatarsStateRef = useRef(showAvatars)
     const tagsStateRef = useRef(showTags)
+    const enteringNoteStateRef = useRef(enteringNote)
     useEffect(() => {
         noteOpenStateRef.current = noteIsOpen
         avatarsStateRef.current = showAvatars
         tagsStateRef.current = showTags
+        enteringNoteStateRef.current = enteringNote
     });
 
     const toggleTagsShortcut = keyboardShortcut('t', 'g', () => {
-        if (!noteOpenStateRef.current) {
+        if (!noteOpenStateRef.current && !enteringNoteStateRef.current) {
             persistSettings('tags', !tagsStateRef.current)
             toggleTags(!tagsStateRef.current)
         }
     })
 
     const toggleAvatarsShortcut = keyboardShortcut('t', 'a', () => {
-        if (!noteOpenStateRef.current) {
+        if (!noteOpenStateRef.current && !enteringNoteStateRef.current) {
             persistSettings('avatars', !avatarsStateRef.current)
             toggleAvatars(!avatarsStateRef.current)
         }

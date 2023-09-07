@@ -22,10 +22,12 @@ export const Student = ({
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
         getStudentLearningRecords
     } = useContext(PeopleContext)
-    const { showAllProjects, toggleAllProjects, dragStudent } = useContext(StandupContext)
     const { activeCohort } = useContext(CohortContext)
     const { getProposalStatuses } = useContext(AssessmentContext)
+    const { showAllProjects, toggleAllProjects, dragStudent } = useContext(StandupContext)
+
     const [delayHandler, setDelayHandler] = useState(null)
+
     const studentFooter = useRef()
 
     const setAssessmentIndicatorBorder = (status) => {

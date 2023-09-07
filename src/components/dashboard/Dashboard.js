@@ -15,10 +15,12 @@ import "./Dashboard.css"
 export const StandupContext = createContext()
 
 export const Dashboard = () => {
-    const [searchTerms, setSearchTerms] = useState("")
     const [mvps, setMVPs] = useState(0)
-    const [showAllProjects, toggleAllProjects] = useState(false)
+    const [searchTerms, setSearchTerms] = useState("")
     const [draggedStudent, dragStudent] = useState(null)
+    const [showAllProjects, toggleAllProjects] = useState(false)
+    const [enteringNote, setEnteringNote] = useState(false)
+
     const { activeCohort } = useContext(CohortContext)
     const { activeCourse, capstoneSeason } = useContext(CourseContext)
     const { cohortStudents } = useContext(PeopleContext)
@@ -46,7 +48,8 @@ export const Dashboard = () => {
         </section>
 
         <StandupContext.Provider value={{
-            showAllProjects, toggleAllProjects, dragStudent, draggedStudent
+            showAllProjects, toggleAllProjects, dragStudent, draggedStudent,
+            enteringNote, setEnteringNote
         }}>
             {
                 capstoneSeason.active && capstoneSeason.id === activeCohort

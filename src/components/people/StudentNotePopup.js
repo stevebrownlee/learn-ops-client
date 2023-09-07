@@ -3,11 +3,12 @@ import React, { useContext, useEffect, useRef, useState } from "react"
 import * as Popover from '@radix-ui/react-popover'
 import { FilePlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
 
-import { PeopleContext } from "./PeopleProvider.js"
-import { CourseContext } from "../course/CourseProvider.js"
+import { PeopleContext } from "./PeopleProvider"
+import { CourseContext } from "../course/CourseProvider"
+import { StandupContext } from "../dashboard/Dashboard"
 
-import Settings from "../Settings.js"
-import { fetchIt } from "../utils/Fetch.js"
+import Settings from "../Settings"
+import { fetchIt } from "../utils/Fetch"
 
 
 export const StudentNotePopup = ({ student }) => {
@@ -16,6 +17,7 @@ export const StudentNotePopup = ({ student }) => {
         getStudentNotes, getStudentCoreSkills, getStudentProposals,
         getStudentLearningRecords
     } = useContext(PeopleContext)
+    const { enteringNote, setEnteringNote } = useContext(StandupContext)
 
     const [note, setNote] = useState("")
     const [open, setOpen] = useState(false)
@@ -28,9 +30,15 @@ export const StudentNotePopup = ({ student }) => {
     }
 
     return (
-        <Popover.Root open={open} onOpenChange={setOpen}>
+        <Popover.Root open={open} onOpenChange={isOpen => {
+            setOpen(isOpen)
+            setEnteringNote(isOpen)
+        }}>
             <Popover.Trigger asChild>
-                <button className="NoteIconButton" aria-label="Add student note" onClick={() => setOpen(true)}>
+                <button className="NoteIconButton" aria-label="Add student note" onClick={() => {
+                    setOpen(true)
+                    setEnteringNote(true)
+                }}>
                     <Pencil1Icon />
                 </button>
             </Popover.Trigger>
