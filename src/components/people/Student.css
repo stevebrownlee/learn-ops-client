@@ -42,22 +42,15 @@ button {
     cursor: pointer;
 }
 
-.student__footer {
-    margin-top: auto;
-    font-size: smaller;
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    transition: height 400ms ease 0ms;
-    height: 0;
-    overflow: hidden;
-}
-
-.student__footer.grow {
-    overflow: visible;
+.student__duration {
+    position: absolute;
+    top: -0.1rem;
+    right: 0.1rem;
+    color: #afafaf;
+    font-size: xx-small;
+    font-family: inherit;
     height: 1rem;
-    border-top: 1px dotted darkslategray;
-    padding: 0.5rem 0 0 0;
+    display: inline-flex;
 }
 
 .student__info {
@@ -72,29 +65,6 @@ button {
     justify-content: space-around;
 }
 
-.student__score--mini {
-    font-family: "Patua One", serif;
-    position: absolute;
-    top: -0.4rem;
-    right: -0.8rem;
-    font-size: 0.7rem;
-    color: #4a0d2f;
-    font-weight: bold;
-    letter-spacing: 2px;
-    background-color: #decdd6;
-    padding: 0.1rem;
-    border-radius: 0.7rem;
-    border: 1px solid lightskyblue;
-}
-
-.student__proposals {
-    position: absolute;
-    top: 0rem;
-    left: -0.8rem;
-    display: flex;
-    flex-direction: column;
-}
-
 .student__score {
     display: flex;
     flex-direction: column;
@@ -107,10 +77,6 @@ button {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-}
-
-.button--record {
-    margin: 1rem 0;
 }
 
 .student__details {

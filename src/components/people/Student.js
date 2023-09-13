@@ -7,8 +7,8 @@ import { CohortContext } from "../cohorts/CohortProvider"
 import { PeopleContext } from "./PeopleProvider"
 import { StandupContext } from "../dashboard/Dashboard"
 import { StudentDropdown } from "./StudentDropdown.js"
-import "./Student.css"
 import { StudentNotePopup } from "./StudentNotePopup.js"
+import "./Student.css"
 
 export const Student = ({
     student, toggleProjects,
@@ -128,8 +128,8 @@ export const Student = ({
                         toggleTags={toggleTags}
                         getStudentNotes={getStudentNotes} />
 
-                    <div onClick={showStudentDetails} className="student__name">{student.name}</div>
-
+                    <section onClick={showStudentDetails} className="student__name">{student.name}</section>
+                    <section class="student__duration">{student.book.project_duration} days</section>
                     <StudentNotePopup student={student} />
                 </Text>
                 <Text as="div" size="2" color="gray">
