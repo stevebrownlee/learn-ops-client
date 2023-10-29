@@ -29,7 +29,9 @@ export const ClientProposal = () => {
     }, [user])
 
     return <article className="dashboard--student">
-        <h2 className="cohortForm__title">Submit {course.course__name} Proposal</h2>
+        <h1 style={{
+            fontSize: "2rem"
+        }} className="cohortForm__title">Submit {course.course__name} Proposal</h1>
 
         <form className="cohortForm view"
             onSubmit={(evt) => {
@@ -49,6 +51,57 @@ export const ClientProposal = () => {
                     .catch(window.alert)
             }}
         >
+            <h1>Completeness Check</h1>
+
+            <div>Your proposal will be rejected unless it meets all of the following requirements. This is your chance to double check that you have met all requirements before you submit.</div>
+
+
+            <h3>Wireframes</h3>
+            <ul className="proposal__checklist">
+                <li>
+                    <input required type="checkbox" /> My wireframes include every view in my application
+                </li>
+                <li>
+                    <input required type="checkbox" /> My wireframes include arrows to show user journeys between views
+                </li>
+                <li>
+                    <input required type="checkbox" /> My create and edit forms show required radio buttons/dropdown for related data
+                </li>
+            </ul>
+            <h3>ERD</h3>
+            <ul className="proposal__checklist">
+                <li>
+                    <input required type="checkbox" /> My ERD is is up to date and matches the data needed for my wireframes and stories
+                </li>
+                <li>
+                    <input required type="checkbox" /> My ERD demonstrates user-related data
+                </li>
+                <li>
+                    <input required type="checkbox" /> My ERD has a one to many relationship for when new resources are created. If this is your server-side proposal, your ERD includes a many-to-many relationship.
+                </li>
+                <li>
+                    <input required type="checkbox" /> All of the relationships in my ERD are drawn correctly
+                </li>
+            </ul>
+            <h3>Design Document</h3>
+            <ul className="proposal__checklist">
+                <li>
+                    <input required type="checkbox" /> My project includes functionality for Create, Read, Update and Delete operations.
+                </li>
+                <li>
+                    <input required type="checkbox" /> I have included a user story for all functionality.
+                </li>
+                <li>
+                    <input required type="checkbox" /> A link to my ERD is included in my proposal.
+                </li>
+                <li>
+                    <input required type="checkbox" /> A link to my wireframes is included in my proposal, and wireframe document is publicly accessible.
+                </li>
+                <li>
+                    <input required type="checkbox" /> My proposal document sharing settings are set to "Anyone with the link"
+                </li>
+            </ul>
+
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="name">Proposal URL</label>
@@ -73,26 +126,7 @@ export const ClientProposal = () => {
                 </div>
             </fieldset>
 
-
-            <ul className="proposal__checklist">
-                <li className="important">
-                    <input required type="checkbox" /> My proposal meets all requirements.
-                </li>
-                <li>
-                    <input required type="checkbox" /> Sharing settings for my proposal document is set to anyone with the link.
-                </li>
-                <li>
-                    <input required type="checkbox" /> My proposal includes a URL to my ERD.
-                </li>
-                <li>
-                    <input required type="checkbox" /> My proposal includes a URL to my wireframes.
-                </li>
-                <li>
-                    <input required type="checkbox" /> My wireframes are set to public visibility for review.
-                </li>
-            </ul>
-
-            <button type="submit" className="btn btn-primary"> Submit </button>
+            <button type="submit" className="isometric-button blue"> Submit </button>
         </form>
     </article>
 }
