@@ -8,6 +8,7 @@ export const ClientProposal = () => {
 
     const [courses, establishCourses] = useState([])
     const [url, setURL] = useState("")
+    const [repoUrl, setRepoUrl] = useState("")
     const [overview, setOverview] = useState("")
     const [course, setCourse] = useState("")
     const [user, setUser] = useState({})
@@ -108,7 +109,6 @@ export const ClientProposal = () => {
                     <input onChange={e => setURL(e.target.value)}
                         value={url}
                         type="url" required autoFocus
-                        placeholder="Paste Google Doc URL here"
                         id="proposalURL" className="form-control"
                     />
                 </div>
@@ -116,13 +116,12 @@ export const ClientProposal = () => {
 
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="name">Project overview</label>
-                    <textarea onChange={e => setOverview(e.target.value)}
-                        value={overview}
-                        type="text" required
-                        placeholder="Brief description of project"
-                        id="description" className="form-control proposal__overview"
-                    ></textarea>
+                    <label htmlFor="name">Capstone Github Repository URL</label>
+                    <input onChange={e => setRepoUrl(e.target.value)}
+                        value={repoUrl}
+                        type="url" required
+                        id="repoUrl" className="form-control"
+                    />
                 </div>
             </fieldset>
 
