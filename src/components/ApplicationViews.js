@@ -22,6 +22,7 @@ import { CourseForm } from "./course/CourseForm"
 import { CourseDetails } from "./course/CourseDetails.js"
 import { BookDetails } from "./course/BookDetails.js"
 import { ProjectDetails } from "./course/ProjectDetails.js"
+import { ChatScreen } from "./chat/ChatScreen.js"
 
 export const ApplicationViews = () => {
     return <>
@@ -74,6 +75,12 @@ export const ApplicationViews = () => {
 
                             <Route exact path="/teams">
                                 <WeeklyTeams />
+                            </Route>
+
+                            <Route exact path="/chat">
+                                <h1>Let's Chat</h1>
+
+                                <ChatScreen />
                             </Route>
 
                             <Route exact path="/assessments/new">
