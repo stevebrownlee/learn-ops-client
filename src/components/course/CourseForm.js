@@ -50,6 +50,10 @@ export const CourseForm = () => {
                         id="name" className="form-control"
                     />
                 </div>
+                <div className="form-group">
+                    <input id="active" type="checkbox" controltype="boolean" checked={course.active} onChange={updateState} />
+                    <label htmlFor="active" style={{margin: "0 0 0 0.5rem"}}>Active</label>
+                </div>
 
                 <button type="submit"
                     onClick={
