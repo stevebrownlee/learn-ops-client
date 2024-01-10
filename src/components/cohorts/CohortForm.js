@@ -94,7 +94,8 @@ export const CohortForm = () => {
                         {
                             courses.map(course => {
                                 return <button key={`course--${course.id}`}
-                                    className={`${clientSideCourse === course.id ? "button-28--achieved" : "button-28"}`}
+                                    style={{ margin: "0 0.15rem" }}
+                                    className={`isometric-button ${clientSideCourse === course.id ? "red" : "gray"}`}
                                     onClick={e => {
                                         e.preventDefault()
                                         setClient(course.id)
@@ -112,7 +113,8 @@ export const CohortForm = () => {
                         {
                             courses.map(course => {
                                 return <button key={`course--${course.id}`}
-                                    className={`${serverSideCourse === course.id ? "button-28--achieved" : "button-28"}`}
+                                    style={{ margin: "0 0.15rem" }}
+                                    className={`isometric-button ${serverSideCourse === course.id ? "red" : "gray"}`}
                                     onClick={e => {
                                         e.preventDefault()
                                         setServer(course.id)
@@ -131,7 +133,7 @@ export const CohortForm = () => {
                             constructNewCohort()
                         }
                     }
-                    className="btn btn-primary"> Create </button>
+                    className="isometric-button blue"> Create </button>
             </form>
         </>
     )

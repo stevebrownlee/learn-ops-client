@@ -29,6 +29,13 @@ export const StudentNotePopup = ({ student }) => {
         })
     }
 
+    const completeNoteCreation = () => {
+        createStudentNote()
+            .then(() => getStudentNotes(student.id))
+            .then(() => setNote(""))
+            .then(() => setOpen(false))
+    }
+
     return (
         <Popover.Root open={open} onOpenChange={isOpen => {
             setOpen(isOpen)
@@ -54,10 +61,7 @@ export const StudentNotePopup = ({ student }) => {
                                 onKeyDown={
                                     e => {
                                         if (e.key === "Enter") {
-                                            createStudentNote()
-                                                .then(() => getStudentNotes(student.id))
-                                                .then(() => setNote(""))
-                                                .then(() => setOpen(false))
+                                            completeNoteCreation()
                                         }
                                     }
                                 } />
@@ -66,9 +70,9 @@ export const StudentNotePopup = ({ student }) => {
                     <Popover.Arrow className="PopoverArrow" />
 
                     <div style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
-                        <button style={{
-                            marginLeft: "auto"
-                        }} className="isometric-button blue small">Save</button>
+                        <button
+                            onClick={completeNoteCreation}
+                            style={{ marginLeft: "auto" }} className="isometric-button blue small">Save</button>
                     </div>
                 </Popover.Content>
             </Popover.Portal>

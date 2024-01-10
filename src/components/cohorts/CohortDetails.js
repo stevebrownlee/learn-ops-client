@@ -159,7 +159,7 @@ export const CohortDetails = () => {
                                     />
                                 </div>
 
-                                <button onClick={saveURLs}>Save URLs</button>
+                                <button className="isometric-button blue" onClick={saveURLs}>Save URLs</button>
                             </div>
 
                             <div className="cohort__detail cohort__detail--medium">
