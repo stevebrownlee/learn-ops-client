@@ -74,12 +74,13 @@ export const StudentCardList = ({ searchTerms }) => {
     const avatarsStateRef = useRef(showAvatars)
     const tagsStateRef = useRef(showTags)
     const enteringNoteStateRef = useRef(enteringNote)
+
     useEffect(() => {
         noteOpenStateRef.current = noteIsOpen
         avatarsStateRef.current = showAvatars
         tagsStateRef.current = showTags
         enteringNoteStateRef.current = enteringNote
-    });
+    })
 
     const toggleTagsShortcut = keyboardShortcut('t', 'g', () => {
         if (!noteOpenStateRef.current && !enteringNoteStateRef.current) {

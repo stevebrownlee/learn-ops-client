@@ -1,10 +1,23 @@
-import React, { useEffect, useRef } from "react"
+import React, { useContext, useEffect, useRef } from "react"
+import { StandupContext } from "../dashboard/Dashboard.js"
 import keyboardShortcut from "../ui/keyboardShortcut.js"
 import "./Search.css"
 
 export const StudentSearch = ({ setSearchTerms, searchTerms }) => {
+    const { enteringNote } = useContext(StandupContext)
+
     const studentSearch = useRef()
-    const searchLogger = keyboardShortcut('s', 'l', () => studentSearch.current.focus())
+    const enteringNoteStateRef = useRef(enteringNote)
+
+    useEffect(() => {
+        enteringNoteStateRef.current = enteringNote
+    })
+
+    const searchLogger = keyboardShortcut('s', 'l', () => {
+        if (!enteringNoteStateRef.current) {
+            studentSearch.current.focus()
+        }
+    })
 
     useEffect(() => {
         document.addEventListener("keyup", searchLogger)

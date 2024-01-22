@@ -38,19 +38,19 @@ export const Dashboard = () => {
     }, [cohortStudents, activeCourse])
 
     return <main className="dashboard">
-        <section className="cohortActions">
-            <CohortSearchField />
-            <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
-
-            <section className="capstonePercent">
-                <div>{mvps} / {cohortStudents.length} @ MVP</div>
-            </section>
-        </section>
 
         <StandupContext.Provider value={{
             showAllProjects, toggleAllProjects, dragStudent, draggedStudent,
             enteringNote, setEnteringNote
         }}>
+            <section className="cohortActions">
+                <CohortSearchField />
+                <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
+
+                <section className="capstonePercent">
+                    <div>{mvps} / {cohortStudents.length} @ MVP</div>
+                </section>
+            </section>
             {
                 capstoneSeason.active && capstoneSeason.id === activeCohort
                     ? <StudentCapstoneList searchTerms={searchTerms} />

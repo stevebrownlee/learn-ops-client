@@ -11,7 +11,7 @@
 /*Typography
 --------------------------------------------------------------*/
 
-body, button, input, select, textarea {
+body, button, input, select {
     color: #1b1b1b;
     font-family: "Comfortaa", Arial, sans-serif;
     font-size: 0.9em;

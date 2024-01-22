@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
 
-import * as Popover from '@radix-ui/react-popover'
 import { FilePlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
+import { Button, TextField, Popover, Text, TextArea, Checkbox, Box, Flex, Avatar, IconButton } from '@radix-ui/themes'
 
 import { PeopleContext } from "./PeopleProvider"
 import { CourseContext } from "../course/CourseProvider"
@@ -34,6 +34,7 @@ export const StudentNotePopup = ({ student }) => {
             .then(() => getStudentNotes(student.id))
             .then(() => setNote(""))
             .then(() => setOpen(false))
+            .then(() => setEnteringNote(false))
     }
 
     return (
@@ -42,40 +43,54 @@ export const StudentNotePopup = ({ student }) => {
             setEnteringNote(isOpen)
         }}>
             <Popover.Trigger asChild>
-                <button className="NoteIconButton" aria-label="Add student note" onClick={() => {
-                    setOpen(true)
-                    setEnteringNote(true)
-                }}>
-                    <Pencil1Icon />
-                </button>
+                <IconButton style={{
+                    color: "black",
+                    backgroundColor: "transparent",
+                    position: "absolute",
+                    bottom: "0.1rem",
+                    right: 0,
+                    margin: 0,
+                    padding: 0,
+                    alignItems: "flex-end"
+                }}
+                    className="NoteIconButton"
+                    onClick={() => {
+                        setOpen(true)
+                        setEnteringNote(true)
+                    }}>
+                    <Pencil1Icon width="16" height="16" />
+                </IconButton>
             </Popover.Trigger>
-            <Popover.Portal>
-                <Popover.Content className="PopoverContent" sideOffset={5}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                        <p className="Text" style={{ marginBottom: 10 }}>
-                            Note for {student.name}
-                        </p>
-                        <fieldset className="Fieldset">
-                            <textarea className="Input" id="width" value={note}
-                                onChange={e => setNote(e.target.value)}
-                                onKeyDown={
-                                    e => {
-                                        if (e.key === "Enter") {
-                                            completeNoteCreation()
-                                        }
-                                    }
-                                } />
-                        </fieldset>
-                    </div>
-                    <Popover.Arrow className="PopoverArrow" />
+            <Popover.Content>
+                <Flex gap="3">
+                    <Avatar
+                        size="2"
+                        src={student.avatar}
+                        fallback="A"
+                        radius="full"
+                    />
+                    <Box grow="1">
+                        <TextArea value={note}
+                            onChange={e => setNote(e.target.value)}
+                            placeholder="Enter evaluation note…" style={{ height: 80 }}
+                            onKeyDown={
+                                e => e.key === "Enter" && completeNoteCreation()
+                            } />
+                        <Flex gap="3" mt="3" justify="between">
+                            <Flex align="center" gap="2" asChild>
+                                <Text as="label" size="2">
+                                    <Checkbox />
+                                    <Text>Send to instructor channel</Text>
+                                </Text>
+                            </Flex>
 
-                    <div style={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
-                        <button
-                            onClick={completeNoteCreation}
-                            style={{ marginLeft: "auto" }} className="isometric-button blue small">Save</button>
-                    </div>
-                </Popover.Content>
-            </Popover.Portal>
+                            <Popover.Close>
+                                <Button size="1" onClick={completeNoteCreation}>Save</Button>
+                            </Popover.Close>
+                        </Flex>
+                    </Box>
+                </Flex>
+            </Popover.Content>
         </Popover.Root>
     )
 }

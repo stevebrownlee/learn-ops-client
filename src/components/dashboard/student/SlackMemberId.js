@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react"
+import { Button, TextField } from '@radix-ui/themes'
+import { FrameIcon } from '@radix-ui/react-icons'
 import simpleAuth from "../../auth/simpleAuth"
 import Settings from "../../Settings"
 import { fetchIt } from "../../utils/Fetch"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min.js"
+import { Loading } from "../../Loading.js"
 import MemberId from "./images/get-slack-member-id.gif"
 import "../Dashboard.css"
-import { Loading } from "../../Loading.js"
 
 export const SlackMemberId = () => {
     const { getCurrentUser, getProfile } = simpleAuth()
@@ -45,17 +47,20 @@ export const SlackMemberId = () => {
                         <img src={MemberId} alt="Animation showing how to get Slack member ID" width="300px" />
                     </div>
                     <div>
-                        Watch the animation to the left to see how to copy your Slack member ID. Once you follow those steps, paste the ID into the text box below and slick "Save".
+                        Watch the animation to the left to see how to copy your Slack member ID.
 
-                        <div>
-                            <input type="text" className="slack__input"
-                                id="memberId" value={slackId}
-                                onChange={(e) => setId(e.target.value ?? "")}
-                                placeholder="Paste your member ID here" />
+                        <div style={{ marginTop: "1rem" }}>
+                            <TextField.Root>
+                                <TextField.Slot>
+                                    <FrameIcon height="16" width="16" />
+                                </TextField.Slot>
+                                <TextField.Input className="slack__input"
+                                    value={slackId}
+                                    onChange={(e) => setId(e.target.value ?? "")}
+                                    placeholder="Enter Member ID…" />
+                            </TextField.Root>
 
-                            <div>
-                                <button onClick={updateSlackId} className="slack__save">Save</button>
-                            </div>
+                            <Button style={{ marginTop: "1rem" }} onClick={updateSlackId}>Save</Button>
                         </div>
                     </div>
                 </>

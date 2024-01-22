@@ -129,7 +129,7 @@ export const Student = ({
                         getStudentNotes={getStudentNotes} />
 
                     <section onClick={showStudentDetails} className="student__name">{student.name}</section>
-                    <section class="student__duration">{student.book.project_duration} days</section>
+                    <section className="student__duration">{student.book.project_duration} days</section>
                     <StudentNotePopup student={student} />
                 </Text>
                 <Text as="div" size="2" color="gray">
