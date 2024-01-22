@@ -10,7 +10,7 @@ import { Theme } from '@radix-ui/themes';
 ReactDOM.render(
     <React.StrictMode>
         <Router>
-            <Theme>
+            <Theme style={{height: "100%"}}>
                 <LearnOps />
             </Theme>
         </Router>

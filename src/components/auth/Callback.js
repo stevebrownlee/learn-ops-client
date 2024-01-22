@@ -13,8 +13,11 @@ export const Callback = () => {
     const history = useHistory()
     const { getProfile } = simpleAuth()
 
-    const fetchUser = () => {
-        getProfile(token, cohort, validate).then(() => history.push("/"))
+    const fetchUser = async () => {
+        const response = await getProfile(token, cohort, validate)
+        setTimeout(() => {
+            history.push("/")
+        }, 3000);
     }
 
     const fetchTokenWithCode = (accessCode) => {
@@ -72,8 +75,29 @@ export const Callback = () => {
     }, [code])
 
     return (
-        <article>
-            You are now authorized via Github. Redirecting you to the Learning Platform home page.
+        <article style={{
+            margin: 0,
+            padding: 0,
+            height: "100%", /* Ensures that the body takes the full viewport height */
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center", /* Centers horizontally */
+            alignItems: "center", /* Centers vertically */
+            backgroundColor: "#072137"
+        }}>
+
+            <div style={{color: "snow", padding: "0 0 5rem 0"}}>
+                <h1>Authorization complete</h1>
+                <div>🚀 Engaging warp drive to Learning Platform</div>
+            </div>
+            <div className="container">
+                <div className="clouds"></div>
+                <div className="planet">
+                </div>
+                <div className="moon"></div>
+                <div className="up"></div>
+            </div>
+
         </article>
     )
 }
