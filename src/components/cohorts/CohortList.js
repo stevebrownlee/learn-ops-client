@@ -4,11 +4,11 @@ import { CohortContext } from "./CohortProvider"
 import { PeopleContext } from "../people/PeopleProvider"
 import { Cohort } from "./Cohort"
 import { CohortDetails } from "./CohortDetails"
-import { UnassignedStudents } from "./UnassignedStudents"
 import { PeopleIcon } from "../../svgs/PeopleIcon"
 import { EditIcon } from "../../svgs/EditIcon"
 import "./CohortList.css"
 import "./Cohort.css"
+import { Button } from "@radix-ui/themes"
 
 
 export const CohortList = () => {
@@ -21,16 +21,17 @@ export const CohortList = () => {
     const history = useHistory()
 
     useEffect(() => {
-        getRecentCohorts()
+        if (cohorts.length === 0) {
+            getRecentCohorts()
+        }
     }, [])
 
     const getRecentCohorts = () => getCohorts({ limit: 6 })
 
     return <>
-        <button className="isometric-button blue studentList__createCohort"
-            onClick={() => history.push("/cohorts/new")}>
-            Create Cohort
-        </button>
+        <header className="cohorts__header">
+            <Button className="" onClick={() => history.push("/cohorts/new")}>Create Cohort</Button>
+        </header>
         <div className="cohorts">
             {
                 cohorts.map(cohort => <Cohort

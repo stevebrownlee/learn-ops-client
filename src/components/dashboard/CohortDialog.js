@@ -10,7 +10,7 @@ export const CohortDialog = ({ toggleCohorts, cohortIsOpen }) => {
 
     useEffect(() => {
         if (activeStudent) {
-            getCohorts()
+            getCohorts({ limit: 6 })
         }
     }, [activeStudent])
 

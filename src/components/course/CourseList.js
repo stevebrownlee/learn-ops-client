@@ -3,10 +3,11 @@ import React, { useContext, useEffect, useState } from "react"
 import { CourseContext } from "./CourseProvider"
 import { DeleteIcon } from "../../svgs/DeleteIcon"
 import { EditIcon } from "../../svgs/EditIcon"
-import "./Courses.css"
 import { NoteIcon } from "../../svgs/NoteIcon.js"
 import { GridIcon } from "../../svgs/GridIcon.js"
 import { CourseCard } from "./CourseCard.js"
+import "./Courses.css"
+import { Button } from "@radix-ui/themes"
 
 export const CourseList = () => {
     const { getCourses, createCourse } = useContext(CourseContext)
@@ -26,11 +27,10 @@ export const CourseList = () => {
         </div>
 
         <div className="course__footer">
-            <button className="isometric-button blue"
-                style={{ margin: "1rem 0 0 3rem" }}
+            <Button style={{ margin: "1rem 4rem 0 3rem" }}
                 onClick={() => history.push("/courses/new")}>
                 <span>Create Course</span>
-            </button>
+            </Button>
         </div>
     </article>
 }

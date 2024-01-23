@@ -3,16 +3,14 @@ import { Route, Redirect } from "react-router-dom"
 import { ApplicationViews } from "./ApplicationViews"
 import { NavBar } from "./nav/NavBar"
 import { Login } from "./auth/Login"
-import { Register } from "./auth/Register"
-import simpleAuth from "./auth/simpleAuth"
 import { CohortProvider } from "./cohorts/CohortProvider"
 import { Callback } from "./auth/Callback"
 import { useLocation } from "react-router-dom"
 import { StudentViews } from "./StudentViews"
 import { StudentNavBar } from "./nav/StudentNavBar"
+import simpleAuth from "./auth/simpleAuth"
 
 export const SettingsContext = createContext()
-
 
 export const LearnOps = () => {
     const [mimic, changeMimic] = useState(false)

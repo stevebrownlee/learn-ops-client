@@ -6,6 +6,7 @@ import { NoteIcon } from "../../svgs/NoteIcon"
 import { EditIcon } from "../../svgs/EditIcon"
 import { CourseContext } from "./CourseProvider.js"
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
+import { Button } from "@radix-ui/themes"
 
 
 export const BookDetails = () => {
@@ -65,33 +66,28 @@ export const BookDetails = () => {
         }
 
         <div className="book__footer">
-            <button style={{ marginTop: "2rem" }}
-                className="isometric-button blue"
-                onClick={() => history.push(`/projects/new/${book.id}`)}>Add Project</button>
+            <Button style={{ marginTop: "2rem" }}
+                onClick={() => history.push(`/projects/new/${book.id}`)}>Add Project</Button>
 
             {
                 book.has_assessment
                     ? ""
-                    : <button style={{ margin: "2rem 0 0 2rem" }}
-                        className="isometric-button blue"
+                    : <Button style={{ margin: "2rem 0 0 1rem" }}
                         onClick={() => history.push({
                             pathname: `/assessments/new`,
                             state: { book }
-                        })}>Add Self-Assessment</button>
+                        })}>Add Self-Assessment</Button>
             }
 
-
-            <button style={{ marginTop: "2rem", marginLeft: "auto" }}
-                className="isometric-button yellow"
+            <Button style={{ marginTop: "2rem", marginLeft: "auto" }} color="orange"
                 onClick={() => {
                     history.push(`/books/edit/${book.id}`)
-                }}>Edit Book</button>
+                }}>Edit Book</Button>
 
-            <button style={{ marginTop: "2rem" }}
-                className="isometric-button red"
+            <Button style={{ margin: "2rem 0 0 1rem" }} color="crimson"
                 onClick={() => {
                     deleteBook(book.id).then(() => history.push(`/courses/${activeCourse.id}`))
-                }}>Delete Book</button>
+                }}>Delete Book</Button>
         </div>
     </section>
 }

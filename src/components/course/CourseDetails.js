@@ -5,6 +5,7 @@ import { GridIcon } from "../../svgs/GridIcon"
 import { NoteIcon } from "../../svgs/NoteIcon"
 import { EditIcon } from "../../svgs/EditIcon"
 import { CourseContext } from "./CourseProvider.js"
+import { Button } from "@radix-ui/themes"
 
 
 export const CourseDetails = () => {
@@ -13,8 +14,8 @@ export const CourseDetails = () => {
     const { courseId } = useParams()
 
     const {
-        getBooks, getCourse, activeCourse, setActiveCourse,
-        deactivateCourse
+        getBooks, getCourse, activeCourse,
+        setActiveCourse, deactivateCourse
     } = useContext(CourseContext)
 
     useEffect(() => {
@@ -52,21 +53,18 @@ export const CourseDetails = () => {
         </article>
 
         <div className="course__footer">
-            <button style={{ marginTop: "2rem" }}
-                className="isometric-button blue"
-                onClick={() => history.push(`/books/new/${activeCourse.id}`)}>Add Book</button>
+            <Button style={{ marginTop: "2rem" }}
+                onClick={() => history.push(`/books/new/${activeCourse.id}`)}>Add Book</Button>
 
-            <button style={{ marginTop: "2rem", marginLeft: "auto" }}
-                className="isometric-button yellow"
+            <Button style={{ marginTop: "2rem", marginLeft: "auto" }} color="orange"
                 onClick={() => {
                     history.push(`/courses/edit/${activeCourse.id}`)
-                }}>Edit Course</button>
+                }}>Edit Course</Button>
 
-            <button style={{ marginTop: "2rem" }}
-                className="isometric-button red"
+            <Button style={{ margin: "2rem 0 0 1rem" }} color="crimson"
                 onClick={() => {
                     deactivateCourse(activeCourse.id).then(() => history.push(`/courses`))
-                }}>Delete Course</button>
+                }}>Delete Course</Button>
         </div>
     </section>
 }

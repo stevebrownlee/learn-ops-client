@@ -14,8 +14,10 @@
     display: flex;
 }
 
-.studentList__createCohort {
-    margin: 1rem 0 1rem 4rem;
+.cohorts__header {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
 }
 
 .header--studentList {

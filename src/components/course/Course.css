@@ -65,6 +65,6 @@
 .book__footer, .project__footer, .course__footer {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: flex-end;
     padding-top: 0.5rem;
 }
