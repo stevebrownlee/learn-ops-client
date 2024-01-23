@@ -2,8 +2,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: teal;
-    color: #fff;
+    background-color: var(--primary);
+    color: var(--primaryText);
 }
 
 #checkbox_toggle {
@@ -17,7 +17,7 @@
 
 .nav-links {
     width: 100%;
-    margin: 0.75rem 0 0.33rem 0;
+    margin: 0.25rem 0 0 0;
 }
 
 .menu {
@@ -28,6 +28,7 @@
 .navbar__item {
     flex-basis: 20%;
     list-style-type: none;
+    margin: 0.2rem 0 0 0;
 }
 
 .navbar__logo {
@@ -37,7 +38,7 @@
 
 .navbar__link {
     background-color: inherit;
-    color: blanchedalmond;
+    color: var(--lightText);
 }
 
 @media (max-width: 768px) {

@@ -17,13 +17,13 @@
 
 .bookColumn__header {
     border: 1px dotted rgb(50, 67, 50);
-    background-color: #b1e2a9;
+    background-color: var(--tertiaryDark);
     padding: 0.3rem 0.25rem;
     text-align: center;
     min-width: 4rem;
     border-radius: 0.33rem;
     font-size: 0.8rem;
-    color: rgb(34, 34, 34);
+    color: var(--darkText);
     margin: 0 0 0.8rem 0;
     box-shadow: 0.25rem 0.25rem 0.25rem rgb(156, 156, 156);
 }
@@ -57,12 +57,12 @@
 
 .projectColumn__header {
     border: 1px dotted rgb(50, 67, 66);
-    background-color: #a9e2de;
+    background-color: var(--tertiaryLight);
     padding: 0.25rem 0.25rem;
     text-align: center;
     min-width: 2rem;
     border-radius: 0.33rem;
-    color: rgb(34, 34, 34);
+    color: var(--darkText);
     margin: 0 1rem;
     box-shadow: 0.25rem 0.25rem 0.25rem rgb(156, 156, 156);
 }

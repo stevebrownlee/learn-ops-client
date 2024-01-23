@@ -11,6 +11,16 @@
 /*Typography
 --------------------------------------------------------------*/
 
+:root {
+    --primary: #CE8147;
+    --secondary: #ECDD7B;
+    --tertiaryDark: #CDE7BE;
+    --tertiaryLight: #D3E298;
+    --lightText: snow;
+    --darkText: #214E34;
+}
+
+
 body, button, input, select {
     color: #1b1b1b;
     font-family: "Comfortaa", Arial, sans-serif;

@@ -37,6 +37,14 @@ export const Dashboard = () => {
         }
     }, [cohortStudents, activeCourse])
 
+    const mvpCountBadge = () => {
+        if (capstoneSeason.active && capstoneSeason.id === activeCohort) {
+            return <section className="capstonePercent">
+                <div>{mvps} / {cohortStudents.length} @ MVP</div>
+            </section>
+        }
+    }
+
     return <main className="dashboard">
 
         <StandupContext.Provider value={{
@@ -46,10 +54,8 @@ export const Dashboard = () => {
             <section className="cohortActions">
                 <CohortSearchField />
                 <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
+                { mvpCountBadge() }
 
-                <section className="capstonePercent">
-                    <div>{mvps} / {cohortStudents.length} @ MVP</div>
-                </section>
             </section>
             {
                 capstoneSeason.active && capstoneSeason.id === activeCohort
