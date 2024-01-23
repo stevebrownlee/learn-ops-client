@@ -18,6 +18,10 @@
     --tertiaryLight: #D3E298;
     --lightText: snow;
     --darkText: #214E34;
+    --started: rgb(233, 237, 0);
+    --ready: rgb(231, 52, 20);
+    --incomplete: rgb(175, 22, 165);
+    --complete: rgb(49, 225, 96);
 }
 
 

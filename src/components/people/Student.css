@@ -131,20 +131,20 @@ button {
 
 
 .student--takingAssessment {
-    border: 2px solid rgb(251, 255, 30);
+    border: 2px solid var(--started);
 }
 
 .student--assessmentReviewNeeded {
-    border: 3px solid rgb(231, 52, 20);
+    border: 3px solid var(--ready);
     animation: attention 4s linear infinite;
 }
 
 .student--assessReviewIncomplete {
-    border: 2px solid rgb(175, 22, 165);
+    border: 2px solid var(--incomplete);
 }
 
 .student--assessReviewComplete {
-    border: 2px solid rgb(19, 241, 78);
+    border: 2px solid var(--complete);
 }
 
 @keyframes attention {
