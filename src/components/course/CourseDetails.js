@@ -6,6 +6,7 @@ import { NoteIcon } from "../../svgs/NoteIcon"
 import { EditIcon } from "../../svgs/EditIcon"
 import { CourseContext } from "./CourseProvider.js"
 import { Button } from "@radix-ui/themes"
+import { CourseDetailsChart } from "./CourseDetailsChart.js"
 
 
 export const CourseDetails = () => {
@@ -66,5 +67,7 @@ export const CourseDetails = () => {
                     deactivateCourse(activeCourse.id).then(() => history.push(`/courses`))
                 }}>Delete Course</Button>
         </div>
+
+        <CourseDetailsChart courseId={courseId} />
     </section>
 }
