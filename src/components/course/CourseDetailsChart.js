@@ -1,29 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Bar, Bubble } from 'react-chartjs-2'
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { fetchIt } from '../utils/Fetch.js'
 import Settings from '../Settings.js'
+
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    PointElement,
-    Title,
-    Tooltip,
-    Legend
+    Chart as ChartJS, CategoryScale, LinearScale,
+    BarElement, PointElement, Title,
+    Tooltip, Legend
 } from 'chart.js'
 
 ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    PointElement,
-    Title,
-    Tooltip,
-    Legend
+    CategoryScale, LinearScale, BarElement,
+    PointElement, Title, Tooltip,
+    Legend, ChartDataLabels
 )
 
+
 export const CourseDetailsChart = ({ courseId }) => {
+    const bubbleScale = 3
+
     const [barChartData, setBarChartData] = useState({
         labels: ["Project"],
         datasets: [
@@ -69,14 +65,14 @@ export const CourseDetailsChart = ({ courseId }) => {
                             label: ["Time on Project"],
                             data: response.data.map((item, idx, arr) => {
                                 // debugger
-                                item.x = idx + 1
+                                item.x = (idx + 1) * 2
                                 item.y = item.averagestartdelay
                                 try {
-                                    item.r = Math.abs(idx < arr.length ? arr[idx + 1].averagestartdelay - arr[idx].averagestartdelay : 1)
+                                    item.r = 1 + Math.abs(idx < arr.length ? arr[idx + 1].averagestartdelay - arr[idx].averagestartdelay : 1)
                                 } catch (error) {
                                     item.r = 1
                                 }
-                                item.r *= 3
+                                item.r *= bubbleScale
                                 item.label = item.projectname
 
                                 return item
@@ -85,13 +81,14 @@ export const CourseDetailsChart = ({ courseId }) => {
                         }
                     ],
                 }
+                console.log(chartData)
 
                 setChartData(chartData)
             })
     }, [])
 
-    return <div style={{ display: "flex", justifyContent: 'space-between' }}>
-        <div style={{ width: "45%" }}>
+    return <div style={{ display: "flex", justifyContent: 'space-between', flexDirection: "row" }}>
+        <div style={{ flex: 1 }}>
             <Bar data={barChartData}
                 options={{
                     scales: {
@@ -102,7 +99,7 @@ export const CourseDetailsChart = ({ courseId }) => {
                 }}
             />
         </div>
-        <div style={{ width: "45%" }}>
+        <div style={{ flex: 1 }}>
             <Bubble data={chartData}
                 options={{
                     scales: {
@@ -114,6 +111,20 @@ export const CourseDetailsChart = ({ courseId }) => {
                         }
                     },
                     plugins: {
+                        datalabels: {
+                            display: true,
+                            anchor: 'end',
+                            align: -145,
+                            rotation: 45,
+                            color: '#000',
+                            formatter: (value, context) => {
+                                const splitName = value.projectname.split("Group:")
+
+                                return splitName.length > 1
+                                    ? splitName[1]
+                                    : splitName[0].substring(0, 6)
+                            }
+                        },
                         tooltip: {
                             enabled: true,
                             callbacks: {
@@ -126,7 +137,7 @@ export const CourseDetailsChart = ({ courseId }) => {
                                     if (context.parsed.y !== null) {
                                         label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
                                     }
-                                    return `${context.raw.projectname}: ${Math.round(context.raw.r / 3)} days`;
+                                    return `${context.raw.projectname}: ${Math.round(context.raw.r / bubbleScale)} days`;
                                 }
                             }
                         }
