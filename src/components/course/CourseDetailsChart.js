@@ -21,7 +21,7 @@ export const CourseDetailsChart = ({ courseId }) => {
     const bubbleScale = 3
 
     const [barChartData, setBarChartData] = useState({
-        labels: ["Project"],
+        labels: [""],
         datasets: [
             {
                 label: 'Average Start Delay (days)',
@@ -33,12 +33,8 @@ export const CourseDetailsChart = ({ courseId }) => {
         ],
     })
     const [chartData, setChartData] = useState({
-        labels: ["Project"],
-        datasets: [
-            {
-                x: 0, y: 0, r: 0
-            },
-        ],
+        labels: [""],
+        datasets: [ { x: 0, y: 0, r: 0 }, ],
     })
 
     useEffect(() => {
