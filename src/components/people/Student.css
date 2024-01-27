@@ -33,7 +33,7 @@ button {
 
 .student__name {
     color: rgb(5, 50, 95);
-
+    font-weight: 400;
  }
 
 .student__name:hover {
