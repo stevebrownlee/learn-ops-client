@@ -78,7 +78,7 @@ export const StudentDropdown = ({
                             >
                                 {
                                     activeCourse.books.map(book => {
-                                        if (book.index >= student.book.index) {
+                                        if (book.index >= student.book_index) {
                                             return <DropdownMenu.Sub key={`subbook--${book.id}`}>
                                                 <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
                                                     {book.name}

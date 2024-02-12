@@ -145,7 +145,7 @@ export const StudentCardList = ({ searchTerms }) => {
             for (const project of book.projects) {
                 project.display = false
                 project.droppable = false
-                project.students = copy.filter(student => student.book.id === book.id && student.book.project === project.name)
+                project.students = copy.filter(student => student.book_id === book.id && student.project_id === project.id)
 
 
                 if (project.students.length > 0) {

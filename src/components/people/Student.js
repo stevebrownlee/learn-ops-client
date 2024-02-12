@@ -97,10 +97,10 @@ export const Student = ({
             const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
             const transferStudent = Object.assign(Object.create(null), {
                 id: student.id,
-                bookId: student.book.id,
-                bookIndex: student.book.index,
+                bookId: student.book_id,
+                bookIndex: student.book_index,
                 projectId: parseInt(currentProjectId),
-                assessment_status: student.assessment_status,
+                assessment_status: student.assessment_status_id,
                 hasAssessment
             })
             e.dataTransfer.setData("text/plain", JSON.stringify(transferStudent))
@@ -129,7 +129,7 @@ export const Student = ({
                         getStudentNotes={getStudentNotes} />
 
                     <section onClick={showStudentDetails} className="student__name">{student.name}</section>
-                    <section className="student__duration">{student.book.project_duration} days</section>
+                    <section className="student__duration">{student.project_duration} days</section>
                     <StudentNotePopup student={student} />
                 </Text>
                 <Text as="div" size="2" color="gray">
