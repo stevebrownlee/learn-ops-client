@@ -74,8 +74,7 @@ export const StudentCapstoneList = ({ searchTerms }) => {
             ])
 
             for (const student of studentsCopy) {
-                const currentProposal = student.proposals[0]
-                // const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
+                const currentProposal = student.proposals.find(p => p?.course_name === activeCourse.name)
 
                 if (student.proposals.length === 0 || !currentProposal) {
                     grouping.get(4).push(student)
