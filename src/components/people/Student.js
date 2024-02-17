@@ -90,7 +90,7 @@ export const Student = ({
                 personality--
                 student
                 ${showAvatars ? "student--regular" : "student-mini"}
-                ${setAssessmentIndicatorBorder(student.assessment_status)}
+                ${setAssessmentIndicatorBorder(student.assessment_status_id)}
             `}
         draggable={true}
         onDragStart={e => {

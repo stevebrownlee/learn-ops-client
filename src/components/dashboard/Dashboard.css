@@ -286,7 +286,7 @@
 .capstonePercent {
     padding: 0.5rem 0.5rem 0.25rem 0.5rem;
     background-color: var(--secondary);
-    color: var(--lightText);
+    color: var(--darkText);
     margin: 0 -2rem 0 1rem;
     text-align: center;
     font-size: small;
