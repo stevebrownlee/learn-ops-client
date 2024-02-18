@@ -25,9 +25,6 @@ export const StudentDashboard = () => {
     }, [])
 
     return <main>
-        <header className="studentDashboard__header">
-            <h1>Welcome {user.profile?.name}</h1>
-        </header>
         <article className="dashboard--overview">
             <CohortInfo profile={user.profile} />
             <StudentInfo profile={user.profile} />

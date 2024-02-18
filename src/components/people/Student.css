@@ -345,7 +345,6 @@ button {
     border-top: 1px solid rgb(191, 231, 231);
     padding: 0.4rem 1rem;
     display: flex;
-    justify-content: space-between;
 }
 
 .note__date {

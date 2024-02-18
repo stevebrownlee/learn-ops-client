@@ -30,6 +30,15 @@ export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
         })
     }
 
+    const deleteStudentNote = (noteId) => {
+        fetchIt(`${Settings.apiHost}/notes/${noteId}`, {
+            method: "DELETE"
+        })
+        .then(() => {
+            getStudentNotes(activeStudent.id).then(setNotes).then(() => note.current.focus())
+        })
+    }
+
     return <dialog id="dialog--note" className="dialog--note" open={noteIsOpen}>
         <div className="form-group">
             <label>Add Note:</label>
@@ -61,6 +70,6 @@ export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
             id="closeBtn"
             onClick={() => toggleNote()}>[ close ]</button>
 
-        <StudentNoteList notes={notes} />
+        <StudentNoteList notes={notes} deleteStudentNote={deleteStudentNote} />
     </dialog>
 }
