@@ -33,13 +33,6 @@ export const StudentInfo = ({ profile }) => {
                 </div>
             </section>
 
-
-
-
-
-
-
-
             <section className="assessmentInfo text--mini" style={{ display: "flex", flexDirection: "row" }}>
                 <div className="assessmentInfo__book" style={{ display: "flex", flexDirection: "column" }}>
                     <header style={{ flex: 1, minHeight: "10rem" }}>
