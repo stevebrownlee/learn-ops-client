@@ -61,7 +61,7 @@ export const Student = ({
                             })
                         }}
                         className="student--tag">
-                        {tag.tag.name}
+                        {tag.tag}
                         <span className="delete clickable"
                             onClick={e => {
                                 e.stopPropagation()
