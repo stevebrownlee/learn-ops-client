@@ -39,7 +39,7 @@ export const AssessmentStatusDialog = ({ toggleStatuses, statusIsOpen }) => {
                                     operation = setStudentCurrentAssessment(activeStudent)
                                 } else {
                                     if (status.status === "Reviewed and Complete") {
-                                        const certification = window.confirm(`You certify that the student has been evaluated and has understanding and competency in the following objectives\n\n${assessment.objectives.map(o => o.label).join("\n")} `)
+                                        const certification = window.confirm(`You certify that the student has been evaluated and has understanding and competency in the objectives for this book.`)
                                         if (certification) {
                                             operation = updateStudentCurrentAssessment(activeStudent, status.id)
                                         }
