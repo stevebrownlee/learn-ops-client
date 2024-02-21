@@ -102,7 +102,7 @@ export const PeopleProvider = (props) => {
         return fetchIt(`${Settings.apiHost}/students/${student.id}/assess`, {
             method: "POST",
             body: JSON.stringify({
-                bookId: student.book.id
+                bookId: student.book_id
             })
         })
             .catch(error => alert(error))
