@@ -25,17 +25,17 @@ export const AssessmentStatusDialog = ({ toggleStatuses, statusIsOpen }) => {
     }, [activeStudent])
 
     return <dialog id="dialog--statuses" className="dialog--statuses" open={statusIsOpen}>
-        <h2>{activeStudent?.name} is {activeStudent?.assessment_status === 0 ? "not assigned to the assessment" : `working on the self-assessment for ${activeStudent?.book?.name}`} </h2>
+        <h2>{activeStudent?.name} is {activeStudent?.assessment_status_id === 0 ? "not assigned to the assessment" : `working on the self-assessment for ${activeStudent?.book_name}`} </h2>
         <h4>Update Self-Assessment Status</h4>
         <section className="statusButtons">
             {
                 statuses.map(status => {
-                    if ((activeStudent?.assessment_status > 0 && status.status !== "In Progress") ||
-                        (activeStudent?.assessment_status === 0 && status.status === "In Progress")) {
+                    if ((activeStudent?.assessment_status_id > 0 && status.status !== "In Progress") ||
+                        (activeStudent?.assessment_status_id === 0 && status.status === "In Progress")) {
                         return <button className="statusButton isometric-button small blue" key={`st--${status.id}`}
                             onClick={() => {
                                 let operation = null
-                                if (activeStudent.assessment_status === 0) {
+                                if (activeStudent.assessment_status_id === 0) {
                                     operation = setStudentCurrentAssessment(activeStudent)
                                 } else {
                                     if (status.status === "Reviewed and Complete") {
