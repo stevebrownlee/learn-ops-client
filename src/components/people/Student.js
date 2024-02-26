@@ -93,6 +93,7 @@ export const Student = ({
                 ${setAssessmentIndicatorBorder(student.assessment_status_id)}
             `}
         draggable={true}
+        onDoubleClick={e => window.alert("Notes")}
         onDragStart={e => {
             const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
             const transferStudent = Object.assign(Object.create(null), {

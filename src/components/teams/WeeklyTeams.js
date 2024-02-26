@@ -230,7 +230,7 @@ export const WeeklyTeams = () => {
         for (const student of cohortStudents) {
             if (student.tags.length) {
                 for (const tag of student.tags) {
-                    if (tag.tag.name.toLowerCase().startsWith("team ")) {
+                    if (tag.tag.toLowerCase().startsWith("team ")) {
                         tagsToDelete.push(untagStudent(tag.id))
                     }
                 }

@@ -158,7 +158,7 @@ export const StudentCardList = ({ searchTerms }) => {
                     let reg = searchTerms.split("").reduce((r, c) => `${r}.*${c}`, "")
                     const regex = new RegExp(reg, "gi")
                     project.students = project.students.filter(student => {
-                        const hasTag = student.tags.find(tag => tag.tag.name.toLowerCase().includes(searchTerms.toLowerCase()))
+                        const hasTag = student.tags.find(tag => tag.tag.toLowerCase().includes(searchTerms.toLowerCase()))
                         const nameMatches = student.name.match(regex)
 
                         return hasTag || nameMatches

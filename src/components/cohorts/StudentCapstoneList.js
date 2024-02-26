@@ -57,7 +57,7 @@ export const StudentCapstoneList = ({ searchTerms }) => {
 
             if (searchTerms !== "" && searchTerms.length > 2) {
                 studentsCopy = studentsCopy.filter(student => {
-                    const hasTag = student.tags.find(tag => tag.tag.name.toLowerCase().includes(searchTerms.toLowerCase()))
+                    const hasTag = student.tags.find(tag => tag.tag.toLowerCase().includes(searchTerms.toLowerCase()))
                     const nameMatches = student.name.toLowerCase().includes(searchTerms.toLowerCase())
 
                     return hasTag || nameMatches
