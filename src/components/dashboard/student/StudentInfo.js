@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
+import { AssessmentContext } from "../../assessments/AssessmentProvider"
 import { useHistory } from "react-router-dom"
 import { AssessmentRow } from "./AssessmentRow"
 import { CapstoneRow } from "./CapstoneRow"
@@ -6,9 +7,16 @@ import { Button } from "@radix-ui/themes"
 
 import Settings from "../../Settings.js"
 import { fetchIt } from "../../utils/Fetch.js"
+import { PeopleContext } from "../../people/PeopleProvider.js"
 
 export const StudentInfo = ({ profile }) => {
     const history = useHistory()
+    const { getStatuses, statuses } = useContext(AssessmentContext)
+    const { selfUpdateStudentCurrentAssessment } = useContext(PeopleContext)
+
+    useEffect(() => {
+        getStatuses()
+    }, [])
 
     return <section className="info">
         <h2 className="info__header" style={{ marginBottom: 0 }}>{profile?.name} Resources</h2>
@@ -55,12 +63,10 @@ export const StudentInfo = ({ profile }) => {
                         <p>
                             <Button color="iris"
                                 onClick={
-                                    () => fetchIt(`${Settings.apiHost}/notify`, {
-                                        method: "POST",
-                                        body: JSON.stringify({
-                                            message: `:orange_book: ${profile.name} is ready for the ${profile?.project?.book_name} self-assessment`
-                                        })
-                                    }).then(() => window.alert("Your instructors have been notified"))
+                                    () => {
+                                        const inProgress = statuses.find(s => s.status === "In Progress")
+                                        selfUpdateStudentCurrentAssessment(profile.id, inProgress.id)
+                                    }
                                 }>
                                 Ready to Start Self-Assessment
                             </Button>

@@ -91,6 +91,13 @@ export const PeopleProvider = (props) => {
         })
     }, [])
 
+    const selfUpdateStudentCurrentAssessment = useCallback((student, statusId) => {
+        return fetchIt(`${Settings.apiHost}/students/${student.id}/selfassess`, {
+            method: "PUT",
+            body: JSON.stringify({ statusId })
+        })
+    }, [])
+
     const updateStudentCurrentAssessment = useCallback((student, statusId) => {
         return fetchIt(`${Settings.apiHost}/students/${student.id}/assess`, {
             method: "PUT",
@@ -148,7 +155,7 @@ export const PeopleProvider = (props) => {
             getStudentNotes, getStudentCoreSkills, coreSkills,
             getStudentLearningRecords, learningRecords,
             getStudentPersonality, personality, tagStudentTeams,
-            setCohortStudents
+            setCohortStudents, selfUpdateStudentCurrentAssessment
         }} >
             {props.children}
         </PeopleContext.Provider>
