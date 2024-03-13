@@ -23,6 +23,7 @@ export const ServerAssessment = () => {
             <h2 id="application-design">Application Design Requirements</h2>
             <h3 id="client-side">Client</h3>
             <ol>
+                <li>You must support CRUD in your application. Create data, Read data, Update data, Delete data</li>
                 <li>You are required to use React.</li>
                 <li>You must have a form that allows a user to create a new resource.</li>
                 <li>Your form must include <code>&lt;select&gt;</code> element, radio button group, or checkbox group that allows a user to choose a related resource.</li>
