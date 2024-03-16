@@ -12,9 +12,9 @@ export const RulesOfEngagment = () => {
             <li>Your goal is not to "get it done". You will be focused on that on the job, but not here.</li>
         </ul>
 
-        <Heading size="5">Git/Github Workflows</Heading>
+        <Heading size="5">Github Workflow Guides</Heading>
 
-        <p>Here's the link again to the <a href="https://gist.github.com/Valerie-Freeman/171fd7e639fcd1f9129bc79144b5f5ea" target="_blank">Github Workflow Reference</a> that everyone must use during this project.</p>
+        <p>Do not experiment or guess with git and Github workflows. Follow the direction on the <a href="https://nashville-software-school.github.io/github-workflow/" target="_blank">Github Workflow Guides</a> site.</p>
 
         <Heading size="5">Git Branching Strategy</Heading>
 
