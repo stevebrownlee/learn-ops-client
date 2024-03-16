@@ -37,13 +37,13 @@ export const StudentNavBar = () => {
                             {makeLink("/", "Overview")}
                         </li>
                         <li className="navbar__item">
-                            {makeLink("/goals", "Core Skills")}
-                        </li>
-                        <li className="navbar__item">
                             {makeLink("/assessment", "Capstones")}
                         </li>
                         <li className="navbar__item">
-                            {makeLink("/readme", "README Resources")}
+                            {makeLink("/goals", "Core Skills")}
+                        </li>
+                        <li className="navbar__item">
+                            {makeLink("/roe", "Rules of Engagement")}
                         </li>
                         {
                             isAuthenticated()
