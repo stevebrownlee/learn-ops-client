@@ -11,6 +11,7 @@ import { CohortContext } from "../cohorts/CohortProvider.js"
 import { Shortcuts } from "./Shortcuts.js"
 import "toaster-js/default.css"
 import "./Dashboard.css"
+import { ActiveCohortStrip } from "./CohortStrip.js"
 
 export const StandupContext = createContext()
 
@@ -54,7 +55,7 @@ export const Dashboard = () => {
             enteringNote, setEnteringNote
         }}>
             <section className="cohortActions">
-                <CohortSearchField />
+                <ActiveCohortStrip />
                 <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
                 { mvpCountBadge() }
 

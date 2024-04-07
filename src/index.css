@@ -126,6 +126,14 @@ dialog {
     font-weight: bold;
 }
 
+.activeLink {
+    color: var(--darkText);
+    font-weight: 900;
+    text-decoration: none;
+    background-color: var(--tertiaryDark);
+    border-radius: 1rem;
+}
+
 .readonly {
     background-color: rgb(214, 226, 242);
     padding: 0.5rem;
@@ -308,7 +316,7 @@ html, body, #root {
     left: -175px;
     overflow: hidden;
     offset-path: path("M280.25,191c38.55,0,74.78,5.44,102,15.32C409.18,216.08,424,228.93,424,242.5s-14.82,26.42-41.74,36.18C355,288.56,318.8,294,280.25,294s-74.78-5.44-102-15.32c-26.91-9.76-41.74-22.61-41.74-36.18s14.83-26.42,41.74-36.18c27.24-9.88,63.47-15.32,102-15.32m0-1c-79.95,0-144.76,23.51-144.76,52.5S200.3,295,280.25,295,425,271.49,425,242.5,360.19,190,280.25,190Z");
-    animation: move 6s linear infinite;
+    animation: move 2s linear infinite;
 }
 
 .moon:before, .moon:after {

@@ -17,7 +17,7 @@ export const Callback = () => {
         const response = await getProfile(token, cohort, validate)
         setTimeout(() => {
             history.push("/")
-        }, 3000);
+        }, 1000);
     }
 
     const fetchTokenWithCode = (accessCode) => {
@@ -81,7 +81,7 @@ export const Callback = () => {
             height: "100%", /* Ensures that the body takes the full viewport height */
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center", /* Centers horizontally */
+            justifyContent: "start", /* Centers horizontally */
             alignItems: "center", /* Centers vertically */
             backgroundColor: "#072137"
         }}>

@@ -78,10 +78,30 @@
     align-items: center;
 }
 
+.active_cohorts {
+    padding: 0;
+    margin: 0 5rem 0 0;
+}
+
+.active_cohorts__list {
+    padding: 0;
+    margin: 0.25rem 0 0 0;
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    justify-content: space-evenly;
+}
+
+.active_cohorts__cohort {
+    /* border: 1px solid var(--tertiaryDark); */
+    padding: 0.25rem 1rem;
+}
+
 .cohortActions {
     display: flex;
+    flex-direction: row;
     flex-wrap: nowrap;
-    margin: 1rem 0 0 0;
+    margin: 0.75rem 0 0 0;
 }
 
 .cohortAction {
