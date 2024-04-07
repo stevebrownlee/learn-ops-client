@@ -304,6 +304,7 @@ export const StudentCardList = ({ searchTerms }) => {
         <AssessmentStatusDialog toggleStatuses={toggleStatuses} statusIsOpen={statusIsOpen} />
         <TagDialog toggleTags={toggleTagDialog} tagIsOpen={tagIsOpen} />
         <StudentNoteDialog toggleNote={toggleNote} noteIsOpen={noteIsOpen} />
+        <CohortDialog toggleCohorts={toggleCohorts} cohortIsOpen={cohortIsOpen} />
     </section>
 }
 

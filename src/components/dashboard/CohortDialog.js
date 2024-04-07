@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react"
 import { PeopleContext } from "../people/PeopleProvider"
-import Settings from "../Settings"
-import { fetchIt } from "../utils/Fetch"
 import { CohortContext } from "../cohorts/CohortProvider"
+import { fetchIt } from "../utils/Fetch"
+import Settings from "../Settings"
 
 export const CohortDialog = ({ toggleCohorts, cohortIsOpen }) => {
     const { activeStudent, getStudent } = useContext(PeopleContext)
-    const { getCohorts, cohorts } = useContext(CohortContext)
+    const [cohorts, setCohorts] = useState([])
 
     useEffect(() => {
         if (activeStudent) {
-            getCohorts({ limit: 6 })
+            fetchIt(`${Settings.apiHost}/cohorts?limit=6`).then(setCohorts)
         }
     }, [activeStudent])
 

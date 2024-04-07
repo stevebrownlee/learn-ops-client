@@ -5,16 +5,17 @@ import { fetchIt } from "../utils/Fetch"
 import { CohortContext } from "../cohorts/CohortProvider"
 
 export const ActiveCohortStrip = () => {
-    const { getCohorts, cohorts, activateCohort, activeCohort } = useContext(CohortContext)
+    const { getCohorts, activateCohort, activeCohort } = useContext(CohortContext)
+    const  [activeCohorts, setCohorts] = useState([])
 
     useEffect(() => {
-        getCohorts({ active: true })
+        fetchIt(`${Settings.apiHost}/cohorts?active=true`).then(setCohorts)
     }, [])
 
     return <section className="active_cohorts">
         <ul className="active_cohorts__list">
             {
-                cohorts.map(cohort => {
+                activeCohorts.map(cohort => {
                     return <li key={cohort.id}
                                className={`fakeLink small active_cohorts__cohort ${activeCohort === cohort.id ? "activeLink" : ""}`} >
                         <span onClick={e => activateCohort(cohort.id)}>{cohort.name}</span>
