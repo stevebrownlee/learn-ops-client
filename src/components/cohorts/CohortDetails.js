@@ -6,6 +6,7 @@ import { CourseContext } from "../course/CourseProvider.js"
 import { useHistory } from "react-router-dom"
 import Settings from "../Settings.js"
 import { CopyIcon } from "../../svgs/CopyIcon.js"
+import { fetchIt } from "../utils/Fetch.js"
 
 export const CohortDetails = () => {
     const initialState = {
@@ -20,7 +21,8 @@ export const CohortDetails = () => {
 
     const {
         activeCohort, activeCohortDetails, getCohort,
-        getCohortInfo, saveCohortInfo, updateCohortInfo
+        getCohortInfo, saveCohortInfo, updateCohortInfo,
+        updateCohort
     } = useContext(CohortContext)
     const { migrateCohortToServerSide, capstoneSeason, setCapstoneSeason } = useContext(CourseContext)
     const history = useHistory()
@@ -196,19 +198,46 @@ export const CohortDetails = () => {
                                     </div>
                                 </div>
 
+                                <h2>Active</h2>
+                                <div className="capstoneToggle">
+                                    <input defaultChecked={activeCohortDetails.active}
+                                        onChange={(evt) => {
+                                            evt.target.ariaChecked = evt.target.checked
+
+                                            const cohortObject = {
+                                                id: activeCohortDetails.id,
+                                                active: evt.target.checked
+                                            }
+                                            return fetchIt(`${Settings.apiHost}/cohorts/${activeCohortDetails.id}/active`,
+                                                {
+                                                    method: "PUT",
+                                                    body: JSON.stringify(cohortObject)
+                                                })
+                                                .then(() => {
+                                                    getCohort(activeCohortDetails.id)
+                                                    new Toast("Cohort updated", Toast.TYPE_INFO, Toast.TIME_SHORT)
+                                                })
+                                        }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
+                                    <label htmlFor="toggle" className="slot">
+                                        <span className="slot__label">OFF</span>
+                                        <span className="slot__label">ON</span>
+                                    </label>
+                                    <div className="curtain"></div>
+                                </div>
+
                                 <h2>Capstone Season</h2>
                                 <div className="capstoneToggle">
                                     <input defaultChecked={capstoneSeason.active}
                                         onChange={(evt) => {
-                                        evt.target.ariaChecked = evt.target.checked
+                                            evt.target.ariaChecked = evt.target.checked
 
-                                        const seasonObject = {
-                                            id: activeCohortDetails.id,
-                                            active: evt.target.checked
-                                        }
-                                        setCapstoneSeason(seasonObject)
-                                        localStorage.setItem("capstoneSeason", JSON.stringify(seasonObject))
-                                    }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
+                                            const seasonObject = {
+                                                id: activeCohortDetails.id,
+                                                active: evt.target.checked
+                                            }
+                                            setCapstoneSeason(seasonObject)
+                                            localStorage.setItem("capstoneSeason", JSON.stringify(seasonObject))
+                                        }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
                                     <label htmlFor="toggle" className="slot">
                                         <span className="slot__label">OFF</span>
                                         <span className="slot__label">ON</span>

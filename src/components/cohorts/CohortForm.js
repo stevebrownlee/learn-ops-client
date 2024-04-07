@@ -17,7 +17,8 @@ export const CohortForm = () => {
         endDate: "",
         breakStartDate: "",
         breakEndDate: "",
-        slackChannel: ""
+        slackChannel: "",
+        active: false
     })
     const { getCourses } = useContext(CourseContext)
     const history = useHistory()
@@ -124,6 +125,11 @@ export const CohortForm = () => {
                             })
                         }
                     </div>
+                </fieldset>
+
+                <fieldset>
+                    <input type="checkbox" id="active" />
+                    <label style={{ margin: "0 0 0 0.66rem"}} htmlFor="active">The cohort has already started</label>
                 </fieldset>
 
                 <button type="submit"

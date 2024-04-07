@@ -10,7 +10,10 @@ export const CohortProvider = (props) => {
     const [activeCohort, activateCohort] = useState(null)
     const [activeCohortDetails, setCohortDetails] = useState({
         start_date: "",
-        end_date: ""
+        end_date: "",
+        cohort: {
+            active: false
+        }
     })
 
     const { getCurrentUser } = simpleAuth()
