@@ -29,8 +29,8 @@ export const Dashboard = () => {
     const history = useHistory()
 
     useEffect(() => {
-        if (capstoneSeason.active && capstoneSeason.id === activeCohort) {
-            if (cohortStudents.length > 0 && "id" in activeCourse) {
+        if (capstoneSeason.includes(activeCohort)) {
+            if (cohortStudents.length > 0) {
                 const mvpReached = cohortStudents.reduce((count, student) => {
                     return student.proposals.find(p => p?.status === "MVP" && p.course_name === activeCourse.name) ? ++count : count
                 }, 0)
@@ -41,7 +41,7 @@ export const Dashboard = () => {
     }, [cohortStudents, activeCourse])
 
     const mvpCountBadge = () => {
-        if (capstoneSeason.active && capstoneSeason.id === activeCohort) {
+        if (capstoneSeason.includes(activeCohort)) {
             return <section className="capstonePercent">
                 <div>{mvps} / {cohortStudents.length} @ MVP</div>
             </section>
@@ -61,7 +61,7 @@ export const Dashboard = () => {
 
             </section>
             {
-                capstoneSeason.active && capstoneSeason.id === activeCohort
+                capstoneSeason.includes(activeCohort)
                     ? <StudentCapstoneList searchTerms={searchTerms} />
                     : <><StudentCardList searchTerms={searchTerms} /><Shortcuts /></>
             }
