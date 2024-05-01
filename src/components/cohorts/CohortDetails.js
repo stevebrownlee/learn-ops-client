@@ -227,17 +227,27 @@ export const CohortDetails = () => {
 
                                 <h2>Capstone Season</h2>
                                 <div className="capstoneToggle">
-                                    <input defaultChecked={capstoneSeason.active}
+                                    <input checked={capstoneSeason.includes(activeCohortDetails.id)}
                                         onChange={(evt) => {
                                             evt.target.ariaChecked = evt.target.checked
 
-                                            const seasonObject = {
-                                                id: activeCohortDetails.id,
-                                                active: evt.target.checked
+                                            const localStorageSeasons = localStorage.getItem("capstoneSeason")
+                                            const cohortsInCapstoneSeason = localStorageSeasons
+                                                    ? new Set([...JSON.parse(localStorageSeasons)])
+                                                    : new Set()
+
+                                            if (evt.target.checked) {
+                                                cohortsInCapstoneSeason.add(activeCohortDetails.id)
                                             }
-                                            setCapstoneSeason(seasonObject)
-                                            localStorage.setItem("capstoneSeason", JSON.stringify(seasonObject))
-                                        }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
+                                            else {
+                                                cohortsInCapstoneSeason.delete(activeCohortDetails.id)
+                                            }
+
+                                            const capstoneSeasonCohorts = Array.from(cohortsInCapstoneSeason)
+                                            setCapstoneSeason(capstoneSeasonCohorts)
+                                            localStorage.setItem("capstoneSeason", JSON.stringify(capstoneSeasonCohorts))
+
+                                        }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" />
                                     <label htmlFor="toggle" className="slot">
                                         <span className="slot__label">OFF</span>
                                         <span className="slot__label">ON</span>
