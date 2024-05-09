@@ -1,19 +1,63 @@
-import React, { useEffect, useState } from "react"
+import React, { useRef, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
 import { AssessmentRow } from "./AssessmentRow"
 import { CapstoneRow } from "./CapstoneRow"
-import { Button } from "@radix-ui/themes"
+import { Badge, Button, Dialog, TextArea, Text, Flex, Checkbox } from '@radix-ui/themes'
+import { FilePlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
+import { Toast, deleteAllToasts } from "toaster-js"
 
 import Settings from "../../Settings.js"
 import { fetchIt } from "../../utils/Fetch.js"
 
 export const StudentInfo = ({ profile }) => {
     const history = useHistory()
+    const [githubUrl, setGithubUrl] = useState('')
+    const [vocab, setVocab] = useState(false)
+    const [pushed, setPushed] = useState(false)
+    const [validationMessage, setValidationMessage] = useState('')
+    const [dialogOpen, setDialogOpen] = useState(false)
+
+    const toasterElement = useRef(null)
+
+    useEffect(() => {
+        toasterElement.current = document.createElement("div")
+        toasterElement.current.innerHTML = "<h2>Sent!</h2><p>If you want to request a 1-on-1 review, send a message in your cohort channel.</p>"
+
+        return () => {
+            if (toasterElement.current) {
+                deleteAllToasts()
+                toasterElement.current.remove()
+            }
+        }
+    }, [])
+
+    const validateSubmission = () => {
+        if (pushed && vocab) {
+            fetchIt(`${Settings.apiHost}/notify`, {
+                method: "POST",
+                body: JSON.stringify({
+                    message: `:speaking_head_in_silhouette: ${profile.name ?? "Testing"} has completed the ${profile?.project?.book_name} self-assessment.\n\nRepository: ${githubUrl}`
+                })
+            })
+                .then(() => {
+                    setPushed(false)
+                    setVocab(false)
+                    setGithubUrl('')
+                    setValidationMessage('')
+
+                    setDialogOpen(false)
+
+                    new Toast( toasterElement.current, Toast.TYPE_DONE, Toast.TIME_LONG );
+                })
+        }
+        else {
+            setValidationMessage("Please complete the Vocabulary & Understanding questions and push your code to Github.")
+        }
+    }
 
     return <section className="info">
         <h2 className="info__header" style={{ marginBottom: 0 }}>{profile?.name} Resources</h2>
         <div className="info__body info__body--student">
-
 
             <section className="studentAccounts">
                 <div className="studentAccount">
@@ -64,24 +108,72 @@ export const StudentInfo = ({ profile }) => {
                                         })
                                     }).then(() => window.alert("Your instructors have been notified"))
                                 }>
-                                Request Self-Assessment
+                                Ready for Self-Assessment
                             </Button>
                         </section>
                         <p>
-                            You are done with your self-assessment project and are ready to review vocabulary with an instructor.
+                            When you have completed the project code, completed the Vocabulary &amp; Understanding questions, and pushed your repository to Github, click the button below to notify your coaches.
                         </p>
                         <p>
-                            <Button color="grass"
-                                onClick={
-                                    () => fetchIt(`${Settings.apiHost}/notify`, {
-                                        method: "POST",
-                                        body: JSON.stringify({
-                                            message: `:speaking_head_in_silhouette: ${profile.name} is ready for the ${profile?.project?.book_name} vocabulary review`
-                                        })
-                                    })
-                                        .then(() => window.alert("Your instructors will schedule a time to review your vocabulary with you."))
-                                }
-                            >Request Vocab Review</Button>
+                            <Dialog.Root open={dialogOpen}>
+                                <Dialog.Trigger>
+                                    <Button onClick={() => setDialogOpen(true)} color="grass">Self-Assessment Complete</Button>
+                                </Dialog.Trigger>
+
+                                <Dialog.Content>
+                                    <Dialog.Title>Complete Self-Assessment</Dialog.Title>
+                                    <Dialog.Description size="2" mb="4">
+                                        Share the URL of your Github repository with your coaches for review.
+                                    </Dialog.Description>
+
+                                    <Flex direction="column" gap="3">
+                                        <label>
+                                            <Text as="div" size="2" mb="1" weight="bold">
+                                                Github Repository URL
+                                            </Text>
+                                            <TextArea onChange={(e) => setGithubUrl(e.target.value)}
+                                                placeholder="https://github.com/your-username/repository"
+                                            />
+                                        </label>
+                                    </Flex>
+
+                                    <Flex gap="3" mt="3">
+                                        <Badge color="crimson">{validationMessage}</Badge>
+                                    </Flex>
+
+
+                                    <Text as="label" size="1">
+                                        <Flex gap="2" mt="3" direction="column">
+                                            <label>
+                                                <Checkbox onClick={() => {
+                                                    setVocab(!vocab)
+                                                    setValidationMessage('')
+                                                }} checked={vocab} /> I have completed the Vocablary &amp; Understanding questions.
+                                            </label>
+                                            <label>
+                                                <Checkbox onClick={() => {
+                                                    setPushed(!pushed)
+                                                    setValidationMessage('')
+                                                }} checked={pushed} /> All of my code has been pushed to Github.
+                                            </label>
+                                        </Flex>
+                                    </Text>
+
+                                    <Flex gap="3" mt="4" justify="end">
+                                        <Dialog.Close>
+                                            <Button variant="soft" color="gray" onClick={() => {
+                                                setDialogOpen(false)
+                                                setValidationMessage('')
+                                            }}>
+                                                Cancel
+                                            </Button>
+                                        </Dialog.Close>
+                                        <Dialog.Close>
+                                            <Button onClick={validateSubmission}>Save</Button>
+                                        </Dialog.Close>
+                                    </Flex>
+                                </Dialog.Content>
+                            </Dialog.Root>
                         </p>
                     </div>
                 </div>
@@ -115,14 +207,6 @@ export const StudentInfo = ({ profile }) => {
                     </div>
                 </div>
             </section>
-
-
-
-
-
-
-
-
         </div>
     </section>
 }

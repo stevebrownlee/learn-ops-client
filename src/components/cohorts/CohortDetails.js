@@ -4,9 +4,9 @@ import { CohortContext } from "./CohortProvider.js"
 import { Toast, configureToasts } from "toaster-js"
 import { CourseContext } from "../course/CourseProvider.js"
 import { useHistory } from "react-router-dom"
-import Settings from "../Settings.js"
 import { CopyIcon } from "../../svgs/CopyIcon.js"
 import { fetchIt } from "../utils/Fetch.js"
+import Settings from "../Settings.js"
 
 export const CohortDetails = () => {
     const initialState = {
