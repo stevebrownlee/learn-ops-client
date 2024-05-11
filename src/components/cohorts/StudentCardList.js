@@ -276,12 +276,8 @@ export const StudentCardList = ({ searchTerms }) => {
                                         onDrop={(e) => handleDrop(e, book, project)}
                                     >
                                         <div className="projectColumn__header"
-                                            onMouseOver={evt => {
-                                                evt.target.innerText = project.name
-                                            }}
-                                            onMouseOut={evt => {
-                                                evt.target.innerText = showAllProjects ? project.name.substring(0, 3) : project.name
-                                            }}
+                                            onMouseOver={evt => evt.target.innerText = project.name }
+                                            onMouseOut={evt => evt.target.innerText = showAllProjects ? project.name.substring(0, 3) : project.name }
                                         >
                                             {showAllProjects ? project.name.substring(0, 14) : project.name}
                                         </div>
@@ -289,7 +285,6 @@ export const StudentCardList = ({ searchTerms }) => {
                                         <div className="projectColumn__students">
                                             {showStudentCardsForProject(book, project)}
                                         </div>
-
                                     </div>
                                 }
                                 return ""

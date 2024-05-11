@@ -77,8 +77,6 @@ export const CourseDetailsChart = ({ courseId }) => {
                         }
                     ],
                 }
-                console.log(chartData)
-
                 setChartData(chartData)
             })
     }, [])

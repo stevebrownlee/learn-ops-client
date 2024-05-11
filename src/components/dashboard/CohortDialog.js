@@ -8,11 +8,9 @@ export const CohortDialog = ({ toggleCohorts, cohortIsOpen }) => {
     const { activeStudent, getStudent } = useContext(PeopleContext)
     const [cohorts, setCohorts] = useState([])
 
-    useEffect(() => {
-        if (activeStudent) {
-            fetchIt(`${Settings.apiHost}/cohorts?limit=6`).then(setCohorts)
-        }
-    }, [activeStudent])
+    if ("id" in activeStudent && cohorts.length === 0) {
+        fetchIt(`${Settings.apiHost}/cohorts?limit=6`).then(setCohorts)
+    }
 
     const removeStudent = (cohort) => {
         return fetchIt(`${Settings.apiHost}/cohorts/${cohort.id}/assign`, {

@@ -17,7 +17,9 @@ export const ProjectForm = () => {
         book: 0,
         course: 0,
         index: 0,
-        implementation_url: ""
+        implementation_url: "",
+        active: true,
+        is_group_project: false
     })
     const history = useHistory()
     const { projectId, bookId } = useParams()
@@ -100,6 +102,25 @@ export const ProjectForm = () => {
                     />
                 </div>
 
+                <div className="form-group">
+                    <input onChange={updateState}
+                        checked={project.is_group_project}
+                        type="checkbox" required
+                        controltype="boolean"
+                        id="is_group_project"
+                    />
+                    <label htmlFor="is_group_project"> Group project </label>
+                </div>
+
+                <div className="form-group">
+                    <input onChange={updateState}
+                        checked={project.active}
+                        type="checkbox" required
+                        controltype="boolean"
+                        id="active"
+                    />
+                    <label htmlFor="active"> Active </label>
+                </div>
 
                 <button type="submit" className="isometric-button blue"
                     onClick={
