@@ -36,14 +36,10 @@ export const StudentDropdown = ({
 
             <DropdownMenu.Portal>
                 <DropdownMenu.Content className="DropdownMenuContent" sideOffset={5}>
-                    <DropdownMenu.Item className="DropdownMenuItem" onClick={() => {
-                        toggleNote()
-                    }}>
+                    <DropdownMenu.Item className="DropdownMenuItem" onClick={() => toggleNote()}>
                         Learner Notes
                     </DropdownMenu.Item>
-                    <DropdownMenu.Item className="DropdownMenuItem" onClick={() => {
-                        toggleTags()
-                    }}>
+                    <DropdownMenu.Item className="DropdownMenuItem" onClick={() => toggleTags()}>
                         Tag Learner
                     </DropdownMenu.Item>
 
@@ -54,9 +50,7 @@ export const StudentDropdown = ({
                     </DropdownMenu.Item>
 
                     <DropdownMenu.Item className="DropdownMenuItem"
-                        onClick={() => {
-                            toggleStatuses()
-                        }}>
+                        onClick={() => toggleStatuses() }>
                         Set status
                     </DropdownMenu.Item>
 
@@ -106,7 +100,6 @@ export const StudentDropdown = ({
                             </DropdownMenu.SubContent>
                         </DropdownMenu.Portal>
                     </DropdownMenu.Sub>
-
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>
         </DropdownMenu.Root>
