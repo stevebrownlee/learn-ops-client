@@ -230,7 +230,7 @@ export const StudentCardList = ({ searchTerms }) => {
     }
 
     const assignStudentToProject = (student, project) => {
-        if (project.index === 99) {
+        if (project.index === 99 && student.assessment_status === 0) {
             student.book_id = student.bookId // Snake case needed for the API
             setStudentCurrentAssessment(student).then(() => getCohortStudents(activeCohort))
             new Toast("Student assigned to assessment", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
@@ -314,9 +314,7 @@ export const StudentCardList = ({ searchTerms }) => {
                                         onDragOver={e => e.preventDefault()}
                                         onDrop={(e) => handleDrop(e, book, project)}
                                     >
-                                        <div className={`projectColumn__header ${project.index === 99 ? "projectColumn__header--assessment" : ""}`}
-
-                                        >
+                                        <div className={`projectColumn__header ${project.index === 99 ? "projectColumn__header--assessment" : ""}`}>
                                             {
                                                 project.is_group_project ?
                                                     <OutlineGroupIcon style={{
@@ -342,7 +340,6 @@ export const StudentCardList = ({ searchTerms }) => {
     }
 
         <StudentDetails toggleCohorts={toggleCohorts} />
-        {/* <AssessmentStatusDialog toggleStatuses={toggleStatuses} statusIsOpen={statusIsOpen} /> */}
         <TagDialog toggleTags={toggleTagDialog} tagIsOpen={tagIsOpen} />
         <StudentNoteDialog toggleNote={toggleNote} noteIsOpen={noteIsOpen} />
         <CohortDialog toggleCohorts={toggleCohorts} cohortIsOpen={cohortIsOpen} />
