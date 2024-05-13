@@ -8,6 +8,7 @@ import { StudentSearch } from "../people/StudentSearch"
 import { StudentCapstoneList } from "../cohorts/StudentCapstoneList.js"
 import { PeopleIcon } from "../../svgs/PeopleIcon.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
+import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { Shortcuts } from "./Shortcuts.js"
 import "toaster-js/default.css"
 import "./Dashboard.css"
@@ -25,8 +26,16 @@ export const Dashboard = () => {
     const { activeCohort } = useContext(CohortContext)
     const { activeCourse, capstoneSeason } = useContext(CourseContext)
     const { cohortStudents } = useContext(PeopleContext)
+    const { getStatuses, statuses } = useContext(AssessmentContext)
 
     const history = useHistory()
+
+    useEffect(() => {
+        if (statuses.length === 0) {
+            getStatuses()
+        }
+    }, [])
+
 
     useEffect(() => {
         if (capstoneSeason.includes(activeCohort)) {

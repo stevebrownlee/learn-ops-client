@@ -342,7 +342,7 @@ export const StudentCardList = ({ searchTerms }) => {
     }
 
         <StudentDetails toggleCohorts={toggleCohorts} />
-        <AssessmentStatusDialog toggleStatuses={toggleStatuses} statusIsOpen={statusIsOpen} />
+        {/* <AssessmentStatusDialog toggleStatuses={toggleStatuses} statusIsOpen={statusIsOpen} /> */}
         <TagDialog toggleTags={toggleTagDialog} tagIsOpen={tagIsOpen} />
         <StudentNoteDialog toggleNote={toggleNote} noteIsOpen={noteIsOpen} />
         <CohortDialog toggleCohorts={toggleCohorts} cohortIsOpen={cohortIsOpen} />
