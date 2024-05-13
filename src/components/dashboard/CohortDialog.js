@@ -6,13 +6,14 @@ import Settings from "../Settings"
 
 export const CohortDialog = ({ toggleCohorts, cohortIsOpen }) => {
     const { activeStudent, getStudent } = useContext(PeopleContext)
-    const [cohorts, setCohorts] = useState([])
+    const { cohorts, getCohorts } = useContext(CohortContext)
+    // const [cohorts, setCohorts] = useState([])
 
     useEffect(() => {
-        if (activeStudent) {
-            fetchIt(`${Settings.apiHost}/cohorts?limit=6`).then(setCohorts)
+        if ("id" in activeStudent && cohorts.length === 0) {
+            getCohorts()
         }
-    }, [activeStudent])
+    }, [])
 
     const removeStudent = (cohort) => {
         return fetchIt(`${Settings.apiHost}/cohorts/${cohort.id}/assign`, {

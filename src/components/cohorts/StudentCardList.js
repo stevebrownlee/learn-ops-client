@@ -21,6 +21,7 @@ import keyboardShortcut from "../ui/keyboardShortcut.js"
 
 import "./CohortStudentList.css"
 import "./Tooltip.css"
+import { OutlineGroupIcon } from "../../svgs/OutlineGroup.js"
 
 const persistSettings = (setting, value) => {
     let settings = localStorage.getItem("lp_settings")
@@ -56,7 +57,10 @@ export const StudentCardList = ({ searchTerms }) => {
         showAllProjects, toggleAllProjects, dragStudent, draggedStudent,
         enteringNote
     } = useContext(StandupContext)
-    const { cohortStudents, getCohortStudents, setStudentCurrentProject, activeStudent } = useContext(PeopleContext)
+    const {
+        cohortStudents, getCohortStudents, activeStudent,
+        setStudentCurrentProject, setStudentCurrentAssessment,
+    } = useContext(PeopleContext)
 
     const [showTags, toggleTags] = useState(initial_show_tags_state)
     const [groupedStudents, setGroupedStudents] = useState([])
@@ -139,14 +143,44 @@ export const StudentCardList = ({ searchTerms }) => {
         let ceilingBookIndex = activeCourse?.books ? activeCourse?.books[activeCohort?.books?.length - 1]?.index : 0
 
         const studentsPerBook = activeCourse?.books?.map(book => {
+            const maxedAssessments = book.assessments.map(b => ({ ...b, index: 99 }))
+
             book.studentCount = 0
             book.display = false
+
+            if (book.projects.find(p => p.index === 99) === undefined) {
+                book.projects = [...book.projects, ...maxedAssessments]
+            }
+
+            copy = copy.map(s => ({...s, inGroupProject: false}))
 
             for (const project of book.projects) {
                 project.display = false
                 project.droppable = false
-                project.students = copy.filter(student => student.book_id === book.id && student.project_id === project.id)
 
+
+                // Account for core projects and being assigned to an assessment
+                project.students = copy.filter(student => {
+                    const studentWorkingOnCoreProject = student.book_id === book.id
+                        && student.project_id === project.id
+                        && student.assessment_status_id === 0
+
+                    const studentWorkingOnAssessment = student.book_id === book.id
+                        && student.assessment_status_id > 0
+                        && project.index === 99
+
+                    const studentWorkingOnGroupProject = student.book_id === book.id
+                        && student.project_id === project.id
+                        && project.is_group_project
+
+                    if (studentWorkingOnGroupProject) {
+                        student.inGroupProject = true
+                    }
+
+                    return studentWorkingOnCoreProject
+                        || student.inGroupProject && project.is_group_project
+                        || (studentWorkingOnAssessment && !student.inGroupProject)
+                })
 
                 if (project.students.length > 0) {
                     book.display = true
@@ -181,7 +215,6 @@ export const StudentCardList = ({ searchTerms }) => {
             return book
         })
 
-
         if (studentsPerBook) {
             setGroupedStudents(studentsPerBook)
         }
@@ -196,15 +229,21 @@ export const StudentCardList = ({ searchTerms }) => {
         return showInRegularMode || showInStandupMode
     }
 
-    const assignStudentToProject = (studentId, projectId) => {
-        setStudentCurrentProject(studentId, projectId)
+    const assignStudentToProject = (student, project) => {
+        if (project.index === 99 && student.assessment_status === 0) {
+            student.book_id = student.bookId // Snake case needed for the API
+            setStudentCurrentAssessment(student).then(() => getCohortStudents(activeCohort))
+            new Toast("Student assigned to assessment", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+            return null
+        }
+        setStudentCurrentProject(student.id, project.id)
             .then(() => getCohortStudents(activeCohort))
             .catch((error) => {
                 if (error?.message?.includes("duplicate")) {
-                    new Toast("Student has previously been assigned to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                    new Toast("Student has previously been assigned to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL)
                 }
                 else {
-                    new Toast("Could not assign student to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                    new Toast("Could not assign student to that project.", Toast.TYPE_ERROR, Toast.TIME_NORMAL)
                 }
             })
     }
@@ -227,7 +266,7 @@ export const StudentCardList = ({ searchTerms }) => {
             new Toast("Self-assessment for this book not marked as reviewed and complete.", Toast.TYPE_WARNING, Toast.TIME_NORMAL);
         }
         else {
-            assignStudentToProject(rawStudent.id, project.id)
+            assignStudentToProject(rawStudent, project)
         }
     }
 
@@ -258,7 +297,7 @@ export const StudentCardList = ({ searchTerms }) => {
                                 <div className="bookColumn__studentCount">
                                     <PeopleIcon />
                                     <div style={{
-                                        padding: "0.2rem 0.33rem 0 0.33rem",
+                                        padding: "0.1rem 0.33rem 0 0.33rem",
                                     }}>{book.studentCount}</div>
                                 </div>
                             </div>
@@ -275,21 +314,21 @@ export const StudentCardList = ({ searchTerms }) => {
                                         onDragOver={e => e.preventDefault()}
                                         onDrop={(e) => handleDrop(e, book, project)}
                                     >
-                                        <div className="projectColumn__header"
-                                            onMouseOver={evt => {
-                                                evt.target.innerText = project.name
-                                            }}
-                                            onMouseOut={evt => {
-                                                evt.target.innerText = showAllProjects ? project.name.substring(0, 3) : project.name
-                                            }}
-                                        >
-                                            {showAllProjects ? project.name.substring(0, 14) : project.name}
+                                        <div className={`projectColumn__header ${project.index === 99 ? "projectColumn__header--assessment" : ""}`}>
+                                            {
+                                                project.is_group_project ?
+                                                    <OutlineGroupIcon style={{
+                                                        height: "1.1rem",
+                                                        verticalAlign: "text-top",
+                                                    }} />
+                                                    : ""
+                                            }
+                                            {showAllProjects ? project.name.substring(0, 14) : ` ${project.name}`}
                                         </div>
 
                                         <div className="projectColumn__students">
                                             {showStudentCardsForProject(book, project)}
                                         </div>
-
                                     </div>
                                 }
                                 return ""
@@ -301,7 +340,6 @@ export const StudentCardList = ({ searchTerms }) => {
     }
 
         <StudentDetails toggleCohorts={toggleCohorts} />
-        <AssessmentStatusDialog toggleStatuses={toggleStatuses} statusIsOpen={statusIsOpen} />
         <TagDialog toggleTags={toggleTagDialog} tagIsOpen={tagIsOpen} />
         <StudentNoteDialog toggleNote={toggleNote} noteIsOpen={noteIsOpen} />
         <CohortDialog toggleCohorts={toggleCohorts} cohortIsOpen={cohortIsOpen} />

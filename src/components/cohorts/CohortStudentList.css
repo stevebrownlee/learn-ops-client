@@ -67,6 +67,10 @@
     box-shadow: 0.25rem 0.25rem 0.25rem rgb(156, 156, 156);
 }
 
+.projectColumn__header--assessment {
+    background-color: var(--secondary);
+}
+
 .projectColumn__students {
     flex: 1;
     height: 80vh;

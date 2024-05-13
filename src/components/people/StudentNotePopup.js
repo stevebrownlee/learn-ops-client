@@ -77,13 +77,6 @@ export const StudentNotePopup = ({ student }) => {
                                 e => e.key === "Enter" && completeNoteCreation()
                             } />
                         <Flex gap="3" mt="3" justify="between">
-                            <Flex align="center" gap="2" asChild>
-                                <Text as="label" size="2">
-                                    <Checkbox />
-                                    <Text>Send to instructor channel</Text>
-                                </Text>
-                            </Flex>
-
                             <Popover.Close>
                                 <Button size="1" onClick={completeNoteCreation}>Save</Button>
                             </Popover.Close>

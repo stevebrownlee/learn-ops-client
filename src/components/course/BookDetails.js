@@ -37,10 +37,27 @@ export const BookDetails = () => {
             {book.name}
         </h1>
 
-        <h3>Projects</h3>
+        <h3>Core Projects</h3>
         <div className="book__projects">
             {
-                projects.map(project => <section key={project.id} className="book__project"
+                projects
+                    .filter(project => project.active && !project.is_group_project)
+                    .map(project => <section key={project.id} className="book__project"
+                    onClick={() => {
+                        history.push(`/projects/${project.id}`)
+                    }}
+                >
+                    <div>{project.name}</div>
+                </section>)
+            }
+        </div>
+
+        <h3>Group Project</h3>
+        <div className="book__projects">
+            {
+                projects
+                    .filter(project => project.active && project.is_group_project)
+                    .map(project => <section key={project.id} className="book__project book__project--group"
                     onClick={() => {
                         history.push(`/projects/${project.id}`)
                     }}
@@ -89,5 +106,21 @@ export const BookDetails = () => {
                     deleteBook(book.id).then(() => history.push(`/courses/${activeCourse.id}`))
                 }}>Delete Book</Button>
         </div>
+
+        <h3>Deprecated Projects</h3>
+        <div className="book__projects">
+            {
+                projects
+                    .filter(project => !project.active)
+                    .map(project => <section key={project.id} className="book__project book__project--deprecated"
+                    onClick={() => {
+                        history.push(`/projects/${project.id}`)
+                    }}
+                >
+                    <div>{project.name}</div>
+                </section>)
+            }
+        </div>
+
     </section>
 }

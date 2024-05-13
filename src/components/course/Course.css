@@ -53,6 +53,14 @@
     background-color: rgb(243, 249, 255);
 }
 
+.book__project--deprecated {
+    background-color: rgb(253, 219, 213);
+}
+
+.book__project--group {
+    background-color: rgb(238, 216, 250);
+}
+
 .course__book:hover, .book__project:hover {
     border: 1px solid rgb(202, 215, 233);
     padding: 0.33rem 0.6rem;
@@ -61,6 +69,15 @@
     text-decoration: underline;
     color:blue;
 }
+
+.book__project--deprecated:hover {
+    background-color: rgb(250, 203, 195);
+}
+
+.book__project--group:hover {
+    background-color: rgb(234, 202, 251);
+}
+
 
 .book__footer, .project__footer, .course__footer {
     display: flex;
