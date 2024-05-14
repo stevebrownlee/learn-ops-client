@@ -74,7 +74,7 @@ export const StudentDropdown = ({
                                 statuses.map(status => {
                                     if ((activeStudent?.assessment_status_id > 0 && status.status !== "In Progress") ||
                                         (activeStudent?.assessment_status_id === 0 && status.status === "In Progress")) {
-                                        return <DropdownMenu.Item className="DropdownMenuItem"
+                                        return <DropdownMenu.Item key={`status--${status.id}`} className="DropdownMenuItem"
                                             onClick={() => {
                                                 let operation = null
                                                 if (activeStudent.assessment_status_id === 0) {

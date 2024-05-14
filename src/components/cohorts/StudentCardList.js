@@ -17,11 +17,11 @@ import { Student } from "../people/Student"
 import { StandupContext } from "../dashboard/Dashboard"
 import { Toast, configureToasts } from "toaster-js"
 import { Loading } from "../Loading.js"
+import { OutlineGroupIcon } from "../../svgs/OutlineGroup.js"
 import keyboardShortcut from "../ui/keyboardShortcut.js"
 
 import "./CohortStudentList.css"
 import "./Tooltip.css"
-import { OutlineGroupIcon } from "../../svgs/OutlineGroup.js"
 
 const persistSettings = (setting, value) => {
     let settings = localStorage.getItem("lp_settings")

@@ -1,16 +1,22 @@
 import React, { useContext, useEffect } from "react"
+import { Button, Text, Flex } from '@radix-ui/themes'
+
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { LearningObjectives } from "../course/LearningObjectives.js"
 import { CoreSkillSliders } from "./CoreSkillSliders.js"
 import { PeopleContext } from "./PeopleProvider.js"
 import { CourseContext } from "../course/CourseProvider.js"
 import { AssessmentRow } from "../dashboard/student/AssessmentRow.js"
+import { CohortContext } from "../cohorts/CohortProvider.js"
+import { fetchIt } from "../utils/Fetch.js"
+import Settings from "../Settings.js"
 import "../people/Status.css"
 
 export const StudentDetails = ({ toggleCohorts }) => {
-    const { activeStudent } = useContext(PeopleContext)
+    const { getCohortStudents, activeStudent } = useContext(PeopleContext)
     const { getStudentAssessments } = useContext(AssessmentContext)
     const { getLearningObjectives } = useContext(CourseContext)
+    const { activeCohort, activateCohort } = useContext(CohortContext)
 
     const hideOverlay = (e) => {
         document.querySelector('.overlay--student').style.display = "none"
@@ -47,13 +53,15 @@ export const StudentDetails = ({ toggleCohorts }) => {
                             Github: <a href={`https://www.github.com/${activeStudent?.github_handle}`}>
                                 {`https://www.github.com/${activeStudent?.github_handle}`}</a>
                         </div>
-                        <div className="student__cohort">
-                            Cohort: <button className="fakeLink"
-                                onClick={() => {
-                                    toggleCohorts()
-                                }}>
-                                {activeStudent?.current_cohort?.name}
-                            </button>
+                        <div className="student__cohort" style={{ display: "flex", flexDirection: "column" }}>
+                            <div>
+                                Cohort: <button className="fakeLink"
+                                    onClick={() => {
+                                        toggleCohorts()
+                                    }}>
+                                    {activeStudent?.current_cohort?.name}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -68,15 +76,37 @@ export const StudentDetails = ({ toggleCohorts }) => {
             <LearningObjectives />
         </div>
 
-        <div className="card student__history">
-            <div>
-                <h3>Book Assessment Status</h3>
-                {
-                    activeStudent?.assessment_overview?.length > 0
-                        ? activeStudent?.assessment_overview?.map(assmt => <AssessmentRow key={`assmt--${assmt.id}`} assmt={assmt} />)
-                        : "No self-assessments submitted yet"
+        <Flex as="div" mt="8">
+            <Button ml="3" color="orange" onClick={() => {
+                if (window.confirm("Are you sure you want erase all previous data about this student?")) {
+                    fetchIt(`${Settings.apiHost}/students/${activeStudent.id}?soft=true`, {
+                        method: "DELETE"
+                    })
+                        .then(() => {
+                            document.querySelector('.overlay--student').style.display = "none"
+                            getCohortStudents(activeCohort)
+                        })
                 }
-            </div>
-        </div>
+            }}
+            >
+                Clear Student Data
+            </Button>
+
+            <Button ml="3" color="red"
+                onClick={() => {
+                    if (window.confirm("Are you sure you want to completely remove this student from the Learning Platform?")) {
+                        fetchIt(`${Settings.apiHost}/students/${activeStudent.id}`, {
+                            method: "DELETE"
+                        })
+                            .then(() => {
+                                document.querySelector('.overlay--student').style.display = "none"
+                                getCohortStudents(activeCohort)
+                            })
+                    }
+                }}
+            >
+                Delete Student Permanently
+            </Button>
+        </Flex>
     </div>
 }

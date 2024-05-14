@@ -24,7 +24,7 @@ export const LearningObjectives = () => {
 
     return <section className="section--objectives">
         <div className="card-title">
-            <h3>Learning Objectives</h3>
+            <h3>Learning Objectives Remaining</h3>
         </div>
         <div className="objectives">
             {
