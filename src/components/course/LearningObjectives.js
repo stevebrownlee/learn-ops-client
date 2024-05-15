@@ -1,4 +1,6 @@
 import React, { useContext, useEffect } from "react"
+import { Button, Text, Flex } from '@radix-ui/themes'
+
 import { useHistory } from "react-router-dom"
 import { CohortContext } from "../cohorts/CohortProvider.js"
 import { PeopleContext } from "../people/PeopleProvider.js"
@@ -33,7 +35,7 @@ export const LearningObjectives = () => {
                     const achieved = studentRecord?.achieved ?? false
 
                     if (!achieved) {
-                        return <button key={`objective--${objective.id}`}
+                        return <Button key={`objective--${objective.id}`}
                             onClick={(e) => {
                                 e.stopPropagation()
 
@@ -53,17 +55,13 @@ export const LearningObjectives = () => {
                                 action.then(() => getStudentLearningRecords(activeStudent?.id))
                                     .then(() => getCohortStudents(activeCohort))
                             }}
-                            className="isometric-button gray small"
-                            style={{ margin: "0.2rem 0.2rem" }}
-                        >
-                            <span onMouseOver={(evt) => {
-                                evt.target.innerText = objective.label
-                            }}
-                            onMouseOut={(evt) => {
-                                evt.target.innerText = objective.label.substr(0,15)
-                            }}
-                            >{objective.label.substr(0,15)}</span>
-                        </button>
+                            color="indigo" radius="large" size="1" style={{
+                                padding: "0.75rem",
+                                fontSize: "0.75rem",
+                                margin: "0.2rem",
+                            }}>
+                            {objective.label}
+                        </Button>
                     }
                 })
             }

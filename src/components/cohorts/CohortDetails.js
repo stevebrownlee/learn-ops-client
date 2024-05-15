@@ -1,4 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
+import { Badge, Button, Dialog, TextArea, Text, Flex, MagnifyingGlassIcon } from '@radix-ui/themes'
+import { TextField } from '@radix-ui/themes'
+
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { CohortContext } from "./CohortProvider.js"
 import { Toast, configureToasts } from "toaster-js"
@@ -7,6 +10,7 @@ import { useHistory } from "react-router-dom"
 import { CopyIcon } from "../../svgs/CopyIcon.js"
 import { fetchIt } from "../utils/Fetch.js"
 import Settings from "../Settings.js"
+import { CohortStudentAddDialog } from "./CohortStudentAddDialog.js"
 
 export const CohortDetails = () => {
     const initialState = {
@@ -18,6 +22,8 @@ export const CohortDetails = () => {
         zoom_url: ""
     }
     const [info, setInfo] = useState(initialState)
+    const [dialogOpen, setDialogOpen] = useState(false)
+    const [studentName, setStudentName] = useState("")
 
     const {
         activeCohort, activeCohortDetails, getCohort,
@@ -83,7 +89,6 @@ export const CohortDetails = () => {
 
         return ""
     }
-
 
 
     return (
@@ -152,16 +157,7 @@ export const CohortDetails = () => {
                                     />
                                 </div>
 
-                                <div className="form-group form-group--row">
-                                    <label className="label--smallrow" htmlFor="zoom_url">Zoom Session</label>
-                                    <input onChange={updateState}
-                                        value={info.zoom_url ?? ""}
-                                        type="url" controltype="string"
-                                        id="zoom_url" className="form-control form-control--row form-control--small"
-                                    />
-                                </div>
-
-                                <button className="isometric-button blue" onClick={saveURLs}>Save URLs</button>
+                                <Button color="blue" onClick={saveURLs}>Save URLs</Button>
                             </div>
 
                             <div className="cohort__detail cohort__detail--medium">
@@ -198,62 +194,68 @@ export const CohortDetails = () => {
                                     </div>
                                 </div>
 
-                                <h2>Active</h2>
-                                <div className="capstoneToggle">
-                                    <input defaultChecked={activeCohortDetails.active}
-                                        onChange={(evt) => {
-                                            evt.target.ariaChecked = evt.target.checked
+                                <Flex as="div" direction="row" align="start">
+                                    <div>
+                                        <h3>Active</h3>
+                                        <div className="capstoneToggle">
+                                            <input defaultChecked={activeCohortDetails.active}
+                                                onChange={(evt) => {
+                                                    evt.target.ariaChecked = evt.target.checked
 
-                                            const cohortObject = {
-                                                id: activeCohortDetails.id,
-                                                active: evt.target.checked
-                                            }
-                                            return fetchIt(`${Settings.apiHost}/cohorts/${activeCohortDetails.id}/active`,
-                                                {
-                                                    method: "PUT",
-                                                    body: JSON.stringify(cohortObject)
-                                                })
-                                                .then(() => {
-                                                    getCohort(activeCohortDetails.id)
-                                                    new Toast("Cohort updated", Toast.TYPE_INFO, Toast.TIME_SHORT)
-                                                })
-                                        }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
-                                    <label htmlFor="toggle" className="slot">
-                                        <span className="slot__label">OFF</span>
-                                        <span className="slot__label">ON</span>
-                                    </label>
-                                    <div className="curtain"></div>
-                                </div>
+                                                    const cohortObject = {
+                                                        id: activeCohortDetails.id,
+                                                        active: evt.target.checked
+                                                    }
+                                                    return fetchIt(`${Settings.apiHost}/cohorts/${activeCohortDetails.id}/active`,
+                                                        {
+                                                            method: "PUT",
+                                                            body: JSON.stringify(cohortObject)
+                                                        })
+                                                        .then(() => {
+                                                            getCohort(activeCohortDetails.id)
+                                                            new Toast("Cohort updated", Toast.TYPE_INFO, Toast.TIME_SHORT)
+                                                        })
+                                                }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
+                                            <label htmlFor="toggle" className="slot">
+                                                <span className="slot__label">OFF</span>
+                                                <span className="slot__label">ON</span>
+                                            </label>
+                                            <div className="curtain"></div>
+                                        </div>
+                                    </div>
 
-                                <h2>Capstone Season</h2>
-                                <div className="capstoneToggle">
-                                    <input checked={capstoneSeason.includes(activeCohortDetails.id)}
-                                        onChange={(evt) => {
-                                            evt.target.ariaChecked = evt.target.checked
+                                    <div>
+                                        <h3>Capstone Season</h3>
+                                        <div className="capstoneToggle">
+                                            <input checked={capstoneSeason.includes(activeCohortDetails.id)}
+                                                onChange={(evt) => {
+                                                    evt.target.ariaChecked = evt.target.checked
 
-                                            const localStorageSeasons = localStorage.getItem("capstoneSeason")
-                                            const cohortsInCapstoneSeason = localStorageSeasons
-                                                    ? new Set([...JSON.parse(localStorageSeasons)])
-                                                    : new Set()
+                                                    const localStorageSeasons = localStorage.getItem("capstoneSeason")
+                                                    const cohortsInCapstoneSeason = localStorageSeasons
+                                                        ? new Set([...JSON.parse(localStorageSeasons)])
+                                                        : new Set()
 
-                                            if (evt.target.checked) {
-                                                cohortsInCapstoneSeason.add(activeCohortDetails.id)
-                                            }
-                                            else {
-                                                cohortsInCapstoneSeason.delete(activeCohortDetails.id)
-                                            }
+                                                    if (evt.target.checked) {
+                                                        cohortsInCapstoneSeason.add(activeCohortDetails.id)
+                                                    }
+                                                    else {
+                                                        cohortsInCapstoneSeason.delete(activeCohortDetails.id)
+                                                    }
 
-                                            const capstoneSeasonCohorts = Array.from(cohortsInCapstoneSeason)
-                                            setCapstoneSeason(capstoneSeasonCohorts)
-                                            localStorage.setItem("capstoneSeason", JSON.stringify(capstoneSeasonCohorts))
+                                                    const capstoneSeasonCohorts = Array.from(cohortsInCapstoneSeason)
+                                                    setCapstoneSeason(capstoneSeasonCohorts)
+                                                    localStorage.setItem("capstoneSeason", JSON.stringify(capstoneSeasonCohorts))
 
-                                        }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" />
-                                    <label htmlFor="toggle" className="slot">
-                                        <span className="slot__label">OFF</span>
-                                        <span className="slot__label">ON</span>
-                                    </label>
-                                    <div className="curtain"></div>
-                                </div>
+                                                }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" />
+                                            <label htmlFor="toggle" className="slot">
+                                                <span className="slot__label">OFF</span>
+                                                <span className="slot__label">ON</span>
+                                            </label>
+                                            <div className="curtain"></div>
+                                        </div>
+                                    </div>
+                                </Flex>
                             </div>
 
                             <div className="cohort__detail">
@@ -277,11 +279,17 @@ export const CohortDetails = () => {
                                         activeCohortDetails.coaches?.map(coach => <div key={`coach--${coach.name}`} className="instructor--badge cohort__coach">{coach.name}</div>)
                                     }
                                 </div>
+
+                                <h3>Students</h3>
+                                <div className="cohort__coaches">
+                                    {activeCohortDetails.students} active students
+                                </div>
+                                <CohortStudentAddDialog />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

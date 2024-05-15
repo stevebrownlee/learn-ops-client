@@ -164,6 +164,20 @@
     background-color: rgb(214, 230, 230);
 }
 
+.student--found {
+    padding: 0.2rem 0 0.2rem 0.5rem;
+    background-color: rgb(214, 230, 230);
+    margin: 0.2rem 0;
+    border-radius: 0.1rem;
+    border: 1px dashed rgb(180, 208, 208);
+    font-size: 0.8rem;
+}
+
+.student--found:hover {
+    background-color: rgb(180, 208, 208);
+    cursor: pointer;
+}
+
 .cohort__details {
     display: flex;
     flex-direction: row;

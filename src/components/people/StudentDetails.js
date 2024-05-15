@@ -76,8 +76,11 @@ export const StudentDetails = ({ toggleCohorts }) => {
             <LearningObjectives />
         </div>
 
-        <Flex as="div" mt="8">
-            <Button ml="3" color="orange" onClick={() => {
+        <Flex as="div" mt="8" style={{
+            position: "absolute",
+            bottom: "1rem",
+        }}>
+            <Button ml="3" size="1" color="orange" onClick={() => {
                 if (window.confirm("Are you sure you want erase all previous data about this student?")) {
                     fetchIt(`${Settings.apiHost}/students/${activeStudent.id}?soft=true`, {
                         method: "DELETE"
@@ -92,7 +95,7 @@ export const StudentDetails = ({ toggleCohorts }) => {
                 Clear Student Data
             </Button>
 
-            <Button ml="3" color="red"
+            <Button ml="3" color="red" size="1"
                 onClick={() => {
                     if (window.confirm("Are you sure you want to completely remove this student from the Learning Platform?")) {
                         fetchIt(`${Settings.apiHost}/students/${activeStudent.id}`, {
