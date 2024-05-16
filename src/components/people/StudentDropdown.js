@@ -135,7 +135,7 @@ export const StudentDropdown = ({
                                                     {
                                                         book.projects.map(project => {
                                                             return <DropdownMenu.Item key={`subproject--${project.id}`}
-                                                                onClick={() => assignStudentToProject(student.id, project.id)}
+                                                                onClick={() => assignStudentToProject(student, project)}
                                                                 className="DropdownMenuItem">
                                                                 {project.name}
                                                             </DropdownMenu.Item>
