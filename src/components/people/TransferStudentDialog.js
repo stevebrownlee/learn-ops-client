@@ -13,14 +13,14 @@ export const TransferStudentDialog = () => {
     const [chosenCohort, chooseCohort] = useState(0)
 
     const { cohorts, getCohorts, activeCohort } = useContext(CohortContext)
-    const { getCohortStudents, activeStudent } = useContext(PeopleContext)
+    const { getCohortStudents, activeStudent, getStudent } = useContext(PeopleContext)
 
     useEffect(() => {
         getCohorts({ limit: 3 })
     }, [])
 
     const transferStudent = () => {
-        fetchIt(`${Settings.apiHost}/students/${chosenCohort}?soft=true`, {
+        fetchIt(`${Settings.apiHost}/students/${activeStudent.id}?soft=true`, {
             method: "DELETE"
         }).then(() => {
             getCohortStudents(activeCohort)
@@ -30,6 +30,7 @@ export const TransferStudentDialog = () => {
                 body: JSON.stringify({ person_id: activeStudent.id })
             }).then(() => {
                 setDialogOpen(false)
+                getStudent(activeStudent.id)
                 new Toast("Student transferred", Toast.TYPE_DONE, Toast.TIME_NORMAL)
             })
         })
@@ -49,8 +50,8 @@ export const TransferStudentDialog = () => {
                 </Dialog.Description>
 
                 <Flex direction="column" gap="3">
-                    <Select.Root onValueChange={chooseCohort}>
-                        <Select.Trigger />
+                    <Select.Root onValueChange={chooseCohort} value={chosenCohort}>
+                        <Select.Trigger>{activeStudent?.current_cohort?.name}</Select.Trigger>
                         <Select.Content>
                             <Select.Item value=""></Select.Item>
                             {
