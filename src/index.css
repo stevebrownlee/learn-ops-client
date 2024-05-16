@@ -122,7 +122,7 @@ dialog {
     font-size: inherit;
 }
 
-.fakeLink:hover, .prompt {
+.prompt {
     font-weight: bold;
 }
 

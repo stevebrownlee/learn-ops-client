@@ -355,26 +355,11 @@ button {
     background-color: rgb(241, 252, 249);
 }
 
-
 .section--proposals {
     padding: 0 2rem;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.rt-SelectItem:hover {
+    background-color: rgb(187, 187, 249);
+}
 

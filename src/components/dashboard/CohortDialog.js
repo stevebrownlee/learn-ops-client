@@ -7,10 +7,9 @@ import Settings from "../Settings"
 export const CohortDialog = ({ toggleCohorts, cohortIsOpen }) => {
     const { activeStudent, getStudent } = useContext(PeopleContext)
     const { cohorts, getCohorts } = useContext(CohortContext)
-    // const [cohorts, setCohorts] = useState([])
 
     useEffect(() => {
-        if ("id" in activeStudent && cohorts.length === 0) {
+        if (activeStudent && "id" in activeStudent && cohorts.length === 0) {
             getCohorts()
         }
     }, [])

@@ -1,12 +1,17 @@
 import React, { useContext, useEffect, useState } from "react"
+import { Badge, Button, Dialog, TextArea, Text, Flex, MagnifyingGlassIcon } from '@radix-ui/themes'
+import { TextField } from '@radix-ui/themes'
+
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { CohortContext } from "./CohortProvider.js"
 import { Toast, configureToasts } from "toaster-js"
 import { CourseContext } from "../course/CourseProvider.js"
 import { useHistory } from "react-router-dom"
-import { CopyIcon } from "../../svgs/CopyIcon.js"
+
 import { fetchIt } from "../utils/Fetch.js"
 import Settings from "../Settings.js"
+import { CohortStudentAddDialog } from "./CohortStudentAddDialog.js"
+import { CohortInvitationLink } from "./CohortInvitationLink.js"
 
 export const CohortDetails = () => {
     const initialState = {
@@ -25,6 +30,7 @@ export const CohortDetails = () => {
         updateCohort
     } = useContext(CohortContext)
     const { migrateCohortToServerSide, capstoneSeason, setCapstoneSeason } = useContext(CourseContext)
+
     const history = useHistory()
 
     useEffect(() => {
@@ -83,7 +89,6 @@ export const CohortDetails = () => {
 
         return ""
     }
-
 
 
     return (
@@ -152,30 +157,10 @@ export const CohortDetails = () => {
                                     />
                                 </div>
 
-                                <div className="form-group form-group--row">
-                                    <label className="label--smallrow" htmlFor="zoom_url">Zoom Session</label>
-                                    <input onChange={updateState}
-                                        value={info.zoom_url ?? ""}
-                                        type="url" controltype="string"
-                                        id="zoom_url" className="form-control form-control--row form-control--small"
-                                    />
-                                </div>
-
-                                <button className="isometric-button blue" onClick={saveURLs}>Save URLs</button>
+                                <Button color="blue" onClick={saveURLs}>Save URLs</Button>
                             </div>
 
                             <div className="cohort__detail cohort__detail--medium">
-                                <h3>Invitation Link</h3>
-
-                                <div style={{ margin: "1rem 0" }}>
-                                    Send this link to incoming students to assign them to your cohort
-                                </div>
-
-                                <span className="fakeLink readonly">
-                                    {`${Settings.apiHost}/auth/github/url?cohort=${activeCohortDetails.id}&v=1`}
-                                    <CopyIcon text={`${Settings.apiHost}/auth/github/url?cohort=${activeCohortDetails.id}&v=1`} />
-                                </span>
-
                                 <h3 style={{ margin: "3rem 0 0 0" }}>Dates</h3>
 
                                 <div style={{ margin: "1rem 0" }}>
@@ -198,62 +183,70 @@ export const CohortDetails = () => {
                                     </div>
                                 </div>
 
-                                <h2>Active</h2>
-                                <div className="capstoneToggle">
-                                    <input defaultChecked={activeCohortDetails.active}
-                                        onChange={(evt) => {
-                                            evt.target.ariaChecked = evt.target.checked
+                                <CohortInvitationLink activeCohortDetails={activeCohortDetails} />
 
-                                            const cohortObject = {
-                                                id: activeCohortDetails.id,
-                                                active: evt.target.checked
-                                            }
-                                            return fetchIt(`${Settings.apiHost}/cohorts/${activeCohortDetails.id}/active`,
-                                                {
-                                                    method: "PUT",
-                                                    body: JSON.stringify(cohortObject)
-                                                })
-                                                .then(() => {
-                                                    getCohort(activeCohortDetails.id)
-                                                    new Toast("Cohort updated", Toast.TYPE_INFO, Toast.TIME_SHORT)
-                                                })
-                                        }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
-                                    <label htmlFor="toggle" className="slot">
-                                        <span className="slot__label">OFF</span>
-                                        <span className="slot__label">ON</span>
-                                    </label>
-                                    <div className="curtain"></div>
-                                </div>
+                                <Flex as="div" direction="row" align="start">
+                                    <div>
+                                        <h3>Active</h3>
+                                        <div className="capstoneToggle">
+                                            <input defaultChecked={activeCohortDetails.active}
+                                                onChange={(evt) => {
+                                                    evt.target.ariaChecked = evt.target.checked
 
-                                <h2>Capstone Season</h2>
-                                <div className="capstoneToggle">
-                                    <input checked={capstoneSeason.includes(activeCohortDetails.id)}
-                                        onChange={(evt) => {
-                                            evt.target.ariaChecked = evt.target.checked
+                                                    const cohortObject = {
+                                                        id: activeCohortDetails.id,
+                                                        active: evt.target.checked
+                                                    }
+                                                    return fetchIt(`${Settings.apiHost}/cohorts/${activeCohortDetails.id}/active`,
+                                                        {
+                                                            method: "PUT",
+                                                            body: JSON.stringify(cohortObject)
+                                                        })
+                                                        .then(() => {
+                                                            getCohort(activeCohortDetails.id)
+                                                            new Toast("Cohort updated", Toast.TYPE_INFO, Toast.TIME_SHORT)
+                                                        })
+                                                }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
+                                            <label htmlFor="toggle" className="slot">
+                                                <span className="slot__label">OFF</span>
+                                                <span className="slot__label">ON</span>
+                                            </label>
+                                            <div className="curtain"></div>
+                                        </div>
+                                    </div>
 
-                                            const localStorageSeasons = localStorage.getItem("capstoneSeason")
-                                            const cohortsInCapstoneSeason = localStorageSeasons
-                                                    ? new Set([...JSON.parse(localStorageSeasons)])
-                                                    : new Set()
+                                    <div>
+                                        <h3>Capstone Season</h3>
+                                        <div className="capstoneToggle">
+                                            <input checked={capstoneSeason.includes(activeCohortDetails.id)}
+                                                onChange={(evt) => {
+                                                    evt.target.ariaChecked = evt.target.checked
 
-                                            if (evt.target.checked) {
-                                                cohortsInCapstoneSeason.add(activeCohortDetails.id)
-                                            }
-                                            else {
-                                                cohortsInCapstoneSeason.delete(activeCohortDetails.id)
-                                            }
+                                                    const localStorageSeasons = localStorage.getItem("capstoneSeason")
+                                                    const cohortsInCapstoneSeason = localStorageSeasons
+                                                        ? new Set([...JSON.parse(localStorageSeasons)])
+                                                        : new Set()
 
-                                            const capstoneSeasonCohorts = Array.from(cohortsInCapstoneSeason)
-                                            setCapstoneSeason(capstoneSeasonCohorts)
-                                            localStorage.setItem("capstoneSeason", JSON.stringify(capstoneSeasonCohorts))
+                                                    if (evt.target.checked) {
+                                                        cohortsInCapstoneSeason.add(activeCohortDetails.id)
+                                                    }
+                                                    else {
+                                                        cohortsInCapstoneSeason.delete(activeCohortDetails.id)
+                                                    }
 
-                                        }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" />
-                                    <label htmlFor="toggle" className="slot">
-                                        <span className="slot__label">OFF</span>
-                                        <span className="slot__label">ON</span>
-                                    </label>
-                                    <div className="curtain"></div>
-                                </div>
+                                                    const capstoneSeasonCohorts = Array.from(cohortsInCapstoneSeason)
+                                                    setCapstoneSeason(capstoneSeasonCohorts)
+                                                    localStorage.setItem("capstoneSeason", JSON.stringify(capstoneSeasonCohorts))
+
+                                                }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" />
+                                            <label htmlFor="toggle" className="slot">
+                                                <span className="slot__label">OFF</span>
+                                                <span className="slot__label">ON</span>
+                                            </label>
+                                            <div className="curtain"></div>
+                                        </div>
+                                    </div>
+                                </Flex>
                             </div>
 
                             <div className="cohort__detail">
@@ -277,11 +270,18 @@ export const CohortDetails = () => {
                                         activeCohortDetails.coaches?.map(coach => <div key={`coach--${coach.name}`} className="instructor--badge cohort__coach">{coach.name}</div>)
                                     }
                                 </div>
+
+                                <h3>Students</h3>
+                                <div className="cohort__coaches">
+                                    {activeCohortDetails.students} active students
+                                </div>
+
+                                <CohortStudentAddDialog />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

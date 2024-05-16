@@ -1,4 +1,6 @@
 import React, { useContext, useEffect } from "react"
+import { Button, Text, Flex } from '@radix-ui/themes'
+
 import { PeopleContext } from "./PeopleProvider"
 import Settings from "../Settings"
 import { fetchIt } from "../utils/Fetch"
@@ -54,7 +56,7 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
                             />
                         </section>
                     )
-                    : <button className="isometric-button yellow"
+                    : <Button color="amber"
                         onClick={() => {
                             fetchIt(`${Settings.apiHost}/coreskills`)
                                 .then(skills => {
@@ -75,9 +77,7 @@ export const CoreSkillSliders = ({ hideOverlay }) => {
                                     }
                                     Promise.all(newRecordRequests).then(() => getStudentCoreSkills(activeStudent?.id))
                                 })
-                        }}>
-                        <span>Start Tracking Core Skills</span>
-                    </button>
+                        }}> Start Tracking Core Skills </Button>
 
             }
         </div>

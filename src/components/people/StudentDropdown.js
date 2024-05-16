@@ -74,7 +74,7 @@ export const StudentDropdown = ({
                                 statuses.map(status => {
                                     if ((activeStudent?.assessment_status_id > 0 && status.status !== "In Progress") ||
                                         (activeStudent?.assessment_status_id === 0 && status.status === "In Progress")) {
-                                        return <DropdownMenu.Item className="DropdownMenuItem"
+                                        return <DropdownMenu.Item key={`status--${status.id}`} className="DropdownMenuItem"
                                             onClick={() => {
                                                 let operation = null
                                                 if (activeStudent.assessment_status_id === 0) {
@@ -135,7 +135,7 @@ export const StudentDropdown = ({
                                                     {
                                                         book.projects.map(project => {
                                                             return <DropdownMenu.Item key={`subproject--${project.id}`}
-                                                                onClick={() => assignStudentToProject(student.id, project.id)}
+                                                                onClick={() => assignStudentToProject(student, project)}
                                                                 className="DropdownMenuItem">
                                                                 {project.name}
                                                             </DropdownMenu.Item>
