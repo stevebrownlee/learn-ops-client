@@ -21,9 +21,7 @@ export const CohortList = () => {
     const history = useHistory()
 
     useEffect(() => {
-        if (cohorts.length === 0) {
-            getRecentCohorts()
-        }
+        getRecentCohorts()
     }, [])
 
     const getRecentCohorts = () => getCohorts({ limit: 6 })

@@ -20,8 +20,8 @@ export const CohortProvider = (props) => {
     const user = getCurrentUser()
 
     const getCohorts = useCallback((options={}) => {
-        const limit = options.limit ? `?limit=${options.limit}` : null
-        const active = options.active ? `?active=${options.active}` : null
+        const limit = options.limit ? `?limit=${options.limit}` : ""
+        const active = options.active ? `?active=${options.active}` : ""
 
         return fetchIt(`${Settings.apiHost}/cohorts${limit || active}`)
             .then(data => setCohorts(data))

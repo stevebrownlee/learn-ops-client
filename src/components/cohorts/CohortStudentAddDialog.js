@@ -5,6 +5,7 @@ import { TextField } from '@radix-ui/themes'
 import { CohortContext } from "./CohortProvider.js"
 import { fetchIt } from "../utils/Fetch.js"
 import Settings from "../Settings.js"
+import { Toast } from "toaster-js"
 
 export const CohortStudentAddDialog = () => {
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -18,7 +19,7 @@ export const CohortStudentAddDialog = () => {
     } = useContext(CohortContext)
 
     useEffect(() => {
-        if (studentName.length > 3) {
+        if (studentName.length >= 2) {
             fetchIt(`${Settings.apiHost}/students?lastname_like=${studentName}`)
                 .then(data => setFoundStudents(data))
         }
@@ -26,6 +27,19 @@ export const CohortStudentAddDialog = () => {
             setFoundStudents([])
         }
     }, [studentName])
+
+    const transferStudent = (id) => {
+        return fetchIt(`${Settings.apiHost}/cohorts/${activeCohortDetails.id}/assign`, {
+            method: "POST",
+            body: JSON.stringify({
+                person_id: id
+            })
+        }).then(() => {
+            setDialogOpen(false)
+            getCohortInfo(activeCohortDetails.info)
+            new Toast("Student transferred to cohort", Toast.TYPE_DONE, Toast.TIME_NORMAL)
+        })
+    }
 
     return (
         <Dialog.Root open={dialogOpen}>
@@ -52,7 +66,12 @@ export const CohortStudentAddDialog = () => {
 
                 <Flex gap="1" direction="column">
                     <h3>Results</h3>
-                    <Text>{foundStudents.length ? foundStudents.map(s => <div className="student--found">{s.name}</div>) : "None"}</Text>
+                    <Text>{foundStudents.length
+                        ? foundStudents.map(s => <div key={`fs--${s.id}`} className="student--found"
+                            onClick={() => transferStudent(s.id)}>
+                                {s.name}
+                            </div>)
+                        : "None"}</Text>
                 </Flex>
 
 

@@ -7,10 +7,11 @@ import { CohortContext } from "./CohortProvider.js"
 import { Toast, configureToasts } from "toaster-js"
 import { CourseContext } from "../course/CourseProvider.js"
 import { useHistory } from "react-router-dom"
-import { CopyIcon } from "../../svgs/CopyIcon.js"
+
 import { fetchIt } from "../utils/Fetch.js"
 import Settings from "../Settings.js"
 import { CohortStudentAddDialog } from "./CohortStudentAddDialog.js"
+import { CohortInvitationLink } from "./CohortInvitationLink.js"
 
 export const CohortDetails = () => {
     const initialState = {
@@ -22,8 +23,6 @@ export const CohortDetails = () => {
         zoom_url: ""
     }
     const [info, setInfo] = useState(initialState)
-    const [dialogOpen, setDialogOpen] = useState(false)
-    const [studentName, setStudentName] = useState("")
 
     const {
         activeCohort, activeCohortDetails, getCohort,
@@ -31,6 +30,7 @@ export const CohortDetails = () => {
         updateCohort
     } = useContext(CohortContext)
     const { migrateCohortToServerSide, capstoneSeason, setCapstoneSeason } = useContext(CourseContext)
+
     const history = useHistory()
 
     useEffect(() => {
@@ -161,17 +161,6 @@ export const CohortDetails = () => {
                             </div>
 
                             <div className="cohort__detail cohort__detail--medium">
-                                <h3>Invitation Link</h3>
-
-                                <div style={{ margin: "1rem 0" }}>
-                                    Send this link to incoming students to assign them to your cohort
-                                </div>
-
-                                <span className="fakeLink readonly">
-                                    {`${Settings.apiHost}/auth/github/url?cohort=${activeCohortDetails.id}&v=1`}
-                                    <CopyIcon text={`${Settings.apiHost}/auth/github/url?cohort=${activeCohortDetails.id}&v=1`} />
-                                </span>
-
                                 <h3 style={{ margin: "3rem 0 0 0" }}>Dates</h3>
 
                                 <div style={{ margin: "1rem 0" }}>
@@ -193,6 +182,8 @@ export const CohortDetails = () => {
                                         />
                                     </div>
                                 </div>
+
+                                <CohortInvitationLink activeCohortDetails={activeCohortDetails} />
 
                                 <Flex as="div" direction="row" align="start">
                                     <div>
@@ -284,6 +275,7 @@ export const CohortDetails = () => {
                                 <div className="cohort__coaches">
                                     {activeCohortDetails.students} active students
                                 </div>
+
                                 <CohortStudentAddDialog />
                             </div>
                         </div>
