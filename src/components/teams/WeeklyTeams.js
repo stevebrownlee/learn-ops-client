@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
+import { Button } from '@radix-ui/themes'
+
 import { PeopleContext } from "../people/PeopleProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
 import TeamsRepository from "./TeamsRepository"
@@ -286,20 +288,20 @@ export const WeeklyTeams = () => {
                         onChange={e => setWeeklyPrefix(e.target.value)} />
                 </div>
                 <div className="teamsconfig__auto">
-                    <button className="isometric-button yellow" onClick={() => autoAssignStudents()}>
+                    <Button color="amber" onClick={() => autoAssignStudents()}>
                         Assign By Score
-                    </button>
+                    </Button>
                 </div>
                 <div className="teamsconfig__random">
-                    <button className="isometric-button yellow" onClick={() => autoAssignStudents(true)}>
+                    <Button color="amber" onClick={() => autoAssignStudents(true)}>
                         Random
-                    </button>
+                    </Button>
                 </div>
                 <div className="teamsconfig__save">
-                    <button className="isometric-button blue" onClick={saveTeams}> Save </button>
+                    <Button className="isometric-Button blue" onClick={saveTeams}> Save </Button>
                 </div>
                 <div className="teamsconfig__clear">
-                    <button className="isometric-button red" onClick={() => {
+                    <Button color="red" onClick={() => {
                         localStorage.removeItem("currentCohortTeams")
                         changeCount(6)
                         buildNewTeams()
@@ -307,7 +309,7 @@ export const WeeklyTeams = () => {
                         clearTeams().then(() => getCohortStudents(activeCohort))
                     }}>
                         Clear
-                    </button>
+                    </Button>
                 </div>
             </section>
 
