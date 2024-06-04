@@ -95,12 +95,11 @@ export const Student = ({
         draggable={true}
         onDoubleClick={e => window.alert("Notes")}
         onDragStart={e => {
-            const currentProjectId = e.nativeEvent.target.parentElement.id.split("--")[1]
             const transferStudent = Object.assign(Object.create(null), {
                 id: student.id,
                 bookId: student.book_id,
                 bookIndex: student.book_index,
-                projectId: parseInt(currentProjectId),
+                projectId: student.project_id,
                 assessment_status: student.assessment_status_id,
                 hasAssessment
             })
