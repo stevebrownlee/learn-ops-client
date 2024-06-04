@@ -1,4 +1,5 @@
 import React from "react"
+import { Button } from '@radix-ui/themes'
 
 export const SettingsDialog = ({ toggleSettings, settingsIsOpen, changeMimic, mimic }) => {
     return <dialog id="dialog--settings"
@@ -14,11 +15,11 @@ export const SettingsDialog = ({ toggleSettings, settingsIsOpen, changeMimic, mi
     >
 
         <h1>User Settings</h1>
-        <button onClick={() => changeMimic(!mimic)} className="isometric-button yellow">
+        <Button onClick={() => changeMimic(!mimic)} color="amber">
             {
                 mimic ? "Instructor Interface" : "Student Interface"
             }
-        </button>
+        </Button>
         <button className="fakeLink dialog__close"
             id="closeBtn"
             onClick={toggleSettings}>[ close ]</button>
