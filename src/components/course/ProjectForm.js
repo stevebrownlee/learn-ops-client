@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
+
 import Settings from "../Settings.js"
+import { Button } from "@radix-ui/themes"
 import { fetchIt } from "../utils/Fetch.js"
 import { HelpIcon } from "../../svgs/Help.js"
 import { CourseContext } from "./CourseProvider.js"
@@ -40,7 +42,7 @@ export const ProjectForm = () => {
     useEffect(() => {
         if (bookId) {
             getBook(bookId).then((book) => {
-                updateProject({...project, book: book.id, course: book.course.id})
+                updateProject({ ...project, book: book.id, course: book.course.id })
                 setTitle(`${book.course.name} > ${book.name} > New Project`)
             })
             setMode("create")
@@ -122,29 +124,23 @@ export const ProjectForm = () => {
                     <label htmlFor="active"> Active </label>
                 </div>
 
-                <button type="submit" className="isometric-button blue"
-                    onClick={
-                        evt => {
-                            evt.preventDefault()
+                <Button style={{ marginTop: "2rem", marginLeft: "auto" }} color="blue"
+                    onClick={evt => {
+                        evt.preventDefault()
 
-                            if (mode === "create") {
-                                constructNewProject()
-                            }
-                            else {
-                                editProject(project).then(() => history.push(`/books/${project.book}`))
-                            }
+                        if (mode === "create") {
+                            constructNewProject()
                         }
-                    }> Save </button>
+                        else {
+                            editProject(project).then(() => history.push(`/books/${project.book}`))
+                        }
+                    }}>Save</Button>
 
-                <button type="submit"
-                    style={{ margin: "0 0 0 1rem" }}
-                    className="isometric-button blue"
-                    onClick={
-                        evt => {
-                            evt.preventDefault()
-                            history.push(`/books/${project.book}`)
-                        }
-                    }> Cancel </button>
+                <Button style={{ margin: "2rem 0 0 1rem" }} color="crimson"
+                    onClick={evt => {
+                        evt.preventDefault()
+                        history.push(`/books/${project.book}`)
+                    }}>Cancel</Button>
             </form>
         </>
     )

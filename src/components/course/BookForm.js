@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
+
+import { Button } from "@radix-ui/themes"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 import { HelpIcon } from "../../svgs/Help.js"
@@ -111,31 +113,23 @@ export const BookForm = () => {
                     />
                 </div>
 
+                <Button style={{ marginTop: "2rem", marginLeft: "auto" }} color="blue"
+                    onClick={evt => {
+                        evt.preventDefault()
 
-                <button type="submit"
-                    className="isometric-button blue"
-                    onClick={
-                        evt => {
-                            evt.preventDefault()
-
-                            if (mode === "create") {
-                                constructNewBook()
-                            }
-                            else {
-                                editBook(book).then(() => history.push(`/courses/${book.course}`))
-                            }
+                        if (mode === "create") {
+                            constructNewBook()
                         }
-                    }> Save </button>
-
-                <button type="submit"
-                    style={{margin: "0 0 0 1rem"}}
-                    className="isometric-button blue"
-                    onClick={
-                        evt => {
-                            evt.preventDefault()
-                            history.push(`/courses/${book.course}`)
+                        else {
+                            editBook(book).then(() => history.push(`/courses/${book.course}`))
                         }
-                    }> Cancel </button>
+                    }}>Save</Button>
+
+                <Button style={{ margin: "2rem 0 0 1rem" }} color="crimson"
+                    onClick={evt => {
+                        evt.preventDefault()
+                        history.push(`/courses/${book.course}`)
+                    }}>Cancel</Button>
             </form>
         </>
     )
