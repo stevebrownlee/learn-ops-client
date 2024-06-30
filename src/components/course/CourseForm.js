@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
+
+import { Button } from "@radix-ui/themes"
 import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 import { HelpIcon } from "../../svgs/Help.js"
@@ -40,7 +42,7 @@ export const CourseForm = () => {
     return (
         <>
             <form className="courseForm view">
-                <h2 className="courseForm__title">{mode === "edit" ? "Edit": "New"} Course</h2>
+                <h2 className="courseForm__title">{mode === "edit" ? "Edit" : "New"} Course</h2>
                 <div className="form-group">
                     <label htmlFor="name"> Course name </label>
                     <input onChange={updateState}
@@ -52,23 +54,26 @@ export const CourseForm = () => {
                 </div>
                 <div className="form-group">
                     <input id="active" type="checkbox" controltype="boolean" checked={course.active} onChange={updateState} />
-                    <label htmlFor="active" style={{margin: "0 0 0 0.5rem"}}>Active</label>
+                    <label htmlFor="active" style={{ margin: "0 0 0 0.5rem" }}>Active</label>
                 </div>
 
-                <button type="submit"
-                    onClick={
-                        evt => {
-                            evt.preventDefault()
+                <Button style={{ marginTop: "2rem", marginLeft: "auto" }} color="blue"
+                    onClick={evt => {
+                        evt.preventDefault()
 
-                            if (mode === "create") {
-                                createCourse(course).then(() => history.push("/courses"))
-                            }
-                            else {
-                                editCourse(course).then(() => history.push("/courses"))
-                            }
+                        if (mode === "create") {
+                            createCourse(course).then(() => history.push("/courses"))
                         }
-                    }
-                    className="isometric-button blue"> Save </button>
+                        else {
+                            editCourse(course).then(() => history.push("/courses"))
+                        }
+                    }}>Save</Button>
+
+                <Button style={{ margin: "2rem 0 0 1rem" }} color="crimson"
+                    onClick={evt => {
+                        evt.preventDefault()
+                        history.push("/courses")
+                    }}>Cancel</Button>
             </form>
         </>
     )
