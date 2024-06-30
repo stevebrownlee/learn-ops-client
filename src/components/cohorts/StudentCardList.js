@@ -266,7 +266,19 @@ export const StudentCardList = ({ searchTerms }) => {
             new Toast("Self-assessment for this book not marked as reviewed and complete.", Toast.TYPE_WARNING, Toast.TIME_NORMAL);
         }
         else {
-            assignStudentToProject(rawStudent, project)
+            // Assign to assessment
+            if (project.index === 99) {
+                if (rawStudent.assessment_status === 0) {
+                    setStudentCurrentAssessment(rawStudent)
+                }
+                else {
+                    new Toast("Student already assigned to assessment.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                }
+            }
+            // Assign to core project
+            else {
+                assignStudentToProject(rawStudent, project)
+            }
         }
     }
 
