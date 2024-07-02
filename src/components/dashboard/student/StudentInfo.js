@@ -101,10 +101,10 @@ export const StudentInfo = ({ profile }) => {
                         <section>
                             <Button color="iris"
                                 onClick={
-                                    () => fetchIt(`${Settings.apiHost}/notify`, {
+                                    () => fetchIt(`${Settings.apiHost}/students/${profile.id}/assess`, {
                                         method: "POST",
                                         body: JSON.stringify({
-                                            message: `:orange_book: ${profile.name} is ready for the ${profile?.project?.book_name} self-assessment`
+                                            bookId: profile?.project?.book_id
                                         })
                                     }).then(() => window.alert("Your instructors have been notified"))
                                 }>
