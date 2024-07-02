@@ -106,7 +106,7 @@ export const StudentInfo = ({ profile }) => {
                                         body: JSON.stringify({
                                             bookId: profile?.project?.book_id
                                         })
-                                    }).then(() => window.alert("Your instructors have been notified"))
+                                    }).then(() => window.alert("Your self-assessment project has been created. You will receive a notification in Slack with the link to the project."))
                                 }>
                                 Ready for Self-Assessment
                             </Button>
