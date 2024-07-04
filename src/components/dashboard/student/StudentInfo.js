@@ -36,6 +36,30 @@ export const StudentInfo = ({ profile }) => {
         }
     }, [])
 
+    const createAssessmentRepo = () => {
+        fetchIt(`${Settings.apiHost}/students/${profile.id}/assess`, {
+            method: "POST",
+            body: JSON.stringify({ bookId: profile?.project?.book_id }),
+            autoHandleResponse: false
+        })
+            .then(res => {
+                if (res.status === 409) {
+                    fetchIt(res.headers.get("Location")).then(sa => {
+                        new Toast(
+                            `You have already started the ${sa.assessment.name} self-assessment. Its status is ${sa.status}.`,
+                            Toast.TYPE_WARNING, Toast.TIME_NORMAL
+                        )
+                    })
+                }
+                else {
+                    new Toast(
+                        "Your self-assessment project has been created. You will receive a notification in Slack with the link to the project.",
+                        Toast.TYPE_DONE, Toast.TIME_NORMAL
+                    )
+                }
+            })
+    }
+
     const validateSubmission = () => {
         if (pushed && vocab) {
             fetchIt(`${Settings.apiHost}/students/${profile.id}/assess`, {
@@ -50,7 +74,7 @@ export const StudentInfo = ({ profile }) => {
 
                     setDialogOpen(false)
 
-                    new Toast( toasterElement.current, Toast.TYPE_DONE, Toast.TIME_LONG );
+                    new Toast(toasterElement.current, Toast.TYPE_DONE, Toast.TIME_LONG);
                 })
         }
         else {
@@ -102,21 +126,7 @@ export const StudentInfo = ({ profile }) => {
                             You are done with the core projects in a book and need the link from an instructor to start your self-assessment project.
                         </p>
                         <section>
-                            <Button color="iris"
-                                onClick={
-                                    () => fetchIt(`${Settings.apiHost}/students/${profile.id}/assess`, {
-                                        method: "POST",
-                                        body: JSON.stringify({
-                                            bookId: profile?.project?.book_id
-                                        })
-                                    })
-                                    .then(() => window.alert("Your self-assessment project has been created. You will receive a notification in Slack with the link to the project."))
-                                    .catch(err => {
-                                        window.alert(err.message)
-                                    })
-                                }>
-                                Ready for Self-Assessment
-                            </Button>
+                            <Button color="iris" onClick={createAssessmentRepo}> Ready for Self-Assessment </Button>
                         </section>
                         <p>
                             When you have completed the project code, completed the Vocabulary &amp; Understanding questions, and pushed your repository to Github, click the button below to notify your coaches.
