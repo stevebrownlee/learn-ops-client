@@ -363,3 +363,13 @@ button {
     background-color: rgb(187, 187, 249);
 }
 
+.student__assessmenticon {
+    position: absolute;
+    bottom: 0.1rem;
+    left: 0.2rem;
+    text-decoration: none;
+}
+
+.student__assessmenticon:hover {
+    cursor: pointer;
+}

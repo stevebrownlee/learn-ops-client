@@ -131,6 +131,12 @@ export const Student = ({
                     <section onClick={showStudentDetails} className="student__name">{student.name}</section>
                     <section className="student__duration">{student.project_duration} days</section>
                     <StudentNotePopup student={student} />
+
+                    {
+                        [2,3].includes(student.assessment_status_id)
+                            ? <a href={student.assessment_url} className="student__assessmenticon" target="_blank">📺</a>
+                            : ""
+                    }
                 </Text>
                 <Text as="div" size="2" color="gray">
                     {displayTags(student)}
