@@ -23,6 +23,11 @@ export const StudentInfo = ({ profile }) => {
         toasterElement.current = document.createElement("div")
         toasterElement.current.innerHTML = "<h2>Sent!</h2><p>If you want to request a 1-on-1 review, send a message in your cohort channel.</p>"
 
+        if (profile && profile.assessment_overview && profile.assessment_overview.length > 0) {
+            const latestAssessment = profile.assessment_overview[0]
+            setGithubUrl(latestAssessment.github_url)
+        }
+
         return () => {
             if (toasterElement.current) {
                 deleteAllToasts()
@@ -33,11 +38,9 @@ export const StudentInfo = ({ profile }) => {
 
     const validateSubmission = () => {
         if (pushed && vocab) {
-            fetchIt(`${Settings.apiHost}/notify`, {
-                method: "POST",
-                body: JSON.stringify({
-                    message: `:speaking_head_in_silhouette: ${profile.name ?? "Testing"} has completed the ${profile?.project?.book_name} self-assessment.\n\nRepository: ${githubUrl}`
-                })
+            fetchIt(`${Settings.apiHost}/students/${profile.id}/assess`, {
+                method: "PUT",
+                body: JSON.stringify({ statusId: 2 })
             })
                 .then(() => {
                     setPushed(false)
@@ -127,7 +130,7 @@ export const StudentInfo = ({ profile }) => {
                                 <Dialog.Content>
                                     <Dialog.Title>Complete Self-Assessment</Dialog.Title>
                                     <Dialog.Description size="2" mb="4">
-                                        Share the URL of your Github repository with your coaches for review.
+                                        Verify that you have completed the project code, the Vocabulary &amp; Understanding questions, and pushed your repository to Github.
                                     </Dialog.Description>
 
                                     <Flex direction="column" gap="3">
@@ -135,7 +138,7 @@ export const StudentInfo = ({ profile }) => {
                                             <Text as="div" size="2" mb="1" weight="bold">
                                                 Github Repository URL
                                             </Text>
-                                            <TextArea onChange={(e) => setGithubUrl(e.target.value)}
+                                            <TextArea readOnly={true} value={githubUrl} onChange={(e) => setGithubUrl(e.target.value)}
                                                 placeholder="https://github.com/your-username/repository"
                                             />
                                         </label>
