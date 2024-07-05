@@ -135,9 +135,9 @@ export const Student = ({
                     {
                         [2, 3].includes(student.assessment_status_id)
                             ? <Tooltip content="Go to assessment repo">
-                                <a href={student.assessment_url} className="student__assessmenticon" target="_blank">
-                                    📺
-                                </a>
+                                <a href={student.assessment_url}
+                                   className="student__assessmenticon"
+                                   target="_blank">📺</a>
                             </Tooltip>
                             : ""
                     }

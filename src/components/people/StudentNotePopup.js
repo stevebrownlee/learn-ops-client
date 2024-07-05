@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
 
 import { FilePlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
-import { Button, TextField, Popover, Text, TextArea, Checkbox, Box, Flex, Avatar, IconButton } from '@radix-ui/themes'
+import {
+    Button, TextField, Popover, Text, TextArea,
+    Checkbox, Box, Flex, Avatar, Tooltip,
+    IconButton
+} from '@radix-ui/themes'
 
 import { PeopleContext } from "./PeopleProvider"
 import { CourseContext } from "../course/CourseProvider"
@@ -43,23 +47,25 @@ export const StudentNotePopup = ({ student }) => {
             setEnteringNote(isOpen)
         }}>
             <Popover.Trigger asChild>
-                <IconButton style={{
-                    color: "black",
-                    backgroundColor: "transparent",
-                    position: "absolute",
-                    bottom: "0.1rem",
-                    right: 0,
-                    margin: 0,
-                    padding: 0,
-                    alignItems: "flex-end"
-                }}
-                    className="NoteIconButton"
-                    onClick={() => {
-                        setOpen(true)
-                        setEnteringNote(true)
-                    }}>
-                    <Pencil1Icon width="16" height="16" />
-                </IconButton>
+                <Tooltip content="Enter student note">
+                    <IconButton style={{
+                        color: "black",
+                        backgroundColor: "transparent",
+                        position: "absolute",
+                        bottom: "0.1rem",
+                        right: 0,
+                        margin: 0,
+                        padding: 0,
+                        alignItems: "flex-end"
+                    }}
+                        className="NoteIconButton"
+                        onClick={() => {
+                            setOpen(true)
+                            setEnteringNote(true)
+                        }}>
+                        <Pencil1Icon width="16" height="16" />
+                    </IconButton>
+                </Tooltip>
             </Popover.Trigger>
             <Popover.Content>
                 <Flex gap="3">
