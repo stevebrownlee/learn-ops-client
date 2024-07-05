@@ -10,6 +10,7 @@ import Settings from "../../Settings.js"
 import { fetchIt } from "../../utils/Fetch.js"
 
 export const StudentInfo = ({ profile }) => {
+
     const history = useHistory()
     const [githubUrl, setGithubUrl] = useState('')
     const [vocab, setVocab] = useState(false)
@@ -23,11 +24,6 @@ export const StudentInfo = ({ profile }) => {
         toasterElement.current = document.createElement("div")
         toasterElement.current.innerHTML = "<h2>Sent!</h2><p>If you want to request a 1-on-1 review, send a message in your cohort channel.</p>"
 
-        if (profile && profile.assessment_overview && profile.assessment_overview.length > 0) {
-            const latestAssessment = profile.assessment_overview[0]
-            setGithubUrl(latestAssessment.github_url)
-        }
-
         return () => {
             if (toasterElement.current) {
                 deleteAllToasts()
@@ -35,6 +31,13 @@ export const StudentInfo = ({ profile }) => {
             }
         }
     }, [])
+
+    useEffect(() => {
+        if (profile && profile.assessment_overview && profile.assessment_overview.length > 0) {
+            const latestAssessment = profile.assessment_overview[0]
+            setGithubUrl(latestAssessment.github_url)
+        }
+    }, [profile])
 
     const createAssessmentRepo = () => {
         fetchIt(`${Settings.apiHost}/students/${profile.id}/assess`, {
@@ -69,7 +72,6 @@ export const StudentInfo = ({ profile }) => {
                 .then(() => {
                     setPushed(false)
                     setVocab(false)
-                    setGithubUrl('')
                     setValidationMessage('')
 
                     setDialogOpen(false)

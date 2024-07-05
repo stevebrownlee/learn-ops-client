@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from "react"
 
-import { Flex, Text, Button, Card, Avatar, Box } from '@radix-ui/themes';
+import { Flex, Text, Button, Card, Avatar, Box, Tooltip, IconButton } from '@radix-ui/themes';
 
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
@@ -133,8 +133,12 @@ export const Student = ({
                     <StudentNotePopup student={student} />
 
                     {
-                        [2,3].includes(student.assessment_status_id)
-                            ? <a href={student.assessment_url} className="student__assessmenticon" target="_blank">📺</a>
+                        [2, 3].includes(student.assessment_status_id)
+                            ? <Tooltip content="Go to assessment repo">
+                                <a href={student.assessment_url} className="student__assessmenticon" target="_blank">
+                                    📺
+                                </a>
+                            </Tooltip>
                             : ""
                     }
                 </Text>
@@ -143,5 +147,5 @@ export const Student = ({
                 </Text>
             </Box>
         </Flex>
-    </Card>
+    </Card >
 }

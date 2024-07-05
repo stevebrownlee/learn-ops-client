@@ -365,8 +365,8 @@ button {
 
 .student__assessmenticon {
     position: absolute;
-    bottom: 0.1rem;
-    left: 0.2rem;
+    bottom: 0;
+    left: 0;
     text-decoration: none;
 }
 
