@@ -93,7 +93,10 @@ export const Student = ({
                 ${setAssessmentIndicatorBorder(student.assessment_status_id)}
             `}
         draggable={true}
-        onDoubleClick={e => window.alert("Notes")}
+        onDoubleClick={e => {
+            e.preventDefault()
+            window.alert("Notes")
+        }}
         onDragStart={e => {
             const transferStudent = Object.assign(Object.create(null), {
                 id: student.id,
@@ -128,16 +131,19 @@ export const Student = ({
                         toggleTags={toggleTags}
                         getStudentNotes={getStudentNotes} />
 
-                    <section onClick={showStudentDetails} className="student__name">{student.name}</section>
+                    <section onClick={e => {
+                        e.stopPropagation()
+                        showStudentDetails()
+                    }} className="student__name">{student.name}</section>
                     <section className="student__duration">{student.project_duration} days</section>
                     <StudentNotePopup student={student} />
 
                     {
-                        [2, 3].includes(student.assessment_status_id)
+                        [2, 3, 4].includes(student.assessment_status_id)
                             ? <Tooltip content="Go to assessment repo">
                                 <a href={student.assessment_url}
-                                   className="student__assessmenticon"
-                                   target="_blank">📺</a>
+                                    className="student__assessmenticon"
+                                    target="_blank">📺</a>
                             </Tooltip>
                             : ""
                     }

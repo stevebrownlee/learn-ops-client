@@ -48,23 +48,12 @@ export const StudentNotePopup = ({ student }) => {
         }}>
             <Popover.Trigger asChild>
                 <Tooltip content="Enter student note">
-                    <IconButton style={{
-                        color: "black",
-                        backgroundColor: "transparent",
-                        position: "absolute",
-                        bottom: "0.1rem",
-                        right: 0,
-                        margin: 0,
-                        padding: 0,
-                        alignItems: "flex-end"
-                    }}
+                    <IconButton style={{ backgroundColor: "transparent" }}
                         className="NoteIconButton"
                         onClick={() => {
                             setOpen(true)
                             setEnteringNote(true)
-                        }}>
-                        <Pencil1Icon width="16" height="16" />
-                    </IconButton>
+                        }}>📝</IconButton>
                 </Tooltip>
             </Popover.Trigger>
             <Popover.Content>
