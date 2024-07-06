@@ -52,56 +52,59 @@ export const StudentDropdown = ({
                         Tag Learner
                     </DropdownMenu.Item>
 
-                    <DropdownMenu.Separator className="DropdownMenuSeparator" />
-                    <DropdownMenu.Label className="DropdownMenuLabel">Book Assessment</DropdownMenu.Label>
-                    <DropdownMenu.Item className="DropdownMenuItem">
-                        Send Link
-                    </DropdownMenu.Item>
 
-                    <DropdownMenu.Sub>
-                        <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
-                            Assessment status
-                            <div className="RightSlot">
-                                <ChevronRightIcon />
-                            </div>
-                        </DropdownMenu.SubTrigger>
-                        <DropdownMenu.SubContent
-                            className="DropdownMenuSubContent"
-                            sideOffset={2}
-                            alignOffset={-5}
-                        >
-                            {
-                                statuses.map(status => {
-                                    if ((activeStudent?.assessment_status_id > 0 && status.status !== "In Progress") ||
-                                        (activeStudent?.assessment_status_id === 0 && status.status === "In Progress")) {
-                                        return <DropdownMenu.Item key={`status--${status.id}`} className="DropdownMenuItem"
-                                            onClick={() => {
-                                                let operation = null
-                                                if (activeStudent.assessment_status_id === 0) {
-                                                    operation = setStudentCurrentAssessment(activeStudent)
-                                                } else {
-                                                    if (status.status === "Reviewed and Complete") {
-                                                        const certification = window.confirm(`You certify that the student has been evaluated and has understanding and competency in the objectives for this book.`)
-                                                        if (certification) {
-                                                            operation = updateStudentCurrentAssessment(activeStudent, status.id)
-                                                        }
-                                                    }
-                                                    else {
-                                                        operation = updateStudentCurrentAssessment(activeStudent, status.id)
-                                                    }
+                    {
+                        activeStudent?.assessment_status_id > 2
+                            ? <>
+                                <DropdownMenu.Separator className="DropdownMenuSeparator" />
+                                <DropdownMenu.Label className="DropdownMenuLabel">Book Assessment</DropdownMenu.Label>
+                                <DropdownMenu.Sub>
+                                    <DropdownMenu.SubTrigger className="DropdownMenuSubTrigger">
+                                        Assessment status
+                                        <div className="RightSlot">
+                                            <ChevronRightIcon />
+                                        </div>
+                                    </DropdownMenu.SubTrigger>
+                                    <DropdownMenu.SubContent
+                                        className="DropdownMenuSubContent"
+                                        sideOffset={2}
+                                        alignOffset={-5}
+                                    >
+                                        {
+                                            statuses.map(status => {
+                                                if (activeStudent?.assessment_status_id > 0 && status.id > 2) {
+                                                    return <DropdownMenu.Item key={`status--${status.id}`} className="DropdownMenuItem"
+                                                        onClick={() => {
+                                                            let operation = null
+                                                            if (activeStudent.assessment_status_id === 0) {
+                                                                operation = setStudentCurrentAssessment(activeStudent)
+                                                            } else {
+                                                                if (status.status === "Reviewed and Complete") {
+                                                                    const certification = window.confirm(`You certify that the student has been evaluated and has understanding and competency in the objectives for this book.`)
+                                                                    if (certification) {
+                                                                        operation = updateStudentCurrentAssessment(activeStudent, status.id)
+                                                                    }
+                                                                }
+                                                                else {
+                                                                    operation = updateStudentCurrentAssessment(activeStudent, status.id)
+                                                                }
+                                                            }
+                                                            if (operation) {
+                                                                operation.then(() => {
+                                                                    toggleStatuses()
+                                                                    getCohortStudents(activeCohort)
+                                                                })
+                                                            }
+                                                        }}>{status.status}</DropdownMenu.Item>
                                                 }
-                                                if (operation) {
-                                                    operation.then(() => {
-                                                        toggleStatuses()
-                                                        getCohortStudents(activeCohort)
-                                                    })
-                                                }
-                                            }}>{status.status}</DropdownMenu.Item>
-                                    }
-                                })
-                            }
-                        </DropdownMenu.SubContent>
-                    </DropdownMenu.Sub>
+                                            })
+                                        }
+                                    </DropdownMenu.SubContent>
+                                </DropdownMenu.Sub>
+                            </>
+                            : ""
+                    }
+
 
                     <DropdownMenu.Separator className="DropdownMenuSeparator" />
                     <DropdownMenu.Label className="DropdownMenuLabel">Progress Tracking</DropdownMenu.Label>
@@ -138,7 +141,7 @@ export const StudentDropdown = ({
                                                                 return null
                                                             }
                                                             return <DropdownMenu.Item key={`subproject--${project.id}`}
-                                                                onClick={() => assignStudentToProject(student, project) }
+                                                                onClick={() => assignStudentToProject(student, project)}
                                                                 className="DropdownMenuItem">
                                                                 {project.name}
                                                             </DropdownMenu.Item>

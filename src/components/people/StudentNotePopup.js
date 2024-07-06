@@ -69,19 +69,12 @@ export const StudentNotePopup = ({ student }) => {
             </Popover.Trigger>
             <Popover.Content>
                 <Flex gap="3">
-                    <Avatar
-                        size="2"
-                        src={student.avatar}
-                        fallback="A"
-                        radius="full"
-                    />
+                    <Avatar size="2" src={student.avatar} fallback="A" radius="full" />
                     <Box grow="1">
                         <TextArea value={note}
                             onChange={e => setNote(e.target.value)}
                             placeholder="Enter evaluation note…" style={{ height: 80 }}
-                            onKeyDown={
-                                e => e.key === "Enter" && completeNoteCreation()
-                            } />
+                            onKeyDown={ e => e.key === "Enter" && completeNoteCreation() } />
                         <Flex gap="3" mt="3" justify="between">
                             <Popover.Close>
                                 <Button size="1" onClick={completeNoteCreation}>Save</Button>
