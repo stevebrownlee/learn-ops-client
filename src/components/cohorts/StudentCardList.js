@@ -22,6 +22,7 @@ import keyboardShortcut from "../ui/keyboardShortcut.js"
 
 import "./CohortStudentList.css"
 import "./Tooltip.css"
+import { StudentAssessmentForm } from "../people/StudentAssessmentForm.js"
 
 const persistSettings = (setting, value) => {
     let settings = localStorage.getItem("lp_settings")
@@ -65,6 +66,7 @@ export const StudentCardList = ({ searchTerms }) => {
     const [showTags, toggleTags] = useState(initial_show_tags_state)
     const [groupedStudents, setGroupedStudents] = useState([])
     const [showAvatars, toggleAvatars] = useState(initial_show_avatars_state)
+    const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false)
 
     const history = useHistory()
 
@@ -85,6 +87,22 @@ export const StudentCardList = ({ searchTerms }) => {
         tagsStateRef.current = showTags
         enteringNoteStateRef.current = enteringNote
     })
+
+    /*
+        This function, and the useEffect below, were added to prevent the
+        Radix Dialog element from blocking pointer events on the body
+    */
+    const removePointerEventsStyle = () => {
+        document.body.style.pointerEvents = ''
+    }
+
+    useEffect(() => {
+        return () => {
+            if (!feedbackDialogOpen) {
+                removePointerEventsStyle()
+            }
+        }
+    }, [feedbackDialogOpen])
 
     const toggleTagsShortcut = keyboardShortcut('t', 'g', () => {
         if (!noteOpenStateRef.current && !enteringNoteStateRef.current) {
@@ -124,7 +142,7 @@ export const StudentCardList = ({ searchTerms }) => {
         }
         else {
             history.push("/cohorts")
-            new Toast("You have not joined a cohort. Please choose one.", Toast.TYPE_WARNING, Toast.TIME_NORMAL);
+            new Toast("You have not joined a cohort. Please choose one.", Toast.TYPE_WARNING, Toast.TIME_NORMAL)
         }
 
         document.addEventListener("keyup", toggleTagsShortcut)
@@ -135,6 +153,28 @@ export const StudentCardList = ({ searchTerms }) => {
         }
     }, [])
 
+    /*
+        The purpose of this useEffect is to restructure the student data into a format that
+        can be easily rendered in the component. This is done by grouping students by book and project.
+        Assessments are treated as projects with an index of 99.
+
+        The data structure is as follows:
+        [
+            {
+                name: "Book 1",
+                studentCount: 0,
+                display: false,
+                projects: [
+                    {
+                        name: "Project 1",
+                        students: [],
+                        display: false,
+                        droppable: false
+                    }
+                ]
+            }
+        ]
+    */
     useEffect(() => {
         /* eslint-disable no-undef */
         let copy = structuredClone(cohortStudents)
@@ -152,7 +192,7 @@ export const StudentCardList = ({ searchTerms }) => {
                 book.projects = [...book.projects, ...maxedAssessments]
             }
 
-            copy = copy.map(s => ({...s, inGroupProject: false}))
+            copy = copy.map(s => ({ ...s, inGroupProject: false }))
 
             for (const project of book.projects) {
                 project.display = false
@@ -233,7 +273,7 @@ export const StudentCardList = ({ searchTerms }) => {
         if (project.index === 99 && student.assessment_status === 0) {
             student.book_id = student.bookId // Snake case needed for the API
             setStudentCurrentAssessment(student).then(() => getCohortStudents(activeCohort))
-            new Toast("Student assigned to assessment", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+            new Toast("Student assigned to assessment", Toast.TYPE_ERROR, Toast.TIME_NORMAL)
             return null
         }
         setStudentCurrentProject(student.id, project.id)
@@ -263,7 +303,7 @@ export const StudentCardList = ({ searchTerms }) => {
             book.id !== rawStudent.bookId &&
             rawStudent.assessment_status !== 4
         ) {
-            new Toast("Self-assessment for this book not marked as reviewed and complete.", Toast.TYPE_WARNING, Toast.TIME_NORMAL);
+            new Toast("Self-assessment for this book not marked as reviewed and complete.", Toast.TYPE_WARNING, Toast.TIME_NORMAL)
         }
         else {
             // Assign to assessment
@@ -272,7 +312,7 @@ export const StudentCardList = ({ searchTerms }) => {
                     setStudentCurrentAssessment(rawStudent)
                 }
                 else {
-                    new Toast("Student already assigned to assessment.", Toast.TYPE_ERROR, Toast.TIME_NORMAL);
+                    new Toast("Student already assigned to assessment.", Toast.TYPE_ERROR, Toast.TIME_NORMAL)
                 }
             }
             // Assign to core project
@@ -289,6 +329,7 @@ export const StudentCardList = ({ searchTerms }) => {
             toggleStatuses={toggleStatuses}
             toggleTags={toggleTagDialog}
             toggleNote={toggleNote}
+            setFeedbackDialogOpen={setFeedbackDialogOpen}
             assignStudentToProject={assignStudentToProject}
             hasAssessment={book.assessments.length > 0}
             toggleCohorts={toggleCohorts}
@@ -304,7 +345,7 @@ export const StudentCardList = ({ searchTerms }) => {
                     ? <article key={`book--${book.id}--${showTags}--${showAvatars}`} className="bookColumn">
                         <header className="bookColumn__header">
                             <div className="bookColumn__name">
-                                <div className="bookColumn__studentCount">&nbsp;</div>
+                                <div className="bookColumn__studentCount">&nbsp</div>
                                 <div> {book.name} </div>
                                 <div className="bookColumn__studentCount">
                                     <PeopleIcon />
@@ -351,10 +392,19 @@ export const StudentCardList = ({ searchTerms }) => {
             })
     }
 
+        {/*
+            All student-specific dialogs are rendered here. Each one should pull `activeStudent` from
+            the PeopleContext to access the student that was clicked on. This prevents multiple instances
+            of the dialog from being rendered at the same time.
+
+            Make sure that you invoke `activateStudent(student)` where needed before you display the
+            dialog. This will set the `activeStudent` in the PeopleContext to the student that was clicked on.
+        */}
         <StudentDetails toggleCohorts={toggleCohorts} />
         <TagDialog toggleTags={toggleTagDialog} tagIsOpen={tagIsOpen} />
         <StudentNoteDialog toggleNote={toggleNote} noteIsOpen={noteIsOpen} />
         <CohortDialog toggleCohorts={toggleCohorts} cohortIsOpen={cohortIsOpen} />
+        <StudentAssessmentForm dialogOpen={feedbackDialogOpen} setDialogOpen={setFeedbackDialogOpen} />
     </section>
 }
 

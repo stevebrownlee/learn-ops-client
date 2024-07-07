@@ -1,13 +1,12 @@
 import React, { useContext, useRef, useState } from "react"
 
-import { Flex, Text, Button, Card, Avatar, Box } from '@radix-ui/themes';
+import { Flex, Text, Button, Card, Avatar, Box, Tooltip, IconButton } from '@radix-ui/themes'
 
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { PeopleContext } from "./PeopleProvider"
 import { StandupContext } from "../dashboard/Dashboard"
 import { StudentDropdown } from "./StudentDropdown.js"
-import { StudentNotePopup } from "./StudentNotePopup.js"
 import "./Student.css"
 
 export const Student = ({
@@ -15,7 +14,7 @@ export const Student = ({
     toggleStatuses, toggleTags,
     toggleNote, toggleCohorts,
     hasAssessment, assignStudentToProject,
-    showTags, showAvatars
+    showTags, showAvatars, setFeedbackDialogOpen
 }) => {
     const {
         activateStudent, getCohortStudents, untagStudent,
@@ -69,7 +68,7 @@ export const Student = ({
                                     getCohortStudents(activeCohort)
                                 })
                             }}
-                        >&times;</span>
+                        >&times</span>
                     </span>
                     )
                 }
@@ -86,6 +85,33 @@ export const Student = ({
         document.querySelector('.overlay--student').style.display = "block"
     }
 
+    let doubleClickOccurred = false
+    let singleClickOccurred = false
+
+    const handleDoubleClick = (e) => {
+        doubleClickOccurred = true
+        console.log(`Double-click triggered`)
+        activateStudent(student)
+        toggleNote()
+        // Perform any immediate actions required on double-click
+    }
+
+    const handleClick = (e) => {
+        if (!singleClickOccurred) {
+            singleClickOccurred = true
+
+            setTimeout(() => {
+                if (!doubleClickOccurred && singleClickOccurred) {
+                    console.log('Single-click logic running')
+                    showStudentDetails()
+                }
+                doubleClickOccurred = false
+                singleClickOccurred = false
+            }, 300)
+        }
+    }
+
+
     return <Card className={`
                 personality--
                 student
@@ -93,7 +119,7 @@ export const Student = ({
                 ${setAssessmentIndicatorBorder(student.assessment_status_id)}
             `}
         draggable={true}
-        onDoubleClick={e => window.alert("Notes")}
+        onDoubleClick={handleDoubleClick}
         onDragStart={e => {
             const transferStudent = Object.assign(Object.create(null), {
                 id: student.id,
@@ -126,16 +152,26 @@ export const Student = ({
                         toggleNote={toggleNote}
                         assignStudentToProject={assignStudentToProject}
                         toggleTags={toggleTags}
+                        setFeedbackDialogOpen={setFeedbackDialogOpen}
                         getStudentNotes={getStudentNotes} />
 
-                    <section onClick={showStudentDetails} className="student__name">{student.name}</section>
+                    <section onClick={handleClick}
+                        className="student__name">{student.name}</section>
                     <section className="student__duration">{student.project_duration} days</section>
-                    <StudentNotePopup student={student} />
+                    {
+                        [2, 3, 4].includes(student.assessment_status_id)
+                            ? <Tooltip content="Go to assessment repo">
+                                <a href={student.assessment_url}
+                                    className="student__assessmenticon"
+                                    target="_blank">📺</a>
+                            </Tooltip>
+                            : ""
+                    }
                 </Text>
                 <Text as="div" size="2" color="gray">
                     {displayTags(student)}
                 </Text>
             </Box>
         </Flex>
-    </Card>
+    </Card >
 }

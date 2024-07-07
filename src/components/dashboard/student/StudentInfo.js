@@ -10,6 +10,7 @@ import Settings from "../../Settings.js"
 import { fetchIt } from "../../utils/Fetch.js"
 
 export const StudentInfo = ({ profile }) => {
+
     const history = useHistory()
     const [githubUrl, setGithubUrl] = useState('')
     const [vocab, setVocab] = useState(false)
@@ -31,23 +32,51 @@ export const StudentInfo = ({ profile }) => {
         }
     }, [])
 
+    useEffect(() => {
+        if (profile && profile.assessment_overview && profile.assessment_overview.length > 0) {
+            const latestAssessment = profile.assessment_overview[0]
+            setGithubUrl(latestAssessment.github_url)
+        }
+    }, [profile])
+
+    const createAssessmentRepo = () => {
+        fetchIt(`${Settings.apiHost}/students/${profile.id}/assess`, {
+            method: "POST",
+            body: JSON.stringify({ bookId: profile?.project?.book_id }),
+            autoHandleResponse: false
+        })
+            .then(res => {
+                if (res.status === 409) {
+                    fetchIt(res.headers.get("Location")).then(sa => {
+                        new Toast(
+                            `You have already started the ${sa.assessment.name} self-assessment. Its status is ${sa.status}.`,
+                            Toast.TYPE_WARNING, Toast.TIME_NORMAL
+                        )
+                    })
+                }
+                else {
+                    new Toast(
+                        "Your self-assessment project has been created. You will receive a notification in Slack with the link to the project.",
+                        Toast.TYPE_DONE, Toast.TIME_NORMAL
+                    )
+                }
+            })
+    }
+
     const validateSubmission = () => {
         if (pushed && vocab) {
-            fetchIt(`${Settings.apiHost}/notify`, {
-                method: "POST",
-                body: JSON.stringify({
-                    message: `:speaking_head_in_silhouette: ${profile.name ?? "Testing"} has completed the ${profile?.project?.book_name} self-assessment.\n\nRepository: ${githubUrl}`
-                })
+            fetchIt(`${Settings.apiHost}/students/${profile.id}/assess`, {
+                method: "PUT",
+                body: JSON.stringify({ statusId: 2 })
             })
                 .then(() => {
                     setPushed(false)
                     setVocab(false)
-                    setGithubUrl('')
                     setValidationMessage('')
 
                     setDialogOpen(false)
 
-                    new Toast( toasterElement.current, Toast.TYPE_DONE, Toast.TIME_LONG );
+                    new Toast(toasterElement.current, Toast.TYPE_DONE, Toast.TIME_LONG);
                 })
         }
         else {
@@ -99,17 +128,7 @@ export const StudentInfo = ({ profile }) => {
                             You are done with the core projects in a book and need the link from an instructor to start your self-assessment project.
                         </p>
                         <section>
-                            <Button color="iris"
-                                onClick={
-                                    () => fetchIt(`${Settings.apiHost}/notify`, {
-                                        method: "POST",
-                                        body: JSON.stringify({
-                                            message: `:orange_book: ${profile.name} is ready for the ${profile?.project?.book_name} self-assessment`
-                                        })
-                                    }).then(() => window.alert("Your instructors have been notified"))
-                                }>
-                                Ready for Self-Assessment
-                            </Button>
+                            <Button color="iris" onClick={createAssessmentRepo}> Ready for Self-Assessment </Button>
                         </section>
                         <p>
                             When you have completed the project code, completed the Vocabulary &amp; Understanding questions, and pushed your repository to Github, click the button below to notify your coaches.
@@ -123,7 +142,7 @@ export const StudentInfo = ({ profile }) => {
                                 <Dialog.Content>
                                     <Dialog.Title>Complete Self-Assessment</Dialog.Title>
                                     <Dialog.Description size="2" mb="4">
-                                        Share the URL of your Github repository with your coaches for review.
+                                        Verify that you have completed the project code, the Vocabulary &amp; Understanding questions, and pushed your repository to Github.
                                     </Dialog.Description>
 
                                     <Flex direction="column" gap="3">
@@ -131,7 +150,7 @@ export const StudentInfo = ({ profile }) => {
                                             <Text as="div" size="2" mb="1" weight="bold">
                                                 Github Repository URL
                                             </Text>
-                                            <TextArea onChange={(e) => setGithubUrl(e.target.value)}
+                                            <TextArea readOnly={true} value={githubUrl} onChange={(e) => setGithubUrl(e.target.value)}
                                                 placeholder="https://github.com/your-username/repository"
                                             />
                                         </label>

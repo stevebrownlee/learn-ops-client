@@ -331,13 +331,14 @@ button {
 }
 
 .section--notes {
-    padding: 0 2rem;
-    max-height: 20rem;
+    height: fit-content;
+    min-height: 15rem;
     overflow: scroll;
     border: 1px dotted lightsteelblue;
 }
 
 .dialog--note {
+    min-height: 20rem;
     height: fit-content;
 }
 
@@ -347,8 +348,22 @@ button {
     display: flex;
 }
 
+.note__text {
+    font-size: 0.9rem;
+    flex: 20;
+    text-align: left;
+}
+
 .note__date {
-    font-size: small;
+    font-size: 0.7rem;
+    flex: 4;
+    text-align: center;
+}
+
+.note__author {
+    font-size: 0.7rem;
+    flex: 4;
+    text-align: center;
 }
 
 .note:nth-child(even) {
@@ -363,3 +378,13 @@ button {
     background-color: rgb(187, 187, 249);
 }
 
+.student__assessmenticon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-decoration: none;
+}
+
+.student__assessmenticon:hover {
+    cursor: pointer;
+}

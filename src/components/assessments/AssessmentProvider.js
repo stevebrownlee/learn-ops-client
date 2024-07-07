@@ -15,7 +15,7 @@ export const AssessmentProvider = (props) => {
         return fetch(`${Settings.apiHost}/assessments?studentId=${studentId}`)
             .then(response => response.json())
             .then(data => {
-                data.sort((c, n) => c.status - n.status ? 1 : -1)
+
                 setAssessments(data)
             })
     }, [setAssessments])
