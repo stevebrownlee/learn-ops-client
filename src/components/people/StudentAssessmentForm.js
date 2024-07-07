@@ -17,7 +17,7 @@ export const StudentAssessmentForm = ({ dialogOpen, setDialogOpen }) => {
     const { activeStudent } = useContext(PeopleContext)
 
     const validateFeedback = () => {
-        if (!assessmentObjectives.isSubsetOf(learningObjectivesMet)) {
+        if (!learningObjectivesMet.isSupersetOf(assessmentObjectives)) {
             setValidationMessage(`Please validate that ${activeStudent.name} has met all objectives before saving.`)
 
             setTimeout(() => {
