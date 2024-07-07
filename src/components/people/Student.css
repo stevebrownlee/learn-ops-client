@@ -331,13 +331,14 @@ button {
 }
 
 .section--notes {
-    padding: 0 2rem;
-    max-height: 20rem;
+    height: fit-content;
+    min-height: 15rem;
     overflow: scroll;
     border: 1px dotted lightsteelblue;
 }
 
 .dialog--note {
+    min-height: 20rem;
     height: fit-content;
 }
 

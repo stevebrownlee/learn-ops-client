@@ -50,11 +50,10 @@ export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
                 onKeyDown={
                     e => {
                         if (e.key === "Enter") {
-                            createStudentNote().then(getNotes).then(() => {
-                                setMessage("")
-                            })
+                            createStudentNote().then(getNotes).then(() => setMessage(""))
                         } else if (e.key === "Escape") {
                             toggleNote()
+                            setNotes([])
                         }
                     }
                 }
@@ -68,7 +67,10 @@ export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
             fontSize: "0.75rem"
         }}
             id="closeBtn"
-            onClick={() => toggleNote()}>[ close ]</button>
+            onClick={() => {
+                toggleNote()
+                setNotes([])
+            }}>[ close ]</button>
 
         <StudentNoteList notes={notes} deleteStudentNote={deleteStudentNote} />
     </dialog>

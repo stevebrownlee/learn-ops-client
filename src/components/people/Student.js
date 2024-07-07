@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from "react"
 
-import { Flex, Text, Button, Card, Avatar, Box, Tooltip, IconButton } from '@radix-ui/themes';
+import { Flex, Text, Button, Card, Avatar, Box, Tooltip, IconButton } from '@radix-ui/themes'
 
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
@@ -69,7 +69,7 @@ export const Student = ({
                                     getCohortStudents(activeCohort)
                                 })
                             }}
-                        >&times;</span>
+                        >&times</span>
                     </span>
                     )
                 }
@@ -86,6 +86,33 @@ export const Student = ({
         document.querySelector('.overlay--student').style.display = "block"
     }
 
+    let doubleClickOccurred = false
+    let singleClickOccurred = false
+
+    const handleDoubleClick = (e) => {
+        doubleClickOccurred = true
+        console.log(`Double-click triggered`)
+        activateStudent(student)
+        toggleNote()
+        // Perform any immediate actions required on double-click
+    }
+
+    const handleClick = (e) => {
+        if (!singleClickOccurred) {
+            singleClickOccurred = true
+
+            setTimeout(() => {
+                if (!doubleClickOccurred && singleClickOccurred) {
+                    console.log('Single-click logic running')
+                    showStudentDetails()
+                }
+                doubleClickOccurred = false
+                singleClickOccurred = false
+            }, 300)
+        }
+    }
+
+
     return <Card className={`
                 personality--
                 student
@@ -93,10 +120,7 @@ export const Student = ({
                 ${setAssessmentIndicatorBorder(student.assessment_status_id)}
             `}
         draggable={true}
-        onDoubleClick={e => {
-            e.preventDefault()
-            window.alert("Notes")
-        }}
+        onDoubleClick={handleDoubleClick}
         onDragStart={e => {
             const transferStudent = Object.assign(Object.create(null), {
                 id: student.id,
@@ -131,10 +155,8 @@ export const Student = ({
                         toggleTags={toggleTags}
                         getStudentNotes={getStudentNotes} />
 
-                    <section onClick={e => {
-                        e.stopPropagation()
-                        showStudentDetails()
-                    }} className="student__name">{student.name}</section>
+                    <section onClick={handleClick}
+                        className="student__name">{student.name}</section>
                     <section className="student__duration">{student.project_duration} days</section>
                     <StudentNotePopup student={student} />
 

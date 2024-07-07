@@ -5,10 +5,6 @@ import { fetchIt } from "../utils/Fetch.js"
 import Settings from "../Settings.js"
 
 export const StudentNoteList = ({ notes, deleteStudentNote }) => <section className="section--notes">
-    <div className="card-title">
-        <h2>Notes</h2>
-    </div>
-
     {
         notes && notes.length
             ? notes.map(note => <div key={`note--${note.id}`} className="note">
