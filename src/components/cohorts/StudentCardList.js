@@ -345,7 +345,7 @@ export const StudentCardList = ({ searchTerms }) => {
                     ? <article key={`book--${book.id}--${showTags}--${showAvatars}`} className="bookColumn">
                         <header className="bookColumn__header">
                             <div className="bookColumn__name">
-                                <div className="bookColumn__studentCount">&nbsp</div>
+                                <div className="bookColumn__studentCount">&nbsp;</div>
                                 <div> {book.name} </div>
                                 <div className="bookColumn__studentCount">
                                     <PeopleIcon />
