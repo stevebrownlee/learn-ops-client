@@ -8,8 +8,9 @@ export const StudentNoteList = ({ notes, deleteStudentNote }) => <section classN
     {
         notes && notes.length
             ? notes.map(note => <div key={`note--${note.id}`} className="note">
-                <div style={{ flex: 20 }}>{note.note} by {note.author}</div>
-                <div style={{ flex: 4 }} className="note__date">{
+                <div className="note__text">{note.note}</div>
+                <div className="note__author">{note.author}</div>
+                <div className="note__date">{
                     new Date(note.created_on).toLocaleDateString("en-US",
                         {
                             year: 'numeric',

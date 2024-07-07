@@ -153,6 +153,28 @@ export const StudentCardList = ({ searchTerms }) => {
         }
     }, [])
 
+    /*
+        The purpose of this useEffect is to restructure the student data into a format that
+        can be easily rendered in the component. This is done by grouping students by book and project.
+        Assessments are treated as projects with an index of 99.
+
+        The data structure is as follows:
+        [
+            {
+                name: "Book 1",
+                studentCount: 0,
+                display: false,
+                projects: [
+                    {
+                        name: "Project 1",
+                        students: [],
+                        display: false,
+                        droppable: false
+                    }
+                ]
+            }
+        ]
+    */
     useEffect(() => {
         /* eslint-disable no-undef */
         let copy = structuredClone(cohortStudents)
@@ -370,6 +392,14 @@ export const StudentCardList = ({ searchTerms }) => {
             })
     }
 
+        {/*
+            All student-specific dialogs are rendered here. Each one should pull `activeStudent` from
+            the PeopleContext to access the student that was clicked on. This prevents multiple instances
+            of the dialog from being rendered at the same time.
+
+            Make sure that you invoke `activateStudent(student)` where needed before you display the
+            dialog. This will set the `activeStudent` in the PeopleContext to the student that was clicked on.
+        */}
         <StudentDetails toggleCohorts={toggleCohorts} />
         <TagDialog toggleTags={toggleTagDialog} tagIsOpen={tagIsOpen} />
         <StudentNoteDialog toggleNote={toggleNote} noteIsOpen={noteIsOpen} />

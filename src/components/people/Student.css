@@ -348,8 +348,22 @@ button {
     display: flex;
 }
 
+.note__text {
+    font-size: 0.9rem;
+    flex: 20;
+    text-align: left;
+}
+
 .note__date {
-    font-size: small;
+    font-size: 0.7rem;
+    flex: 4;
+    text-align: center;
+}
+
+.note__author {
+    font-size: 0.7rem;
+    flex: 4;
+    text-align: center;
 }
 
 .note:nth-child(even) {
