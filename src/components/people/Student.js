@@ -7,7 +7,6 @@ import { CohortContext } from "../cohorts/CohortProvider"
 import { PeopleContext } from "./PeopleProvider"
 import { StandupContext } from "../dashboard/Dashboard"
 import { StudentDropdown } from "./StudentDropdown.js"
-import { StudentNotePopup } from "./StudentNotePopup.js"
 import "./Student.css"
 
 export const Student = ({
@@ -15,7 +14,7 @@ export const Student = ({
     toggleStatuses, toggleTags,
     toggleNote, toggleCohorts,
     hasAssessment, assignStudentToProject,
-    showTags, showAvatars
+    showTags, showAvatars, setFeedbackDialogOpen
 }) => {
     const {
         activateStudent, getCohortStudents, untagStudent,
@@ -153,13 +152,12 @@ export const Student = ({
                         toggleNote={toggleNote}
                         assignStudentToProject={assignStudentToProject}
                         toggleTags={toggleTags}
+                        setFeedbackDialogOpen={setFeedbackDialogOpen}
                         getStudentNotes={getStudentNotes} />
 
                     <section onClick={handleClick}
                         className="student__name">{student.name}</section>
                     <section className="student__duration">{student.project_duration} days</section>
-                    <StudentNotePopup student={student} />
-
                     {
                         [2, 3, 4].includes(student.assessment_status_id)
                             ? <Tooltip content="Go to assessment repo">

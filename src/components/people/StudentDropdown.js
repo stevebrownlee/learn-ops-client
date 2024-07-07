@@ -14,7 +14,7 @@ import { CohortContext } from "../cohorts/CohortProvider.js"
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 
 export const StudentDropdown = ({
-    toggleStatuses, student,
+    toggleStatuses, student, setFeedbackDialogOpen,
     getStudentNotes, toggleNote,
     toggleTags, assignStudentToProject
 }) => {
@@ -31,7 +31,8 @@ export const StudentDropdown = ({
     const [urlsChecked, setUrlsChecked] = useState(false)
     const [person, setPerson] = useState('')
 
-    return (
+
+    return (<>
         <DropdownMenu.Root onOpenChange={(open) => {
             if (open) {
                 activateStudent(student)
@@ -54,7 +55,7 @@ export const StudentDropdown = ({
 
 
                     {
-                        activeStudent?.assessment_status_id > 2
+                        activeStudent?.assessment_status_id > 1
                             ? <>
                                 <DropdownMenu.Separator className="DropdownMenuSeparator" />
                                 <DropdownMenu.Label className="DropdownMenuLabel">Book Assessment</DropdownMenu.Label>
@@ -80,10 +81,7 @@ export const StudentDropdown = ({
                                                                 operation = setStudentCurrentAssessment(activeStudent)
                                                             } else {
                                                                 if (status.status === "Reviewed and Complete") {
-                                                                    const certification = window.confirm(`You certify that the student has been evaluated and has understanding and competency in the objectives for this book.`)
-                                                                    if (certification) {
-                                                                        operation = updateStudentCurrentAssessment(activeStudent, status.id)
-                                                                    }
+                                                                    setFeedbackDialogOpen(true)
                                                                 }
                                                                 else {
                                                                     operation = updateStudentCurrentAssessment(activeStudent, status.id)
@@ -158,5 +156,6 @@ export const StudentDropdown = ({
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>
         </DropdownMenu.Root>
+    </>
     )
 }
