@@ -1,13 +1,14 @@
 import React, { useRef, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { AssessmentRow } from "./AssessmentRow"
-import { CapstoneRow } from "./CapstoneRow"
 import { Badge, Button, Dialog, TextArea, Text, Flex, Checkbox } from '@radix-ui/themes'
 import { FilePlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
 import { Toast, deleteAllToasts } from "toaster-js"
 
 import Settings from "../../Settings.js"
 import { fetchIt } from "../../utils/Fetch.js"
+import { AssessmentRow } from "./AssessmentRow"
+import { CapstoneRow } from "./CapstoneRow"
+
 
 export const StudentInfo = ({ profile }) => {
 

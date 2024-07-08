@@ -83,9 +83,11 @@
     .dashboard--overview {
         display: block;
     }
+
     .info {
         margin-bottom: 1rem;
     }
+
     .info__body--cohort {
         display: flex;
         justify-content: space-around;
@@ -97,12 +99,15 @@
     .studentassessments {
         flex-direction: column;
     }
+
     .info__body--cohort {
         display: block;
     }
+
     .studentAccounts {
         display: block;
     }
+
     .studentAccount__header {
         margin-block-start: 1rem;
         margin-top: 1rem;
@@ -348,4 +353,14 @@
 
 .shortcut__description {
     padding: 0 0 0 1.5rem;
+}
+
+.fullCenter {
+    margin: 0;
+    padding: 10rem 0 0 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
 }
