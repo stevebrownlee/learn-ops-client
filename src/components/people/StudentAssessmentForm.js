@@ -7,6 +7,7 @@ import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { PeopleContext } from "./PeopleProvider.js"
 
 export const StudentAssessmentForm = ({ dialogOpen, setDialogOpen }) => {
+
     const [feedback, setFeedback] = React.useState('')
     const [validationMessage, setValidationMessage] = React.useState('')
     const [currentAssessment, setCurrentAssessment] = React.useState({ assessment: { objectives: [] } })
@@ -14,7 +15,7 @@ export const StudentAssessmentForm = ({ dialogOpen, setDialogOpen }) => {
     const [learningObjectivesMet, setLearningObjectivesMet] = React.useState(new Set())
 
     const { studentAssessments } = useContext(AssessmentContext)
-    const { activeStudent } = useContext(PeopleContext)
+    const { activeStudent, getCohortStudents } = useContext(PeopleContext)
 
     const validateFeedback = () => {
         if (!learningObjectivesMet.isSupersetOf(assessmentObjectives)) {
@@ -37,6 +38,9 @@ export const StudentAssessmentForm = ({ dialogOpen, setDialogOpen }) => {
             })
                 .then(() => {
                     setDialogOpen(false)
+
+                    const cohortId = JSON.parse(localStorage.getItem("activeCohort"))
+                    getCohortStudents(cohortId)
                 })
         }
         else {
