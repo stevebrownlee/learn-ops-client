@@ -1,13 +1,14 @@
 import React, { useRef, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { AssessmentRow } from "./AssessmentRow"
-import { CapstoneRow } from "./CapstoneRow"
 import { Badge, Button, Dialog, TextArea, Text, Flex, Checkbox } from '@radix-ui/themes'
 import { FilePlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
 import { Toast, deleteAllToasts } from "toaster-js"
 
 import Settings from "../../Settings.js"
 import { fetchIt } from "../../utils/Fetch.js"
+import { AssessmentRow } from "./AssessmentRow"
+import { CapstoneRow } from "./CapstoneRow"
+
 
 export const StudentInfo = ({ profile }) => {
 
@@ -125,10 +126,10 @@ export const StudentInfo = ({ profile }) => {
                             <h3 className="studentAccount__header">Book Self-Assessments</h3>
                         </section>
                         <p>
-                            You are done with the core projects in a book and need the link from an instructor to start your self-assessment project.
+                            You are done with the core projects in a book and are ready for the self-assessment.
                         </p>
                         <section>
-                            <Button color="iris" onClick={createAssessmentRepo}> Ready for Self-Assessment </Button>
+                            <Button color="iris" onClick={createAssessmentRepo}>Start Self-Assessment</Button>
                         </section>
                         <p>
                             When you have completed the project code, completed the Vocabulary &amp; Understanding questions, and pushed your repository to Github, click the button below to notify your coaches.
