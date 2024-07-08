@@ -12,7 +12,6 @@ import { LearningGoals } from "./info/Goals"
 import { Repos } from "./info/Repos"
 import { ServerAssessment } from "./info/ServerSideRequirements"
 import { StudentDashboard } from "./dashboard/student/StudentDashboard.js"
-import { RulesOfEngagment } from "./info/RulesOfEngagment.js"
 
 export const StudentViews = () => {
     return <>
@@ -23,9 +22,6 @@ export const StudentViews = () => {
                 </Route>
                 <Route exact path="/repos">
                     <Repos />
-                </Route>
-                <Route exact path="/roe">
-                    <RulesOfEngagment />
                 </Route>
                 <Route exact path="/goals">
                     <LearningGoals />

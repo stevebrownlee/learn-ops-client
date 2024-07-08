@@ -97,7 +97,6 @@ export const Callback = () => {
                 <div className="moon"></div>
                 <div className="up"></div>
             </div>
-
         </article>
     )
 }

@@ -46,7 +46,6 @@ const simpleAuth = () => {
                     localStorage.setItem("activeCohort", activeCohort)
                 } catch (error) {
                     localStorage.setItem("activeCohort", null)
-
                 }
             })
     }
