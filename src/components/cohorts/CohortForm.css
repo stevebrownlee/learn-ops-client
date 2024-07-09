@@ -3,3 +3,12 @@
     border-radius: 100%;
     padding: 0.25rem;
 }
+
+.cohortForm {
+    display: flex;
+    flex-direction: row;
+    margin: 0 auto;
+    padding: 0 5rem;
+    gap: 1rem;
+    justify-content: space-evenly;
+}

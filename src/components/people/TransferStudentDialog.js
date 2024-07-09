@@ -16,7 +16,7 @@ export const TransferStudentDialog = () => {
     const { getCohortStudents, activeStudent, getStudent } = useContext(PeopleContext)
 
     useEffect(() => {
-        getCohorts({ limit: 3 })
+        getCohorts({ active: true})
     }, [])
 
     const transferStudent = () => {
