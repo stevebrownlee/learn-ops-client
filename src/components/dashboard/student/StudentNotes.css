@@ -1,0 +1,42 @@
+.note--AssessmentReview {
+    background-color: #ffd1c1;
+    border-left: 4px solid #f8f8f8;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.note--GeneralProgress {
+    background-color: rgb(241, 252, 249);
+    border-left: 4px solid #f8f8f8;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.note--MentalHealth {
+    background-color: #f2f7c8;
+    border-left: 4px solid #f8f8f8;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.note--BehavioralIssue {
+    background-color: #fbdcfc;
+    border-left: 4px solid #f8f8f8;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+
+/*
+
+    const noteTypes = {
+        "Assessment Review": 1,
+        "General Progress": 2,
+        "Mental Health": 3,
+        "Behavioral Issue": 4
+    }
+*/
