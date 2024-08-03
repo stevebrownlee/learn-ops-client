@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
 import { Button, DropdownMenu } from '@radix-ui/themes'
-import {
-    DropdownMenuIcon,
-} from '@radix-ui/react-icons'
+import { DropdownMenuIcon } from '@radix-ui/react-icons'
 
-import { PeopleContext } from "../people/PeopleProvider"
 import Settings from "../Settings"
 import { fetchIt } from "../utils/Fetch"
+import { PeopleContext } from "../people/PeopleProvider"
 import { StudentNoteList } from "../people/StudentNoteList"
+
 import "./student/StudentNotes.css"
 
 export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
@@ -50,18 +49,14 @@ export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
     }
 
     const deleteStudentNote = (noteId) => {
-        fetchIt(`${Settings.apiHost}/notes/${noteId}`, {
-            method: "DELETE"
-        })
-            .then(() => {
-                getStudentNotes(activeStudent.id).then(setNotes).then(() => note.current.focus())
-            })
+        fetchIt(`${Settings.apiHost}/notes/${noteId}`, { method: "DELETE" })
+            .then(() => getStudentNotes(activeStudent.id).then(setNotes).then(() => note.current.focus()))
     }
 
     const showNoteTypeButtons = () => {
         const buttons = []
         for (let type of studentNoteTypes) {
-            buttons.push(<Button color={`${noteType === type.id ? "lime" : "grass"}`} size="2" style={{
+            buttons.push(<Button key={`nt-btn--${type.id}`} color={`${noteType === type.id ? "lime" : "grass"}`} size="2" style={{
                 margin: "0 0.2rem"
             }}
                 onClick={() => {
@@ -75,11 +70,27 @@ export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
     const showFilterDropdownItems = () => {
         const buttons = []
         for (let type of studentNoteTypes) {
-            buttons.push(<DropdownMenu.Item onClick={() => {
+            buttons.push(<DropdownMenu.Item key={`dd-nt--${type.id}`} onClick={() => {
                 setFilteredNotes(notes.filter(note => note.note_type.id === type.id))
             }}>{type.label}</DropdownMenu.Item>)
         }
         return buttons
+    }
+
+    const closeDialog = () => {
+        toggleNote()
+        setNotes([])
+    }
+
+    const handleNoteKeyDown = (e) => {
+        if (e.key === "Enter") {
+            if (noteType === 0) {
+                return window.alert("Please choose a note type.")
+            }
+            createStudentNote().then(getNotes).then(() => setMessage(""))
+        } else if (e.key === "Escape") {
+            closeDialog()
+        }
     }
 
     return <dialog id="dialog--note" className="dialog--note" open={noteIsOpen}>
@@ -100,7 +111,6 @@ export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
                         <DropdownMenu.Item onClick={() => setFilteredNotes(notes)}>Show all</DropdownMenu.Item>
                     </DropdownMenu.Content>
                 </DropdownMenu.Root>
-
             </div>
         </div>
 
@@ -111,36 +121,11 @@ export const StudentNoteDialog = ({ toggleNote, noteIsOpen }) => {
                 ref={note}
                 value={message}
                 onChange={e => setMessage(e.target.value)}
-                onKeyDown={
-                    e => {
-                        if (e.key === "Enter") {
-                            if (noteType === 0) {
-                                return window.alert("Please choose a note type.")
-                            }
-                            createStudentNote().then(getNotes).then(() => setMessage(""))
-                        } else if (e.key === "Escape") {
-                            toggleNote()
-                            setNotes([])
-                        }
-                    }
-                }
+                onKeyDown={handleNoteKeyDown}
             />
         </div>
 
-
-
-        <button className="fakeLink" style={{
-            position: "absolute",
-            top: "0.33em",
-            right: "0.5em",
-            fontSize: "0.75rem"
-        }}
-            id="closeBtn"
-            onClick={() => {
-                toggleNote()
-                setNotes([])
-            }}>[ close ]</button>
-
+        <button className="fakeLink noteDialog__close" id="closeBtn" onClick={closeDialog}>[ close ]</button>
         <StudentNoteList notes={filteredNotes} deleteStudentNote={deleteStudentNote} />
     </dialog>
 }

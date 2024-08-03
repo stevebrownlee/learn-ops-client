@@ -90,10 +90,8 @@ export const Student = ({
 
     const handleDoubleClick = (e) => {
         doubleClickOccurred = true
-        console.log(`Double-click triggered`)
         activateStudent(student)
         toggleNote()
-        // Perform any immediate actions required on double-click
     }
 
     const handleClick = (e) => {

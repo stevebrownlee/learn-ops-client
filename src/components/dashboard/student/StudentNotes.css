@@ -30,13 +30,9 @@
     margin-bottom: 1rem;
 }
 
-
-/*
-
-    const noteTypes = {
-        "Assessment Review": 1,
-        "General Progress": 2,
-        "Mental Health": 3,
-        "Behavioral Issue": 4
-    }
-*/
+.noteDialog__close {
+    position: absolute;
+    top: 0.33em;
+    right: 0.5em;
+    font-size: 0.75rem;
+}
