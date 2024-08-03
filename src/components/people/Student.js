@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from "react"
 
-import { Flex, Text, Button, Card, Avatar, Box, Tooltip, IconButton } from '@radix-ui/themes'
+import { Flex, Text, Card, Avatar, Box, Tooltip, IconButton } from '@radix-ui/themes'
 
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
@@ -90,10 +90,8 @@ export const Student = ({
 
     const handleDoubleClick = (e) => {
         doubleClickOccurred = true
-        console.log(`Double-click triggered`)
         activateStudent(student)
         toggleNote()
-        // Perform any immediate actions required on double-click
     }
 
     const handleClick = (e) => {

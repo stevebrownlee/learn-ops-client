@@ -333,6 +333,7 @@ button {
 .section--notes {
     height: fit-content;
     min-height: 15rem;
+    max-height: 30rem;
     overflow: scroll;
     border: 1px dotted lightsteelblue;
 }
@@ -364,10 +365,6 @@ button {
     font-size: 0.7rem;
     flex: 4;
     text-align: center;
-}
-
-.note:nth-child(even) {
-    background-color: rgb(241, 252, 249);
 }
 
 .section--proposals {

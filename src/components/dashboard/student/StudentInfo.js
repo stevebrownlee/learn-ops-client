@@ -48,11 +48,14 @@ export const StudentInfo = ({ profile }) => {
         })
             .then(res => {
                 if (res.status === 409) {
-                    fetchIt(res.headers.get("Location")).then(sa => {
-                        new Toast(
-                            `You have already started the ${sa.assessment.name} self-assessment. Its status is ${sa.status}.`,
-                            Toast.TYPE_WARNING, Toast.TIME_NORMAL
-                        )
+                    const assessmentRepoURL = res.headers.get("Location")
+                    fetchIt(assessmentRepoURL).then(sa => {
+                        let element = document.createElement("div");
+                        element.innerHTML = `<h2>Already Started</h2>
+                            <p>You have already started the ${sa.assessment.name} self-assessment. Its status is ${sa.status}.</p>
+                            <p>Here is the link <a href="${sa.url}" target="_blank">${sa.url}</a></p>`
+
+                        new Toast(element, Toast.TYPE_INFO, 6000)
                     })
                 }
                 else {
