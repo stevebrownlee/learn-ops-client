@@ -59,7 +59,6 @@ export const TransferStudentDialog = () => {
                             }
                         </Select.Content>
                     </Select.Root>
-
                 </Flex>
 
                 <Flex gap="3" mt="4" justify="end">

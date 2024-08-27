@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Button } from '@radix-ui/themes'
+import { Select, Button } from '@radix-ui/themes'
 
 import { PeopleContext } from "../people/PeopleProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
+import { CourseContext } from "../course/CourseProvider.js"
 import TeamsRepository from "./TeamsRepository"
 import { HelpIcon } from "../../svgs/Help"
 import slackLogo from "./images/slack.png"
@@ -17,22 +18,18 @@ export const WeeklyTeams = () => {
         activeCohort, activateCohort, getCohort,
         activeCohortDetails
     } = useContext(CohortContext)
+    const {
+        getProjects
+    } = useContext(CourseContext)
 
-    const initialTeamState = new Map([
-        [1, new Set()],
-        [2, new Set()],
-        [3, new Set()],
-        [4, new Set()],
-        [5, new Set()],
-        [6, new Set()]
-    ])
-
-    const [teamCount, changeCount] = useState(6)
+    const [teamCount, changeCount] = useState(3)
     const [feedback, setFeedback] = useState("")
     const [weeklyPrefix, setWeeklyPrefix] = useState("")
     const [unassignedStudents, setUnassigned] = useState([])
     const [originalTeam, trackOriginalTeam] = useState(0)
-    const [teams, updateTeams] = useState(initialTeamState)
+    const [teams, updateTeams] = useState(new Map())
+    const [groupProjects, setGroupProjects] = useState([])
+    const [chosenProject, setChosenProject] = useState("none")
 
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
@@ -40,6 +37,9 @@ export const WeeklyTeams = () => {
             activateCohort(id)
             getCohortStudents(id)
             getCohort(id)
+            getProjects().then(
+                (projects) => setGroupProjects(projects.filter(p => p.is_group_project && p.active))
+            )
         }
     }, [])
 
@@ -63,14 +63,7 @@ export const WeeklyTeams = () => {
     }
 
     useEffect(() => {
-        if (teamCount > teams.size) {
-            const newTeams = new Map(teams)
-            newTeams.set(teamCount, new Set())
-            updateTeams(newTeams)
-        }
-        else {
-            buildNewTeams()
-        }
+        buildNewTeams()
     }, [teamCount])
 
     useEffect(() => {
@@ -87,6 +80,7 @@ export const WeeklyTeams = () => {
             setUnassigned([])
         }
         else {
+            changeCount(Math.floor(cohortStudents.length / 4))
             setUnassigned(cohortStudents)
         }
 
@@ -138,6 +132,7 @@ export const WeeklyTeams = () => {
 
         try {
             for (let teamNumber = 1; teamNumber <= teamCount; teamNumber++) {
+                console.log(teamCount, teamNumber)
                 boxes.push(
                     <div id={`teambox--${teamNumber}`} key={`teambox--${teamNumber}`} className="team"
                         onDragOver={e => e.preventDefault()}
@@ -263,8 +258,13 @@ export const WeeklyTeams = () => {
             }
         )
 
-        localStorage.setItem("currentCohortTeams", JSON.stringify(convertible))
-        tagStudentTeams(tagsToAdd).then(() => getCohortStudents(activeCohort))
+        if (weeklyPrefix !== "") {
+            localStorage.setItem("currentCohortTeams", JSON.stringify(convertible))
+            tagStudentTeams(tagsToAdd).then(() => getCohortStudents(activeCohort))
+        }
+        else {
+            window.alert("Please provide a weekly team prefix")
+        }
     }
 
     return (
@@ -272,20 +272,47 @@ export const WeeklyTeams = () => {
             <h1>Weekly Teams</h1>
 
             <section className="teamsconfig">
-                <div>
-                    How many teams: <input type="number"
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    margin: "0 2rem 0 0"
+                }}>
+                    <div>How many teams:</div>
+                    <div><input type="number"
                         className="teamsconfig__count"
                         value={teamCount}
-                        onChange={e => changeCount(parseInt(e.target.value))} />
+                        onChange={e => changeCount(parseInt(e.target.value))} /></div>
                 </div>
-                <div>
-                    Slack channel prefix:
-                    <HelpIcon tip="The string of '-team-n' will be added after what you specify at the prefix. For example, if your prefix is 'c58-week2' a Slack channel of 'c58-week2-team-1' will be created." />
-                    <input type="text"
-                        className="teamsconfig__prefix"
-                        value={weeklyPrefix}
-                        placeholder="e.g. c56"
-                        onChange={e => setWeeklyPrefix(e.target.value)} />
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    margin: "0 2rem 0 0"
+                }}>
+                    <div>Slack channel prefix:</div>
+                    <div>
+                        <input type="text"
+                            className="teamsconfig__prefix"
+                            value={weeklyPrefix}
+                            placeholder="e.g. c56"
+                            onChange={e => setWeeklyPrefix(e.target.value)} />
+                    </div>
+                </div>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column"
+                }}>
+                    <div>Choose Group Project</div>
+                    <Select.Root onValueChange={setChosenProject} value={chosenProject}>
+                        <Select.Trigger />
+                        <Select.Content>
+                            <Select.Item value="none">N/A</Select.Item>
+                            {
+                                groupProjects.map(project => <Select.Item
+                                    key={`project--${project.id}`}
+                                    value={project.id}>{project.name}</Select.Item>)
+                            }
+                        </Select.Content>
+                    </Select.Root>
                 </div>
                 <div className="teamsconfig__auto">
                     <Button color="amber" onClick={() => autoAssignStudents()}>
@@ -303,7 +330,7 @@ export const WeeklyTeams = () => {
                 <div className="teamsconfig__clear">
                     <Button color="red" onClick={() => {
                         localStorage.removeItem("currentCohortTeams")
-                        changeCount(6)
+                        changeCount(Math.floor(cohortStudents.length / 4))
                         buildNewTeams()
                         setUnassigned(cohortStudents)
                         clearTeams().then(() => getCohortStudents(activeCohort))
