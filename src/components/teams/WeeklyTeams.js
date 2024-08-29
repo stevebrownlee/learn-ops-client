@@ -8,6 +8,7 @@ import TeamsRepository from "./TeamsRepository"
 import { HelpIcon } from "../../svgs/Help"
 import slackLogo from "./images/slack.png"
 import "./Teams.css"
+import { fetchIt } from "../utils/Fetch.js"
 
 export const WeeklyTeams = () => {
     const {
@@ -132,7 +133,6 @@ export const WeeklyTeams = () => {
 
         try {
             for (let teamNumber = 1; teamNumber <= teamCount; teamNumber++) {
-                console.log(teamCount, teamNumber)
                 boxes.push(
                     <div id={`teambox--${teamNumber}`} key={`teambox--${teamNumber}`} className="team"
                         onDragOver={e => e.preventDefault()}
@@ -238,29 +238,18 @@ export const WeeklyTeams = () => {
     }
 
     const saveTeams = () => {
-        const tagsToAdd = []
-
-        const serializableMap = Array.from(teams)
-        const convertible = serializableMap.map(
-            ([id, studentSet]) => {
-                for (const student of studentSet) {
-                    const studentObject = JSON.parse(student)
-                    tagsToAdd.push({
-                        "student": studentObject.id,
-                        "team": `Team ${id}`
-                    })
-                }
-
-                return {
-                    id,
-                    students: Array.from(studentSet)
-                }
-            }
-        )
-
         if (weeklyPrefix !== "") {
-            localStorage.setItem("currentCohortTeams", JSON.stringify(convertible))
-            tagStudentTeams(tagsToAdd).then(() => getCohortStudents(activeCohort))
+            for (const [key, studentSet] of teams) {
+                const studentArray = Array.from(studentSet).map(s => JSON.parse(s).id)
+                fetchIt(`http://localhost:8000/teams`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        cohort: activeCohort,
+                        students: studentArray,
+                        groupProject: chosenProject !== "none" ? chosenProject : null,
+                    })
+                })
+            }
         }
         else {
             window.alert("Please provide a weekly team prefix")
