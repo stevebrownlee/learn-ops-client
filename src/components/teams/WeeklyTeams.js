@@ -87,30 +87,6 @@ export const WeeklyTeams = () => {
 
     }, [cohortStudents])
 
-    const makeSlackChannel = (teamNumber) => {
-        // Get students
-        let studentIds = Array.from(teams.get(teamNumber))
-            .map(JSON.parse)
-            .map(student => student.id)
-
-        // Add instructors
-        studentIds = [...studentIds, ...activeCohortDetails.coaches.map(c => c.id)]
-
-        // Create channel
-        TeamsRepository.createSlackChannel(
-            `${weeklyPrefix}-team-${teamNumber}`,
-            studentIds
-        )
-            .then(res => {
-                if (res.channel.ok) {
-                    setFeedback(`Slack channel ${res.channel.channel.name} successfully created...`)
-                }
-                else {
-                    setFeedback(`Error creating Slack channel: ${res.channel.error}`)
-                }
-            })
-    }
-
     const createStudentBadge = (student) => {
         return <div key={`studentbadge--${student.id}`}
             id={JSON.stringify(student)}
@@ -161,8 +137,6 @@ export const WeeklyTeams = () => {
                         }}
                     >
                         Team {teamNumber}
-                        <img onClick={() => makeSlackChannel(teamNumber)}
-                            className="icon--slack" src={slackLogo} alt="Create Slack team channel" />
                         {
                             Array.from(teams.get(teamNumber)).map(
                                 (studentJSON) => {
@@ -240,12 +214,17 @@ export const WeeklyTeams = () => {
     const saveTeams = () => {
         if (weeklyPrefix !== "") {
             for (const [key, studentSet] of teams) {
-                const studentArray = Array.from(studentSet).map(s => JSON.parse(s).id)
+                let studentArray = Array.from(studentSet).map(s => JSON.parse(s).id)
+                // studentArray = activeCohortDetails.coaches.map(c => c.id)
+                studentArray = [...studentArray, ...activeCohortDetails.coaches.map(c => c.id)]
+
                 fetchIt(`http://localhost:8000/teams`, {
                     method: "POST",
                     body: JSON.stringify({
                         cohort: activeCohort,
                         students: studentArray,
+                        weeklyPrefix,
+                        teamIndex: key,
                         groupProject: chosenProject !== "none" ? chosenProject : null,
                     })
                 })
