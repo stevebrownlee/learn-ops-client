@@ -99,13 +99,6 @@ export const CourseProvider = (props) => {
         []
     )
 
-    const editProject = useCallback(
-        project => fetchIt(`${Settings.apiHost}/projects/${project.id}`, {
-            method: "PUT",
-            body: JSON.stringify(project)
-        }), []
-    )
-
     const editBook = useCallback(
         book => fetchIt(`${Settings.apiHost}/books/${book.id}`, {
             method: "PUT",
@@ -129,7 +122,7 @@ export const CourseProvider = (props) => {
             getCourses, courses, activeCourse, setActiveCourse,
             getCourse, getLearningObjectives, objectives, getBooks,
             getProjects, deleteProject, getActiveCourse, getProject,
-            editProject, migrateCohortToServerSide, getBook, editBook,
+            migrateCohortToServerSide, getBook, editBook,
             deleteBook, createCourse, editCourse, getBookProjects,
             deactivateCourse, capstoneSeason, setCapstoneSeason
         }} >

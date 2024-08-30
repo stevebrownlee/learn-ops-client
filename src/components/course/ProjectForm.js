@@ -13,7 +13,7 @@ export const ProjectForm = () => {
     const [courses, setCourses] = useState([])
     const [title, setTitle] = useState("")
     const [mode, setMode] = useState("create")
-    const { getBooks, getCourses, getProject, editProject, getBook } = useContext(CourseContext)
+    const { getBooks, getCourses, getProject, getBook } = useContext(CourseContext)
     const [project, updateProject] = useState({
         name: "",
         book: 0,
@@ -60,6 +60,11 @@ export const ProjectForm = () => {
 
     const constructNewProject = () => {
         fetchIt(`${Settings.apiHost}/projects`, { method: "POST", body: JSON.stringify(project) })
+            .then(() => history.push(`/books/${project.book}`))
+    }
+
+    const editProject = () => {
+        fetchIt(`${Settings.apiHost}/projects/${project.id}`, { method: "PUT", body: JSON.stringify(project) })
             .then(() => history.push(`/books/${project.book}`))
     }
 
@@ -183,7 +188,7 @@ export const ProjectForm = () => {
                             constructNewProject()
                         }
                         else {
-                            editProject(project).then(() => history.push(`/books/${project.book}`))
+                            editProject()
                         }
                     }}>Save</Button>
 
