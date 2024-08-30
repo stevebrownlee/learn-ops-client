@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Select, Button } from '@radix-ui/themes'
 
+import { fetchIt } from "../utils/Fetch.js"
+import { HelpIcon } from "../../svgs/Help"
+
 import { PeopleContext } from "../people/PeopleProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { CourseContext } from "../course/CourseProvider.js"
-import TeamsRepository from "./TeamsRepository"
-import { HelpIcon } from "../../svgs/Help"
-import slackLogo from "./images/slack.png"
 import "./Teams.css"
-import { fetchIt } from "../utils/Fetch.js"
 
 export const WeeklyTeams = () => {
     const {
