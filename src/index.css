@@ -75,18 +75,29 @@ dialog {
 }
 
 .invisible {
-    display: none;
+    display: block;
+    background-color: unset;
+    border: unset;
+    min-height: 1.5rem;
+    padding: 0.5rem;
 }
 
 .visible {
     display: block;
+    min-height: 1rem;
+    padding: 0.5rem;
 }
 
 .error {
     border: 1px dotted rgb(107, 21, 4);
-    padding: 1rem;
     background-color: rgb(255, 229, 228);
 }
+
+.feedback {
+    border: 1px dotted cadetblue;
+    background-color: rgb(218, 230, 247);
+}
+
 
 .view {
     margin: 1rem 3rem;

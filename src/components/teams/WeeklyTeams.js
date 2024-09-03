@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Select, Button } from '@radix-ui/themes'
+import { Toast } from "toaster-js"
 
 import { fetchIt } from "../utils/Fetch.js"
 import { HelpIcon } from "../../svgs/Help"
@@ -8,6 +9,7 @@ import { PeopleContext } from "../people/PeopleProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { CourseContext } from "../course/CourseProvider.js"
 import "./Teams.css"
+import Settings from "../Settings.js"
 
 export const WeeklyTeams = () => {
     const {
@@ -30,13 +32,15 @@ export const WeeklyTeams = () => {
     const [teams, updateTeams] = useState(new Map())
     const [groupProjects, setGroupProjects] = useState([])
     const [chosenProject, setChosenProject] = useState("none")
+    const [activeTeams, setActiveTeams] = useState(false)
 
     useEffect(() => {
         if (localStorage.getItem("activeCohort")) {
             const id = parseInt(localStorage.getItem("activeCohort"))
             activateCohort(id)
-            getCohortStudents(id)
+            if (cohortStudents.length === 0) getCohortStudents(id)
             getCohort(id)
+            fetchIt(`${Settings.apiHost}/teams?cohort=${id}`)
             getProjects().then(
                 (projects) => setGroupProjects(projects.filter(p => p.is_group_project && p.active))
             )
@@ -63,27 +67,27 @@ export const WeeklyTeams = () => {
     }
 
     useEffect(() => {
-        buildNewTeams()
-    }, [teamCount])
+        if (activeCohort) {
+            fetchIt(`${Settings.apiHost}/teams?cohort=${activeCohort}`)
+                .then((teams) => {
+                    if (teams.length) {
+                        const teamMap = new Map()
 
-    useEffect(() => {
-        if (localStorage.getItem("currentCohortTeams")) {
-            const storage = JSON.parse(localStorage.getItem("currentCohortTeams"))
-            const teamMap = new Map()
+                        teams.forEach((team, index) => {
+                            teamMap.set(index + 1, new Set(team.students.map(s => JSON.stringify(s))))
+                        })
 
-            storage.forEach(team => {
-                teamMap.set(team.id, new Set(team.students))
-            })
-
-            changeCount(Array.from(teamMap.entries()).length)
-            updateTeams(teamMap)
-            setUnassigned([])
+                        changeCount(teamMap.size)
+                        updateTeams(teamMap)
+                        setActiveTeams(true)
+                    }
+                    else {
+                        changeCount(Math.floor(cohortStudents.length / 4))
+                        buildNewTeams()
+                        setActiveTeams(false)
+                    }
+                })
         }
-        else {
-            changeCount(Math.floor(cohortStudents.length / 4))
-            setUnassigned(cohortStudents)
-        }
-
     }, [cohortStudents])
 
     const createStudentBadge = (student) => {
@@ -211,6 +215,20 @@ export const WeeklyTeams = () => {
     }
 
     const saveTeams = () => {
+        // Check if any of the team Map values are empty
+        for (const [key, value] of teams) {
+            if (value.size === 0) {
+                setFeedback("Error: One or more teams are empty")
+                return
+            }
+        }
+
+        // Number of teams cannot be 0
+        if (teamCount === 0) {
+            setFeedback("Error: Number of teams cannot be 0")
+            return
+        }
+
         if (weeklyPrefix !== "") {
             for (const [key, studentSet] of teams) {
                 let studentArray = Array.from(studentSet).map(s => JSON.parse(s).id)
@@ -230,13 +248,23 @@ export const WeeklyTeams = () => {
             }
         }
         else {
-            window.alert("Please provide a weekly team prefix")
+            setFeedback("Error: Please provide a Slack channel prefix")
         }
     }
 
     return (
         <article className="view">
-            <h1>Weekly Teams</h1>
+            <div style={{
+                border: "1px solid #ddd",
+                padding: "1rem",
+                margin: "1rem 0",
+                backgroundColor: "#f4f4f4",
+                borderRadius: "0.5rem",
+                fontSize: "0.9rem",
+                color: "#555"
+            }}>📝 Use this tool to design weekly student teams for the client-side course,
+                or for constructing teams for a specific group project. If building weekly
+                teams, leave N/A chosen in the group project select.</div>
 
             <section className="teamsconfig">
                 <div style={{
@@ -281,35 +309,55 @@ export const WeeklyTeams = () => {
                         </Select.Content>
                     </Select.Root>
                 </div>
-                <div className="teamsconfig__auto">
-                    <Button color="amber" onClick={() => autoAssignStudents()}>
-                        Assign By Score
-                    </Button>
-                </div>
-                <div className="teamsconfig__random">
-                    <Button color="amber" onClick={() => autoAssignStudents(true)}>
-                        Random
-                    </Button>
-                </div>
-                <div className="teamsconfig__save">
-                    <Button className="isometric-Button blue" onClick={saveTeams}> Save </Button>
-                </div>
-                <div className="teamsconfig__clear">
-                    <Button color="red" onClick={() => {
-                        localStorage.removeItem("currentCohortTeams")
-                        changeCount(Math.floor(cohortStudents.length / 4))
-                        buildNewTeams()
-                        setUnassigned(cohortStudents)
-                        clearTeams().then(() => getCohortStudents(activeCohort))
-                    }}>
-                        Clear
-                    </Button>
-                </div>
+                <div className="teamsconfig__auto"> </div>
+
+
+                {
+                    activeTeams
+                        ? <div className="teamsconfig__clear">
+                            <Button color="red" onClick={() => {
+                                fetchIt(`${Settings.apiHost}/teams/1?cohort=${activeCohort}`, {
+                                    method: "DELETE"
+                                })
+                                    .then(() => {
+                                        changeCount(Math.floor(cohortStudents.length / 4))
+                                        buildNewTeams()
+                                        setUnassigned(cohortStudents)
+                                        setActiveTeams(false)
+                                        setFeedback("Teams deleted")
+                                    })
+                            }}>
+                                Delete Current Teams
+                            </Button>
+                        </div>
+                        : <>
+                            <div className="teamsconfig__auto teamsconfig__random">
+                                <Button color="amber" onClick={() => autoAssignStudents(true)}>
+                                    Random
+                                </Button>
+                            </div>
+                            <div className="teamsconfig__save">
+                                <Button color="blue" onClick={saveTeams}> Save </Button>
+                            </div>
+                            <div className="teamsconfig__clear">
+                                <Button color="gray" onClick={() => {
+                                    changeCount(Math.floor(cohortStudents.length / 4))
+                                    buildNewTeams()
+                                    setUnassigned(cohortStudents)
+                                }}>
+                                    Clear Choices
+                                </Button>
+                            </div>
+                        </>
+
+                }
+
+
             </section>
 
             <hr />
 
-            <div className={`${feedback.includes("Error") ? "error" : "feedback"} ${feedback === "" ? "invisible" : "visible"}`}>
+            <div className={`${feedback === "" ? "invisible" : "visible"} ${feedback === "" ? "" : feedback.includes("Error") ? "error" : "feedback"} `}>
                 {feedback}
             </div>
 
