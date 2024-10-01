@@ -67,6 +67,10 @@ export const WeeklyTeams = () => {
     }
 
     useEffect(() => {
+        buildNewTeams()
+    }, [teamCount])
+
+    useEffect(() => {
         if (activeCohort) {
             fetchIt(`${Settings.apiHost}/teams?cohort=${activeCohort}`)
                 .then((teams) => {
@@ -82,8 +86,7 @@ export const WeeklyTeams = () => {
                         setActiveTeams(true)
                     }
                     else {
-                        changeCount(Math.floor(cohortStudents.length / 4))
-                        buildNewTeams()
+                        changeCount(Math.ceil(cohortStudents.length / 4))
                         setActiveTeams(false)
                     }
                 })
@@ -232,8 +235,9 @@ export const WeeklyTeams = () => {
         if (weeklyPrefix !== "") {
             for (const [key, studentSet] of teams) {
                 let studentArray = Array.from(studentSet).map(s => JSON.parse(s).id)
-                // studentArray = activeCohortDetails.coaches.map(c => c.id)
-                studentArray = [...studentArray, ...activeCohortDetails.coaches.map(c => c.id)]
+                const coaches = activeCohortDetails.coaches.map(c => c.id)
+                studentArray = coaches  // Use this to add coaches to the team only for testing
+                // studentArray = [...studentArray, ...coaches]
 
                 fetchIt(`http://localhost:8000/teams`, {
                     method: "POST",
@@ -288,7 +292,7 @@ export const WeeklyTeams = () => {
                         <input type="text"
                             className="teamsconfig__prefix"
                             value={weeklyPrefix}
-                            placeholder="e.g. c56"
+                            placeholder=""
                             onChange={e => setWeeklyPrefix(e.target.value)} />
                     </div>
                 </div>
@@ -311,7 +315,6 @@ export const WeeklyTeams = () => {
                 </div>
                 <div className="teamsconfig__auto"> </div>
 
-
                 {
                     activeTeams
                         ? <div className="teamsconfig__clear">
@@ -320,7 +323,7 @@ export const WeeklyTeams = () => {
                                     method: "DELETE"
                                 })
                                     .then(() => {
-                                        changeCount(Math.floor(cohortStudents.length / 4))
+                                        changeCount(Math.ceil(cohortStudents.length / 4))
                                         buildNewTeams()
                                         setUnassigned(cohortStudents)
                                         setActiveTeams(false)
@@ -340,12 +343,12 @@ export const WeeklyTeams = () => {
                                 <Button color="blue" onClick={saveTeams}> Save </Button>
                             </div>
                             <div className="teamsconfig__clear">
-                                <Button color="gray" onClick={() => {
-                                    changeCount(Math.floor(cohortStudents.length / 4))
+                                <Button color="ruby" onClick={() => {
+                                    changeCount(Math.ceil(cohortStudents.length / 4))
                                     buildNewTeams()
                                     setUnassigned(cohortStudents)
                                 }}>
-                                    Clear Choices
+                                    Reset
                                 </Button>
                             </div>
                         </>
