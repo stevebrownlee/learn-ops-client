@@ -59,7 +59,7 @@ export const PeopleProvider = (props) => {
     }, [])
 
     const tagStudentTeams = useCallback((combos) => {
-        return fetchIt(`${Settings.apiHost}/students/teams`, {
+        return fetchIt(`${Settings.apiHost}/students/cohortteams`, {
             method: "POST",
             body: JSON.stringify({ combos })
         })
