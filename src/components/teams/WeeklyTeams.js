@@ -21,19 +21,18 @@ export const WeeklyTeams = () => {
         activeCohort, activateCohort, getCohort,
         activeCohortDetails
     } = useContext(CohortContext)
-    const {
-        getProjects
-    } = useContext(CourseContext)
+    const { getProjects } = useContext(CourseContext)
 
+    const [activeTeams, setActiveTeams] = useState(false)
     const [teamCount, changeCount] = useState(0)
+    const [teams, setTeams] = useState(new Map())
+    const [unassignedStudents, setUnassigned] = useState([])
+
     const [feedback, setFeedback] = useState("")
     const [weeklyPrefix, setWeeklyPrefix] = useState("")
-    const [unassignedStudents, setUnassigned] = useState([])
     const [originalTeam, trackOriginalTeam] = useState(0)
-    const [teams, setTeams] = useState(new Map())
     const [groupProjects, setGroupProjects] = useState([])
     const [chosenProject, setChosenProject] = useState("none")
-    const [activeTeams, setActiveTeams] = useState(false)
     const [loading, setLoading] = useState(true)
 
 
@@ -46,6 +45,9 @@ export const WeeklyTeams = () => {
             }
         }
 
+        /*
+            TODO: Update the API to return only active group projects by supporting query params
+        */
         getProjects().then(
             (projects) => setGroupProjects(projects.filter(p => p.is_group_project && p.active))
         )
@@ -58,29 +60,36 @@ export const WeeklyTeams = () => {
         }
     }, [feedback])
 
-    useEffect(() => {
-        console.log(teamCount)
-        if (loading && teamCount > 0) {
-            setLoading(false)
-        }
-
-        if (!activeTeams) {
-            resetToEmptyTeams()
-        }
-     }, [teamCount])
-
     useEffect(() => { activeCohort && retrieveTeams() }, [activeCohort])
 
 
     const resetToEmptyTeams = () => {
-        const newTeams = new Map()
 
-        for (let i = 1; i <= teamCount; i++) {
-            newTeams.set(i, new Set())
+        const renderConstructionUI = (cohortStudents) => {
+            const newTeams = new Map()
+            const numberOfTeams = Math.ceil(cohortStudents.length / 4)
+
+            setUnassigned(cohortStudents)
+            changeCount(numberOfTeams)
+
+            for (let i = 1; i <= numberOfTeams; i++) {
+                newTeams.set(i, new Set())
+            }
+
+            setTeams(newTeams)
+            setActiveTeams(false)
+            setLoading(false)
         }
 
-        setUnassigned(cohortStudents)
-        setTeams(newTeams)
+        if (cohortStudents.length === 0) {
+            getCohortStudents(activeCohort).then(() => {
+                renderConstructionUI(cohortStudents)
+            })
+        }
+        else {
+            renderConstructionUI(cohortStudents)
+        }
+
     }
 
     const retrieveTeams = async () => {
@@ -93,19 +102,12 @@ export const WeeklyTeams = () => {
                 teamMap.set(index + 1, new Set(team.students.map(s => JSON.stringify(s))))
             })
 
-            changeCount(teamMap.size)
-            setActiveTeams(true)
             setTeams(teamMap)
-            setUnassigned([])
+            setLoading(false)
+            setActiveTeams(true)
         }
         else {
-            if (cohortStudents.length === 0) {
-                getCohortStudents(activeCohort)
-            }
-            else {
-                changeCount(Math.ceil(cohortStudents.length / 4))
-                setActiveTeams(false)
-            }
+            resetToEmptyTeams()
         }
     }
 
@@ -308,8 +310,6 @@ export const WeeklyTeams = () => {
                 teams, leave N/A chosen in the group project select.</div>
 
             <section className="teamsconfig">
-
-
                 {
                     activeTeams
                         ? <div className="teamsconfig__clear">
@@ -318,10 +318,7 @@ export const WeeklyTeams = () => {
                                     method: "DELETE"
                                 })
                                     .then(() => {
-                                        changeCount(Math.ceil(cohortStudents.length / 4))
                                         resetToEmptyTeams()
-                                        setUnassigned(cohortStudents)
-                                        setActiveTeams(false)
                                         setFeedback("Teams deleted")
                                     })
                             }}>
@@ -381,9 +378,7 @@ export const WeeklyTeams = () => {
                             </div>
                             <div className="teamsconfig__clear">
                                 <Button color="ruby" onClick={() => {
-                                    changeCount(Math.ceil(cohortStudents.length / 4))
                                     resetToEmptyTeams()
-                                    setUnassigned(cohortStudents)
                                 }}>
                                     Reset
                                 </Button>
