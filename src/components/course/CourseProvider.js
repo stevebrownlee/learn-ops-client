@@ -70,6 +70,8 @@ export const CourseProvider = (props) => {
 
     const getBookProjects = (bookId) => fetchIt(`${Settings.apiHost}/projects?bookId=${bookId}`)
 
+    const getGroupProjects = () => fetchIt(`${Settings.apiHost}/projects?group=true`)
+
     const getProject = (id) => fetchIt(`${Settings.apiHost}/projects/${id}?&expand=book&expand=course`)
 
     const deleteProject = id => fetchIt(`${Settings.apiHost}/projects/${id}`, { method: "DELETE" })
@@ -87,7 +89,8 @@ export const CourseProvider = (props) => {
             getProjects, deleteProject, getActiveCourse, getProject,
             migrateCohortToServerSide, getBook, editBook,
             deleteBook, createCourse, editCourse, getBookProjects,
-            deactivateCourse, capstoneSeason, setCapstoneSeason
+            deactivateCourse, capstoneSeason, setCapstoneSeason,
+            getGroupProjects
         }} >
             {props.children}
         </CourseContext.Provider>

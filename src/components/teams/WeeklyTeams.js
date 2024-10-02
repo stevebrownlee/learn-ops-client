@@ -2,15 +2,16 @@ import React, { useContext, useEffect, useState } from "react"
 import { Select, Button } from '@radix-ui/themes'
 import { Toast } from "toaster-js"
 
+import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 import { HelpIcon } from "../../svgs/Help"
+import { Loading } from "../Loading.js"
 
 import { PeopleContext } from "../people/PeopleProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
 import { CourseContext } from "../course/CourseProvider.js"
+
 import "./Teams.css"
-import Settings from "../Settings.js"
-import { Loading } from "../Loading.js"
 
 export const WeeklyTeams = () => {
     const {
@@ -21,7 +22,7 @@ export const WeeklyTeams = () => {
         activeCohort, activateCohort, getCohort,
         activeCohortDetails
     } = useContext(CohortContext)
-    const { getProjects } = useContext(CourseContext)
+    const { getGroupProjects } = useContext(CourseContext)
 
     const [activeTeams, setActiveTeams] = useState(false)
     const [teamCount, changeCount] = useState(0)
@@ -48,7 +49,7 @@ export const WeeklyTeams = () => {
         /*
             TODO: Update the API to return only active group projects by supporting query params
         */
-        getProjects().then(
+        getGroupProjects().then(
             (projects) => setGroupProjects(projects.filter(p => p.is_group_project && p.active))
         )
     }, [])
@@ -61,20 +62,24 @@ export const WeeklyTeams = () => {
     }, [feedback])
 
     useEffect(() => { activeCohort && retrieveTeams() }, [activeCohort])
+    useEffect(() => { teamCount > 0 && !activeTeams && buildEmptyTeams(teamCount) }, [teamCount])
+    useEffect(() => { console.log(teamCount) }, [teamCount])
     useEffect(() => { console.log(teams) }, [teams])
 
+    const buildEmptyTeams = () => {
+        const newTeams = new Map()
+        for (let i = 1; i <= teamCount; i++) {
+            newTeams.set(i, new Set())
+        }
+        setTeams(newTeams)
+    }
 
     const resetToEmptyTeams = () => {
 
         const renderConstructionUI = (cohortStudents) => {
-            const newTeams = new Map()
             const numberOfTeams = Math.ceil(cohortStudents.length / 4)
+            buildEmptyTeams()
 
-            for (let i = 1; i <= numberOfTeams; i++) {
-                newTeams.set(i, new Set())
-            }
-
-            setTeams(newTeams)
             setActiveTeams(false)
             setUnassigned(cohortStudents)
             setLoading(false)
@@ -105,6 +110,7 @@ export const WeeklyTeams = () => {
             setTeams(teamMap)
             setLoading(false)
             setActiveTeams(true)
+            changeCount(teams.length)
         }
         else {
             resetToEmptyTeams()
@@ -257,7 +263,6 @@ export const WeeklyTeams = () => {
 
             for (const [key, studentSet] of teams) {
                 let studentArray = Array.from(studentSet).map(s => JSON.parse(s).id)
-                debugger
                 const coaches = activeCohortDetails.coaches.map(c => c.id)
                 // studentArray = coaches  // Use this to add coaches to the team only for testing
                 studentArray = [...studentArray, ...coaches]
