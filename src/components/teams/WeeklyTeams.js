@@ -39,7 +39,6 @@ export const WeeklyTeams = () => {
 
     useEffect(() => {
         if (!activeCohort) {
-            console.log("No active cohort")
             if (localStorage.getItem("activeCohort")) {
                 const id = parseInt(localStorage.getItem("activeCohort"))
                 activateCohort(id)
@@ -63,8 +62,6 @@ export const WeeklyTeams = () => {
 
     useEffect(() => { activeCohort && retrieveTeams() }, [activeCohort])
     useEffect(() => { teamCount > 0 && !activeTeams && buildEmptyTeams(teamCount) }, [teamCount])
-    useEffect(() => { console.log(teamCount) }, [teamCount])
-    useEffect(() => { console.log(teams) }, [teams])
 
     const buildEmptyTeams = () => {
         const newTeams = new Map()
@@ -75,7 +72,6 @@ export const WeeklyTeams = () => {
     }
 
     const resetToEmptyTeams = () => {
-
         const renderConstructionUI = (cohortStudents) => {
             const numberOfTeams = Math.ceil(cohortStudents.length / 4)
             buildEmptyTeams()
@@ -94,7 +90,6 @@ export const WeeklyTeams = () => {
         else {
             renderConstructionUI(cohortStudents)
         }
-
     }
 
     const retrieveTeams = async () => {
@@ -333,23 +328,20 @@ export const WeeklyTeams = () => {
                             </Button>
                         </div>
                         : <>
-                            <div style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                margin: "0 2rem 0 0"
-                            }}>
+                            <div className="teamsconfig__option">
                                 <div>How many teams:</div>
                                 <div><input type="number"
                                     className="teamsconfig__count"
                                     value={teamCount}
                                     onChange={e => changeCount(parseInt(e.target.value))} /></div>
                             </div>
-                            <div style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                margin: "0 2rem 0 0"
-                            }}>
-                                <div>Slack channel prefix:</div>
+                            <div className="teamsconfig__option">
+                                <div style={{
+                                    display: "flex",
+                                    flexDirection: "column"
+                                }}>
+                                    <div>Slack channel prefix:</div>
+                                </div>
                                 <div>
                                     <input type="text"
                                         className="teamsconfig__prefix"
@@ -357,6 +349,9 @@ export const WeeklyTeams = () => {
                                         placeholder=""
                                         onChange={e => setWeeklyPrefix(e.target.value)} />
                                 </div>
+                                <div style={{ fontSize: "0.7rem", margin: "0.3rem 0 0 0" }}>Will be suffixed with</div>
+                                    <div style={{ fontSize: "0.7rem", color: "firebrick" }}>-[cohort number]-[random id]</div>
+
                             </div>
                             <div style={{
                                 display: "flex",
