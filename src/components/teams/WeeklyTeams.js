@@ -10,6 +10,7 @@ import { CohortContext } from "../cohorts/CohortProvider"
 import { CourseContext } from "../course/CourseProvider.js"
 import "./Teams.css"
 import Settings from "../Settings.js"
+import { Loading } from "../Loading.js"
 
 export const WeeklyTeams = () => {
     const {
@@ -29,13 +30,49 @@ export const WeeklyTeams = () => {
     const [weeklyPrefix, setWeeklyPrefix] = useState("")
     const [unassignedStudents, setUnassigned] = useState([])
     const [originalTeam, trackOriginalTeam] = useState(0)
-    const [teams, updateTeams] = useState(new Map())
+    const [teams, setTeams] = useState(new Map())
     const [groupProjects, setGroupProjects] = useState([])
     const [chosenProject, setChosenProject] = useState("none")
     const [activeTeams, setActiveTeams] = useState(false)
+    const [loading, setLoading] = useState(true)
 
 
-    const buildNewTeams = () => {
+    useEffect(() => {
+        if (!activeCohort) {
+            console.log("No active cohort")
+            if (localStorage.getItem("activeCohort")) {
+                const id = parseInt(localStorage.getItem("activeCohort"))
+                activateCohort(id)
+            }
+        }
+
+        getProjects().then(
+            (projects) => setGroupProjects(projects.filter(p => p.is_group_project && p.active))
+        )
+    }, [])
+
+
+    useEffect(() => {
+        if (feedback !== "") {
+            setTimeout(() => setFeedback(""), 3000);
+        }
+    }, [feedback])
+
+    useEffect(() => {
+        console.log(teamCount)
+        if (loading && teamCount > 0) {
+            setLoading(false)
+        }
+
+        if (!activeTeams) {
+            resetToEmptyTeams()
+        }
+     }, [teamCount])
+
+    useEffect(() => { activeCohort && retrieveTeams() }, [activeCohort])
+
+
+    const resetToEmptyTeams = () => {
         const newTeams = new Map()
 
         for (let i = 1; i <= teamCount; i++) {
@@ -43,60 +80,34 @@ export const WeeklyTeams = () => {
         }
 
         setUnassigned(cohortStudents)
-        updateTeams(newTeams)
+        setTeams(newTeams)
     }
 
-    const retrieveTeams = () => {
-        fetchIt(`${Settings.apiHost}/teams?cohort=${activeCohort}`)
-            .then((teams) => {
-                if (teams.length) {
-                    const teamMap = new Map()
+    const retrieveTeams = async () => {
+        const teams = await fetchIt(`${Settings.apiHost}/teams?cohort=${activeCohort}`)
 
-                    teams.forEach((team, index) => {
-                        teamMap.set(index + 1, new Set(team.students.map(s => JSON.stringify(s))))
-                    })
+        if (teams.length) {
+            const teamMap = new Map()
 
-                    changeCount(teamMap.size)
-                    updateTeams(teamMap)
-                    setActiveTeams(true)
-                }
-                else {
-                    changeCount(Math.ceil(cohortStudents.length / 4))
-                    setActiveTeams(false)
-                }
+            teams.forEach((team, index) => {
+                teamMap.set(index + 1, new Set(team.students.map(s => JSON.stringify(s))))
             })
+
+            changeCount(teamMap.size)
+            setActiveTeams(true)
+            setTeams(teamMap)
+            setUnassigned([])
+        }
+        else {
+            if (cohortStudents.length === 0) {
+                getCohortStudents(activeCohort)
+            }
+            else {
+                changeCount(Math.ceil(cohortStudents.length / 4))
+                setActiveTeams(false)
+            }
+        }
     }
-
-    useEffect(() => {
-        if (localStorage.getItem("activeCohort")) {
-            const id = parseInt(localStorage.getItem("activeCohort"))
-            activateCohort(id)
-            if (cohortStudents.length === 0) getCohortStudents(id)
-            getCohort(id)
-            fetchIt(`${Settings.apiHost}/teams?cohort=${id}`)
-            getProjects().then(
-                (projects) => setGroupProjects(projects.filter(p => p.is_group_project && p.active))
-            )
-        }
-    }, [])
-
-    useEffect(() => {
-        if (feedback !== "") {
-            setTimeout(() => {
-                setFeedback("")
-            }, 3000);
-        }
-    }, [feedback])
-
-    useEffect(() => {
-        buildNewTeams()
-    }, [teamCount])
-
-    useEffect(() => {
-        if (activeCohort) {
-            retrieveTeams()
-        }
-    }, [cohortStudents])
 
     const createStudentBadge = (student) => {
         return <div key={`studentbadge--${student.id}`}
@@ -143,7 +154,7 @@ export const WeeklyTeams = () => {
                                     copy.get(originalTeam).delete(data)
                                 }
 
-                                updateTeams(copy)
+                                setTeams(copy)
                             }
                         }}
                     >
@@ -203,7 +214,7 @@ export const WeeklyTeams = () => {
         }
 
         setUnassigned([])
-        updateTeams(teamsCopy)
+        setTeams(teamsCopy)
     }
 
     const clearTeams = () => {
@@ -244,8 +255,8 @@ export const WeeklyTeams = () => {
             for (const [key, studentSet] of teams) {
                 let studentArray = Array.from(studentSet).map(s => JSON.parse(s).id)
                 const coaches = activeCohortDetails.coaches.map(c => c.id)
-                studentArray = coaches  // Use this to add coaches to the team only for testing
-                // studentArray = [...studentArray, ...coaches]
+                // studentArray = coaches  // Use this to add coaches to the team only for testing
+                studentArray = [...studentArray, ...coaches]
 
                 fetchPromises.push(
                     fetchIt(`http://localhost:8000/teams`, {
@@ -278,6 +289,10 @@ export const WeeklyTeams = () => {
         }
     }
 
+    if (loading) {
+        return <Loading />
+    }
+
     return (
         <article className="view">
             <div style={{
@@ -304,7 +319,7 @@ export const WeeklyTeams = () => {
                                 })
                                     .then(() => {
                                         changeCount(Math.ceil(cohortStudents.length / 4))
-                                        buildNewTeams()
+                                        resetToEmptyTeams()
                                         setUnassigned(cohortStudents)
                                         setActiveTeams(false)
                                         setFeedback("Teams deleted")
@@ -367,7 +382,7 @@ export const WeeklyTeams = () => {
                             <div className="teamsconfig__clear">
                                 <Button color="ruby" onClick={() => {
                                     changeCount(Math.ceil(cohortStudents.length / 4))
-                                    buildNewTeams()
+                                    resetToEmptyTeams()
                                     setUnassigned(cohortStudents)
                                 }}>
                                     Reset
