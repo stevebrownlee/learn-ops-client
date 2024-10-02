@@ -82,8 +82,8 @@ export const WeeklyTeams = () => {
         }
 
         if (cohortStudents.length === 0) {
-            getCohortStudents(activeCohort).then(() => {
-                renderConstructionUI(cohortStudents)
+            getCohortStudents(activeCohort).then((students) => {
+                renderConstructionUI(students)
             })
         }
         else {

@@ -24,7 +24,10 @@ export const PeopleProvider = (props) => {
 
     const getCohortStudents = useCallback((cohortId) => {
         return fetchIt(`${Settings.apiHost}/students?cohort=${cohortId}`)
-            .then(data => setCohortStudents(data))
+            .then(data => {
+                setCohortStudents(data)
+                return data
+            })
     }, [])
 
     const getStudentCoreSkills = useCallback((studentId) => {
