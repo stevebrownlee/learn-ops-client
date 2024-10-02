@@ -61,6 +61,7 @@ export const WeeklyTeams = () => {
     }, [feedback])
 
     useEffect(() => { activeCohort && retrieveTeams() }, [activeCohort])
+    useEffect(() => { console.log(teams) }, [teams])
 
 
     const resetToEmptyTeams = () => {
@@ -69,16 +70,15 @@ export const WeeklyTeams = () => {
             const newTeams = new Map()
             const numberOfTeams = Math.ceil(cohortStudents.length / 4)
 
-            setUnassigned(cohortStudents)
-            changeCount(numberOfTeams)
-
             for (let i = 1; i <= numberOfTeams; i++) {
                 newTeams.set(i, new Set())
             }
 
             setTeams(newTeams)
             setActiveTeams(false)
+            setUnassigned(cohortStudents)
             setLoading(false)
+            changeCount(numberOfTeams)
         }
 
         if (cohortStudents.length === 0) {
@@ -240,6 +240,7 @@ export const WeeklyTeams = () => {
         for (const [key, value] of teams) {
             if (value.size === 0) {
                 setFeedback("Error: One or more teams are empty")
+                console.log(teams)
                 return
             }
         }
@@ -256,6 +257,7 @@ export const WeeklyTeams = () => {
 
             for (const [key, studentSet] of teams) {
                 let studentArray = Array.from(studentSet).map(s => JSON.parse(s).id)
+                debugger
                 const coaches = activeCohortDetails.coaches.map(c => c.id)
                 // studentArray = coaches  // Use this to add coaches to the team only for testing
                 studentArray = [...studentArray, ...coaches]
@@ -275,7 +277,7 @@ export const WeeklyTeams = () => {
             }
 
             // Wait for all fetch promises to resolve. If a 201 is not returned from any of the fetches, set feedback to error
-            Promise.allSettled(fetchPromises)
+            fetchPromises.length > 0 && Promise.allSettled(fetchPromises)
                 .then((results) => {
                     const failed = results.filter(r => r.status === "rejected")
                     if (failed.length) {
