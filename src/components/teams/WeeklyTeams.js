@@ -1,11 +1,16 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Button } from '@radix-ui/themes'
+import { Select, Button } from '@radix-ui/themes'
+import { Toast } from "toaster-js"
+
+import Settings from "../Settings.js"
+import { fetchIt } from "../utils/Fetch.js"
+import { HelpIcon } from "../../svgs/Help"
+import { Loading } from "../Loading.js"
 
 import { PeopleContext } from "../people/PeopleProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
-import TeamsRepository from "./TeamsRepository"
-import { HelpIcon } from "../../svgs/Help"
-import slackLogo from "./images/slack.png"
+import { CourseContext } from "../course/CourseProvider.js"
+
 import "./Teams.css"
 
 export const WeeklyTeams = () => {
@@ -17,103 +22,94 @@ export const WeeklyTeams = () => {
         activeCohort, activateCohort, getCohort,
         activeCohortDetails
     } = useContext(CohortContext)
+    const { getGroupProjects } = useContext(CourseContext)
 
-    const initialTeamState = new Map([
-        [1, new Set()],
-        [2, new Set()],
-        [3, new Set()],
-        [4, new Set()],
-        [5, new Set()],
-        [6, new Set()]
-    ])
+    const [activeTeams, setActiveTeams] = useState(false)
+    const [teamCount, changeCount] = useState(0)
+    const [teams, setTeams] = useState(new Map())
+    const [unassignedStudents, setUnassigned] = useState([])
 
-    const [teamCount, changeCount] = useState(6)
     const [feedback, setFeedback] = useState("")
     const [weeklyPrefix, setWeeklyPrefix] = useState("")
-    const [unassignedStudents, setUnassigned] = useState([])
     const [originalTeam, trackOriginalTeam] = useState(0)
-    const [teams, updateTeams] = useState(initialTeamState)
+    const [groupProjects, setGroupProjects] = useState([])
+    const [chosenProject, setChosenProject] = useState("none")
+    const [loading, setLoading] = useState(true)
+
 
     useEffect(() => {
-        if (localStorage.getItem("activeCohort")) {
-            const id = parseInt(localStorage.getItem("activeCohort"))
-            activateCohort(id)
-            getCohortStudents(id)
-            getCohort(id)
+        if (!activeCohort) {
+            if (localStorage.getItem("activeCohort")) {
+                const id = parseInt(localStorage.getItem("activeCohort"))
+                activateCohort(id)
+            }
         }
+
+        /*
+            TODO: Update the API to return only active group projects by supporting query params
+        */
+        getGroupProjects().then(
+            (projects) => setGroupProjects(projects.filter(p => p.is_group_project && p.active))
+        )
     }, [])
+
 
     useEffect(() => {
         if (feedback !== "") {
-            setTimeout(() => {
-                setFeedback("")
-            }, 3000);
+            setTimeout(() => setFeedback(""), 3000);
         }
     }, [feedback])
 
-    const buildNewTeams = () => {
-        const newTeams = new Map()
+    useEffect(() => { activeCohort && retrieveTeams() }, [activeCohort])
+    useEffect(() => { teamCount > 0 && !activeTeams && buildEmptyTeams(teamCount) }, [teamCount])
 
+    const buildEmptyTeams = () => {
+        const newTeams = new Map()
         for (let i = 1; i <= teamCount; i++) {
             newTeams.set(i, new Set())
         }
-
-        setUnassigned(cohortStudents)
-        updateTeams(newTeams)
+        setTeams(newTeams)
     }
 
-    useEffect(() => {
-        if (teamCount > teams.size) {
-            const newTeams = new Map(teams)
-            newTeams.set(teamCount, new Set())
-            updateTeams(newTeams)
+    const resetToEmptyTeams = () => {
+        const renderConstructionUI = (cohortStudents) => {
+            const numberOfTeams = Math.ceil(cohortStudents.length / 4)
+            buildEmptyTeams()
+
+            setActiveTeams(false)
+            setUnassigned(cohortStudents)
+            setLoading(false)
+            changeCount(numberOfTeams)
+        }
+
+        if (cohortStudents.length === 0) {
+            getCohortStudents(activeCohort).then((students) => {
+                renderConstructionUI(students)
+            })
         }
         else {
-            buildNewTeams()
+            renderConstructionUI(cohortStudents)
         }
-    }, [teamCount])
+    }
 
-    useEffect(() => {
-        if (localStorage.getItem("currentCohortTeams")) {
-            const storage = JSON.parse(localStorage.getItem("currentCohortTeams"))
+    const retrieveTeams = async () => {
+        const teams = await fetchIt(`${Settings.apiHost}/teams?cohort=${activeCohort}`)
+
+        if (teams.length) {
             const teamMap = new Map()
 
-            storage.forEach(team => {
-                teamMap.set(team.id, new Set(team.students))
+            teams.forEach((team, index) => {
+                teamMap.set(index + 1, new Set(team.students.map(s => JSON.stringify(s))))
             })
 
-            changeCount(Array.from(teamMap.entries()).length)
-            updateTeams(teamMap)
-            setUnassigned([])
+            setTeams(teamMap)
+            setLoading(false)
+            setActiveTeams(true)
+            changeCount(teams.length)
         }
         else {
-            setUnassigned(cohortStudents)
+            resetToEmptyTeams()
         }
-
-    }, [cohortStudents])
-
-    const makeSlackChannel = (teamNumber) => {
-        // Get students
-        let studentIds = Array.from(teams.get(teamNumber))
-            .map(JSON.parse)
-            .map(student => student.id)
-
-        // Add instructors
-        studentIds = [...studentIds, ...activeCohortDetails.coaches.map(c => c.id)]
-
-        // Create channel
-        TeamsRepository.createSlackChannel(
-            `${weeklyPrefix}-team-${teamNumber}`,
-            studentIds
-        )
-            .then(res => {
-                if (res.channel.ok) {
-                    setFeedback(`Slack channel ${res.channel.channel.name} successfully created...`)
-                }
-                else {
-                    setFeedback(`Error creating Slack channel: ${res.channel.error}`)
-                }
-            })
     }
 
     const createStudentBadge = (student) => {
@@ -161,13 +157,11 @@ export const WeeklyTeams = () => {
                                     copy.get(originalTeam).delete(data)
                                 }
 
-                                updateTeams(copy)
+                                setTeams(copy)
                             }
                         }}
                     >
                         Team {teamNumber}
-                        <img onClick={() => makeSlackChannel(teamNumber)}
-                            className="icon--slack" src={slackLogo} alt="Create Slack team channel" />
                         {
                             Array.from(teams.get(teamNumber)).map(
                                 (studentJSON) => {
@@ -223,7 +217,7 @@ export const WeeklyTeams = () => {
         }
 
         setUnassigned([])
-        updateTeams(teamsCopy)
+        setTeams(teamsCopy)
     }
 
     const clearTeams = () => {
@@ -242,80 +236,162 @@ export const WeeklyTeams = () => {
         return Promise.allSettled(tagsToDelete)
     }
 
-    const saveTeams = () => {
-        const tagsToAdd = []
-
-        const serializableMap = Array.from(teams)
-        const convertible = serializableMap.map(
-            ([id, studentSet]) => {
-                for (const student of studentSet) {
-                    const studentObject = JSON.parse(student)
-                    tagsToAdd.push({
-                        "student": studentObject.id,
-                        "team": `Team ${id}`
-                    })
-                }
-
-                return {
-                    id,
-                    students: Array.from(studentSet)
-                }
+    const saveTeams = async () => {
+        // Check if any of the team Map values are empty
+        for (const [key, value] of teams) {
+            if (value.size === 0) {
+                setFeedback("Error: One or more teams are empty")
+                console.log(teams)
+                return
             }
-        )
+        }
 
-        localStorage.setItem("currentCohortTeams", JSON.stringify(convertible))
-        tagStudentTeams(tagsToAdd).then(() => getCohortStudents(activeCohort))
+        // Number of teams cannot be 0
+        if (teamCount === 0) {
+            setFeedback("Error: Number of teams cannot be 0")
+            return
+        }
+
+        if (weeklyPrefix !== "") {
+            // Create an array to hold each of the fetch promises defined below
+            const fetchPromises = []
+
+            for (const [key, studentSet] of teams) {
+                let studentArray = Array.from(studentSet).map(s => JSON.parse(s).id)
+                const coaches = activeCohortDetails.coaches.map(c => c.id)
+                // studentArray = coaches  // Use this to add coaches to the team only for testing
+                studentArray = [...studentArray, ...coaches]
+
+                fetchPromises.push(
+                    fetchIt(`http://localhost:8000/teams`, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            cohort: activeCohort,
+                            students: studentArray,
+                            weeklyPrefix,
+                            teamIndex: key,
+                            groupProject: chosenProject !== "none" ? chosenProject : null,
+                        })
+                    })
+                )
+            }
+
+            // Wait for all fetch promises to resolve. If a 201 is not returned from any of the fetches, set feedback to error
+            fetchPromises.length > 0 && Promise.allSettled(fetchPromises)
+                .then((results) => {
+                    const failed = results.filter(r => r.status === "rejected")
+                    if (failed.length) {
+                        return setFeedback("Error: Unable to save teams")
+                    }
+                    setFeedback("Teams saved")
+                    retrieveTeams()
+                })
+
+        }
+        else {
+            setFeedback("Error: Please provide a Slack channel prefix")
+        }
+    }
+
+    if (loading) {
+        return <Loading />
     }
 
     return (
         <article className="view">
-            <h1>Weekly Teams</h1>
+            <div style={{
+                border: "1px solid #ddd",
+                padding: "1rem",
+                margin: "1rem 0",
+                backgroundColor: "#f4f4f4",
+                borderRadius: "0.5rem",
+                fontSize: "0.9rem",
+                color: "#555"
+            }}>📝 Use this tool to design weekly student teams for the client-side course,
+                or for constructing teams for a specific group project. If building weekly
+                teams, leave N/A chosen in the group project select.</div>
 
             <section className="teamsconfig">
-                <div>
-                    How many teams: <input type="number"
-                        className="teamsconfig__count"
-                        value={teamCount}
-                        onChange={e => changeCount(parseInt(e.target.value))} />
-                </div>
-                <div>
-                    Slack channel prefix:
-                    <HelpIcon tip="The string of '-team-n' will be added after what you specify at the prefix. For example, if your prefix is 'c58-week2' a Slack channel of 'c58-week2-team-1' will be created." />
-                    <input type="text"
-                        className="teamsconfig__prefix"
-                        value={weeklyPrefix}
-                        placeholder="e.g. c56"
-                        onChange={e => setWeeklyPrefix(e.target.value)} />
-                </div>
-                <div className="teamsconfig__auto">
-                    <Button color="amber" onClick={() => autoAssignStudents()}>
-                        Assign By Score
-                    </Button>
-                </div>
-                <div className="teamsconfig__random">
-                    <Button color="amber" onClick={() => autoAssignStudents(true)}>
-                        Random
-                    </Button>
-                </div>
-                <div className="teamsconfig__save">
-                    <Button className="isometric-Button blue" onClick={saveTeams}> Save </Button>
-                </div>
-                <div className="teamsconfig__clear">
-                    <Button color="red" onClick={() => {
-                        localStorage.removeItem("currentCohortTeams")
-                        changeCount(6)
-                        buildNewTeams()
-                        setUnassigned(cohortStudents)
-                        clearTeams().then(() => getCohortStudents(activeCohort))
-                    }}>
-                        Clear
-                    </Button>
-                </div>
+                {
+                    activeTeams
+                        ? <div className="teamsconfig__clear">
+                            <Button color="red" onClick={() => {
+                                fetchIt(`${Settings.apiHost}/teams/reset?cohort=${activeCohort}`, {
+                                    method: "DELETE"
+                                })
+                                    .then(() => {
+                                        resetToEmptyTeams()
+                                        setFeedback("Teams deleted")
+                                    })
+                            }}>
+                                Delete Current Teams
+                            </Button>
+                        </div>
+                        : <>
+                            <div className="teamsconfig__option">
+                                <div>How many teams:</div>
+                                <div><input type="number"
+                                    className="teamsconfig__count"
+                                    value={teamCount}
+                                    onChange={e => changeCount(parseInt(e.target.value))} /></div>
+                            </div>
+                            <div className="teamsconfig__option">
+                                <div style={{
+                                    display: "flex",
+                                    flexDirection: "column"
+                                }}>
+                                    <div>Slack channel prefix:</div>
+                                </div>
+                                <div>
+                                    <input type="text"
+                                        className="teamsconfig__prefix"
+                                        value={weeklyPrefix}
+                                        placeholder=""
+                                        onChange={e => setWeeklyPrefix(e.target.value)} />
+                                </div>
+                                <div style={{ fontSize: "0.7rem", margin: "0.3rem 0 0 0" }}>Will be suffixed with</div>
+                                    <div style={{ fontSize: "0.7rem", color: "firebrick" }}>-[cohort number]-[random id]</div>
+
+                            </div>
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column"
+                            }}>
+                                <div>Choose Group Project</div>
+                                <Select.Root onValueChange={setChosenProject} value={chosenProject}>
+                                    <Select.Trigger />
+                                    <Select.Content>
+                                        <Select.Item value="none">N/A</Select.Item>
+                                        {
+                                            groupProjects.map(project => <Select.Item
+                                                key={`project--${project.id}`}
+                                                value={project.id}>{project.name}</Select.Item>)
+                                        }
+                                    </Select.Content>
+                                </Select.Root>
+                            </div>
+                            <div className="teamsconfig__auto teamsconfig__random">
+                                <Button color="amber" onClick={() => autoAssignStudents(true)}>
+                                    Random
+                                </Button>
+                            </div>
+                            <div className="teamsconfig__save">
+                                <Button color="blue" onClick={async () => await saveTeams()}> Save </Button>
+                            </div>
+                            <div className="teamsconfig__clear">
+                                <Button color="ruby" onClick={() => {
+                                    resetToEmptyTeams()
+                                }}>
+                                    Reset
+                                </Button>
+                            </div>
+                        </>
+                }
             </section>
 
             <hr />
 
-            <div className={`${feedback.includes("Error") ? "error" : "feedback"} ${feedback === "" ? "invisible" : "visible"}`}>
+            <div className={`${feedback === "" ? "invisible" : "visible"} ${feedback === "" ? "" : feedback.includes("Error") ? "error" : "feedback"} `}>
                 {feedback}
             </div>
 

@@ -1,11 +1,11 @@
-import '@radix-ui/themes/styles.css';
-import "./index.css"
 import React from "react"
 import ReactDOM from "react-dom"
 import { BrowserRouter as Router } from "react-router-dom"
-import { LearnOps } from "./components/LearnOps.js"
+import '@radix-ui/themes/styles.css';
 import { Theme } from '@radix-ui/themes';
 
+import { LearnOps } from "./components/LearnOps.js"
+import "./index.css"
 
 ReactDOM.render(
     <React.StrictMode>

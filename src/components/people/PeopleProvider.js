@@ -24,7 +24,10 @@ export const PeopleProvider = (props) => {
 
     const getCohortStudents = useCallback((cohortId) => {
         return fetchIt(`${Settings.apiHost}/students?cohort=${cohortId}`)
-            .then(data => setCohortStudents(data))
+            .then(data => {
+                setCohortStudents(data)
+                return data
+            })
     }, [])
 
     const getStudentCoreSkills = useCallback((studentId) => {
@@ -59,7 +62,7 @@ export const PeopleProvider = (props) => {
     }, [])
 
     const tagStudentTeams = useCallback((combos) => {
-        return fetchIt(`${Settings.apiHost}/students/teams`, {
+        return fetchIt(`${Settings.apiHost}/students/cohortteams`, {
             method: "POST",
             body: JSON.stringify({ combos })
         })

@@ -13,14 +13,17 @@ export const ProjectForm = () => {
     const [courses, setCourses] = useState([])
     const [title, setTitle] = useState("")
     const [mode, setMode] = useState("create")
-    const { getBooks, getCourses, getProject, editProject, getBook } = useContext(CourseContext)
+    const { getBooks, getCourses, getProject, getBook } = useContext(CourseContext)
     const [project, updateProject] = useState({
         name: "",
         book: 0,
         course: 0,
         index: 0,
         implementation_url: "",
+        api_template_url: "",
+        client_template_url: "",
         active: true,
+        is_full_stack: false,
         is_group_project: false
     })
     const history = useHistory()
@@ -57,6 +60,11 @@ export const ProjectForm = () => {
 
     const constructNewProject = () => {
         fetchIt(`${Settings.apiHost}/projects`, { method: "POST", body: JSON.stringify(project) })
+            .then(() => history.push(`/books/${project.book}`))
+    }
+
+    const editProject = () => {
+        fetchIt(`${Settings.apiHost}/projects/${project.id}`, { method: "PUT", body: JSON.stringify(project) })
             .then(() => history.push(`/books/${project.book}`))
     }
 
@@ -114,6 +122,54 @@ export const ProjectForm = () => {
                     <label htmlFor="is_group_project"> Group project </label>
                 </div>
 
+                {
+                    project.is_group_project
+                        ? <>
+                            <div className="form-group">
+                                <input onChange={updateState}
+                                    checked={project.is_full_stack}
+                                    type="checkbox" required
+                                    controltype="boolean"
+                                    id="is_full_stack"
+                                />
+                                <label htmlFor="is_full_stack"> Full stack project? </label>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="name">
+                                    Client side template URL
+                                </label>
+                                <input onChange={updateState}
+                                    value={project.client_template_url}
+                                    type="text" required
+                                    controltype="string"
+                                    id="client_template_url"
+                                    className="form-control"
+                                />
+                            </div>
+
+                            {
+                                project.is_full_stack
+                                    ? <>
+                                        <div className="form-group">
+                                            <label htmlFor="name">
+                                                API template URL
+                                            </label>
+                                            <input onChange={updateState}
+                                                value={project.api_template_url}
+                                                type="text" required
+                                                controltype="string"
+                                                id="api_template_url"
+                                                className="form-control"
+                                            />
+                                        </div>
+                                    </>
+                                    : ""
+                            }
+                        </>
+                        : ""
+                }
+
                 <div className="form-group">
                     <input onChange={updateState}
                         checked={project.active}
@@ -132,7 +188,7 @@ export const ProjectForm = () => {
                             constructNewProject()
                         }
                         else {
-                            editProject(project).then(() => history.push(`/books/${project.book}`))
+                            editProject()
                         }
                     }}>Save</Button>
 

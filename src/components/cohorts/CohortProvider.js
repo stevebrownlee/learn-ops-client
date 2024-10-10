@@ -19,6 +19,12 @@ export const CohortProvider = (props) => {
     const { getCurrentUser } = simpleAuth()
     const user = getCurrentUser()
 
+    useEffect(() => {
+        if (activeCohort && !("id" in activeCohortDetails)) {
+            getCohort(activeCohort)
+        }
+    }, [activeCohort])
+
     const getCohorts = useCallback((options={}) => {
         const limit = options.limit ? `?limit=${options.limit}` : ""
         const active = options.active ? `?active=${options.active}` : ""
@@ -27,13 +33,13 @@ export const CohortProvider = (props) => {
             .then(data => setCohorts(data))
     }, [setCohorts])
 
-    const getCohort = useCallback((id) => {
+    const getCohort = (id) => {
         return fetchIt(`${Settings.apiHost}/cohorts/${id}`)
             .then((cohort) => {
                 setCohortDetails(cohort)
                 return cohort
             })
-    }, [user])
+    }
 
     const getCohortInfo = (id) => {
         return fetchIt(`${Settings.apiHost}/cohortinfo/${id}`)

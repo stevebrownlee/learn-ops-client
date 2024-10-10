@@ -32,8 +32,27 @@ export const ProjectDetails = () => {
             {project.name}
         </h1>
         <div className="project__info">
-            <div>Name: {project.name}</div>
-            <div>Position: {project.index}</div>
+            <div><strong>Name:</strong> {project.name}</div>
+            <div><strong>Type:</strong> {project.is_group_project ? "Group project" : "Book project"}</div>
+            {
+                project.is_group_project ?
+                    <>
+                        <div>
+                            <strong>Client side template URL</strong>:
+                            <a href={project.client_template_url} target="_blank">{project.client_template_url}</a>
+                        </div>
+                        {
+                            project.api_template_url ?
+                                <div>
+                                    <strong>API template URL</strong>:
+                                    <a href={project.api_template_url} target="_blank">{project.api_template_url}</a>
+                                </div>
+                                : ""
+                        }
+                    </>
+                    : ""
+            }
+
         </div>
 
         <div className="project__footer">
