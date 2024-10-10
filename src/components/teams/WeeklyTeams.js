@@ -263,7 +263,7 @@ export const WeeklyTeams = () => {
                 studentArray = [...studentArray, ...coaches]
 
                 fetchPromises.push(
-                    fetchIt(`http://localhost:8000/teams`, {
+                    fetchIt(`${Settings.apiHost}/teams`, {
                         method: "POST",
                         body: JSON.stringify({
                             cohort: activeCohort,
