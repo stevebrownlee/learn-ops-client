@@ -122,15 +122,6 @@ export const CohortDetails = () => {
                                 </div>
 
                                 <div className="form-group form-group--row">
-                                    <label className="label--smallrow" htmlFor="github_classroom_url">Github Classroom</label>
-                                    <input onChange={updateState}
-                                        value={info.github_classroom_url ?? ""}
-                                        type="url" controltype="string"
-                                        id="github_classroom_url" className="form-control form-control--row form-control--small"
-                                    />
-                                </div>
-
-                                <div className="form-group form-group--row">
                                     <label className="label--smallrow" htmlFor="student_organization_url">Github Organization</label>
                                     <input onChange={updateState}
                                         value={info.student_organization_url ?? ""}

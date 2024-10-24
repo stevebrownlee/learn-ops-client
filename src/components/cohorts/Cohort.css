@@ -94,15 +94,16 @@
 
 .cohort__links {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     padding: 0 0 1rem 0;
     font-size: 0.75rem;
+    justify-items: center;
 }
 
 @media (max-width: 1000px) {
     .cohort__links {
         display: grid;
-        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
         padding: 0 0 1rem 0;
         font-size: 0.75rem;
     }

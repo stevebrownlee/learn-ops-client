@@ -84,8 +84,7 @@ export const Cohort = ({ cohort, getRecentCohorts }) => {
         </div>
 
         <div className="cohort__links">
-            <a href={cohort.github_classroom_url} target="_blank">Classroom</a>
-            <a href={cohort.student_organization_url} target="_blank">Github</a>
+            <a href={cohort.student_organization_url} target="_blank">Github Org</a>
             <a href={cohort.attendance_sheet_url} target="_blank">Attendance</a>
         </div>
 

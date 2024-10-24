@@ -183,6 +183,16 @@ dialog {
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
+.form-control--small {
+    padding-left: 0.4rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    padding-right: 0.4rem;
+    height: calc(1.5em + .5rem);
+    font-size: 0.8rem;
+    line-height: 1.25;
+}
+
 .form-control--row {
     flex: 3
 }

@@ -14,30 +14,7 @@
     display: inline-block;
 }
 
-.form-control {
-    display: block;
-    width: 94%;
-    height: calc(1.5em + .75rem + 2px);
-    padding: .25rem .5rem;
-    font-size: 0.9rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: .25rem;
-    -webkit-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
 
-.form-control--small {
-    height: calc(1.5em + .5rem);
-    padding: .2rem .4rem;
-    font-size: 0.8rem;
-    font-weight: 400;
-    line-height: 1.25;
-}
 
 .container--login {
     text-align: center;
