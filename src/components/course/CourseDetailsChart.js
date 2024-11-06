@@ -60,7 +60,6 @@ export const CourseDetailsChart = ({ courseId }) => {
                         {
                             label: ["Time on Project"],
                             data: response.data.map((item, idx, arr) => {
-                                // debugger
                                 item.x = (idx + 1) * 2
                                 item.y = item.averagestartdelay
                                 try {
