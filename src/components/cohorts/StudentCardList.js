@@ -23,6 +23,7 @@ import keyboardShortcut from "../ui/keyboardShortcut.js"
 import "./CohortStudentList.css"
 import "./Tooltip.css"
 import { StudentAssessmentForm } from "../people/StudentAssessmentForm.js"
+import { InterviewCompleteConfirm } from "../people/InterviewCompleteConfirm.js"
 
 const persistSettings = (setting, value) => {
     let settings = localStorage.getItem("lp_settings")
@@ -67,6 +68,7 @@ export const StudentCardList = ({ searchTerms }) => {
     const [groupedStudents, setGroupedStudents] = useState([])
     const [showAvatars, toggleAvatars] = useState(initial_show_avatars_state)
     const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false)
+    const [interviewOpen, setInterviewOpen] = useState(false)
 
     const history = useHistory()
 
@@ -330,6 +332,7 @@ export const StudentCardList = ({ searchTerms }) => {
             toggleTags={toggleTagDialog}
             toggleNote={toggleNote}
             setFeedbackDialogOpen={setFeedbackDialogOpen}
+            setInterviewOpen={setInterviewOpen}
             assignStudentToProject={assignStudentToProject}
             hasAssessment={book.assessments.length > 0}
             toggleCohorts={toggleCohorts}
@@ -405,6 +408,7 @@ export const StudentCardList = ({ searchTerms }) => {
         <StudentNoteDialog toggleNote={toggleNote} noteIsOpen={noteIsOpen} />
         <CohortDialog toggleCohorts={toggleCohorts} cohortIsOpen={cohortIsOpen} />
         <StudentAssessmentForm dialogOpen={feedbackDialogOpen} setDialogOpen={setFeedbackDialogOpen} />
+        <InterviewCompleteConfirm dialogOpen={interviewOpen} setDialogOpen={setInterviewOpen} />
     </section>
 }
 

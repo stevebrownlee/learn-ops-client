@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useState } from "react"
 
 import { Flex, Text, Card, Avatar, Box, Tooltip, IconButton } from '@radix-ui/themes'
+import { InterviewIcon } from "../../svgs/InterviewIcon.js"
 
 import { AssessmentContext } from "../assessments/AssessmentProvider"
 import { CohortContext } from "../cohorts/CohortProvider"
@@ -14,7 +15,8 @@ export const Student = ({
     toggleStatuses, toggleTags,
     toggleNote, toggleCohorts,
     hasAssessment, assignStudentToProject,
-    showTags, showAvatars, setFeedbackDialogOpen
+    showTags, showAvatars, setFeedbackDialogOpen,
+    setInterviewOpen
 }) => {
     const {
         activateStudent, getCohortStudents, untagStudent,
@@ -155,6 +157,9 @@ export const Student = ({
 
                     <section onClick={handleClick}
                         className="student__name">{student.name}</section>
+
+                        <InterviewIcon studentId={student.id} setter={setInterviewOpen} text="Interview not done" />
+
                     <section className="student__duration">{student.project_duration} days</section>
                     {
                         [2, 3, 4].includes(student.assessment_status_id)

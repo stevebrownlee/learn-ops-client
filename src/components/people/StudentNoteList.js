@@ -8,7 +8,7 @@ export const StudentNoteList = ({ notes, deleteStudentNote }) => <section classN
     {
         notes && notes.length
             ? notes.map(note => {
-                return <div key={`note--${note.id}`} className={`note note--${note.note_type.label.replace(/\s/g, "")}`}>
+                return <div key={`note--${note.id}`} className={`note note--${note?.note_type?.label.replace(/\s/g, "")}`}>
                     <div className="note__text">{note.note}</div>
                     <div className="note__author">{note.author}</div>
                     <div className="note__date">{
