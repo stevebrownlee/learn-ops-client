@@ -385,3 +385,12 @@ button {
 .student__assessmenticon:hover {
     cursor: pointer;
 }
+
+.student__interviewicon {
+    height: 1.5rem;
+    position: absolute;
+    right: 1.4rem;
+    bottom: -0.3rem;
+    padding: 0;
+    margin: 0;
+}

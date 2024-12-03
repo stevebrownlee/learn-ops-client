@@ -1,25 +1,10 @@
 import React from "react"
-import { fetchIt } from "../components/utils/Fetch.js"
-import Settings from "../components/Settings.js"
 
-export const InterviewIcon = ({ text, setter, studentId }) => {
-
+export const InterviewIcon = ({ text, setter }) => {
     return <svg
-            style={{
-                height: "1.2rem",
-                position: "absolute",
-                right: "1.3rem",
-                bottom: "0"
-            }}
+
             onClick={() => {
                 setter(true)
-
-                fetchIt(`${Settings.apiHost}/interviews`, {
-                    method: "POST",
-                    body: JSON.stringify({
-                        student_id: studentId
-                    })
-                })
             }}
             className="svg"
             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

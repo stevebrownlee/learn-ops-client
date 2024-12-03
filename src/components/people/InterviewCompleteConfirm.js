@@ -5,14 +5,22 @@ import Settings from "../Settings.js"
 import { fetchIt } from "../utils/Fetch.js"
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
 import { PeopleContext } from "./PeopleProvider.js"
+import { CohortContext } from "../cohorts/CohortProvider.js"
 
 export const InterviewCompleteConfirm = ({ dialogOpen, setDialogOpen }) => {
 
     const [complete, setComplete] = React.useState('')
-    const { activeStudent } = useContext(PeopleContext)
+    const { activeStudent, getCohortStudents } = useContext(PeopleContext)
+    const { activeCohort } = useContext(CohortContext)
 
     const updateStudentInterviewStatus = () => {
-        console.log("TODO: Perform fetch to update status")
+        fetchIt(`${Settings.apiHost}/interviews`, {
+            method: "POST",
+            body: JSON.stringify({ student_id: activeStudent.id })
+        })
+        .then(() => {
+            getCohortStudents(activeCohort)
+        })
     }
 
     return <Dialog.Root open={dialogOpen}>
@@ -26,6 +34,7 @@ export const InterviewCompleteConfirm = ({ dialogOpen, setDialogOpen }) => {
                 <Dialog.Close>
                     <Button onClick={() => {
                         setDialogOpen(false)
+                        updateStudentInterviewStatus()
                     }}>Yes</Button>
                 </Dialog.Close>
                 <Dialog.Close>

@@ -155,10 +155,16 @@ export const Student = ({
                         setFeedbackDialogOpen={setFeedbackDialogOpen}
                         getStudentNotes={getStudentNotes} />
 
-                    <section onClick={handleClick}
-                        className="student__name">{student.name}</section>
+                    <section onClick={handleClick} className="student__name">{student.name}</section>
 
-                        <InterviewIcon studentId={student.id} setter={setInterviewOpen} text="Interview not done" />
+                    <section className="student__interviewicon" onClick={() => activateStudent(student)}>
+                        {
+                            student.interview_count < student.book_index
+                                ? <InterviewIcon studentId={student.id} setter={setInterviewOpen} text="Interview not done" />
+                                : student.interview_count
+                        }
+                    </section>
+
 
                     <section className="student__duration">{student.project_duration} days</section>
                     {
