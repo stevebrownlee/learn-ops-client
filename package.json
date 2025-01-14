@@ -1,6 +1,9 @@
 {
   "name": "learnopsclient",
   "version": "4.0.0",
+  "engines": {
+    "node": "22.13.0"
+  },
   "private": true,
   "dependencies": {
     "@radix-ui/colors": "1.0.1",
