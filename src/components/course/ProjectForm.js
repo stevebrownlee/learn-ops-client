@@ -71,10 +71,17 @@ export const ProjectForm = () => {
     const updateState = (event) => {
         const copy = { ...project }
 
+        let targetValue = event.target.value
+
+        // Remove apostrophes if the control type is string
+        if (event.target.attributes.controltype.value === "string") {
+            targetValue = targetValue.replace(/[']/g, '')
+        }
+
         const newValue = {
-            "string": event.target.value,
+            "string": targetValue,
             "boolean": event.target.checked ? true : false,
-            "number": parseInt(event.target.value)
+            "number": parseInt(targetValue)
         }[event.target.attributes.controltype.value]
 
         copy[event.target.id] = newValue
