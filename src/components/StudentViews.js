@@ -1,4 +1,3 @@
-
 import React from "react"
 import { Route } from "react-router-dom"
 import { AssessmentProvider } from "./assessments/AssessmentProvider"
@@ -9,9 +8,9 @@ import { Assessment } from "./info/Assessment"
 import { ClientProposal } from "./info/ClientProposal"
 import { ClientAssessment } from "./info/ClientSideRequirements"
 import { LearningGoals } from "./info/Goals"
-import { Repos } from "./info/Repos"
 import { ServerAssessment } from "./info/ServerSideRequirements"
-import { StudentDashboard } from "./dashboard/student/StudentDashboard.js"
+import { StudentDashboard } from "./dashboard/student/StudentDashboard"
+import { Query } from "./Query"
 
 export const StudentViews = () => {
     return <>
@@ -20,8 +19,8 @@ export const StudentViews = () => {
                 <Route exact path="/">
                     <StudentDashboard />
                 </Route>
-                <Route exact path="/repos">
-                    <Repos />
+                <Route exact path="/query">
+                    <Query />
                 </Route>
                 <Route exact path="/goals">
                     <LearningGoals />

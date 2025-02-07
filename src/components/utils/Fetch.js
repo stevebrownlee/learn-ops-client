@@ -22,7 +22,7 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null, 
     }
 
     let handleResponse = res => {
-        if (res.status === 200 || res.status === 201) {
+        if (res.status === 200 || res.status === 201 || res.status === 202) {
             if (res.headers.get("content-type") === "application/json") {
                 return res.json()
             }

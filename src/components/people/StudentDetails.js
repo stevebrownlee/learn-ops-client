@@ -8,10 +8,10 @@ import { PeopleContext } from "./PeopleProvider.js"
 import { CourseContext } from "../course/CourseProvider.js"
 import { AssessmentRow } from "../dashboard/student/AssessmentRow.js"
 import { CohortContext } from "../cohorts/CohortProvider.js"
+import { TransferStudentDialog } from "./TransferStudentDialog.js"
 import { fetchIt } from "../utils/Fetch.js"
 import Settings from "../Settings.js"
 import "../people/Status.css"
-import { TransferStudentDialog } from "./TransferStudentDialog.js"
 
 export const StudentDetails = ({ toggleCohorts }) => {
     const { getCohortStudents, activeStudent } = useContext(PeopleContext)
