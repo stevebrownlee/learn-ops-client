@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { Button, Flex } from '@radix-ui/themes'
+import { Box, Container, Button, Flex } from '@radix-ui/themes'
 import Settings from "./Settings.js"
 import { fetchIt } from "./utils/Fetch.js"
 
@@ -112,8 +112,43 @@ export const Query = () => {
         }
     }
 
+    const renderContent = (text) => {
+        if (!text) return "";
+
+        const parts = text.split(/(```[\s\S]*?```)/);
+        return parts.map((part, index) => {
+            if (part.startsWith('```') && part.endsWith('```')) {
+                // Remove the backticks and any language identifier after the opening backticks
+                const code = part.slice(3, -3).replace(/^[a-zA-Z]+\n/, '');
+                return (
+                    <pre key={index} style={{
+                        backgroundColor: '#272b2c',
+                        color: 'white',
+                        padding: '1rem',
+                        borderRadius: '4px',
+                        overflowX: 'auto',
+                        fontFamily: 'monospace',
+                        fontSize: '0.9rem',
+                    }}>
+                        <code>{code}</code>
+                    </pre>
+                );
+            }
+            // For non-code blocks, replace \n with <br/>
+            const lines = part.split('\\n');
+            return <span key={index}>
+                {lines.map((line, i) => (
+                    <React.Fragment key={i}>
+                        {line}
+                        {i < lines.length - 1 && <br />}
+                    </React.Fragment>
+                ))}
+            </span>;
+        });
+    };
+
     return (
-        <div className="query">
+        <div>
             <textarea
                 value={question}
                 onChange={e => setQuestion(e.target.value)}
@@ -125,23 +160,18 @@ export const Query = () => {
                     onClick={submitQuestion}
                     disabled={isConnected} // Prevent new submission while connected
                     color="green"
-                >
-                    Submit Question
-                </Button>
+                > Submit Question </Button>
 
                 {isConnected && (
-                    <Button
-                        onClick={stopGeneration}
-                        color="red"
-                    >
-                        Stop
-                    </Button>
+                    <Button onClick={stopGeneration} color="red"> Stop </Button>
                 )}
             </Flex>
 
-            <div className="explanation">
-                {explanation || ""}
-            </div>
+            <Container size="3" style={{ margin: '0 3rem' }}>
+                <Box py="4" px="4" style={{ backgroundColor: '#f5f5f5' }}>
+                    {renderContent(explanation)}
+                </Box>
+            </Container>
 
             {isConnected && (
                 <div className="status">
