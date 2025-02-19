@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { Button, Flex } from '@radix-ui/themes'
 import Settings from "./Settings.js"
 import { fetchIt } from "./utils/Fetch.js"
 
@@ -8,17 +9,29 @@ export const Query = () => {
     const [explanation, setExplanation] = useState('')
     const [isConnected, setIsConnected] = useState(false)
     const [receivedChunks] = useState(new Set())
+    const [eventSource, setEventSource] = useState(null)
 
     useEffect(() => {
         if (requestId === 0) {
             return;
         }
 
-        const eventSource = new EventSource(`${Settings.apiHost}/answers/${requestId}`)
+        const es = new EventSource(`${Settings.apiHost}/answers/${requestId}`)
+        setEventSource(es)
 
-        eventSource.onmessage = async (event) => {
+        es.addEventListener('open', (e) => {
+            console.log('Connection opened')
+            setIsConnected(true)
+        });
+
+        es.onmessage = async (event) => {
             try {
                 const chunk = JSON.parse(event.data)
+
+                // Ignore the connection establishment message
+                if (chunk.type === 'connection') {
+                    return
+                }
 
                 // Only process if we haven't seen this chunk
                 if (!receivedChunks.has(chunk.sequence_number)) {
@@ -37,8 +50,9 @@ export const Query = () => {
 
                     // Close connection if this was the final chunk
                     if (chunk.is_final) {
-                        eventSource.close()
+                        es.close()
                         setIsConnected(false)
+                        setEventSource(null)
                     }
                 }
             } catch (error) {
@@ -46,20 +60,17 @@ export const Query = () => {
             }
         }
 
-        eventSource.onerror = (error) => {
+        es.onerror = (error) => {
             console.error('EventSource failed:', error)
             setIsConnected(false)
-            eventSource.close()
-        }
-
-        eventSource.onopen = () => {
-            console.log('Connection opened')
-            setIsConnected(true)
+            es.close()
+            setEventSource(null)
         }
 
         return () => {
-            eventSource.close()
+            es.close()
             setIsConnected(false)
+            setEventSource(null)
         }
     }, [requestId])
 
@@ -79,6 +90,28 @@ export const Query = () => {
         }
     }
 
+    const stopGeneration = async () => {
+        try {
+            // Send an ABORT acknowledgment (sequence_number = -1)
+            await fetchIt(`${Settings.apiHost}/answers/${requestId}/ack`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    sequence_number: -1,
+                    requestId: requestId,
+                    is_final: true,
+                })
+            })
+            console.log('Sent abort signal')
+            setIsConnected(false)
+            if (eventSource) {
+                eventSource.close()
+                setEventSource(null)
+            }
+        } catch (error) {
+            console.error('Error sending abort signal:', error)
+        }
+    }
+
     return (
         <div className="query">
             <textarea
@@ -87,15 +120,27 @@ export const Query = () => {
                 placeholder="What question do you have?"
                 rows="3"
             />
-            <button
-                onClick={submitQuestion}
-                disabled={isConnected} // Prevent new submission while connected
-            >
-                Submit Question
-            </button>
+            <Flex gap="3" my="3">
+                <Button
+                    onClick={submitQuestion}
+                    disabled={isConnected} // Prevent new submission while connected
+                    color="green"
+                >
+                    Submit Question
+                </Button>
+
+                {isConnected && (
+                    <Button
+                        onClick={stopGeneration}
+                        color="red"
+                    >
+                        Stop
+                    </Button>
+                )}
+            </Flex>
 
             <div className="explanation">
-                {explanation || "Awaiting response..."}
+                {explanation || ""}
             </div>
 
             {isConnected && (
