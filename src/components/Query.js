@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react"
 import { Box, Container, Button, Flex } from '@radix-ui/themes'
 import Settings from "./Settings.js"
 import { fetchIt } from "./utils/Fetch.js"
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 export const Query = () => {
     const [question, setQuestion] = useState("What is a javascript function parameter?")
@@ -112,26 +114,40 @@ export const Query = () => {
         }
     }
 
+    const detectLanguage = (codeBlock) => {
+        // Extract language identifier from the opening of the code block
+        const match = codeBlock.match(/^```([a-zA-Z]+)\n/);
+        if (match) {
+            return match[1].toLowerCase();
+        }
+        // Default to javascript if no language is specified
+        return 'javascript';
+    };
+
     const renderContent = (text) => {
         if (!text) return "";
 
         const parts = text.split(/(```[\s\S]*?```)/);
         return parts.map((part, index) => {
             if (part.startsWith('```') && part.endsWith('```')) {
-                // Remove the backticks and any language identifier after the opening backticks
+                const language = detectLanguage(part);
+                // Remove the backticks and language identifier
                 const code = part.slice(3, -3).replace(/^[a-zA-Z]+\n/, '');
+
                 return (
-                    <pre key={index} style={{
-                        backgroundColor: '#272b2c',
-                        color: 'white',
-                        padding: '1rem',
-                        borderRadius: '4px',
-                        overflowX: 'auto',
-                        fontFamily: 'monospace',
-                        fontSize: '0.9rem',
-                    }}>
-                        <code>{code}</code>
-                    </pre>
+                    <div key={index} style={{ margin: '1rem 0' }}>
+                        <SyntaxHighlighter
+                            language={language}
+                            style={vscDarkPlus}
+                            customStyle={{
+                                borderRadius: '4px',
+                                padding: '1rem',
+                                fontSize: '0.9rem',
+                            }}
+                        >
+                            {code.trim()}
+                        </SyntaxHighlighter>
+                    </div>
                 );
             }
             // For non-code blocks, replace \n with <br/>

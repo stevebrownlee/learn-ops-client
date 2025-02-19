@@ -2,7 +2,7 @@
   "name": "learnopsclient",
   "version": "4.0.0",
   "engines": {
-    "node": "22.13.0"
+    "node": "22.13.1"
   },
   "private": true,
   "dependencies": {
@@ -26,6 +26,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.1",
+    "react-syntax-highlighter": "^15.6.1",
     "toaster-js": "^2.2.3"
   },
   "scripts": {
