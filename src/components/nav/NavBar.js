@@ -44,6 +44,9 @@ export const NavBar = () => {
                         <li className="navbar__item">
                             {makeLink("/courses", "Course Management")}
                         </li>
+                        <li className="navbar__item">
+                            {makeLink("/foundations", "Foundations Exercises")}
+                        </li>
                         {
                             isAuthenticated()
                                 ? <>
