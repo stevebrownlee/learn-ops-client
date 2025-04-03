@@ -6,7 +6,7 @@ import "./FoundationsExerciseView.css"
 
 export const FoundationsExerciseView = () => {
     const [exercises, setExercises] = useState([])
-    const [githubId, setGithubId] = useState("")
+    const [githubName, setGithubName] = useState("")
     const [startDate, setStartDate] = useState("")
     const [loading, setLoading] = useState(true)
 
@@ -24,8 +24,8 @@ export const FoundationsExerciseView = () => {
         let url = `${Settings.apiHost}/foundations`
         const queryParams = []
 
-        if (githubId) {
-            queryParams.push(`learner_github_id=${githubId}`)
+        if (githubName) {
+            queryParams.push(`learnerName=${githubName}`)
         }
 
         if (startDate) {
@@ -63,7 +63,7 @@ export const FoundationsExerciseView = () => {
 
     // Reset filters
     const handleReset = () => {
-        setGithubId("")
+        setGithubName("")
         setStartDate("")
         setTimeout(() => {
             fetchExercises()
@@ -77,12 +77,12 @@ export const FoundationsExerciseView = () => {
             <form className="foundations-filter-form" onSubmit={handleSubmit}>
                 <div className="filter-controls">
                     <div className="filter-group">
-                        <label htmlFor="githubId">Learner GitHub ID:</label>
+                        <label htmlFor="githubName">Learner Last Name:</label>
                         <input
                             type="text"
-                            id="githubId"
-                            value={githubId}
-                            onChange={(e) => setGithubId(e.target.value)}
+                            id="githubName"
+                            value={githubName}
+                            onChange={(e) => setGithubName(e.target.value)}
                             placeholder="Enter GitHub ID"
                         />
                     </div>
@@ -114,8 +114,7 @@ export const FoundationsExerciseView = () => {
                         <thead>
                             <tr>
                                 <th>Title</th>
-                                <th>Slug</th>
-                                <th>Learner ID</th>
+                                <th>Learner Name</th>
                                 <th>Attempts</th>
                                 <th>Status</th>
                                 <th>First Attempt</th>
@@ -127,8 +126,7 @@ export const FoundationsExerciseView = () => {
                             {exercises.map(exercise => (
                                 <tr key={exercise.id} className={exercise.complete ? "complete" : "incomplete"}>
                                     <td>{exercise.title}</td>
-                                    <td>{exercise.slug}</td>
-                                    <td>{exercise.learner_github_id}</td>
+                                    <td>{exercise.learner_name}</td>
                                     <td>{exercise.attempts}</td>
                                     <td>{exercise.complete ? "Complete" : "Incomplete"}</td>
                                     <td>{exercise.first_attempt}</td>
