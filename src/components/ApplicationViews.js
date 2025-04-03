@@ -1,4 +1,3 @@
-
 import React from "react"
 import { Route } from "react-router-dom"
 import { AssessmentForm } from "./assessments/AssessmentForm"
@@ -7,6 +6,7 @@ import { AssessmentProvider } from "./assessments/AssessmentProvider"
 import { CohortForm } from "./cohorts/CohortForm"
 import { CohortProvider } from "./cohorts/CohortProvider"
 import { CourseProvider } from "./course/CourseProvider"
+import { FoundationsExerciseView } from "./dashboard/instructor/FoundationsExerciseView"
 import { Dashboard } from "./dashboard/Dashboard"
 import { FeedbackForm } from "./people/FeedbackForm"
 import { PeopleProvider } from "./people/PeopleProvider"
@@ -78,6 +78,10 @@ export const ApplicationViews = () => {
 
                             <Route exact path="/assessments/new">
                                 <AssessmentForm />
+                            </Route>
+
+                            <Route exact path="/foundations">
+                                <FoundationsExerciseView />
                             </Route>
                             <Route exact path="/assessments/edit/:assessmentId">
                                 <AssessmentForm />
