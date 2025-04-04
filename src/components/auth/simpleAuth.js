@@ -9,11 +9,14 @@ function lzw_decode(s) { var dict = {}; var data = (s + "").split(""); var currC
 const simpleAuth = () => {
     const isAuthenticated = () => sessionStorage.getItem("nss_token") !== null
 
-    const getProfile = (token = null, cohort = null, validate = null, mimic = false) => {
+    const getProfile = (token=null, cohort=null, validate=null, mimic=false, staff=false) => {
         let url = `${Settings.apiHost}/profile`
 
         if (cohort !== null) {
             url = `${url}?cohort=${cohort}&validate=${validate}`
+        }
+        if (staff) {
+            url = `${url}?role=Staff`
         }
 
         if (mimic) {
@@ -76,7 +79,7 @@ const simpleAuth = () => {
     const logout = () => sessionStorage.removeItem("nss_token")
 
     const storeCurrentUser = (token, profile) => {
-        const baseUserObject = JSON.stringify({ profile, token  })
+        const baseUserObject = JSON.stringify({ profile, token })
         let lzw = lzw_encode(baseUserObject)
         sessionStorage.setItem("nss_token", lzw)
     }

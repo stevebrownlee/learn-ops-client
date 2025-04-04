@@ -42,11 +42,13 @@ export const LearnOps = () => {
                                 <StaffViews />
                             </>
                         }
-
-                        return <>
-                            <StudentNavBar />
-                            <StudentViews />
-                        </>
+                        else if (mimic || (!isStaff && !isInstructor)) {
+                            return <>
+                                <StudentNavBar />
+                                <StudentViews />
+                            </>
+                        }
+                        return <h1>Loading...</h1>
                     }
                     else {
                         if (location.pathname !== "/auth/github") {

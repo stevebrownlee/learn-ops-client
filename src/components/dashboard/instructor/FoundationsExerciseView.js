@@ -77,13 +77,13 @@ export const FoundationsExerciseView = () => {
             <form className="foundations-filter-form" onSubmit={handleSubmit}>
                 <div className="filter-controls">
                     <div className="filter-group">
-                        <label htmlFor="githubName">Learner Last Name:</label>
+                        <label htmlFor="githubName">Last Name:</label>
                         <input
                             type="text"
                             id="githubName"
                             value={githubName}
                             onChange={(e) => setGithubName(e.target.value)}
-                            placeholder="Enter GitHub ID"
+                            placeholder="Enter learner's last name"
                         />
                     </div>
 

@@ -6,7 +6,8 @@ import "./Auth.css"
 
 export const Callback = () => {
     const [code, setCode] = useState("")
-    const [cohort, setCohort] = useState(0)
+    const [cohort, setCohort] = useState(null)
+    const [staff, setStaff] = useState(false)
     const [validate, setValidate] = useState(0)
     const [token, storeToken] = useState("")
     const location = useLocation()
@@ -14,7 +15,7 @@ export const Callback = () => {
     const { getProfile } = simpleAuth()
 
     const fetchUser = async () => {
-        const response = await getProfile(token, cohort, validate)
+        const response = await getProfile(token, cohort, validate, false, staff)
         setTimeout(() => {
             history.push("/")
         }, 1000);
@@ -53,6 +54,11 @@ export const Callback = () => {
         const studentCohort = params.get("cohort")
         if (studentCohort) {
             setCohort(parseInt(studentCohort))
+        }
+
+        const isStaff = params.get("role")
+        if (isStaff && isStaff === "Staff") {
+            setStaff(true)
         }
 
         const validationFlag = params.get("validate")
