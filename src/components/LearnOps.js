@@ -1,7 +1,9 @@
 import React, { createContext, useState } from "react"
 import { Route, Redirect } from "react-router-dom"
-import { ApplicationViews } from "./ApplicationViews"
 import { NavBar } from "./nav/NavBar"
+import { ApplicationViews } from "./ApplicationViews"
+import { StaffNavBar } from "./nav/StaffNavBar"
+import { StaffViews } from "./StaffViews"
 import { Login } from "./auth/Login"
 import { CohortProvider } from "./cohorts/CohortProvider"
 import { Callback } from "./auth/Callback"
@@ -26,19 +28,25 @@ export const LearnOps = () => {
                     if (isAuthenticated()) {
                         const user = getCurrentUser()
                         const isStaff = user.profile?.staff
+                        const isInstructor = user.profile?.instructor
 
-                        if (isStaff && !mimic) {
+                        if (isInstructor && !mimic) {
                             return <>
                                 <NavBar />
                                 <ApplicationViews />
                             </>
                         }
-                        else {
+                        else if (isStaff) {
                             return <>
-                                <StudentNavBar />
-                                <StudentViews />
+                                <StaffNavBar />
+                                <StaffViews />
                             </>
                         }
+
+                        return <>
+                            <StudentNavBar />
+                            <StudentViews />
+                        </>
                     }
                     else {
                         if (location.pathname !== "/auth/github") {
