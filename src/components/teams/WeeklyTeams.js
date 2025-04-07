@@ -237,6 +237,7 @@ export const WeeklyTeams = () => {
     }
 
     const saveTeams = async () => {
+        await setLoading(false)
         // Check if any of the team Map values are empty
         for (const [key, value] of teams) {
             if (value.size === 0) {
@@ -262,6 +263,7 @@ export const WeeklyTeams = () => {
                 // studentArray = coaches  // Use this to add coaches to the team only for testing
                 studentArray = [...studentArray, ...coaches]
 
+                weeklyPrefix = weeklyPrefix.toLowerCase()
                 fetchPromises.push(
                     fetchIt(`${Settings.apiHost}/teams`, {
                         method: "POST",
@@ -376,7 +378,11 @@ export const WeeklyTeams = () => {
                                 </Button>
                             </div>
                             <div className="teamsconfig__save">
-                                <Button color="blue" onClick={async () => await saveTeams()}> Save </Button>
+                                <Button color="blue" onClick={async () => {
+                                    await setLoading(true)
+                                    await saveTeams()
+                                    await setLoading(false)
+                                }}> Save </Button>
                             </div>
                             <div className="teamsconfig__clear">
                                 <Button color="ruby" onClick={() => {
