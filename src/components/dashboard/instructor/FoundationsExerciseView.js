@@ -123,17 +123,21 @@ export const FoundationsExerciseView = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {exercises.map(exercise => (
-                                <tr key={exercise.id} className={exercise.complete ? "complete" : "incomplete"}>
-                                    <td>{exercise.title}</td>
-                                    <td>{exercise.learner_name}</td>
-                                    <td>{exercise.attempts}</td>
-                                    <td>{exercise.complete ? "Complete" : "Incomplete"}</td>
-                                    <td>{exercise.first_attempt}</td>
-                                    <td>{exercise.last_attempt}</td>
-                                    <td>{exercise.completed_on || "N/A"}</td>
-                                </tr>
-                            ))}
+                            {exercises.map(exercise => {
+                                if (exercise.title !== "Undefined") {
+                                    return (
+                                        <tr key={exercise.id} className={exercise.complete ? "complete" : "incomplete"}>
+                                            <td>{exercise.title}</td>
+                                            <td>{exercise.learner_name}</td>
+                                            <td>{exercise.attempts}</td>
+                                            <td>{exercise.complete ? "Complete" : "Incomplete"}</td>
+                                            <td>{exercise.first_attempt}</td>
+                                            <td>{exercise.last_attempt}</td>
+                                            <td>{exercise.completed_on || "N/A"}</td>
+                                        </tr>
+                                    )
+                                }
+                            })}
                         </tbody>
                     </table>
                 </div>
