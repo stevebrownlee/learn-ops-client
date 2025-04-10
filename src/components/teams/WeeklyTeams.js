@@ -270,7 +270,7 @@ export const WeeklyTeams = () => {
                         body: JSON.stringify({
                             cohort: activeCohort,
                             students: studentArray,
-                            lowerCaseWeeklyPrefix,
+                            weeklyPrefix: lowerCaseWeeklyPrefix,
                             teamIndex: key,
                             groupProject: chosenProject !== "none" ? chosenProject : null,
                         })
