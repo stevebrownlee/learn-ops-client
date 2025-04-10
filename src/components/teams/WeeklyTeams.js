@@ -263,14 +263,14 @@ export const WeeklyTeams = () => {
                 // studentArray = coaches  // Use this to add coaches to the team only for testing
                 studentArray = [...studentArray, ...coaches]
 
-                weeklyPrefix = weeklyPrefix.toLowerCase()
+                const lowerCaseWeeklyPrefix = weeklyPrefix.toLowerCase()
                 fetchPromises.push(
                     fetchIt(`${Settings.apiHost}/teams`, {
                         method: "POST",
                         body: JSON.stringify({
                             cohort: activeCohort,
                             students: studentArray,
-                            weeklyPrefix,
+                            lowerCaseWeeklyPrefix,
                             teamIndex: key,
                             groupProject: chosenProject !== "none" ? chosenProject : null,
                         })
