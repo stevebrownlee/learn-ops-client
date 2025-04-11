@@ -119,7 +119,7 @@ export const FoundationsExerciseView = () => {
                                 <th>Status</th>
                                 <th>First Attempt</th>
                                 <th>Last Attempt</th>
-                                <th>Completed On</th>
+                                <th>Solution Used</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -133,7 +133,7 @@ export const FoundationsExerciseView = () => {
                                             <td>{exercise.complete ? "Complete" : "Incomplete"}</td>
                                             <td>{exercise.first_attempt}</td>
                                             <td>{exercise.last_attempt}</td>
-                                            <td>{exercise.completed_on || "N/A"}</td>
+                                            <td>{exercise.used_solution ? "Yes" : "No"}</td>
                                         </tr>
                                     )
                                 }
