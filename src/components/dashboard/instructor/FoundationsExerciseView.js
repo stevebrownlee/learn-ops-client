@@ -5,10 +5,11 @@ import "../Dashboard.css"
 import "./FoundationsExerciseView.css"
 
 export const FoundationsExerciseView = () => {
-    const [exercises, setExercises] = useState([])
+    const [learnerData, setLearnerData] = useState([])
     const [githubName, setGithubName] = useState("")
     const [startDate, setStartDate] = useState("")
     const [loading, setLoading] = useState(true)
+    const [expandedLearners, setExpandedLearners] = useState({})
 
     // Format date for API query
     const formatDateForQuery = (dateString) => {
@@ -41,7 +42,7 @@ export const FoundationsExerciseView = () => {
 
         fetchIt(url)
             .then(data => {
-                setExercises(data)
+                setLearnerData(data)
                 setLoading(false)
             })
             .catch(error => {
@@ -70,6 +71,23 @@ export const FoundationsExerciseView = () => {
         }, 0)
     }
 
+    // Toggle expanded state for a learner
+    const toggleExpand = (learnerName) => {
+        setExpandedLearners(prev => ({
+            ...prev,
+            [learnerName]: !prev[learnerName]
+        }))
+    }
+
+    // Calculate completed and incomplete exercise counts
+    const getExerciseCounts = (exercises) => {
+        // Filter out exercises with "Undefined" title before counting
+        const validExercises = exercises.filter(ex => ex.title !== "Undefined")
+        const completed = validExercises.filter(ex => ex.complete).length
+        const incomplete = validExercises.filter(ex => !ex.complete).length
+        return { completed, incomplete, total: validExercises.length }
+    }
+
     return (
         <div className="foundations-exercise-container">
             <h2>Foundations Exercises</h2>
@@ -77,13 +95,13 @@ export const FoundationsExerciseView = () => {
             <form className="foundations-filter-form" onSubmit={handleSubmit}>
                 <div className="filter-controls">
                     <div className="filter-group">
-                        <label htmlFor="githubName">Last Name:</label>
+                        <label htmlFor="githubName">Learner Name:</label>
                         <input
                             type="text"
                             id="githubName"
                             value={githubName}
                             onChange={(e) => setGithubName(e.target.value)}
-                            placeholder="Enter learner's last name"
+                            placeholder="Enter learner's name"
                         />
                     </div>
 
@@ -106,37 +124,82 @@ export const FoundationsExerciseView = () => {
 
             {loading ? (
                 <div className="loading">Loading exercises...</div>
-            ) : exercises.length === 0 ? (
+            ) : learnerData.length === 0 ? (
                 <div className="no-results">No exercises found matching the criteria.</div>
             ) : (
                 <div className="exercises-table-container">
                     <table className="exercises-table">
                         <thead>
                             <tr>
-                                <th>Title</th>
-                                <th>Learner Name</th>
-                                <th>Attempts</th>
-                                <th>Status</th>
-                                <th>First Attempt</th>
-                                <th>Last Attempt</th>
-                                <th>Solution Used</th>
+                                <th>Learner</th>
+                                <th>Cohort</th>
+                                <th>Completed</th>
+                                <th>Incomplete</th>
+                                <th>Total</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {exercises.map(exercise => {
-                                if (exercise.title !== "Undefined") {
-                                    return (
-                                        <tr key={exercise.id} className={exercise.complete ? "complete" : "incomplete"}>
-                                            <td>{exercise.title}</td>
-                                            <td>{exercise.learner_name}</td>
-                                            <td>{exercise.attempts}</td>
-                                            <td>{exercise.complete ? "Complete" : "Incomplete"}</td>
-                                            <td>{exercise.first_attempt}</td>
-                                            <td>{exercise.last_attempt}</td>
-                                            <td>{exercise.used_solution ? "Yes" : "No"}</td>
+                            {learnerData.map((learner) => {
+                                const { completed, incomplete, total } = getExerciseCounts(learner.exercises)
+                                const isExpanded = expandedLearners[learner.learner_name] || false
+                                const validExercises = learner.exercises.filter(ex => ex.title !== "Undefined")
+
+                                return (
+                                    <React.Fragment key={learner.learner_name}>
+                                        {/* Learner summary row */}
+                                        <tr
+                                            className="learner-summary-row"
+                                            style={{
+                                                cursor: 'pointer',
+                                                backgroundColor: '#f0f0f0',
+                                                fontWeight: 'bold'
+                                            }}
+                                            onClick={() => toggleExpand(learner.learner_name)}
+                                        >
+                                            <td>{learner.learner_name}</td>
+                                            <td>{learner.cohort}</td>
+                                            <td>{completed}</td>
+                                            <td>{incomplete}</td>
+                                            <td>{(parseFloat(total/49) * 100).toFixed(1)}%</td>
+                                            <td>
+                                                {isExpanded ? "▼ Hide Details" : "► Show Details"}
+                                            </td>
                                         </tr>
-                                    )
-                                }
+
+                                        {/* Expanded exercise details */}
+                                        {isExpanded && (
+                                            <tr>
+                                                <td colSpan="6" style={{ padding: 0 }}>
+                                                    <table style={{ width: '100%' }}>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Title</th>
+                                                                <th>Attempts</th>
+                                                                <th>Status</th>
+                                                                <th>First Attempt</th>
+                                                                <th>Last Attempt</th>
+                                                                <th>Solution</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {validExercises.map(exercise => (
+                                                                <tr key={exercise.id} className={exercise.complete ? "complete" : "incomplete"}>
+                                                                    <td>{exercise.title}</td>
+                                                                    <td>{exercise.attempts}</td>
+                                                                    <td>{exercise.complete ? "Complete" : "Incomplete"}</td>
+                                                                    <td>{exercise.first_attempt || "N/A"}</td>
+                                                                    <td>{exercise.last_attempt || "N/A"}</td>
+                                                                    <td>{exercise.used_solution ? "Yes" : "No"}</td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>
+                                )
                             })}
                         </tbody>
                     </table>
