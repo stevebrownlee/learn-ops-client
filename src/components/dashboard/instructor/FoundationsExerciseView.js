@@ -161,7 +161,7 @@ export const FoundationsExerciseView = () => {
                                             <td>{learner.cohort}</td>
                                             <td>{completed}</td>
                                             <td>{incomplete}</td>
-                                            <td>{(parseFloat(total/49) * 100).toFixed(1)}%</td>
+                                            <td>{(parseFloat(completed/49) * 100).toFixed(1)}%</td>
                                             <td>
                                                 {isExpanded ? "▼ Hide Details" : "► Show Details"}
                                             </td>
