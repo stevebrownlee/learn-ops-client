@@ -79,6 +79,21 @@ export const FoundationsExerciseView = () => {
         }))
     }
 
+    function formatDuration(first, last) {
+        const firstAttempt = new Date(first);
+        const lastAttempt = new Date(last);
+        const duration = Math.abs(lastAttempt - firstAttempt);
+        const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((duration / (1000 * 60)) % 60);
+        const seconds = Math.floor((duration / 1000) % 60);
+        const formattedDuration = `${hours}h ${minutes}m ${seconds}s`;
+        return formattedDuration;
+    }
+
+    const formatDateWithoutTime = (dateString) => {
+        return dateString.split("T")[0]
+    }
+
     // Calculate completed and incomplete exercise counts
     const getExerciseCounts = (exercises) => {
         // Filter out exercises with "Undefined" title before counting
@@ -161,7 +176,7 @@ export const FoundationsExerciseView = () => {
                                             <td>{learner.cohort}</td>
                                             <td>{completed}</td>
                                             <td>{incomplete}</td>
-                                            <td>{(parseFloat(completed/49) * 100).toFixed(1)}%</td>
+                                            <td>{(parseFloat(completed / 49) * 100).toFixed(1)}%</td>
                                             <td>
                                                 {isExpanded ? "▼ Hide Details" : "► Show Details"}
                                             </td>
@@ -176,10 +191,10 @@ export const FoundationsExerciseView = () => {
                                                             <tr>
                                                                 <th>Title</th>
                                                                 <th>Attempts</th>
-                                                                <th>Status</th>
                                                                 <th>First Attempt</th>
                                                                 <th>Last Attempt</th>
-                                                                <th>Solution</th>
+                                                                <th>Duration</th>
+                                                                <th>Solution Used</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -187,9 +202,9 @@ export const FoundationsExerciseView = () => {
                                                                 <tr key={exercise.id} className={exercise.complete ? "complete" : "incomplete"}>
                                                                     <td>{exercise.title}</td>
                                                                     <td>{exercise.attempts}</td>
-                                                                    <td>{exercise.complete ? "Complete" : "Incomplete"}</td>
-                                                                    <td>{exercise.first_attempt || "N/A"}</td>
-                                                                    <td>{exercise.last_attempt || "N/A"}</td>
+                                                                    <td>{formatDateWithoutTime(exercise.first_attempt) || "N/A"}</td>
+                                                                    <td>{formatDateWithoutTime(exercise.last_attempt) || "N/A"}</td>
+                                                                    <td>{formatDuration(exercise.first_attempt, exercise.last_attempt)}</td>
                                                                     <td>{exercise.used_solution ? "Yes" : "No"}</td>
                                                                 </tr>
                                                             ))}
