@@ -133,11 +133,11 @@ export const FoundationsExerciseView = () => {
                 })
         }
     }
-    // If the cohort field is "Unassigned", display two radio buttons labeled "day" and "night" with an
+    // If the cohort field is "Unassigned", display two radio buttons labeled "day" and "evening" with an
     // input field for the cohort number. The user can select one of the radio buttons and enter a number in the input field.
     // When they return key is pressed in the input field, perform a PUT request to update the cohort.
     const renderCohortField = (learner) => {
-        if (learner.cohort.includes("Unassigned")) {
+        if (learner.cohort.includes("Unassigned") || learner.cohort.toLowerCase() === "day 0") {
             return (
                 <div className="cohort-selection">
                     <input type="radio" name="cohort" value="day" onChange={() => { setCohortType("day") }} /> Day
