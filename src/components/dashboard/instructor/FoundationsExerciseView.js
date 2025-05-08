@@ -108,7 +108,7 @@ export const FoundationsExerciseView = () => {
         // Perform PUT request to update the cohort
         setLoading(true)
         const cohortNumber = e.target.value
-        const selectedCohort = cohortType === "day" ? "Day" : cohortType === "night" ? "Night" : null
+        const selectedCohort = cohortType === "day" ? "Day" : cohortType === "evening" ? "Evening" : null
 
         if (cohortNumber && selectedCohort) {
             const url = `${Settings.apiHost}/foundations/assigncohort`
@@ -143,7 +143,7 @@ export const FoundationsExerciseView = () => {
             return (
                 <div className="cohort-selection">
                     <input type="radio" name="cohort" value="day" onChange={() => { setCohortType("day") }} /> Day
-                    <input type="radio" name="cohort" value="night" onChange={() => { setCohortType("night") }} /> Night
+                    <input type="radio" name="cohort" value="evening" onChange={() => { setCohortType("evening") }} /> Evening
                     <input type="number" placeholder="Cohort Number" onKeyDown={(e) => {
                         if (e.key === "Enter") {
                             updateCohort(e, learner.learner_github_id)
