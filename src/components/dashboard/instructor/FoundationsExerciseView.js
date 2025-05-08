@@ -10,6 +10,7 @@ export const FoundationsExerciseView = () => {
     const [startDate, setStartDate] = useState("")
     const [loading, setLoading] = useState(true)
     const [cohortType, setCohortType] = useState("")
+    const [cohortNumber, setCohortNumber] = useState("")
     const [expandedLearners, setExpandedLearners] = useState({})
 
     // Format date for API query
@@ -43,7 +44,32 @@ export const FoundationsExerciseView = () => {
 
         fetchIt(url)
             .then(data => {
-                setLearnerData(data)
+                // Filter data based on cohort type and number if provided
+                let filteredData = [...data]
+
+                if (cohortType || cohortNumber) {
+                    filteredData = data.filter(learner => {
+                        // Skip filtering if cohort is unassigned
+                        if (learner.cohort.includes("Unassigned") || learner.cohort.toLowerCase() === "day 0") {
+                            return true
+                        }
+
+                        // Split cohort string (e.g., "Day 70" or "Evening 30")
+                        const cohortParts = learner.cohort.split(" ")
+                        const learnerCohortType = cohortParts[0] // "Day" or "Evening"
+                        const learnerCohortNumber = cohortParts[1] // "70" or "30"
+
+                        // Match cohort type if provided
+                        const typeMatches = !cohortType || learnerCohortType.toLowerCase() === cohortType.toLowerCase()
+
+                        // Match cohort number if provided
+                        const numberMatches = !cohortNumber || learnerCohortNumber === cohortNumber
+
+                        return typeMatches && numberMatches
+                    })
+                }
+
+                setLearnerData(filteredData)
                 setLoading(false)
             })
             .catch(error => {
@@ -67,6 +93,8 @@ export const FoundationsExerciseView = () => {
     const handleReset = () => {
         setGithubName("")
         setStartDate("")
+        setCohortType("")
+        setCohortNumber("")
         setTimeout(() => {
             fetchExercises()
         }, 0)
@@ -178,6 +206,30 @@ export const FoundationsExerciseView = () => {
                             id="startDate"
                             value={startDate}
                             onChange={(e) => setStartDate(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="filter-group">
+                        <label htmlFor="cohortType">Cohort Type:</label>
+                        <select
+                            id="cohortType"
+                            value={cohortType}
+                            onChange={(e) => setCohortType(e.target.value)}
+                        >
+                            <option value="">All</option>
+                            <option value="Day">Day</option>
+                            <option value="Evening">Evening</option>
+                        </select>
+                    </div>
+
+                    <div className="filter-group">
+                        <label htmlFor="cohortNumber">Cohort Number:</label>
+                        <input
+                            type="number"
+                            id="cohortNumber"
+                            value={cohortNumber}
+                            onChange={(e) => setCohortNumber(e.target.value)}
+                            placeholder="Cohort number"
                         />
                     </div>
 
