@@ -121,17 +121,15 @@ export const FoundationsExerciseView = () => {
                 method: "PUT",
                 body: JSON.stringify(data)
             })
-                .then(response => response.json())
                 .then(data => {
                     console.log("Cohort updated successfully:", data)
-                    // Optionally, refresh the data or update the state
                     fetchExercises()
                 })
                 .catch(error => {
                     console.error("Error updating cohort:", error)
                 })
                 .finally(() => {
-                    setLoading(false)
+                    fetchExercises()
                 })
         }
     }
