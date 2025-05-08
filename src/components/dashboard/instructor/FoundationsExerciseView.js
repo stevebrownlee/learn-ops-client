@@ -106,7 +106,7 @@ export const FoundationsExerciseView = () => {
 
     const updateCohort = (e, userId) => {
         // Perform PUT request to update the cohort
-        debugger
+        setLoading(true)
         const cohortNumber = e.target.value
         const selectedCohort = cohortType === "day" ? "Day" : cohortType === "night" ? "Night" : null
 
@@ -129,6 +129,9 @@ export const FoundationsExerciseView = () => {
                 })
                 .catch(error => {
                     console.error("Error updating cohort:", error)
+                })
+                .finally(() => {
+                    setLoading(false)
                 })
         }
     }
