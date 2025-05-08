@@ -9,6 +9,7 @@ export const FoundationsExerciseView = () => {
     const [githubName, setGithubName] = useState("")
     const [startDate, setStartDate] = useState("")
     const [loading, setLoading] = useState(true)
+    const [cohortType, setCohortType] = useState("")
     const [expandedLearners, setExpandedLearners] = useState({})
 
     // Format date for API query
@@ -103,6 +104,55 @@ export const FoundationsExerciseView = () => {
         return { completed, incomplete, total: validExercises.length }
     }
 
+    const updateCohort = (e, userId) => {
+        // Perform PUT request to update the cohort
+        debugger
+        const cohortNumber = e.target.value
+        const selectedCohort = cohortType === "day" ? "Day" : cohortType === "night" ? "Night" : null
+
+        if (cohortNumber && selectedCohort) {
+            const url = `${Settings.apiHost}/foundations/assigncohort`
+            const data = {
+                userId: userId,
+                cohortType: selectedCohort,
+                cohortNumber: cohortNumber
+            }
+            fetchIt(url, {
+                method: "PUT",
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Cohort updated successfully:", data)
+                    // Optionally, refresh the data or update the state
+                    fetchExercises()
+                })
+                .catch(error => {
+                    console.error("Error updating cohort:", error)
+                })
+        }
+    }
+    // If the cohort field is "Unassigned", display two radio buttons labeled "day" and "night" with an
+    // input field for the cohort number. The user can select one of the radio buttons and enter a number in the input field.
+    // When they return key is pressed in the input field, perform a PUT request to update the cohort.
+    const renderCohortField = (learner) => {
+        if (learner.cohort.includes("Unassigned")) {
+            return (
+                <div className="cohort-selection">
+                    <input type="radio" name="cohort" value="day" onChange={() => { setCohortType("day") }} /> Day
+                    <input type="radio" name="cohort" value="night" onChange={() => { setCohortType("night") }} /> Night
+                    <input type="number" placeholder="Cohort Number" onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            updateCohort(e, learner.learner_github_id)
+                        }
+                    }}
+                    />
+                </div>
+            )
+        }
+        return learner.cohort
+    }
+
     return (
         <div className="foundations-exercise-container">
             <h2>Foundations Exercises</h2>
@@ -173,7 +223,7 @@ export const FoundationsExerciseView = () => {
                                             onClick={() => toggleExpand(learner.learner_name)}
                                         >
                                             <td>{learner.learner_name}</td>
-                                            <td>{learner.cohort}</td>
+                                            <td>{renderCohortField(learner)}</td>
                                             <td>{completed}</td>
                                             <td>{incomplete}</td>
                                             <td>{(parseFloat(completed / 49) * 100).toFixed(1)}%</td>
