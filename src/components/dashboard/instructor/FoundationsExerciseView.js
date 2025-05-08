@@ -51,7 +51,7 @@ export const FoundationsExerciseView = () => {
                     filteredData = data.filter(learner => {
                         // Skip filtering if cohort is unassigned
                         if (learner.cohort.includes("Unassigned") || learner.cohort.toLowerCase() === "day 0") {
-                            return true
+                            return false
                         }
 
                         // Split cohort string (e.g., "Day 70" or "Evening 30")
