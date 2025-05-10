@@ -24,7 +24,7 @@ export const CohortList = () => {
         getRecentCohorts()
     }, [])
 
-    const getRecentCohorts = () => getCohorts({ limit: 6 })
+    const getRecentCohorts = () => getCohorts({ limit: 12 })
 
     return <>
         <header className="cohorts__header">
