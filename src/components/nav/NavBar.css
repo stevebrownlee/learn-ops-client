@@ -22,11 +22,10 @@
 
 .menu {
     display: flex;
-    gap: 1em;
+    gap: 4rem;
 }
 
 .navbar__item {
-    flex-basis: 15%;
     list-style-type: none;
     margin: 0.2rem 0 0 0;
 }

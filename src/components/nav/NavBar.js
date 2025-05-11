@@ -36,16 +36,16 @@ export const NavBar = () => {
                             {makeLink("/", "Students")}
                         </li>
                         <li className="navbar__item">
-                            {makeLink("/teams", "Team Builder")}
+                            {makeLink("/teams", "Teams")}
                         </li>
                         <li className="navbar__item">
                             {makeLink("/cohorts", "Cohorts")}
                         </li>
                         <li className="navbar__item">
-                            {makeLink("/courses", "Course Management")}
+                            {makeLink("/courses", "Courses")}
                         </li>
                         <li className="navbar__item">
-                            {makeLink("/foundations", "Foundations Exercises")}
+                            {makeLink("/foundations", "Foundations")}
                         </li>
                         {
                             isAuthenticated()
