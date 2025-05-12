@@ -6,12 +6,14 @@ import "./FoundationsExerciseView.css"
 
 export const FoundationsExerciseView = () => {
     const [learnerData, setLearnerData] = useState([])
+    const [allLearnerData, setAllLearnerData] = useState([]) // Store all data from API
     const [githubName, setGithubName] = useState("")
     const [startDate, setStartDate] = useState("")
     const [loading, setLoading] = useState(true)
-    const [cohortType, setCohortType] = useState("")
-    const [cohortNumber, setCohortNumber] = useState("")
+    const [selectedCohort, setSelectedCohort] = useState("")
     const [expandedLearners, setExpandedLearners] = useState({})
+    const [uniqueCohorts, setUniqueCohorts] = useState([])
+    const [cohortTypeForUnassigned, setCohortTypeForUnassigned] = useState("")
 
     // Format date for API query
     const formatDateForQuery = (dateString) => {
@@ -44,29 +46,34 @@ export const FoundationsExerciseView = () => {
 
         fetchIt(url)
             .then(data => {
-                // Filter data based on cohort type and number if provided
+                // Extract unique cohorts from data
+                const cohorts = data
+                    .map(learner => learner.cohort)
+                    .filter(cohort =>
+                        cohort &&
+                        !cohort.includes("Unassigned") &&
+                        cohort.toLowerCase() !== "day 0"
+                    )
+
+                // Get unique cohort values
+                const uniqueCohortValues = [...new Set(cohorts)].sort()
+                setUniqueCohorts(uniqueCohortValues)
+
+                // Store all data from API
+                setAllLearnerData(data)
+
+                // Filter data based on selected cohort if provided
                 let filteredData = [...data]
 
-                if (cohortType || cohortNumber) {
+                if (selectedCohort) {
                     filteredData = data.filter(learner => {
-                        // Skip filtering if cohort is unassigned
-                        if (learner.cohort.includes("Unassigned") || learner.cohort.toLowerCase() === "day 0") {
-                            return false
-                        }
-
-                        // Split cohort string (e.g., "Day 70" or "Evening 30")
-                        const cohortParts = learner.cohort.split(" ")
-                        const learnerCohortType = cohortParts[0] // "Day" or "Evening"
-                        const learnerCohortNumber = cohortParts[1] // "70" or "30"
-
-                        // Match cohort type if provided
-                        const typeMatches = !cohortType || learnerCohortType.toLowerCase() === cohortType.toLowerCase()
-
-                        // Match cohort number if provided
-                        const numberMatches = !cohortNumber || learnerCohortNumber === cohortNumber
-
-                        return typeMatches && numberMatches
+                        return learner.cohort === selectedCohort
                     })
+                } else {
+                    // If no cohort is selected, filter out "day 0" learners
+                    filteredData = data.filter(learner =>
+                        !learner.cohort.toLowerCase().includes("day 0")
+                    )
                 }
 
                 setLearnerData(filteredData)
@@ -83,6 +90,26 @@ export const FoundationsExerciseView = () => {
         fetchExercises()
     }, [])
 
+    // Filter data when selected cohort changes
+    useEffect(() => {
+        if (allLearnerData.length > 0) {
+            // Apply cohort filter without making a new API call
+            if (selectedCohort) {
+                // When a specific cohort is selected, only show learners from that cohort
+                const filteredData = allLearnerData.filter(learner =>
+                    learner.cohort === selectedCohort
+                )
+                setLearnerData(filteredData)
+            } else {
+                // If no cohort is selected (All button), show all data except "day 0"
+                const filteredData = allLearnerData.filter(learner =>
+                    !learner.cohort.toLowerCase().includes("day 0")
+                )
+                setLearnerData(filteredData)
+            }
+        }
+    }, [selectedCohort, allLearnerData])
+
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -93,11 +120,18 @@ export const FoundationsExerciseView = () => {
     const handleReset = () => {
         setGithubName("")
         setStartDate("")
-        setCohortType("")
-        setCohortNumber("")
-        setTimeout(() => {
+        setSelectedCohort("")
+
+        // If we have data already, reset to show all data except "day 0"
+        if (allLearnerData.length > 0) {
+            const filteredData = allLearnerData.filter(learner =>
+                !learner.cohort.toLowerCase().includes("day 0")
+            )
+            setLearnerData(filteredData)
+        } else {
+            // If no data yet, fetch from API
             fetchExercises()
-        }, 0)
+        }
     }
 
     // Toggle expanded state for a learner
@@ -132,17 +166,17 @@ export const FoundationsExerciseView = () => {
         return { completed, incomplete, total: validExercises.length }
     }
 
-    const updateCohort = (e, userId) => {
+    const updateCohort = (e, userId, cohortType) => {
         // Perform PUT request to update the cohort
         setLoading(true)
         const cohortNumber = e.target.value
-        const selectedCohort = cohortType === "day" ? "Day" : cohortType === "evening" ? "Evening" : null
+        const cohortTypeValue = cohortType === "day" ? "Day" : cohortType === "evening" ? "Evening" : null
 
-        if (cohortNumber && selectedCohort) {
+        if (cohortNumber && cohortTypeValue) {
             const url = `${Settings.apiHost}/foundations/assigncohort`
             const data = {
                 userId: userId,
-                cohortType: selectedCohort,
+                cohortType: cohortTypeValue,
                 cohortNumber: cohortNumber
             }
             fetchIt(url, {
@@ -168,13 +202,28 @@ export const FoundationsExerciseView = () => {
         if (learner.cohort.includes("Unassigned") || learner.cohort.toLowerCase() === "day 0") {
             return (
                 <div className="cohort-selection">
-                    <input type="radio" name="cohort" value="day" onChange={() => { setCohortType("day") }} /> Day
-                    <input type="radio" name="cohort" value="evening" onChange={() => { setCohortType("evening") }} /> Evening
-                    <input type="number" placeholder="Cohort Number" onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            updateCohort(e, learner.learner_github_id)
-                        }
-                    }}
+                    <input
+                        type="radio"
+                        name={`cohort-${learner.learner_github_id}`}
+                        value="day"
+                        onChange={() => { setCohortTypeForUnassigned("day") }}
+                        checked={cohortTypeForUnassigned === "day"}
+                    /> Day
+                    <input
+                        type="radio"
+                        name={`cohort-${learner.learner_github_id}`}
+                        value="evening"
+                        onChange={() => { setCohortTypeForUnassigned("evening") }}
+                        checked={cohortTypeForUnassigned === "evening"}
+                    /> Evening
+                    <input
+                        type="number"
+                        placeholder="Cohort Number"
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                updateCohort(e, learner.learner_github_id, cohortTypeForUnassigned)
+                            }
+                        }}
                     />
                 </div>
             )
@@ -187,6 +236,7 @@ export const FoundationsExerciseView = () => {
             <h2>Foundations Exercises</h2>
 
             <form className="foundations-filter-form" onSubmit={handleSubmit}>
+
                 <div className="filter-controls">
                     <div className="filter-group">
                         <label htmlFor="githubName">Learner Name:</label>
@@ -209,33 +259,35 @@ export const FoundationsExerciseView = () => {
                         />
                     </div>
 
-                    <div className="filter-group">
-                        <label htmlFor="cohortType">Cohort Type:</label>
-                        <select
-                            id="cohortType"
-                            value={cohortType}
-                            onChange={(e) => setCohortType(e.target.value)}
-                        >
-                            <option value="">All</option>
-                            <option value="Day">Day</option>
-                            <option value="Evening">Evening</option>
-                        </select>
-                    </div>
 
-                    <div className="filter-group">
-                        <label htmlFor="cohortNumber">Cohort Number:</label>
-                        <input
-                            type="number"
-                            id="cohortNumber"
-                            value={cohortNumber}
-                            onChange={(e) => setCohortNumber(e.target.value)}
-                            placeholder="Cohort number"
-                        />
-                    </div>
 
                     <div className="filter-actions">
                         <button type="submit" className="filter-button">Apply Filters</button>
                         <button type="button" className="reset-button" onClick={handleReset}>Reset</button>
+                    </div>
+                    <div className="filter-controls">
+                        <div className="filter-group">
+                        <label>Cohorts:</label>
+                        <div className="cohort-buttons">
+                            <button
+                                type="button"
+                                className={`cohort-button ${selectedCohort === "" ? "active" : ""}`}
+                                onClick={() => setSelectedCohort("")}
+                            >
+                                All
+                            </button>
+                            {uniqueCohorts.map(cohort => (
+                                <button
+                                    key={cohort}
+                                    type="button"
+                                    className={`cohort-button ${selectedCohort === cohort ? "active" : ""}`}
+                                    onClick={() => setSelectedCohort(cohort)}
+                                >
+                                    {cohort}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                     </div>
                 </div>
             </form>
