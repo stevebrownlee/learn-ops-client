@@ -69,14 +69,11 @@ export const FoundationsExerciseView = () => {
                     filteredData = data.filter(learner => {
                         return learner.cohort === selectedCohort
                     })
+                    setLearnerData(filteredData)
                 } else {
-                    // If no cohort is selected, filter out "day 0" learners
-                    filteredData = data.filter(learner =>
-                        !learner.cohort.toLowerCase().includes("day 0")
-                    )
+                    setLearnerData(data)
                 }
 
-                setLearnerData(filteredData)
                 setLoading(false)
             })
             .catch(error => {
@@ -101,11 +98,7 @@ export const FoundationsExerciseView = () => {
                 )
                 setLearnerData(filteredData)
             } else {
-                // If no cohort is selected (All button), show all data except "day 0"
-                const filteredData = allLearnerData.filter(learner =>
-                    !learner.cohort.toLowerCase().includes("day 0")
-                )
-                setLearnerData(filteredData)
+                setLearnerData(allLearnerData)
             }
         }
     }, [selectedCohort, allLearnerData])
@@ -316,8 +309,7 @@ export const FoundationsExerciseView = () => {
                                 const validExercises = learner.exercises.filter(ex => ex.title !== "Undefined")
 
                                 return (
-                                    <React.Fragment key={learner.learner_name}>
-                                        {/* Learner summary row */}
+                                    <React.Fragment key={`${learner.learner_name}-${learner.learner_github_id}`}>
                                         <tr
                                             className="learner-summary-row"
                                             style={{
@@ -337,7 +329,6 @@ export const FoundationsExerciseView = () => {
                                             </td>
                                         </tr>
 
-                                        {/* Expanded exercise details */}
                                         {isExpanded && (
                                             <tr>
                                                 <td colSpan="6" style={{ padding: 0 }}>
