@@ -13,6 +13,7 @@ import { Button } from "@radix-ui/themes"
 
 export const CohortList = () => {
     const [editSlack, setSlackEdit] = useState(0)
+    const [showActive, setShowActive] = useState(true)
     const { getStudents } = useContext(PeopleContext)
     const {
         getCohorts, cohorts, leaveCohort,
@@ -22,13 +23,14 @@ export const CohortList = () => {
 
     useEffect(() => {
         getRecentCohorts()
-    }, [])
+    }, [showActive])
 
-    const getRecentCohorts = () => getCohorts({ limit: 12 })
+    const getRecentCohorts = () => getCohorts({ limit: 12, active: showActive })
 
     return <>
-        <header className="cohorts__header">
-            <Button className="" onClick={() => history.push("/cohorts/new")}>Create Cohort</Button>
+        <header className="cohorts__header" style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+            <Button  onClick={() => history.push("/cohorts/new")}>Create Cohort</Button>
+            <Button color={showActive ? "brown" : "gold"} onClick={() => setShowActive(!showActive)}>{showActive ? "Show Previous 12" : "Show Active"} Cohorts</Button>
         </header>
         <div className="cohorts">
             {

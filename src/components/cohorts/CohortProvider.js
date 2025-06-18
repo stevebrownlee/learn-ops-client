@@ -26,10 +26,15 @@ export const CohortProvider = (props) => {
     }, [activeCohort])
 
     const getCohorts = useCallback((options={}) => {
-        const limit = options.limit ? `?limit=${options.limit}` : ""
-        const active = options.active ? `?active=${options.active}` : ""
+        const url = `${Settings.apiHost}/cohorts`
+        // If options has a `limit` property, append it to the URL
+        const queryParams = new Set()
+        const limit = options.limit && queryParams.add(`limit=${options.limit}`)
+        // If options has an `active` property, append it to the URL
+        const active = options.active && queryParams.add(`active=${options.active}`)
 
-        return fetchIt(`${Settings.apiHost}/cohorts${limit || active}`)
+
+        return fetchIt(`${Settings.apiHost}/cohorts${queryParams.size ? `?${[...queryParams].join("&")}` : ""}`)
             .then(data => setCohorts(data))
     }, [setCohorts])
 
