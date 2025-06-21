@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Button, Badge } from '@radix-ui/themes'
+import { Button, Badge, Flex, Text, Box, Container, Section, TextField } from '@radix-ui/themes'
 import { useHistory } from "react-router-dom"
 
 import Settings from "../Settings.js"
@@ -57,10 +57,12 @@ export const CohortForm = () => {
         updateCohort(copy)
     }
 
-    return (<form className="cohortForm view">
-        <section className="cohortForm__fields">
-            <h2 className="cohortForm__title">New Cohort</h2>
-            <div className="form-group">
+    return (
+    <Container>
+        <Flex className="cohortForm view" direction="row" gap="1rem" justify="between">
+            <Section className="cohortForm__fields">
+                <Text as="h2" size="5" weight="bold" className="cohortForm__title">New Cohort</Text>
+                <Box className="form-group">
                 <label htmlFor="name">
                     Cohort name
                     <HelpIcon tip="Day Cohort 62, for example." />
@@ -69,42 +71,44 @@ export const CohortForm = () => {
                     value={cohort.name}
                     type="text" required autoFocus
                     id="name" className="form-control" />
-            </div>
+                </Box>
 
-            <div className="form-group">
-                <label htmlFor="name">Github Org URL</label>
-                <input onChange={handleUserInput}
-                    value={cohort.orgURL}
-                    type="url" required
-                    id="orgURL" className="form-control" />
-            </div>
+                <Box className="form-group">
+                    <Text as="label" htmlFor="orgURL">Github Org URL</Text>
+                    <input onChange={handleUserInput}
+                        value={cohort.orgURL}
+                        type="url" required
+                        id="orgURL" className="form-control" />
+                </Box>
 
-            <div className="form-group">
-                <label>
-                    Instructor Slack Channel ID
-                    <HelpIcon tip="Click on the instructor channel name at the top of Slack. Channel ID is at the bottom of pop-up." />
-                </label>
-                <input onChange={handleUserInput}
-                    value={cohort.slackChannel}
-                    type="text" required
-                    id="slackChannel" className="form-control" />
-            </div>
+                <Box className="form-group">
+                    <Flex align="center" gap="1">
+                        <Text as="label" htmlFor="slackChannel">
+                            Instructor Slack Channel ID
+                        </Text>
+                        <HelpIcon tip="Click on the instructor channel name at the top of Slack. Channel ID is at the bottom of pop-up." />
+                    </Flex>
+                    <input onChange={handleUserInput}
+                        value={cohort.slackChannel}
+                        type="text" required
+                        id="slackChannel" className="form-control" />
+                </Box>
 
-            <div className="form-group">
-                <label htmlFor="startDate">Start date</label>
-                <input onChange={handleUserInput}
-                    value={cohort.startDate}
-                    type="date" required
-                    id="startDate" className="form-control" />
-            </div>
+                <Box className="form-group">
+                    <Text as="label" htmlFor="startDate">Start date</Text>
+                    <input onChange={handleUserInput}
+                        value={cohort.startDate}
+                        type="date" required
+                        id="startDate" className="form-control" />
+                </Box>
 
-            <div className="form-group">
-                <label htmlFor="endDate">End date</label>
-                <input onChange={handleUserInput}
-                    value={cohort.endDate}
-                    type="date" required
-                    id="endDate" className="form-control" />
-            </div>
+                <Box className="form-group">
+                    <Text as="label" htmlFor="endDate">End date</Text>
+                    <input onChange={handleUserInput}
+                        value={cohort.endDate}
+                        type="date" required
+                        id="endDate" className="form-control" />
+                </Box>
 
             <Button color="blue"
                 onClick={
@@ -114,13 +118,11 @@ export const CohortForm = () => {
                     }
                 }
                 className="isometric-button blue"> Create </Button>
-
-        </section>
-
-        <section className="cohortForm__courses">
-            <fieldset>
-                <h3 htmlFor="endDate">Client side</h3>
-                <div className="form-group">
+            </Section>
+            <Section className="cohortForm__courses">
+                <Box as="fieldset">
+                    <Text as="h3" size="3" weight="bold">Client side</Text>
+                    <Flex className="form-group" wrap="wrap" gap="1">
                     {
                         courses.map(course => {
                             return <Badge key={`course--${course.id}`}
@@ -136,12 +138,11 @@ export const CohortForm = () => {
                             </Badge>
                         })
                     }
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <h3 htmlFor="endDate">Server side</h3>
-                <div className="form-group">
+                    </Flex>
+                </Box>
+                <Box as="fieldset">
+                    <Text as="h3" size="3" weight="bold">Server side</Text>
+                    <Flex className="form-group" wrap="wrap" gap="1">
                     {
                         courses.map(course => {
                             return <Badge key={`course--${course.id}`}
@@ -156,10 +157,10 @@ export const CohortForm = () => {
                             </Badge>
                         })
                     }
-                </div>
-            </fieldset>
-        </section>
-
-    </form>
+                    </Flex>
+                </Box>
+            </Section>
+        </Flex>
+    </Container>
     )
 }
