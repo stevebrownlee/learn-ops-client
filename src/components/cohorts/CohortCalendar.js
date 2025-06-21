@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Dialog, Button, TextField, TextArea, Text, Flex, Card } from '@radix-ui/themes';
 import { CohortContext } from './CohortProvider';
 import './CohortCalendar.css';
@@ -16,6 +16,17 @@ export const CohortCalendar = () => {
   const [showViewDialog, setShowViewDialog] = useState(false);
   const [calendarDays, setCalendarDays] = useState([]);
   const [calendarMonths, setCalendarMonths] = useState([]);
+  const clickTimeoutRef = useRef(null);
+  const isDoubleClickRef = useRef(false);
+
+  // Clear timeout on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Generate calendar days based on cohort start and end dates
   useEffect(() => {
@@ -146,23 +157,72 @@ export const CohortCalendar = () => {
     setShowAddDialog(false);
   };
 
-  // Handle day click
-  const handleDayClick = (day) => {
+  // Handle day double click - immediately show add dialog and prevent view dialog
+  const handleDayDoubleClick = (day) => {
+    // Mark that a double-click has occurred
+    isDoubleClickRef.current = true;
+
+    // Clear any pending single-click timeout
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+      clickTimeoutRef.current = null;
+    }
+
     setSelectedDate(day.date);
     setShowAddDialog(true);
+
+    // Reset the double-click flag after a delay
+    setTimeout(() => {
+      isDoubleClickRef.current = false;
+    }, 500);
   };
 
-  // Handle day double click
-  const handleDayDoubleClick = (day) => {
+  // Handle day click - set a timeout before showing the view dialog
+  const handleDayClick = (day) => {
+    // Set the selected date immediately
     setSelectedDate(day.date);
-    setShowViewDialog(true);
+
+    // Set a timeout to show the dialog after a delay
+    clickTimeoutRef.current = setTimeout(() => {
+      // Only show the view dialog if no double-click was detected
+      if (!isDoubleClickRef.current) {
+        setShowViewDialog(true);
+      }
+      clickTimeoutRef.current = null;
+    }, 300); // 300ms delay to allow for double-click detection
   };
 
   // Get events for a specific date
   const getEventsForDate = (date) => {
     const dateKey = date.toISOString().split('T')[0];
-    return events[dateKey] || [];
+
+    const eventsForDate = events[dateKey] || [];
+    return eventsForDate
   };
+
+  const generateEventCards = (selectedDate) => {
+    if (selectedDate) {
+      const newDate = new Date(selectedDate);
+      const dateKeyLookup = `${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, '0')}-${String(newDate.getDate()).padStart(2, '0')}`
+      const eventsForDate = events[dateKeyLookup] || [];
+
+      if (eventsForDate.length > 0) {
+        return eventsForDate.map((event, index) => (
+          <Card key={`event-${index}`}>
+            <Flex direction="column" gap="1">
+              <Flex justify="between">
+                <Text weight="bold">{event.name}</Text>
+                <Text>{event.time}</Text>
+              </Flex>
+              <Text>{event.description}</Text>
+            </Flex>
+          </Card>
+        ))
+      }
+      return <Text>No events for this date</Text>;
+    }
+  }
+
 
   // No need for inline styles as we're using CSS classes
 
@@ -174,60 +234,60 @@ export const CohortCalendar = () => {
             <div key={`month-${monthIndex}`} className="month-container">
               <h3 className="month-header">{month.monthYear}</h3>
               <div className="calendar-grid">
-              {/* Day headers */}
-              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day,idx) => (
-                <div key={`${day}${idx}`} className="day-header">
-                  {day}
-                </div>
-              ))}
-
-              {/* Empty cells for proper day alignment */}
-              {(() => {
-                // Get the first day of the current month from calendarDays
-                const firstDayOfMonth = calendarDays[month.startIndex];
-                // Calculate how many empty cells we need based on the day of week (0 = Sunday, 1 = Monday, etc.)
-                const emptyCellsNeeded = firstDayOfMonth.date.getDay();
-
-                return Array.from({ length: emptyCellsNeeded }).map((_, i) => (
-                  <div key={`empty-start-${monthIndex}-${i}`} className="calendar-day empty-day"></div>
-                ));
-              })()}
-
-              {/* Calendar days */}
-              {calendarDays.slice(
-                month.startIndex,
-                monthIndex < calendarMonths.length - 1 ? calendarMonths[monthIndex + 1].startIndex : calendarDays.length
-              ).map((day, i) => {
-                const dateEvents = getEventsForDate(day.date);
-                return (
-                  <div
-                    key={`day-${day.date}`}
-                    className="calendar-day"
-                    style={{
-                      backgroundColor: dateEvents.length > 0 ? 'purple' : 'goldenrod',
-                      color: dateEvents.length > 0 ? 'white' : 'black'
-                    }}
-                    onClick={() => handleDayClick(day)}
-                    onDoubleClick={() => handleDayDoubleClick(day)}
-                  >
-                    <span className="day-number">{day.day}</span>
-                    {dateEvents.length > 0 && (
-                      <span className="event-indicator"></span>
-                    )}
+                {/* Day headers */}
+                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, idx) => (
+                  <div key={`${day}${idx}`} className="day-header">
+                    {day}
                   </div>
-                );
-              })}
+                ))}
 
-              {/* Empty cells at the end of the month */}
-              {monthIndex < calendarMonths.length - 1 && (() => {
-                const lastDayOfMonth = new Date(
-                  calendarDays[calendarMonths[monthIndex + 1].startIndex - 1].date
-                );
-                const emptyCells = 6 - lastDayOfMonth.getDay();
-                return Array.from({ length: emptyCells }).map((_, i) => (
-                  <div key={`empty-end-${i}`} className="calendar-day empty-day"></div>
-                ));
-              })()}
+                {/* Empty cells for proper day alignment */}
+                {(() => {
+                  // Get the first day of the current month from calendarDays
+                  const firstDayOfMonth = calendarDays[month.startIndex];
+                  // Calculate how many empty cells we need based on the day of week (0 = Sunday, 1 = Monday, etc.)
+                  const emptyCellsNeeded = firstDayOfMonth.date.getDay();
+
+                  return Array.from({ length: emptyCellsNeeded }).map((_, i) => (
+                    <div key={`empty-start-${monthIndex}-${i}`} className="calendar-day empty-day"></div>
+                  ));
+                })()}
+
+                {/* Calendar days */}
+                {calendarDays.slice(
+                  month.startIndex,
+                  monthIndex < calendarMonths.length - 1 ? calendarMonths[monthIndex + 1].startIndex : calendarDays.length
+                ).map((day, i) => {
+                  const dateEvents = getEventsForDate(day.date);
+                  return (
+                    <div
+                      key={`day-${day.date}`}
+                      className="calendar-day"
+                      style={{
+                        backgroundColor: dateEvents.length > 0 ? 'purple' : 'goldenrod',
+                        color: dateEvents.length > 0 ? 'white' : 'black'
+                      }}
+                      onClick={() => handleDayClick(day)}
+                      onDoubleClick={() => handleDayDoubleClick(day)}
+                    >
+                      <span className="day-number">{day.day}</span>
+                      {dateEvents.length > 0 && (
+                        <span className="event-indicator"></span>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {/* Empty cells at the end of the month */}
+                {monthIndex < calendarMonths.length - 1 && (() => {
+                  const lastDayOfMonth = new Date(
+                    calendarDays[calendarMonths[monthIndex + 1].startIndex - 1].date
+                  );
+                  const emptyCells = 6 - lastDayOfMonth.getDay();
+                  return Array.from({ length: emptyCells }).map((_, i) => (
+                    <div key={`empty-end-${i}`} className="calendar-day empty-day"></div>
+                  ));
+                })()}
               </div>
             </div>
           ))}
@@ -299,21 +359,7 @@ export const CohortCalendar = () => {
           </Dialog.Description>
 
           <Flex direction="column" gap="3">
-            {selectedDate && getEventsForDate(selectedDate).length > 0 ? (
-              getEventsForDate(selectedDate).map((event, index) => (
-                <Card key={`event-${index}`}>
-                  <Flex direction="column" gap="1">
-                    <Flex justify="between">
-                      <Text weight="bold">{event.name}</Text>
-                      <Text>{event.time}</Text>
-                    </Flex>
-                    <Text>{event.description}</Text>
-                  </Flex>
-                </Card>
-              ))
-            ) : (
-              <Text>No events for this day</Text>
-            )}
+            {generateEventCards(selectedDate)}
           </Flex>
 
           <Flex gap="3" mt="4" justify="end">
