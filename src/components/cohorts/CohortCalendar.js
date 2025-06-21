@@ -28,34 +28,38 @@ export const CohortCalendar = () => {
     };
   }, []);
 
+  const fetchCohortEvents = () => {
+    // Fetch events for the active cohort
+    fetchIt(`${Settings.apiHost}/events?cohort=${activeCohortDetails.id}`)
+      .then(data => {
+        // Process the events data and organize by date
+        const eventsByDate = {};
+        data.forEach(event => {
+          const eventDate = new Date(event.event_datetime);
+          // Create dateKey using local date components to avoid timezone issues
+          const dateKey = `${eventDate.getFullYear()}-${String(eventDate.getMonth() + 1).padStart(2, '0')}-${String(eventDate.getDate()).padStart(2, '0')}`;
+
+          if (!eventsByDate[dateKey]) {
+            eventsByDate[dateKey] = [];
+          }
+
+          eventsByDate[dateKey].push({
+            id: event.id,
+            name: event.event_name,
+            time: new Date(event.event_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            description: event.description
+          });
+        });
+
+        setEvents(eventsByDate);
+      })
+      .catch(error => console.error('Error fetching events:', error));
+  }
+
   // Generate calendar days based on cohort start and end dates
   useEffect(() => {
     if (activeCohortDetails?.start_date && activeCohortDetails?.end_date) {
-
-      // Use fetchIt to get events for the cohort
-      fetchIt(`${Settings.apiHost}/events?cohort=${activeCohortDetails.id}`)
-        .then(data => {
-          // Process the events data and organize by date
-          const eventsByDate = {};
-          data.forEach(event => {
-            const eventDate = new Date(event.event_datetime);
-            const dateKey = eventDate.toISOString().split('T')[0];
-
-            if (!eventsByDate[dateKey]) {
-              eventsByDate[dateKey] = [];
-            }
-
-            eventsByDate[dateKey].push({
-              id: event.id,
-              name: event.event_name,
-              time: new Date(event.event_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-              description: event.description
-            });
-          });
-
-          setEvents(eventsByDate);
-        })
-        .catch(error => console.error('Error fetching events:', error));
+      fetchCohortEvents()
 
       const startDate = new Date(activeCohortDetails.start_date);
       const endDate = new Date(activeCohortDetails.end_date);
@@ -112,10 +116,18 @@ export const CohortCalendar = () => {
     }
     // Create a new event object
 
-    const dateKey = selectedDate.toISOString().split('T')[0];
+    // Create dateKey using local date components to avoid timezone issues
+    const dateKey = `${eventDate.getFullYear()}-${String(eventDate.getMonth() + 1).padStart(2, '0')}-${String(eventDate.getDate()).padStart(2, '0')}`;
+
+    // Create a date string that preserves the local time
+    // Format: YYYY-MM-DDTHH:MM:SS.sssZ
+    // First, adjust for timezone offset so when converted to ISO it will be the correct local time
+    const tzOffset = eventDate.getTimezoneOffset() * 60000; // offset in milliseconds
+    const localISOTime = new Date(eventDate.getTime() - tzOffset).toISOString();
+
     const newEvent = {
       cohort: activeCohortDetails.id,
-      datetime: eventDate.toISOString(),
+      datetime: localISOTime,
       name: eventName,
       description: eventDescription
     };
@@ -126,29 +138,8 @@ export const CohortCalendar = () => {
       body: JSON.stringify(newEvent),
       token: activeCohortDetails.token
     })
-      .then(response => {
-        if (response.ok) {
-          // Update local state with the new event
-          setEvents(prevEvents => {
-            const updatedEvents = { ...prevEvents };
-            if (!updatedEvents[dateKey]) {
-              updatedEvents[dateKey] = [];
-            }
-            updatedEvents[dateKey].push({
-              name: eventName,
-              time: eventTime,
-              description: eventDescription
-            });
-            return updatedEvents;
-          });
-        } else {
-          throw new Error('Failed to add event');
-        }
-      })
+      .then(fetchCohortEvents)
       .catch(error => console.error('Error adding event:', error));
-
-
-
 
     // Reset form
     setEventName('');
@@ -194,7 +185,8 @@ export const CohortCalendar = () => {
 
   // Get events for a specific date
   const getEventsForDate = (date) => {
-    const dateKey = date.toISOString().split('T')[0];
+    // Create dateKey using local date components to avoid timezone issues
+    const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
     const eventsForDate = events[dateKey] || [];
     return eventsForDate
