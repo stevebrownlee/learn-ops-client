@@ -12,6 +12,7 @@ import { fetchIt } from "../utils/Fetch.js"
 import Settings from "../Settings.js"
 import { CohortStudentAddDialog } from "./CohortStudentAddDialog.js"
 import { CohortInvitationLink } from "./CohortInvitationLink.js"
+import { CohortCalendar } from "./CohortCalendar.js"
 
 export const CohortDetails = () => {
     const initialState = {
@@ -250,6 +251,7 @@ export const CohortDetails = () => {
                         </div>
                     </div>
 
+                    <CohortCalendar />
                 </div>
             </div>
         </div >

@@ -1,5 +1,3 @@
-import { useRef } from "react"
-
 const keyboardShortcut = (contextKey, activatorKey, handler = () => { }, state = {}) => {
     const keyMap = new Set([contextKey, activatorKey])
     const internalState = {
