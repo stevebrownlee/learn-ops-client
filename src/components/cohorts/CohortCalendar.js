@@ -19,6 +19,11 @@ export const CohortCalendar = () => {
   const clickTimeoutRef = useRef(null);
   const isDoubleClickRef = useRef(false);
 
+  // Drag selection state
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartDate, setDragStartDate] = useState(null);
+  const [selectedDates, setSelectedDates] = useState([]);
+
   // Clear timeout on unmount to prevent memory leaks
   useEffect(() => {
     return () => {
@@ -105,47 +110,112 @@ export const CohortCalendar = () => {
 
   // Handle adding a new event
   const handleAddEvent = () => {
-    if (!selectedDate || !eventName) return;
+    if ((!selectedDate && selectedDates.length === 0) || !eventName) return;
 
-    // API is expecting a single datetime string, so we format it accordingly
-    const eventDate = new Date(selectedDate);
-    eventDate.setHours(0, 0, 0, 0); // Set time to midnight for consistency
-    const eventTimeParts = eventTime.split(':');
-    if (eventTimeParts.length === 2) {
-      eventDate.setHours(parseInt(eventTimeParts[0], 10), parseInt(eventTimeParts[1], 10));
-    }
-    // Create a new event object
+    // Determine which dates to create events for
+    const datesToProcess = selectedDates.length > 0 ? selectedDates : [selectedDate];
 
-    // Create dateKey using local date components to avoid timezone issues
-    const dateKey = `${eventDate.getFullYear()}-${String(eventDate.getMonth() + 1).padStart(2, '0')}-${String(eventDate.getDate()).padStart(2, '0')}`;
+    // Create and post events for each selected date
+    const createPromises = datesToProcess.map(date => {
+      // API is expecting a single datetime string, so we format it accordingly
+      const eventDate = new Date(date);
+      eventDate.setHours(0, 0, 0, 0); // Set time to midnight for consistency
+      const eventTimeParts = eventTime.split(':');
+      if (eventTimeParts.length === 2) {
+        eventDate.setHours(parseInt(eventTimeParts[0], 10), parseInt(eventTimeParts[1], 10));
+      }
 
-    // Create a date string that preserves the local time
-    // Format: YYYY-MM-DDTHH:MM:SS.sssZ
-    // First, adjust for timezone offset so when converted to ISO it will be the correct local time
-    const tzOffset = eventDate.getTimezoneOffset() * 60000; // offset in milliseconds
-    const localISOTime = new Date(eventDate.getTime() - tzOffset).toISOString();
+      // Create a date string that preserves the local time
+      // Format: YYYY-MM-DDTHH:MM:SS.sssZ
+      // First, adjust for timezone offset so when converted to ISO it will be the correct local time
+      const tzOffset = eventDate.getTimezoneOffset() * 60000; // offset in milliseconds
+      const localISOTime = new Date(eventDate.getTime() - tzOffset).toISOString();
 
-    const newEvent = {
-      cohort: activeCohortDetails.id,
-      datetime: localISOTime,
-      name: eventName,
-      description: eventDescription
-    };
+      const newEvent = {
+        cohort: activeCohortDetails.id,
+        datetime: localISOTime,
+        name: eventName,
+        description: eventDescription
+      };
 
-    // POST the new event to the API
-    fetchIt(`${Settings.apiHost}/events?cohort=${activeCohortDetails.id}`, {
-      method: 'POST',
-      body: JSON.stringify(newEvent),
-      token: activeCohortDetails.token
-    })
+      // POST the new event to the API
+      return fetchIt(`${Settings.apiHost}/events?cohort=${activeCohortDetails.id}`, {
+        method: 'POST',
+        body: JSON.stringify(newEvent),
+        token: activeCohortDetails.token
+      });
+    });
+
+    // Wait for all events to be created
+    Promise.all(createPromises)
       .then(fetchCohortEvents)
-      .catch(error => console.error('Error adding event:', error));
+      .catch(error => console.error('Error adding events:', error));
 
-    // Reset form
+    // Reset form and selection
     setEventName('');
     setEventTime('');
     setEventDescription('');
+    setSelectedDates([]);
     setShowAddDialog(false);
+  };
+
+  // Get dates between two dates (inclusive)
+  const getDatesBetween = (startDate, endDate) => {
+    const dates = [];
+    let currentDate = new Date(Math.min(startDate.getTime(), endDate.getTime()));
+    const lastDate = new Date(Math.max(startDate.getTime(), endDate.getTime()));
+
+    // Set hours to 0 to compare dates only
+    currentDate.setHours(0, 0, 0, 0);
+    lastDate.setHours(0, 0, 0, 0);
+
+    while (currentDate <= lastDate) {
+      dates.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dates;
+  };
+
+  // Handle mouse down on a day - start drag selection
+  const handleDayMouseDown = (day, event) => {
+    // Prevent default to avoid text selection
+    event.preventDefault();
+
+    // Start drag operation
+    setIsDragging(true);
+    setDragStartDate(day.date);
+    setSelectedDates([day.date]);
+  };
+
+  // Handle mouse move over a day during drag
+  const handleDayMouseMove = (day) => {
+    if (isDragging && dragStartDate) {
+      // Update selected dates based on drag range
+      const datesBetween = getDatesBetween(dragStartDate, day.date);
+      setSelectedDates(datesBetween);
+    }
+  };
+
+  // Handle mouse up - end drag selection and show dialog
+  const handleDayMouseUp = () => {
+    if (isDragging && selectedDates.length > 0) {
+      setIsDragging(false);
+
+      // Sort dates chronologically
+      const sortedDates = [...selectedDates].sort((a, b) => a - b);
+      setSelectedDates(sortedDates);
+
+      // Show add dialog with selected date range
+      setShowAddDialog(true);
+    }
+  };
+
+  // Handle mouse leave from calendar area
+  const handleCalendarMouseLeave = () => {
+    if (isDragging) {
+      setIsDragging(false);
+    }
   };
 
   // Handle day double click - immediately show add dialog and prevent view dialog
@@ -160,6 +230,7 @@ export const CohortCalendar = () => {
     }
 
     setSelectedDate(day.date);
+    setSelectedDates([]); // Clear any drag selection
     setShowAddDialog(true);
 
     // Reset the double-click flag after a delay
@@ -170,8 +241,12 @@ export const CohortCalendar = () => {
 
   // Handle day click - set a timeout before showing the view dialog
   const handleDayClick = (day) => {
+    // If we're dragging, don't trigger click
+    if (isDragging) return;
+
     // Set the selected date immediately
     setSelectedDate(day.date);
+    setSelectedDates([]); // Clear any drag selection
 
     // Set a timeout to show the dialog after a delay
     clickTimeoutRef.current = setTimeout(() => {
@@ -220,7 +295,7 @@ export const CohortCalendar = () => {
 
   return (
     <div className="cohort-calendar">
-      <div className="calendar-container">
+      <div className="calendar-container" onMouseLeave={handleCalendarMouseLeave}>
         <div className="months-grid">
           {calendarMonths.map((month, monthIndex) => (
             <div key={`month-${monthIndex}`} className="month-container">
@@ -261,6 +336,9 @@ export const CohortCalendar = () => {
                       }}
                       onClick={() => handleDayClick(day)}
                       onDoubleClick={() => handleDayDoubleClick(day)}
+                      onMouseDown={(e) => handleDayMouseDown(day, e)}
+                      onMouseMove={() => handleDayMouseMove(day)}
+                      onMouseUp={handleDayMouseUp}
                     >
                       <span className="day-number">{day.day}</span>
                       {dateEvents.length > 0 && (
@@ -287,11 +365,19 @@ export const CohortCalendar = () => {
       </div>
 
       {/* Add Event Dialog */}
-      <Dialog.Root open={showAddDialog} onOpenChange={setShowAddDialog}>
+      <Dialog.Root open={showAddDialog} onOpenChange={(open) => {
+        setShowAddDialog(open);
+        if (!open) {
+          // Reset selection when dialog is closed
+          setSelectedDates([]);
+        }
+      }}>
         <Dialog.Content>
           <Dialog.Title>Add Event</Dialog.Title>
           <Dialog.Description size="2" mb="4">
-            {selectedDate && `Add an event for ${selectedDate.toLocaleDateString()}`}
+            {selectedDates.length > 1
+              ? `Add an event for ${selectedDates[0].toLocaleDateString()} to ${selectedDates[selectedDates.length - 1].toLocaleDateString()} (${selectedDates.length} days)`
+              : selectedDate && `Add an event for ${selectedDate.toLocaleDateString()}`}
           </Dialog.Description>
 
           <Flex direction="column" gap="3">
