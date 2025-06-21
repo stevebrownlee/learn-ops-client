@@ -337,7 +337,7 @@ export const StudentCardList = ({ searchTerms }) => {
             student={student} />)
     }
 
-    return <section className="cohortStudents"> {
+    return <section style={{ flex: "5 1 0" }} className="cohortStudents"> {
         groupedStudents.length === 0
             ? <Loading />
             : groupedStudents?.map((book) => {

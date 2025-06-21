@@ -13,6 +13,7 @@ import { Shortcuts } from "./Shortcuts.js"
 import "toaster-js/default.css"
 import "./Dashboard.css"
 import { ActiveCohortStrip } from "./CohortStrip.js"
+import { CohortEventList } from "./CohortEventList.js"
 
 export const StandupContext = createContext()
 
@@ -66,13 +67,19 @@ export const Dashboard = () => {
             <section className="cohortActions">
                 <ActiveCohortStrip />
                 <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
-                { mvpCountBadge() }
+                {mvpCountBadge()}
 
             </section>
             {
                 capstoneSeason.includes(activeCohort)
                     ? <StudentCapstoneList searchTerms={searchTerms} />
-                    : <><StudentCardList searchTerms={searchTerms} /><Shortcuts /></>
+                    : <>
+                        <div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+                            <StudentCardList searchTerms={searchTerms} />
+                            <CohortEventList />
+                        </div>
+                        <Shortcuts />
+                    </>
             }
         </StandupContext.Provider>
     </main>
