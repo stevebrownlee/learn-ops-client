@@ -140,8 +140,17 @@ export const CohortDetails = () => {
             </div>
             <div className="card">
                 <div className="card-body" style={{ paddingTop: "0" }}>
-                    <header className="cohort__header cohort__header--details">
+                    <header style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "15rem",
+                        alignItems: "flex-end",
+                        borderRadius: "0.25rem",
+                    }}>
                         <h1 className="card-title cohort__info">{activeCohortDetails.name}</h1>
+                        <div>
+                            <CohortInvitationLink activeCohortDetails={activeCohortDetails} />
+                        </div>
                     </header>
 
                     <div className="cohort__details">
@@ -176,8 +185,6 @@ export const CohortDetails = () => {
                                     <Switch variant="surface" radius="full" style={toggleFieldStyle} onCheckedChange={toggleCapstoneSeason} color="lime" checked={capstoneSeason.includes(activeCohortDetails.id)} />
                                 </div>
                             </div>
-
-                            <CohortInvitationLink activeCohortDetails={activeCohortDetails} />
                         </div>
 
                         <div style={{ flex: "6", padding: "0 4rem 0 0" }}>
@@ -234,18 +241,6 @@ export const CohortDetails = () => {
                                 }
                             </div>
                             <div>{showMigrate(activeCohortDetails?.courses)}</div>
-
-                            <h3>Coaches</h3>
-                            <div className="cohort__coaches">
-                                {
-                                    activeCohortDetails.coaches?.map(coach => <div key={`coach--${coach.name}`} className="instructor--badge cohort__coach">{coach.name}</div>)
-                                }
-                            </div>
-
-                            <h3>Students</h3>
-                            <div className="cohort__coaches">
-                                {activeCohortDetails.students} active students
-                            </div>
 
                             <CohortStudentAddDialog />
                         </div>
