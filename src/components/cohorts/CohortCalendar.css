@@ -14,6 +14,20 @@
   color: black;
 }
 
+.eventTypeLegend {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.event-type {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
 /* New grid layout for months - 6 columns */
 .months-grid {
   display: grid;
