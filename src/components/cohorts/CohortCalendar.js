@@ -343,7 +343,7 @@ export const CohortCalendar = () => {
                   monthIndex < calendarMonths.length - 1 ? calendarMonths[monthIndex + 1].startIndex : calendarDays.length
                 ).map((day, i) => {
                   const dateEvents = getEventsForDate(day.date)
-                  console.log(`Events for ${day.date.toLocaleDateString()}:`, dateEvents)
+
                   return (
                     <div
                       key={`day-${day.date}`}

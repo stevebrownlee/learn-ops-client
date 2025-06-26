@@ -10,26 +10,30 @@ export const CapstoneRow = ({ capstone }) => {
             </div>
             <div className="capstoneassessment__statuses">
                 {
-                    capstone.statuses.map(status => {
-                        switch (status.status__status) {
-                            case "Approved":
-                                statusClass = "assessment--inProgress"
-                                break
-                            case "In Review":
-                                statusClass = "assessment--readyForReview"
-                                break
-                            case "MVP":
-                                statusClass = "assessment--reviewedSuccess"
-                                break
-                            case "Requires Changes":
-                                statusClass = "assessment--reviewedFail"
-                                break
-                        }
+                    capstone.statuses.length > 0
+                        ? capstone.statuses.map(status => {
+                            switch (status.status__status) {
+                                case "Approved":
+                                    statusClass = "assessment--inProgress"
+                                    break
+                                case "In Review":
+                                    statusClass = "assessment--readyForReview"
+                                    break
+                                case "MVP":
+                                    statusClass = "assessment--reviewedSuccess"
+                                    break
+                                case "Requires Changes":
+                                    statusClass = "assessment--reviewedFail"
+                                    break
+                            }
 
-                        return <div key={`status--${status.status__status}`} className={`capstoneassessment__status ${statusClass}`}>
-                            {status.status__status} on {new Date(status.date).toLocaleDateString()}
+                            return <div key={`status--${status.status__status}`} className={`capstoneassessment__status ${statusClass}`}>
+                                {status.status__status} on {new Date(status.date).toLocaleDateString()}
+                            </div>
+                        })
+                        : <div key={`status--submitted`} className={`capstoneassessment__status assessment--submitted`}>
+                            Submitted
                         </div>
-                    })
                 }
             </div>
         </div>

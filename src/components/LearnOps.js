@@ -25,8 +25,6 @@ const AuthenticatedRoutes = () => {
         const isStaff = user.profile?.staff
         const isInstructor = user.profile?.instructor
 
-        console.log(isInstructor, mimic, user)
-
         if (isInstructor && !mimic) {
             return <>
                 <NavBar />
