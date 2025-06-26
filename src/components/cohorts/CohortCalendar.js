@@ -72,7 +72,7 @@ export const CohortCalendar = () => {
 
   // Generate calendar days based on cohort start and end dates
   useEffect(() => {
-    if (activeCohortDetails?.start_date && activeCohortDetails?.end_date) {
+    if (activeCohortDetails && activeCohortDetails?.start_date && activeCohortDetails?.end_date) {
       fetchEventTypes()
       fetchCohortEvents()
 
@@ -300,8 +300,6 @@ export const CohortCalendar = () => {
     }
   }
 
-
-  // No need for inline styles as we're using CSS classes
 
   return (
     <div className="cohort-calendar">

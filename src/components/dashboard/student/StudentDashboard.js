@@ -10,6 +10,7 @@ import { CohortInfo } from "./CohortInfo.js"
 import { StudentInfo } from "./StudentInfo.js"
 import { SettingsContext } from "../../LearnOps.js"
 import "../Dashboard.css"
+import { CohortCalendar } from "../../cohorts/CohortCalendar.js"
 
 export const StudentDashboard = () => {
     const { mimic } = useContext(SettingsContext)

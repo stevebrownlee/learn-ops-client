@@ -36,16 +36,16 @@ export const LearnOps = () => {
                                 <ApplicationViews />
                             </>
                         }
-                        else if (isStaff) {
-                            return <>
-                                <StaffNavBar />
-                                <StaffViews />
-                            </>
-                        }
                         else if (mimic || (!isStaff && !isInstructor)) {
                             return <>
                                 <StudentNavBar />
                                 <StudentViews />
+                            </>
+                        }
+                        else if (isStaff) {
+                            return <>
+                                <StaffNavBar />
+                                <StaffViews />
                             </>
                         }
                         return <h1>Loading...</h1>

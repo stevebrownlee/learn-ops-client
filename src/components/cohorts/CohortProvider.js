@@ -41,6 +41,9 @@ export const CohortProvider = (props) => {
     const getCohort = (id) => {
         return fetchIt(`${Settings.apiHost}/cohorts/${id}`)
             .then((cohort) => {
+                if (!cohort) {
+                    return null
+                }
                 setCohortDetails(cohort)
                 return cohort
             })

@@ -14,6 +14,7 @@ export const CohortEventList = () => {
         fetchIt(`${Settings.apiHost}/events?cohort=${activeCohort}`)
             .then(data => {
                 // Filter out events from today to 7 days in the future
+                // const today = new Date("2022-11-01");
                 const today = new Date();
                 const sevenDaysFromNow = new Date();
                 sevenDaysFromNow.setDate(today.getDate() + 7);
@@ -37,7 +38,8 @@ export const CohortEventList = () => {
 
     return (
         <div style={{ flex: "1 1 0", fontSize: "0.8rem" }} className="cohort-event-list">
-            {cohortEvents.length > 0 ? (
+            {cohortEvents.length > 0 ? (<>
+                <h2>Upcoming Events</h2>
                 <ul>
                     {cohortEvents.map((event, index) => (
                         <li key={index} onClick={() => { }}>
@@ -46,7 +48,7 @@ export const CohortEventList = () => {
                         </li>
                     ))}
                 </ul>
-            ) : (
+            </>) : (
                 <p>No upcoming events.</p>
             )}
         </div>

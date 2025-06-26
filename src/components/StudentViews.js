@@ -12,6 +12,7 @@ import { LearningGoals } from "./info/Goals"
 import { Repos } from "./info/Repos"
 import { ServerAssessment } from "./info/ServerSideRequirements"
 import { StudentDashboard } from "./dashboard/student/StudentDashboard.js"
+import { CohortCalendar } from "./cohorts/CohortCalendar.js"
 
 export const StudentViews = () => {
     return <>
@@ -20,8 +21,8 @@ export const StudentViews = () => {
                 <Route exact path="/">
                     <StudentDashboard />
                 </Route>
-                <Route exact path="/repos">
-                    <Repos />
+                <Route exact path="/calendar">
+                    <CohortCalendar />
                 </Route>
                 <Route exact path="/goals">
                     <LearningGoals />

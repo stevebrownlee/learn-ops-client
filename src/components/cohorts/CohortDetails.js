@@ -120,7 +120,7 @@ export const CohortDetails = () => {
     const showMigrate = (courses) => {
         const isClientSide = courses?.find(course => course.index === 0 && course.active)
         if (isClientSide) {
-            return <button onClick={migrate} className="fakeLink">Migrate to server-side</button>
+            return <Button style={{ margin: "0 0 1rem 0" }} onClick={migrate} color="cyan" >Migrate to server-side</Button>
         }
 
         return ""

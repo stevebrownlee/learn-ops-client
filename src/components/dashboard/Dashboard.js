@@ -68,7 +68,6 @@ export const Dashboard = () => {
                 <ActiveCohortStrip />
                 <StudentSearch setSearchTerms={setSearchTerms} searchTerms={searchTerms} />
                 {mvpCountBadge()}
-
             </section>
             {
                 capstoneSeason.includes(activeCohort)
