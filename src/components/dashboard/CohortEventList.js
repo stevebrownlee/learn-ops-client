@@ -1,56 +1,70 @@
-import React, { useState } from 'react';
-import Settings from '../Settings.js';
-import { fetchIt } from '../utils/Fetch.js';
-import { useContext } from 'react';
-import { CohortContext } from '../cohorts/CohortProvider.js';
-import { useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react'
+import Settings from '../Settings.js'
+import { fetchIt } from '../utils/Fetch.js'
+import { CohortContext } from '../cohorts/CohortProvider.js'
+import simpleAuth from '../auth/simpleAuth.js'
+import { Card, Flex, Text, Heading } from '@radix-ui/themes'
 
 export const CohortEventList = () => {
-    const [cohortEvents, setEvents] = useState({});
-    const { activeCohort } = useContext(CohortContext);
+    const [cohortEvents, setEvents] = useState({})
+    const { activeCohort, activateCohort } = useContext(CohortContext)
+    const { getCurrentUser, getProfile } = simpleAuth()
 
-    const fetchCohortEvents = () => {
+    const fetchCohortEvents = (cohortId) => {
         // Fetch events for the active cohort
-        fetchIt(`${Settings.apiHost}/events?cohort=${activeCohort}`)
+        fetchIt(`${Settings.apiHost}/events?cohort=${cohortId}`)
             .then(data => {
                 // Filter out events from today to 7 days in the future
-                // const today = new Date("2022-11-01");
-                const today = new Date();
-                const sevenDaysFromNow = new Date();
-                sevenDaysFromNow.setDate(today.getDate() + 7);
+                const today = new Date("2022-11-01")
+                // const today = new Date()
+                const sevenDaysFromNow = new Date()
+                sevenDaysFromNow.setDate(today.getDate() + 7)
                 const filteredEvents = data.filter(event => {
-                    const eventDate = new Date(event.event_datetime);
-                    return eventDate >= today && eventDate <= sevenDaysFromNow;
-                });
-                setEvents(filteredEvents);
+                    const eventDate = new Date(event.event_datetime)
+                    return eventDate >= today && eventDate <= sevenDaysFromNow
+                })
+                setEvents(filteredEvents)
             })
-            .catch(error => console.error('Error fetching events:', error));
+            .catch(error => console.error('Error fetching events:', error))
     }
 
     useEffect(() => {
-        if (activeCohort) {
-            fetchCohortEvents();
+        const user = getCurrentUser()
+        let cohortId = 0
+
+        if (user && user.profile && user.profile.current_cohort) {
+            cohortId = user.profile.current_cohort.id
         }
-    }
-    , [activeCohort]);
+        else if (!activeCohort) {
+            cohortId = user.profile.person.active_cohort
+            activateCohort(cohortId)
+        }
+        fetchCohortEvents(cohortId)
+
+    }, [])
 
 
 
     return (
-        <div style={{ flex: "1 1 0", fontSize: "0.8rem" }} className="cohort-event-list">
+        <div style={{ flex: "1 1 0" }} className="cohort-event-list">
             {cohortEvents.length > 0 ? (<>
-                <h2>Upcoming Events</h2>
-                <ul>
+                <Heading size="4" mb="2">Upcoming Events</Heading>
+                <Flex direction="column" gap="2">
                     {cohortEvents.map((event, index) => (
-                        <li key={index} onClick={() => { }}>
-                            <strong>{event.event_name}</strong> - {new Date(event.event_datetime).toLocaleDateString()}
-                            <p>{event.description}</p>
-                        </li>
+                        <Card size="2" key={index} onClick={() => { }} style={{ cursor: 'pointer', backgroundColor: `${event.event_type.color}` }}>
+                            <Flex direction="column" gap="1">
+                                <Flex justify="between" align="center">
+                                    <Text weight="bold">{event.event_name}</Text>
+                                    <Text size="2" color="gray">{new Date(event.event_datetime).toLocaleDateString()}</Text>
+                                </Flex>
+                                <Text size="2">{event.description}</Text>
+                            </Flex>
+                        </Card>
                     ))}
-                </ul>
+                </Flex>
             </>) : (
-                <p>No upcoming events.</p>
+                <Text>No upcoming events.</Text>
             )}
         </div>
-    );
+    )
 }

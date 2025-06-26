@@ -1,7 +1,10 @@
 import React from "react"
 import { Button } from '@radix-ui/themes'
+import { useSettings } from "../../hooks/useSettings"
 
-export const SettingsDialog = ({ toggleSettings, settingsIsOpen, changeMimic, mimic }) => {
+export const SettingsDialog = ({ toggleSettings, settingsIsOpen }) => {
+    const { mimic, changeMimic } = useSettings()
+
     return <dialog id="dialog--settings"
         open={settingsIsOpen}
         className="dialog--settings"
@@ -13,7 +16,6 @@ export const SettingsDialog = ({ toggleSettings, settingsIsOpen, changeMimic, mi
             }
         }
     >
-
         <h1>User Settings</h1>
         <Button onClick={() => changeMimic(!mimic)} color="amber">
             {

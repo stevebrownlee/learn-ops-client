@@ -5,6 +5,7 @@ import useModal from "../ui/useModal"
 import { CourseContext } from "../course/CourseProvider"
 import { PeopleContext } from "../people/PeopleProvider"
 import { CohortContext } from "./CohortProvider"
+import { useSettings } from "../../hooks/useSettings"
 
 import { TagDialog } from "../dashboard/TagDialog"
 import { CohortDialog } from "../dashboard/CohortDialog"
@@ -24,34 +25,7 @@ import "./CohortStudentList.css"
 import "./Tooltip.css"
 import { StudentAssessmentForm } from "../people/StudentAssessmentForm.js"
 
-const persistSettings = (setting, value) => {
-    let settings = localStorage.getItem("lp_settings")
-
-    if (settings) {
-        settings = JSON.parse(settings)
-        settings[setting] = value
-        localStorage.setItem("lp_settings", JSON.stringify(settings))
-    }
-    else {
-        localStorage.setItem("lp_settings", JSON.stringify({ [setting]: value }))
-    }
-}
-
 export const StudentCardList = ({ searchTerms }) => {
-    let initial_show_tags_state = true
-    let initial_show_avatars_state = true
-
-    let settings = localStorage.getItem("lp_settings")
-    if (settings) {
-        settings = JSON.parse(settings)
-        if ("tags" in settings) {
-            initial_show_tags_state = settings.tags
-        }
-        if ("avatars" in settings) {
-            initial_show_avatars_state = settings.avatars
-        }
-    }
-
     const { activeCohort, activateCohort } = useContext(CohortContext)
     const { getCourses, activeCourse, getActiveCourse } = useContext(CourseContext)
     const {
@@ -63,9 +37,10 @@ export const StudentCardList = ({ searchTerms }) => {
         setStudentCurrentProject, setStudentCurrentAssessment,
     } = useContext(PeopleContext)
 
-    const [showTags, toggleTags] = useState(initial_show_tags_state)
+    // Use the settings hook instead of local state and localStorage
+    const { showTags, toggleTags, showAvatars, toggleAvatars } = useSettings()
+
     const [groupedStudents, setGroupedStudents] = useState([])
-    const [showAvatars, toggleAvatars] = useState(initial_show_avatars_state)
     const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false)
 
     const history = useHistory()
@@ -106,14 +81,12 @@ export const StudentCardList = ({ searchTerms }) => {
 
     const toggleTagsShortcut = keyboardShortcut('t', 'g', () => {
         if (!noteOpenStateRef.current && !enteringNoteStateRef.current) {
-            persistSettings('tags', !tagsStateRef.current)
             toggleTags(!tagsStateRef.current)
         }
     })
 
     const toggleAvatarsShortcut = keyboardShortcut('t', 'a', () => {
         if (!noteOpenStateRef.current && !enteringNoteStateRef.current) {
-            persistSettings('avatars', !avatarsStateRef.current)
             toggleAvatars(!avatarsStateRef.current)
         }
     })
