@@ -15,8 +15,8 @@ export const CohortEventList = () => {
         fetchIt(`${Settings.apiHost}/events?cohort=${cohortId}`)
             .then(data => {
                 // Filter out events from today to 7 days in the future
-                const today = new Date("2022-11-01")
-                // const today = new Date()
+                // const today = new Date("2022-11-01")
+                const today = new Date()
                 const sevenDaysFromNow = new Date()
                 sevenDaysFromNow.setDate(today.getDate() + 7)
                 const filteredEvents = data.filter(event => {
@@ -47,8 +47,8 @@ export const CohortEventList = () => {
 
     return (
         <div style={{ flex: "1 1 0" }} className="cohort-event-list">
+            <Heading size="4" mb="2">⏰ Upcoming Events</Heading>
             {cohortEvents.length > 0 ? (<>
-                <Heading size="4" mb="2">⏰ Upcoming Events</Heading>
                 <Flex direction="column" gap="2">
                     {cohortEvents.map((event, index) => (
                         <Card size="2" key={index} onClick={() => { }} style={{ cursor: 'pointer', backgroundColor: `${event.event_type.color}` }}>

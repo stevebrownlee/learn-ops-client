@@ -110,7 +110,7 @@ export const StudentInfo = ({ profile }) => {
                         </Box>
 
                         <Box>
-                            <Text style={{ margin: "0 0.75rem 0 0"}} size="2" weight="bold">Current Project</Text>
+                            <Text style={{ margin: "0 0.75rem 0 0" }} size="2" weight="bold">Current Project</Text>
                             <Text>
                                 {
                                     profile && "project" in profile && profile.project.id === 0
@@ -122,26 +122,48 @@ export const StudentInfo = ({ profile }) => {
                     </Flex>
                 </Card>
 
-                {/* Book Assessment Status Card */}
+                {/* Capstone Card */}
                 <Card>
                     <Flex direction="column" gap="3">
-                        <Flex align="center" gap="2">
-                            <BookmarkIcon width="20" height="20" />
-                            <Text size="4" weight="bold">Book Assessment Status</Text>
-                        </Flex>
+                        <Text size="4" weight="bold">Capstone Project</Text>
 
                         <Box>
+                            <Text size="3" weight="bold">Current Status</Text>
                             {
-                                profile?.assessment_overview?.length > 0
-                                    ? profile?.assessment_overview?.map(assmt => <AssessmentRow key={`assmt--${assmt.id}`} assmt={assmt} />)
-                                    : <Text color="gray">No self-assessments submitted yet</Text>
+                                profile?.capstones?.length > 0
+                                    ? profile?.capstones?.map(capstone => <CapstoneRow key={`capstone--${capstone.capstone__id}`} capstone={capstone} />)
+                                    : <Text color="gray">No capstone proposals submitted yet</Text>
                             }
                         </Box>
+
+                        <Text size="2">
+                            When you are ready to start building your capstone proposal,
+                            please use the template document.
+                        </Text>
+
+                        <Flex gap="3" wrap="wrap">
+                            <Button color="iris"
+                                onClick={() => window.open("https://docs.google.com/document/d/1FGMU-wQqIciig0JhtOBBKOORSPCROUW0Y27w9io4qMg/edit", "_blank")}
+                            >
+                                Proposal Template
+                            </Button>
+
+                            <Button color="grass"
+                                onClick={() => history.push("/proposal/client")}
+                            >
+                                Submit Proposal
+                            </Button>
+                        </Flex>
+
+                        <Text size="2" color="gray">
+                            When you are ready to submit your capstone proposal, click the
+                            "Submit Proposal" button to let your instructors know that it is ready for review.
+                        </Text>
                     </Flex>
                 </Card>
             </Grid>
 
-            <Grid columns={{ initial: "1", sm: "2" }} gap="2">
+            <Grid columns={{ initial: "2", sm: "2" }} gap="2">
                 {/* Book Self-Assessment Card */}
                 <Card>
                     <Flex direction="column" gap="3">
@@ -225,45 +247,24 @@ export const StudentInfo = ({ profile }) => {
                     </Flex>
                 </Card>
 
-                {/* Capstone Card */}
+                {/* Book Assessment Status Card */}
                 <Card>
                     <Flex direction="column" gap="3">
-                        <Text size="4" weight="bold">Capstone Project</Text>
-
-                        <Box>
-                            <Text size="3" weight="bold">Current Status</Text>
-                            {
-                                profile?.capstones?.length > 0
-                                    ? profile?.capstones?.map(capstone => <CapstoneRow key={`capstone--${capstone.capstone__id}`} capstone={capstone} />)
-                                    : <Text color="gray">No capstone proposals submitted yet</Text>
-                            }
-                        </Box>
-
-                        <Text size="2">
-                            When you are ready to start building your capstone proposal,
-                            please use the template document.
-                        </Text>
-
-                        <Flex gap="3" wrap="wrap">
-                            <Button color="iris"
-                                onClick={() => window.open("https://docs.google.com/document/d/1FGMU-wQqIciig0JhtOBBKOORSPCROUW0Y27w9io4qMg/edit", "_blank")}
-                            >
-                                Proposal Template
-                            </Button>
-
-                            <Button color="grass"
-                                onClick={() => history.push("/proposal/client")}
-                            >
-                                Submit Proposal
-                            </Button>
+                        <Flex align="center" gap="2">
+                            <BookmarkIcon width="20" height="20" />
+                            <Text size="4" weight="bold">Book Assessment Status</Text>
                         </Flex>
 
-                        <Text size="2" color="gray">
-                            When you are ready to submit your capstone proposal, click the
-                            "Submit Proposal" button to let your instructors know that it is ready for review.
-                        </Text>
+                        <Box>
+                            {
+                                profile?.assessment_overview?.length > 0
+                                    ? profile?.assessment_overview?.map(assmt => <AssessmentRow key={`assmt--${assmt.id}`} assmt={assmt} />)
+                                    : <Text color="gray">No self-assessments submitted yet</Text>
+                            }
+                        </Box>
                     </Flex>
                 </Card>
+
             </Grid>
         </Container>
     )
