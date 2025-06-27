@@ -90,7 +90,7 @@ export const StudentInfo = ({ profile }) => {
 
     return (
         <Container>
-            <Grid columns={{ initial: "1", sm: "2" }} gap="4" mb="6">
+            <Grid columns={{ initial: "1", sm: "2" }} gap="2" mb="3">
                 {/* Student Info Card */}
                 <Card>
                     <Flex direction="column" gap="3">
@@ -141,7 +141,7 @@ export const StudentInfo = ({ profile }) => {
                 </Card>
             </Grid>
 
-            <Grid columns={{ initial: "1", sm: "2" }} gap="4">
+            <Grid columns={{ initial: "1", sm: "2" }} gap="2">
                 {/* Book Self-Assessment Card */}
                 <Card>
                     <Flex direction="column" gap="3">

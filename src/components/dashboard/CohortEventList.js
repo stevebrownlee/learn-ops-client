@@ -48,7 +48,7 @@ export const CohortEventList = () => {
     return (
         <div style={{ flex: "1 1 0" }} className="cohort-event-list">
             {cohortEvents.length > 0 ? (<>
-                <Heading size="4" mb="2">Upcoming Events</Heading>
+                <Heading size="4" mb="2">⏰ Upcoming Events</Heading>
                 <Flex direction="column" gap="2">
                     {cohortEvents.map((event, index) => (
                         <Card size="2" key={index} onClick={() => { }} style={{ cursor: 'pointer', backgroundColor: `${event.event_type.color}` }}>
