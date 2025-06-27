@@ -110,7 +110,7 @@ export const StudentInfo = ({ profile }) => {
                         </Box>
 
                         <Box>
-                            <Text size="2" weight="bold">Current Project</Text>
+                            <Text style={{ margin: "0 0.75rem 0 0"}} size="2" weight="bold">Current Project</Text>
                             <Text>
                                 {
                                     profile && "project" in profile && profile.project.id === 0
