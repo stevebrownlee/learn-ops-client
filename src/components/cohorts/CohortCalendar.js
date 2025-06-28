@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
-import { Dialog, Button, TextField, TextArea, Text, Flex, Card } from '@radix-ui/themes'
+import { Dialog, Button, TextField, TextArea, Text, Flex, Card, DropdownMenu } from '@radix-ui/themes'
 import { CohortContext } from './CohortProvider'
 import './CohortCalendar.css'
 import { fetchIt } from '../utils/Fetch.js'
@@ -13,6 +13,7 @@ export const CohortCalendar = () => {
   const [eventName, setEventName] = useState('')
   const [eventTime, setEventTime] = useState('')
   const [eventDescription, setEventDescription] = useState('')
+  const [selectedEventType, setSelectedEventType] = useState(null)
   const [showAddDialog, setShowAddDialog] = useState(false)
   const [showViewDialog, setShowViewDialog] = useState(false)
   const [calendarDays, setCalendarDays] = useState([])
@@ -24,6 +25,7 @@ export const CohortCalendar = () => {
   const [isDragging, setIsDragging] = useState(false)
   const [dragStartDate, setDragStartDate] = useState(null)
   const [selectedDates, setSelectedDates] = useState([])
+  const [mouseDownActive, setMouseDownActive] = useState(false)
 
   // Clear timeout on unmount to prevent memory leaks
   useEffect(() => {
@@ -120,7 +122,7 @@ export const CohortCalendar = () => {
 
   // Handle adding a new event
   const handleAddEvent = () => {
-    if ((!selectedDate && selectedDates.length === 0) || !eventName) return
+    if ((!selectedDate && selectedDates.length === 0) || !eventName || !selectedEventType) return
 
     // Determine which dates to create events for
     const datesToProcess = selectedDates.length > 0 ? selectedDates : [selectedDate]
@@ -145,6 +147,7 @@ export const CohortCalendar = () => {
         cohort: activeCohortDetails.id,
         datetime: localISOTime,
         name: eventName,
+        type: selectedEventType.id,
         description: eventDescription
       }
 
@@ -165,6 +168,7 @@ export const CohortCalendar = () => {
     setEventName('')
     setEventTime('')
     setEventDescription('')
+    setSelectedEventType(null)
     setSelectedDates([])
     setShowAddDialog(false)
   }
@@ -187,20 +191,25 @@ export const CohortCalendar = () => {
     return dates
   }
 
-  // Handle mouse down on a day - start drag selection
+  // Handle mouse down on a day - prepare for potential drag selection
   const handleDayMouseDown = (day, event) => {
     // Prevent default to avoid text selection
     event.preventDefault()
 
-    // Start drag operation
-    setIsDragging(true)
+    // Prepare for potential drag operation
+    setMouseDownActive(true)
     setDragStartDate(day.date)
     setSelectedDates([day.date])
   }
 
   // Handle mouse move over a day during drag
   const handleDayMouseMove = (day) => {
-    if (isDragging && dragStartDate) {
+    if (mouseDownActive && dragStartDate) {
+      // If mouse is moving while button is down, we're now officially dragging
+      if (!isDragging) {
+        setIsDragging(true)
+      }
+
       // Update selected dates based on drag range
       const datesBetween = getDatesBetween(dragStartDate, day.date)
       setSelectedDates(datesBetween)
@@ -209,9 +218,8 @@ export const CohortCalendar = () => {
 
   // Handle mouse up - end drag selection and show dialog
   const handleDayMouseUp = () => {
+    // If we were in a drag operation
     if (isDragging && selectedDates.length > 0) {
-      setIsDragging(false)
-
       // Sort dates chronologically
       const sortedDates = [...selectedDates].sort((a, b) => a - b)
       setSelectedDates(sortedDates)
@@ -219,12 +227,17 @@ export const CohortCalendar = () => {
       // Show add dialog with selected date range
       setShowAddDialog(true)
     }
+
+    // Reset states regardless of whether we were dragging
+    setIsDragging(false)
+    setMouseDownActive(false)
   }
 
   // Handle mouse leave from calendar area
   const handleCalendarMouseLeave = () => {
-    if (isDragging) {
+    if (isDragging || mouseDownActive) {
       setIsDragging(false)
+      setMouseDownActive(false)
     }
   }
 
@@ -306,11 +319,10 @@ export const CohortCalendar = () => {
       <div className="calendar-container" onMouseLeave={handleCalendarMouseLeave}>
         <div className='eventTypeLegend'>
           {eventTypes.map((type, index) => (
-            <>
+            <React.Fragment key={`event-type-${index}`}>
               <div style={{ margin: "0 0.1rem 0 0"}}>{type.description}</div>
               <div key={index} className="event-type" style={{ backgroundColor: type.color }}></div>
-
-            </>
+            </React.Fragment>
           ))}
         </div>
         <div className="months-grid">
@@ -419,6 +431,47 @@ export const CohortCalendar = () => {
                 value={eventTime}
                 onChange={(e) => setEventTime(e.target.value)}
               />
+            </label>
+
+            <label>
+              <Text as="div" size="2" mb="1" weight="bold">
+                Event Type
+              </Text>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Button variant="soft" color={selectedEventType ? "gray" : "gray"} style={{ width: '100%', justifyContent: 'space-between' }}>
+                    <Flex align="center" gap="2">
+                      {selectedEventType && (
+                        <div className="event-type-indicator" style={{
+                          width: '12px',
+                          height: '12px',
+                          borderRadius: '50%',
+                          backgroundColor: selectedEventType.color
+                        }}></div>
+                      )}
+                      <span>{selectedEventType ? selectedEventType.description : 'Select event type'}</span>
+                    </Flex>
+                  </Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  {eventTypes.map((type) => (
+                    <DropdownMenu.Item
+                      key={type.id}
+                      onClick={() => setSelectedEventType(type)}
+                    >
+                      <Flex align="center" gap="2">
+                        <div style={{
+                          width: '12px',
+                          height: '12px',
+                          borderRadius: '50%',
+                          backgroundColor: type.color
+                        }}></div>
+                        <span>{type.description}</span>
+                      </Flex>
+                    </DropdownMenu.Item>
+                  ))}
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
             </label>
 
             <label>

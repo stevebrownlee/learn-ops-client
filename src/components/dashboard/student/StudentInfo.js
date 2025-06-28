@@ -145,12 +145,10 @@ export const StudentInfo = ({ profile }) => {
                             <Button color="iris"
                                 onClick={() => window.open("https://docs.google.com/document/d/1FGMU-wQqIciig0JhtOBBKOORSPCROUW0Y27w9io4qMg/edit", "_blank")}
                             >
-                                Proposal Template
+                                Get Proposal Template
                             </Button>
 
-                            <Button color="grass"
-                                onClick={() => history.push("/proposal/client")}
-                            >
+                            <Button color="grass" onClick={() => history.push("/proposal/client")}>
                                 Submit Proposal
                             </Button>
                         </Flex>
@@ -181,7 +179,7 @@ export const StudentInfo = ({ profile }) => {
                             <Dialog.Root open={dialogOpen}>
                                 <Dialog.Trigger>
                                     <Button onClick={() => setDialogOpen(true)} color="grass">
-                                        Self-Assessment Complete
+                                        Submit Self-Assessment
                                     </Button>
                                 </Dialog.Trigger>
 
@@ -242,7 +240,7 @@ export const StudentInfo = ({ profile }) => {
 
                         <Text size="2" color="gray">
                             When you have completed the project code, completed the Vocabulary &amp; Understanding questions,
-                            and pushed your repository to Github, click the "Self-Assessment Complete" button to notify your coaches.
+                            and pushed your repository to Github, click the "Submit Self-Assessment" button to notify your coaches.
                         </Text>
                     </Flex>
                 </Card>
