@@ -182,7 +182,7 @@
 .cohort__details {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    gap: 5rem;
 }
 
 .cohort__detail {

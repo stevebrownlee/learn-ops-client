@@ -1,0 +1,128 @@
+.cohort-calendar {
+  margin-top: 2rem;
+  font-size: 0.75rem;
+}
+
+.cohort-calendar h2 {
+  margin-bottom: 1rem;
+}
+
+.calendar-container {
+  background-color: #f7e2c5; /* Very light orange */
+  border-radius: 8px;
+  padding: 1rem;
+  color: black;
+}
+
+.eventTypeLegend {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.event-type {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+/* New grid layout for months - 6 columns */
+.months-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+.month-container {
+  width: 100%;
+}
+
+.month-header {
+  font-weight: bold;
+  margin: 0.5rem 0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.1rem;
+}
+
+.day-header {
+  text-align: center;
+  font-weight: bold;
+  padding: 0 0.7rem 0 0;
+  font-size: 0.7rem;
+}
+
+.calendar-day {
+  aspect-ratio: 1/1;
+  border: 1px solid #ddd;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0.2rem;
+  cursor: pointer;
+  position: relative;
+  background-color: white;
+  transition: background-color 0.2s;
+  min-width: 0;
+  font-size: 0.65rem;
+  max-height: 1.5rem;
+  overflow: hidden;
+}
+
+.calendar-day:hover {
+  background-color: dodgerblue !important;
+  color: white;
+}
+
+.day-number {
+  font-size: 0.65rem;
+  font-weight: normal;
+  line-height: 1;
+}
+
+.event-indicator {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: dodgerblue;
+}
+
+.empty-day {
+  border: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .months-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .months-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .months-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .months-grid {
+    grid-template-columns: 1fr;
+  }
+}

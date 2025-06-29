@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Flex, Text, Button, TextField, TextFieldInput } from '@radix-ui/themes'
 import { useHistory } from "react-router-dom"
+import { Flex, Text, Button, TextField, TextFieldInput } from '@radix-ui/themes'
 
 import simpleAuth from "../../auth/simpleAuth"
 import Settings from "../../Settings"
@@ -8,7 +8,9 @@ import { fetchIt } from "../../utils/Fetch"
 import { GithubIcon } from "../../../svgs/GithubIcon.js"
 import { CohortInfo } from "./CohortInfo.js"
 import { StudentInfo } from "./StudentInfo.js"
-import { SettingsContext } from "../../LearnOps.js"
+import { CohortCalendar } from "../../cohorts/CohortCalendar.js"
+import { SettingsContext } from "../../providers/SettingsProvider.js"
+
 import "../Dashboard.css"
 
 export const StudentDashboard = () => {

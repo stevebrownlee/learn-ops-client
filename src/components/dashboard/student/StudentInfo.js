@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { Badge, Button, Dialog, TextArea, Text, Flex, Checkbox } from '@radix-ui/themes'
-import { FilePlusIcon, Pencil1Icon } from '@radix-ui/react-icons'
+import { Badge, Button, Dialog, TextArea, Text, Flex, Checkbox, Card, Grid, Box, Container } from '@radix-ui/themes'
+import { FilePlusIcon, Pencil1Icon, IdCardIcon, BookmarkIcon } from '@radix-ui/react-icons'
 import { Toast, deleteAllToasts } from "toaster-js"
 
 import Settings from "../../Settings.js"
@@ -88,59 +88,99 @@ export const StudentInfo = ({ profile }) => {
         }
     }
 
-    return <section className="info">
-        <h2 className="info__header" style={{ marginBottom: 0 }}>{profile?.name} Resources</h2>
-        <div className="info__body info__body--student">
+    return (
+        <Container>
+            <Grid columns={{ initial: "1", sm: "2" }} gap="2" mb="3">
+                {/* Student Info Card */}
+                <Card>
+                    <Flex direction="column" gap="3">
+                        <Flex align="center" gap="2">
+                            <IdCardIcon width="20" height="20" />
+                            <Text size="4" weight="bold">Student Information</Text>
+                        </Flex>
 
-            <section className="studentAccounts">
-                <div className="studentAccount">
-                    <h3 className="studentAccount__header">Slack ID</h3>
-                    <div>
-                        <div>{profile?.slack_handle} <button
-                            onClick={() => history.push("/slackUpdate")}
-                            className="fakeLink">Update</button></div>
-                    </div>
-                </div>
+                        <Box>
+                            <Text size="2" weight="bold">Slack ID</Text>
+                            <Flex align="center" gap="2">
+                                <Text>{profile?.slack_handle}</Text>
+                                <Button variant="ghost" size="1" onClick={() => history.push("/slackUpdate")}>
+                                    Update
+                                </Button>
+                            </Flex>
+                        </Box>
 
-                <div>
-                    <h3 className="studentAccount__header">Current Project</h3>
-                    <div>
-                        {
-                            profile && "project" in profile && profile.project.id === 0
-                                ? <div>None</div>
-                                : <div>{profile?.project?.book_name}: {profile?.project?.name}</div>
-                        }
-                    </div>
-                </div>
-            </section>
+                        <Box>
+                            <Text style={{ margin: "0 0.75rem 0 0" }} size="2" weight="bold">Current Project</Text>
+                            <Text>
+                                {
+                                    profile && "project" in profile && profile.project.id === 0
+                                        ? "None"
+                                        : `${profile?.project?.book_name}: ${profile?.project?.name}`
+                                }
+                            </Text>
+                        </Box>
+                    </Flex>
+                </Card>
 
-            <section className="assessmentInfo text--mini" >
-                <div className="assessmentInfo__book" style={{ display: "flex", flexDirection: "column" }}>
-                    <header>
-                        <h3>Book Assessment Status</h3>
-                        {
-                            profile?.assessment_overview?.length > 0
-                                ? profile?.assessment_overview?.map(assmt => <AssessmentRow key={`assmt--${assmt.id}`} assmt={assmt} />)
-                                : "No self-assessments submitted yet"
-                        }
-                    </header>
-                    <div className="notificationButtons">
-                        <section>
-                            <h3 className="studentAccount__header">Book Self-Assessments</h3>
-                        </section>
-                        <p>
+                {/* Capstone Card */}
+                <Card>
+                    <Flex direction="column" gap="3">
+                        <Text size="4" weight="bold">Capstone Project</Text>
+
+                        <Box>
+                            <Text size="3" weight="bold">Current Status</Text>
+                            {
+                                profile?.capstones?.length > 0
+                                    ? profile?.capstones?.map(capstone => <CapstoneRow key={`capstone--${capstone.capstone__id}`} capstone={capstone} />)
+                                    : <Text color="gray">No capstone proposals submitted yet</Text>
+                            }
+                        </Box>
+
+                        <Text size="2">
+                            When you are ready to start building your capstone proposal,
+                            please use the template document.
+                        </Text>
+
+                        <Flex gap="3" wrap="wrap">
+                            <Button color="iris"
+                                onClick={() => window.open("https://docs.google.com/document/d/1FGMU-wQqIciig0JhtOBBKOORSPCROUW0Y27w9io4qMg/edit", "_blank")}
+                            >
+                                Get Proposal Template
+                            </Button>
+
+                            <Button color="grass" onClick={() => history.push("/proposal/client")}>
+                                Submit Proposal
+                            </Button>
+                        </Flex>
+
+                        <Text size="2" color="gray">
+                            When you are ready to submit your capstone proposal, click the
+                            "Submit Proposal" button to let your instructors know that it is ready for review.
+                        </Text>
+                    </Flex>
+                </Card>
+            </Grid>
+
+            <Grid columns={{ initial: "2", sm: "2" }} gap="2">
+                {/* Book Self-Assessment Card */}
+                <Card>
+                    <Flex direction="column" gap="3">
+                        <Text size="4" weight="bold">Book Self-Assessments</Text>
+
+                        <Text size="2">
                             You are done with the core projects in a book and are ready for the self-assessment.
-                        </p>
-                        <section>
-                            <Button color="iris" onClick={createAssessmentRepo}>Start Self-Assessment</Button>
-                        </section>
-                        <p>
-                            When you have completed the project code, completed the Vocabulary &amp; Understanding questions, and pushed your repository to Github, click the button below to notify your coaches.
-                        </p>
-                        <p>
+                        </Text>
+
+                        <Flex gap="3" wrap="wrap">
+                            <Button color="iris" onClick={createAssessmentRepo}>
+                                Start Self-Assessment
+                            </Button>
+
                             <Dialog.Root open={dialogOpen}>
                                 <Dialog.Trigger>
-                                    <Button onClick={() => setDialogOpen(true)} color="grass">Self-Assessment Complete</Button>
+                                    <Button onClick={() => setDialogOpen(true)} color="grass">
+                                        Submit Self-Assessment
+                                    </Button>
                                 </Dialog.Trigger>
 
                                 <Dialog.Content>
@@ -163,7 +203,6 @@ export const StudentInfo = ({ profile }) => {
                                     <Flex gap="3" mt="3">
                                         <Badge color="crimson">{validationMessage}</Badge>
                                     </Flex>
-
 
                                     <Text as="label" size="1">
                                         <Flex gap="2" mt="3" direction="column">
@@ -197,39 +236,34 @@ export const StudentInfo = ({ profile }) => {
                                     </Flex>
                                 </Dialog.Content>
                             </Dialog.Root>
-                        </p>
-                    </div>
-                </div>
-                <div className="assessmentInfo__capstone" style={{ marginTop: "5rem" }}>
-                    <header>
-                        <h3>Capstone Assessment Status</h3>
-                        {
-                            profile?.capstones?.length > 0
-                                ? profile?.capstones?.map(capstone => <CapstoneRow key={`capstone--${capstone.capstone__id}`} capstone={capstone} />)
-                                : "No capstone proposals submitted yet"
-                        }
-                    </header>
-                    <div className="notificationButtons">
-                        <h3>Capstone Project Proposals</h3>
-                        <p>
-                            When you are ready to start building your capstone proposal,
-                            please click the button below and make a copy of the template document.
-                        </p>
-                        <Button color="iris"
-                            onClick={() => window.open("https://docs.google.com/document/d/1FGMU-wQqIciig0JhtOBBKOORSPCROUW0Y27w9io4qMg/edit", "_blank")}
-                        >Proposal Template</Button>
+                        </Flex>
 
-                        <p>
-                            When you are ready to submit your capstone proposal, click the
-                            button below to let your instructors know that it is ready for review.
-                        </p>
-                        <Button color="grass"
-                            onClick={() => history.push("/proposal/client")}>
-                            Submit Proposal
-                        </Button>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </section>
+                        <Text size="2" color="gray">
+                            When you have completed the project code, completed the Vocabulary &amp; Understanding questions,
+                            and pushed your repository to Github, click the "Submit Self-Assessment" button to notify your coaches.
+                        </Text>
+                    </Flex>
+                </Card>
+
+                {/* Book Assessment Status Card */}
+                <Card>
+                    <Flex direction="column" gap="3">
+                        <Flex align="center" gap="2">
+                            <BookmarkIcon width="20" height="20" />
+                            <Text size="4" weight="bold">Book Assessment Status</Text>
+                        </Flex>
+
+                        <Box>
+                            {
+                                profile?.assessment_overview?.length > 0
+                                    ? profile?.assessment_overview?.map(assmt => <AssessmentRow key={`assmt--${assmt.id}`} assmt={assmt} />)
+                                    : <Text color="gray">No self-assessments submitted yet</Text>
+                            }
+                        </Box>
+                    </Flex>
+                </Card>
+
+            </Grid>
+        </Container>
+    )
 }

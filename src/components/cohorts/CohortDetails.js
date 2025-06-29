@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Badge, Button, Dialog, TextArea, Text, Flex, MagnifyingGlassIcon } from '@radix-ui/themes'
+import { Badge, Button, Dialog, TextArea, Text, Flex, Switch } from '@radix-ui/themes'
 import { TextField } from '@radix-ui/themes'
 
 import { AssessmentContext } from "../assessments/AssessmentProvider.js"
@@ -12,6 +12,7 @@ import { fetchIt } from "../utils/Fetch.js"
 import Settings from "../Settings.js"
 import { CohortStudentAddDialog } from "./CohortStudentAddDialog.js"
 import { CohortInvitationLink } from "./CohortInvitationLink.js"
+import { CohortCalendar } from "./CohortCalendar.js"
 
 export const CohortDetails = () => {
     const initialState = {
@@ -81,15 +82,52 @@ export const CohortDetails = () => {
         }
     }
 
+    const toggleActive = (checked) => {
+        const cohortObject = {
+            id: activeCohortDetails.id,
+            active: checked
+        }
+        return fetchIt(`${Settings.apiHost}/cohorts/${activeCohortDetails.id}/active`,
+            {
+                method: "PUT",
+                body: JSON.stringify(cohortObject)
+            })
+            .then(() => {
+                getCohort(activeCohortDetails.id)
+                new Toast("Cohort updated", Toast.TYPE_INFO, Toast.TIME_SHORT)
+            })
+    }
+
+    const toggleCapstoneSeason = (checked) => {
+        const localStorageSeasons = localStorage.getItem("capstoneSeason")
+        const cohortsInCapstoneSeason = localStorageSeasons
+            ? new Set([...JSON.parse(localStorageSeasons)])
+            : new Set()
+
+        if (checked) {
+            cohortsInCapstoneSeason.add(activeCohortDetails.id)
+        }
+        else {
+            cohortsInCapstoneSeason.delete(activeCohortDetails.id)
+        }
+
+        const capstoneSeasonCohorts = Array.from(cohortsInCapstoneSeason)
+        setCapstoneSeason(capstoneSeasonCohorts)
+        localStorage.setItem("capstoneSeason", JSON.stringify(capstoneSeasonCohorts))
+
+    }
+
     const showMigrate = (courses) => {
         const isClientSide = courses?.find(course => course.index === 0 && course.active)
         if (isClientSide) {
-            return <button onClick={migrate} className="fakeLink">Migrate to server-side</button>
+            return <Button style={{ margin: "0 0 1rem 0" }} onClick={migrate} color="cyan" >Migrate to server-side</Button>
         }
 
         return ""
     }
 
+    const urlFieldLabelStyle = { flex: "1 1 2rem", padding: "0.3rem 0 0 0" }
+    const toggleFieldStyle = { flex: "3 1 0", padding: "0.3rem 0 0 0" }
 
     return (
         <div className="overlay--cohort">
@@ -102,175 +140,113 @@ export const CohortDetails = () => {
             </div>
             <div className="card">
                 <div className="card-body" style={{ paddingTop: "0" }}>
-                    <header className="cohort__header cohort__header--details">
+                    <header style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "15rem",
+                        alignItems: "flex-end",
+                        borderRadius: "0.25rem",
+                    }}>
                         <h1 className="card-title cohort__info">{activeCohortDetails.name}</h1>
+                        <div>
+                            <CohortInvitationLink activeCohortDetails={activeCohortDetails} />
+                        </div>
                     </header>
 
-                    <div className="card-text">
-                        <div className="cohort__details">
-
-                            <div className="cohort__detail cohort__urls cohort__detail--large">
-                                <h3>Resource URLs</h3>
-
-                                <div className="form-group form-group--row">
-                                    <label className="label--smallrow" htmlFor="attendance_sheet_url">Attendance Sheet</label>
+                    <div className="cohort__details">
+                        <div style={{ flex: "4" }}>
+                            <div style={{ margin: "1rem 0", display: "flex", flexDirection: "column", gap: "2rem" }}>
+                                <div className="form-group--row">
+                                    <label style={urlFieldLabelStyle} htmlFor="start_date">Starts: </label>
                                     <input onChange={updateState}
-                                        value={info.attendance_sheet_url ?? ""}
-                                        type="url" controltype="string"
-                                        id="attendance_sheet_url" className="form-control form-control--row form-control--small"
+                                        value={activeCohortDetails.start_date}
+                                        type="date" controltype="string"
+                                        id="start_date" className="form-control form-control--row form-control--small"
                                     />
                                 </div>
 
-                                <div className="form-group form-group--row">
-                                    <label className="label--smallrow" htmlFor="student_organization_url">Github Organization</label>
+                                <div className="form-group--row">
+                                    <label style={urlFieldLabelStyle} htmlFor="end_date">Ends: </label>
                                     <input onChange={updateState}
-                                        value={info.student_organization_url ?? ""}
-                                        type="url" controltype="string"
-                                        id="student_organization_url" className="form-control form-control--row form-control--small"
+                                        value={activeCohortDetails.end_date}
+                                        type="date" controltype="string"
+                                        id="end_date" className="form-control form-control--row form-control--small"
                                     />
                                 </div>
-
-                                <div className="form-group form-group--row">
-                                    <label className="label--smallrow" htmlFor="client_course_url">Client Side Coure</label>
-                                    <input onChange={updateState}
-                                        value={info.client_course_url ?? ""}
-                                        type="url" controltype="string"
-                                        id="client_course_url" className="form-control form-control--row form-control--small"
-                                    />
-                                </div>
-
-                                <div className="form-group form-group--row">
-                                    <label className="label--smallrow" htmlFor="server_course_url">Server Side Course</label>
-                                    <input onChange={updateState}
-                                        value={info.server_course_url ?? ""}
-                                        type="url" controltype="string"
-                                        id="server_course_url" className="form-control form-control--row form-control--small"
-                                    />
-                                </div>
-
-                                <Button color="blue" onClick={saveURLs}>Save URLs</Button>
                             </div>
 
-                            <div className="cohort__detail cohort__detail--medium">
-                                <h3 style={{ margin: "3rem 0 0 0" }}>Dates</h3>
-
-                                <div style={{ margin: "1rem 0" }}>
-                                    <div className="form-group form-group--row">
-                                        <label className="label--smallrow" htmlFor="start_date">Starts</label>
-                                        <input onChange={updateState}
-                                            value={activeCohortDetails.start_date}
-                                            type="date" controltype="string"
-                                            id="start_date" className="form-control form-control--row form-control--small"
-                                        />
-                                    </div>
-
-                                    <div className="form-group form-group--row">
-                                        <label className="label--smallrow" htmlFor="end_date">Ends</label>
-                                        <input onChange={updateState}
-                                            value={activeCohortDetails.end_date}
-                                            type="date" controltype="string"
-                                            id="end_date" className="form-control form-control--row form-control--small"
-                                        />
-                                    </div>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+                                <div style={{ display: "flex" }}>
+                                    <label style={urlFieldLabelStyle}>Active:</label>
+                                    <Switch variant="surface" radius="full" style={toggleFieldStyle} onCheckedChange={toggleActive} color="crimson" checked={activeCohortDetails.active} />
                                 </div>
-
-                                <CohortInvitationLink activeCohortDetails={activeCohortDetails} />
-
-                                <Flex as="div" direction="row" align="start">
-                                    <div>
-                                        <h3>Active</h3>
-                                        <div className="capstoneToggle">
-                                            <input defaultChecked={activeCohortDetails.active}
-                                                onChange={(evt) => {
-                                                    evt.target.ariaChecked = evt.target.checked
-
-                                                    const cohortObject = {
-                                                        id: activeCohortDetails.id,
-                                                        active: evt.target.checked
-                                                    }
-                                                    return fetchIt(`${Settings.apiHost}/cohorts/${activeCohortDetails.id}/active`,
-                                                        {
-                                                            method: "PUT",
-                                                            body: JSON.stringify(cohortObject)
-                                                        })
-                                                        .then(() => {
-                                                            getCohort(activeCohortDetails.id)
-                                                            new Toast("Cohort updated", Toast.TYPE_INFO, Toast.TIME_SHORT)
-                                                        })
-                                                }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" value="on" />
-                                            <label htmlFor="toggle" className="slot">
-                                                <span className="slot__label">OFF</span>
-                                                <span className="slot__label">ON</span>
-                                            </label>
-                                            <div className="curtain"></div>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <h3>Capstone Season</h3>
-                                        <div className="capstoneToggle">
-                                            <input checked={capstoneSeason.includes(activeCohortDetails.id)}
-                                                onChange={(evt) => {
-                                                    evt.target.ariaChecked = evt.target.checked
-
-                                                    const localStorageSeasons = localStorage.getItem("capstoneSeason")
-                                                    const cohortsInCapstoneSeason = localStorageSeasons
-                                                        ? new Set([...JSON.parse(localStorageSeasons)])
-                                                        : new Set()
-
-                                                    if (evt.target.checked) {
-                                                        cohortsInCapstoneSeason.add(activeCohortDetails.id)
-                                                    }
-                                                    else {
-                                                        cohortsInCapstoneSeason.delete(activeCohortDetails.id)
-                                                    }
-
-                                                    const capstoneSeasonCohorts = Array.from(cohortsInCapstoneSeason)
-                                                    setCapstoneSeason(capstoneSeasonCohorts)
-                                                    localStorage.setItem("capstoneSeason", JSON.stringify(capstoneSeasonCohorts))
-
-                                                }} id="toggle" className="toggle" type="checkbox" role="switch" name="toggle" />
-                                            <label htmlFor="toggle" className="slot">
-                                                <span className="slot__label">OFF</span>
-                                                <span className="slot__label">ON</span>
-                                            </label>
-                                            <div className="curtain"></div>
-                                        </div>
-                                    </div>
-                                </Flex>
-                            </div>
-
-                            <div className="cohort__detail">
-                                <h3>Courses</h3>
-                                <div className="cohort__courses">
-                                    {
-                                        activeCohortDetails?.courses?.map(course => {
-                                            return <div
-                                                key={`course--${course.id}`}
-                                                className={`course--badge cohort__coach ${course.active ? "active" : ""}`}>
-                                                {course.course.name}
-                                            </div>
-                                        })
-                                    }
+                                <div style={{ display: "flex" }}>
+                                    <label style={urlFieldLabelStyle}>Capstone:</label>
+                                    <Switch variant="surface" radius="full" style={toggleFieldStyle} onCheckedChange={toggleCapstoneSeason} color="lime" checked={capstoneSeason.includes(activeCohortDetails.id)} />
                                 </div>
-                                <div>{showMigrate(activeCohortDetails?.courses)}</div>
-
-                                <h3>Coaches</h3>
-                                <div className="cohort__coaches">
-                                    {
-                                        activeCohortDetails.coaches?.map(coach => <div key={`coach--${coach.name}`} className="instructor--badge cohort__coach">{coach.name}</div>)
-                                    }
-                                </div>
-
-                                <h3>Students</h3>
-                                <div className="cohort__coaches">
-                                    {activeCohortDetails.students} active students
-                                </div>
-
-                                <CohortStudentAddDialog />
                             </div>
                         </div>
+
+                        <div style={{ flex: "6", padding: "0 4rem 0 0" }}>
+                            <div className="form-group form-group--row">
+                                <label style={urlFieldLabelStyle} htmlFor="attendance_sheet_url">Attendance Sheet URL:</label>
+                                <input onChange={updateState}
+                                    value={info.attendance_sheet_url ?? ""}
+                                    type="url" controltype="string"
+                                    id="attendance_sheet_url" className="form-control form-control--row form-control--small"
+                                />
+                            </div>
+
+                            <div className="form-group form-group--row">
+                                <label style={urlFieldLabelStyle} htmlFor="student_organization_url">Github Organization URL: </label>
+                                <input onChange={updateState}
+                                    value={info.student_organization_url ?? ""}
+                                    type="url" controltype="string"
+                                    id="student_organization_url" className="form-control form-control--row form-control--small"
+                                />
+                            </div>
+
+                            <div className="form-group form-group--row">
+                                <label style={urlFieldLabelStyle} htmlFor="client_course_url">Client Side Course URL: </label>
+                                <input onChange={updateState}
+                                    value={info.client_course_url ?? ""}
+                                    type="url" controltype="string"
+                                    id="client_course_url" className="form-control form-control--row form-control--small"
+                                />
+                            </div>
+
+                            <div className="form-group form-group--row">
+                                <label style={urlFieldLabelStyle} htmlFor="server_course_url">Server Side Course URL: </label>
+                                <input onChange={updateState}
+                                    value={info.server_course_url ?? ""}
+                                    type="url" controltype="string"
+                                    id="server_course_url" className="form-control form-control--row form-control--small"
+                                />
+                            </div>
+
+                            <Button color="blue" onClick={saveURLs}>Save URLs</Button>
+                        </div>
+
+                        <div style={{ flex: "3" }}>
+                            <h3>Courses</h3>
+                            <div className="cohort__courses">
+                                {
+                                    activeCohortDetails?.courses?.map(course => {
+                                        return <div
+                                            key={`course--${course.id}`}
+                                            className={`course--badge cohort__coach ${course.active ? "active" : ""}`}>
+                                            {course.course.name}
+                                        </div>
+                                    })
+                                }
+                            </div>
+                            <div>{showMigrate(activeCohortDetails?.courses)}</div>
+
+                            <CohortStudentAddDialog />
+                        </div>
                     </div>
+
+                    <CohortCalendar />
                 </div>
             </div>
         </div >

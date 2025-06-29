@@ -28,7 +28,7 @@ export const fetchIt = (url, kwargs = { method: "GET", body: null, token: null, 
             }
         }
         if (res.status === 204) {
-            return
+            return { status: 204 }
         }
 
         if (res.headers.get("content-type") === "application/json") {

@@ -11,8 +11,6 @@ import { Dashboard } from "./dashboard/Dashboard"
 import { FeedbackForm } from "./people/FeedbackForm"
 import { PeopleProvider } from "./people/PeopleProvider"
 import { CohortList } from "./cohorts/CohortList"
-import { RecordEntryForm } from "./records/RecordEntryForm"
-import { RecordForm } from "./records/RecordForm"
 import { RecordProvider } from "./records/RecordProvider"
 import { WeeklyTeams } from "./teams/WeeklyTeams"
 import { ProjectForm } from "./course/ProjectForm"
@@ -93,23 +91,9 @@ export const ApplicationViews = () => {
                             <Route exact path="/feedback/new">
                                 <FeedbackForm />
                             </Route>
-                            <Route exact path="/records/new/:studentId(\d+)">
-                                <RecordForm />
-                            </Route>
-                            <Route exact path="/record/:recordId/entries/new">
-                                <RecordEntryForm />
-                            </Route>
 
                             <Route exact path="/cohorts/new">
                                 <CohortForm />
-                            </Route>
-
-                            <Route exact path="/records/new/:studentId(\d+)">
-                                <RecordForm />
-                            </Route>
-
-                            <Route exact path="/record/:recordId/entries/new">
-                                <RecordEntryForm />
                             </Route>
                         </CourseProvider>
                     </PeopleProvider>

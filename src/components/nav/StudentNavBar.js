@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
+import { SettingsContext } from "../providers/SettingsProvider.js"
 import { SettingsDialog } from "../people/SettingsDialog.js"
 import { SettingsIcon } from "../../svgs/SettingsIcon.js"
-import { SettingsContext } from "../LearnOps.js"
 import useModal from "../ui/useModal.js"
 import simpleAuth from "../auth/simpleAuth"
 import Logout from "./logout.png"
@@ -41,6 +41,9 @@ export const StudentNavBar = () => {
                         </li>
                         <li className="navbar__item">
                             {makeLink("/goals", "Core Skills")}
+                        </li>
+                        <li className="navbar__item">
+                            {makeLink("/calendar", "Calendar")}
                         </li>
                         {
                             isAuthenticated()

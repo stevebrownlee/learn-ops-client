@@ -1,10 +1,10 @@
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { SettingsDialog } from "../people/SettingsDialog.js"
-import { SettingsContext } from "../LearnOps.js"
 import { SettingsIcon } from "../../svgs/SettingsIcon.js"
 import simpleAuth from "../auth/simpleAuth"
 import useModal from "../ui/useModal.js"
+import { useSettings } from "../../hooks/useSettings.js"
 import Logout from "./logout.png"
 import logo from "./nav-logo.png"
 import "./NavBar.css"
@@ -13,7 +13,7 @@ export const NavBar = () => {
     const history = useHistory()
     const [checked, setChecked] = useState("")
     const { logout, isAuthenticated } = simpleAuth()
-    const { mimic, changeMimic } = useContext(SettingsContext)
+    const { mimic, changeMimic } = useSettings()
     let [ toggleSettings, settingsIsOpen ] = useModal("#dialog--settings")
 
     const makeLink = (to, text) => {
@@ -30,7 +30,7 @@ export const NavBar = () => {
 
                     <div className="menu">
                         <li className="navbar__logo">
-                            <img style={{ maxHeight: "30px" }} src={logo} />
+                            <img style={{ maxHeight: "30px" }} src={logo} alt="Logo" />
                         </li>
                         <li className="navbar__item">
                             {makeLink("/", "Students")}
@@ -66,9 +66,9 @@ export const NavBar = () => {
                 </ul>
             </nav>
 
-            <SettingsDialog toggleSettings={toggleSettings}
-                settingsIsOpen={settingsIsOpen}
-                mimic={mimic} changeMimic={changeMimic} />
+            <SettingsDialog
+                toggleSettings={toggleSettings}
+                settingsIsOpen={settingsIsOpen} />
         </>
     )
 }

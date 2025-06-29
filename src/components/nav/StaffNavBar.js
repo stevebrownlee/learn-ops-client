@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
+import { SettingsContext } from "../providers/SettingsProvider.js"
 import { SettingsDialog } from "../people/SettingsDialog.js"
-import { SettingsContext } from "../LearnOps.js"
 import { SettingsIcon } from "../../svgs/SettingsIcon.js"
 import simpleAuth from "../auth/simpleAuth"
 import useModal from "../ui/useModal.js"
