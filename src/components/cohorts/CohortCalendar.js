@@ -1,21 +1,19 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import { Dialog, Button, TextField, TextArea, Text, Flex, Card, DropdownMenu } from '@radix-ui/themes'
-import { CohortContext } from './CohortProvider'
-import './CohortCalendar.css'
-import { fetchIt } from '../utils/Fetch.js'
 import Settings from '../Settings.js'
+import simpleAuth from '../auth/simpleAuth.js'
+import { CohortContext } from './CohortProvider'
+import { AddEventDialog } from './AddEventDialog.js'
+import { fetchIt } from '../utils/Fetch.js'
+import './CohortCalendar.css'
 
 export const CohortCalendar = () => {
-  const { activeCohortDetails, activeCohort } = useContext(CohortContext)
+  const { activeCohortDetails, activeCohort, getCohort } = useContext(CohortContext)
   const [events, setEvents] = useState({})
   const [eventTypes, setEventTypes] = useState([])
   const [selectedDate, setSelectedDate] = useState(null)
-  const [eventName, setEventName] = useState('')
-  const [eventTime, setEventTime] = useState('')
-  const [eventDescription, setEventDescription] = useState('')
-  const [selectedEventType, setSelectedEventType] = useState(null)
-  const [showAddDialog, setShowAddDialog] = useState(false)
   const [showViewDialog, setShowViewDialog] = useState(false)
+  const [showAddDialog, setShowAddDialog] = useState(false)
   const [calendarDays, setCalendarDays] = useState([])
   const [calendarMonths, setCalendarMonths] = useState([])
   const clickTimeoutRef = useRef(null)
@@ -26,6 +24,9 @@ export const CohortCalendar = () => {
   const [dragStartDate, setDragStartDate] = useState(null)
   const [selectedDates, setSelectedDates] = useState([])
   const [mouseDownActive, setMouseDownActive] = useState(false)
+
+  const { isAuthenticated, getCurrentUser } = simpleAuth()
+  const currentUser = getCurrentUser()
 
   // Clear timeout on unmount to prevent memory leaks
   useEffect(() => {
@@ -78,8 +79,8 @@ export const CohortCalendar = () => {
       fetchEventTypes()
       fetchCohortEvents()
 
-      const startDate = new Date(activeCohortDetails.start_date)
-      const endDate = new Date(activeCohortDetails.end_date)
+      const startDate = new Date(activeCohortDetails.start_date + 'T00:00:00')
+      let endDate = new Date(activeCohortDetails.end_date + 'T00:00:00')
 
       const days = []
       const months = []
@@ -118,60 +119,12 @@ export const CohortCalendar = () => {
       setCalendarDays(days)
       setCalendarMonths(months)
     }
+    else {
+      getCohort(currentUser.profile.current_cohort.id)
+    }
   }, [activeCohortDetails])
 
-  // Handle adding a new event
-  const handleAddEvent = () => {
-    if ((!selectedDate && selectedDates.length === 0) || !eventName || !selectedEventType) return
 
-    // Determine which dates to create events for
-    const datesToProcess = selectedDates.length > 0 ? selectedDates : [selectedDate]
-
-    // Create and post events for each selected date
-    const createPromises = datesToProcess.map(date => {
-      // API is expecting a single datetime string, so we format it accordingly
-      const eventDate = new Date(date)
-      eventDate.setHours(0, 0, 0, 0) // Set time to midnight for consistency
-      const eventTimeParts = eventTime.split(':')
-      if (eventTimeParts.length === 2) {
-        eventDate.setHours(parseInt(eventTimeParts[0], 10), parseInt(eventTimeParts[1], 10))
-      }
-
-      // Create a date string that preserves the local time
-      // Format: YYYY-MM-DDTHH:MM:SS.sssZ
-      // First, adjust for timezone offset so when converted to ISO it will be the correct local time
-      const tzOffset = eventDate.getTimezoneOffset() * 60000 // offset in milliseconds
-      const localISOTime = new Date(eventDate.getTime() - tzOffset).toISOString()
-
-      const newEvent = {
-        cohort: activeCohortDetails.id,
-        datetime: localISOTime,
-        name: eventName,
-        type: selectedEventType.id,
-        description: eventDescription
-      }
-
-      // POST the new event to the API
-      return fetchIt(`${Settings.apiHost}/events?cohort=${activeCohortDetails.id}`, {
-        method: 'POST',
-        body: JSON.stringify(newEvent),
-        token: activeCohortDetails.token
-      })
-    })
-
-    // Wait for all events to be created
-    Promise.all(createPromises)
-      .then(fetchCohortEvents)
-      .catch(error => console.error('Error adding events:', error))
-
-    // Reset form and selection
-    setEventName('')
-    setEventTime('')
-    setEventDescription('')
-    setSelectedEventType(null)
-    setSelectedDates([])
-    setShowAddDialog(false)
-  }
 
   // Get dates between two dates (inclusive)
   const getDatesBetween = (startDate, endDate) => {
@@ -290,6 +243,17 @@ export const CohortCalendar = () => {
     return eventsForDate
   }
 
+  const deleteEvent = async (id) => {
+    const response = await fetchIt(`${Settings.apiHost}/events/${id}`, { method: "DELETE"})
+
+    if (response.status === 204) {
+      fetchCohortEvents()
+    }
+    else {
+      window.alert("Error removing event")
+    }
+  }
+
   const generateEventCards = (selectedDate) => {
     if (selectedDate) {
       const newDate = new Date(selectedDate)
@@ -299,13 +263,16 @@ export const CohortCalendar = () => {
       if (eventsForDate.length > 0) {
         return eventsForDate.map((event, index) => (
           <Card key={`event-${index}`}>
-            <Flex direction="column" gap="1">
+            <Flex direction="column" justify="start">
               <Flex justify="between">
                 <Text weight="bold">{event.name}</Text>
                 <Text>{event.time}</Text>
               </Flex>
               <Text>{event.description}</Text>
             </Flex>
+            {
+              currentUser.profile.instructor && <Button color="red" mt="4" onClick={async () => { await deleteEvent(event.id) }}>Delete</Button>
+            }
           </Card>
         ))
       }
@@ -320,7 +287,7 @@ export const CohortCalendar = () => {
         <div className='eventTypeLegend'>
           {eventTypes.map((type, index) => (
             <React.Fragment key={`event-type-${index}`}>
-              <div style={{ margin: "0 0.1rem 0 0"}}>{type.description}</div>
+              <div style={{ margin: "0 0.1rem 0 0" }}>{type.description}</div>
               <div key={index} className="event-type" style={{ backgroundColor: type.color }}></div>
             </React.Fragment>
           ))}
@@ -365,10 +332,10 @@ export const CohortCalendar = () => {
                         color: dateEvents.length > 0 ? 'white' : 'black'
                       }}
                       onClick={() => handleDayClick(day)}
-                      onDoubleClick={() => handleDayDoubleClick(day)}
-                      onMouseDown={(e) => handleDayMouseDown(day, e)}
-                      onMouseMove={() => handleDayMouseMove(day)}
-                      onMouseUp={handleDayMouseUp}
+                      onDoubleClick={() => currentUser.profile.instructor ? handleDayDoubleClick(day) : null}
+                      onMouseDown={(e) => currentUser.profile.instructor ? handleDayMouseDown(day, e) : null}
+                      onMouseMove={() => currentUser.profile.instructor ? handleDayMouseMove(day) : null}
+                      onMouseUp={() => currentUser.profile.instructor ? handleDayMouseUp() : null}
                     >
                       <span className="day-number">{day.day}</span>
                       {dateEvents.length > 0 && (
@@ -394,118 +361,14 @@ export const CohortCalendar = () => {
         </div>
       </div>
 
-      {/* Add Event Dialog */}
-      <Dialog.Root open={showAddDialog} onOpenChange={(open) => {
-        setShowAddDialog(open)
-        if (!open) {
-          // Reset selection when dialog is closed
-          setSelectedDates([])
-        }
-      }}>
-        <Dialog.Content>
-          <Dialog.Title>Add Event</Dialog.Title>
-          <Dialog.Description size="2" mb="4">
-            {selectedDates.length > 1
-              ? `Add an event for ${selectedDates[0].toLocaleDateString()} to ${selectedDates[selectedDates.length - 1].toLocaleDateString()} (${selectedDates.length} days)`
-              : selectedDate && `Add an event for ${selectedDate.toLocaleDateString()}`}
-          </Dialog.Description>
-
-          <Flex direction="column" gap="3">
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Event Name
-              </Text>
-              <TextField.Input
-                value={eventName}
-                onChange={(e) => setEventName(e.target.value)}
-                placeholder="Enter event name"
-              />
-            </label>
-
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Time
-              </Text>
-              <TextField.Input
-                type="time"
-                value={eventTime}
-                onChange={(e) => setEventTime(e.target.value)}
-              />
-            </label>
-
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Event Type
-              </Text>
-              <DropdownMenu.Root>
-                <DropdownMenu.Trigger>
-                  <Button variant="soft" color={selectedEventType ? "gray" : "gray"} style={{ width: '100%', justifyContent: 'space-between' }}>
-                    <Flex align="center" gap="2">
-                      {selectedEventType && (
-                        <div className="event-type-indicator" style={{
-                          width: '12px',
-                          height: '12px',
-                          borderRadius: '50%',
-                          backgroundColor: selectedEventType.color
-                        }}></div>
-                      )}
-                      <span>{selectedEventType ? selectedEventType.description : 'Select event type'}</span>
-                    </Flex>
-                  </Button>
-                </DropdownMenu.Trigger>
-                <DropdownMenu.Content>
-                  {eventTypes.map((type) => (
-                    <DropdownMenu.Item
-                      key={type.id}
-                      onClick={() => setSelectedEventType(type)}
-                    >
-                      <Flex align="center" gap="2">
-                        <div style={{
-                          width: '12px',
-                          height: '12px',
-                          borderRadius: '50%',
-                          backgroundColor: type.color
-                        }}></div>
-                        <span>{type.description}</span>
-                      </Flex>
-                    </DropdownMenu.Item>
-                  ))}
-                </DropdownMenu.Content>
-              </DropdownMenu.Root>
-            </label>
-
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
-                Description
-              </Text>
-              <TextArea
-                value={eventDescription}
-                onChange={(e) => setEventDescription(e.target.value)}
-                placeholder="Enter event description"
-              />
-            </label>
-          </Flex>
-
-          <Flex gap="3" mt="4" justify="end">
-            <Dialog.Close>
-              <Button variant="soft" color="gray">
-                Cancel
-              </Button>
-            </Dialog.Close>
-            <Button onClick={handleAddEvent}>
-              Add Event
-            </Button>
-          </Flex>
-        </Dialog.Content>
-      </Dialog.Root>
+      <AddEventDialog selectedDate={selectedDate} selectedDates={selectedDates}
+        fetchCohortEvents={fetchCohortEvents} eventTypes={eventTypes} showAddDialog={showAddDialog}
+        setSelectedDates={setSelectedDates} setShowAddDialog={setShowAddDialog} />
 
       {/* View Events Dialog */}
       <Dialog.Root open={showViewDialog} onOpenChange={setShowViewDialog}>
         <Dialog.Content>
-          <Dialog.Title>Events</Dialog.Title>
-          <Dialog.Description size="2" mb="4">
-            {selectedDate && `Events for ${selectedDate.toLocaleDateString()}`}
-          </Dialog.Description>
+          <Dialog.Title>{selectedDate && `Events for ${selectedDate.toLocaleDateString()}`}</Dialog.Title>
 
           <Flex direction="column" gap="3">
             {generateEventCards(selectedDate)}

@@ -44,6 +44,9 @@ export const StudentViews = () => {
                     <Route exact path="/slackUpdate">
                         <SlackMemberId />
                     </Route>
+                    <Route exact path="/calendar">
+                        <CohortCalendar />
+                    </Route>
                     <Route exact path="/readme">
                         <Readme />
                     </Route>

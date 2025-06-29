@@ -42,6 +42,9 @@ export const StudentNavBar = () => {
                         <li className="navbar__item">
                             {makeLink("/goals", "Core Skills")}
                         </li>
+                        <li className="navbar__item">
+                            {makeLink("/calendar", "Calendar")}
+                        </li>
                         {
                             isAuthenticated()
                                 ? <li className="navbar__item navbar__logout">

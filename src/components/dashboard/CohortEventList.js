@@ -3,7 +3,7 @@ import Settings from '../Settings.js'
 import { fetchIt } from '../utils/Fetch.js'
 import { CohortContext } from '../cohorts/CohortProvider.js'
 import simpleAuth from '../auth/simpleAuth.js'
-import { Card, Flex, Text, Heading } from '@radix-ui/themes'
+import { Card, Flex, Text, Heading, Button } from '@radix-ui/themes'
 
 export const CohortEventList = () => {
     const [cohortEvents, setEvents] = useState({})
@@ -15,10 +15,11 @@ export const CohortEventList = () => {
         fetchIt(`${Settings.apiHost}/events?cohort=${cohortId}`)
             .then(data => {
                 // Filter out events from today to 7 days in the future
-                // const today = new Date("2022-11-01")
-                const today = new Date()
+                const today = new Date("2022-11-01")
+                // const today = new Date()
                 const sevenDaysFromNow = new Date()
-                sevenDaysFromNow.setDate(today.getDate() + 7)
+                sevenDaysFromNow.setDate(today.getDate() + 70)
+                // sevenDaysFromNow.setDate(today.getDate() + 7)
                 const filteredEvents = data.filter(event => {
                     const eventDate = new Date(event.event_datetime)
                     return eventDate >= today && eventDate <= sevenDaysFromNow
@@ -65,6 +66,7 @@ export const CohortEventList = () => {
             </>) : (
                 <Text>No upcoming events.</Text>
             )}
+            <Button color="teal" mt="4">See All Events</Button>
         </div>
     )
 }

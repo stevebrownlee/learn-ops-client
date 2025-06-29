@@ -91,7 +91,6 @@ export const CohortInfo = ({ profile }) => {
 
                 <Card style={{ flex: 1}}>
                     <Flex direction="column" gap="3">
-
                         <Box>
                             <CohortEventList />
                         </Box>
