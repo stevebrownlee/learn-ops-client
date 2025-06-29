@@ -66,7 +66,6 @@ export const CohortEventList = () => {
             </>) : (
                 <Text>No upcoming events.</Text>
             )}
-            <Button color="teal" mt="4">See All Events</Button>
         </div>
     )
 }
