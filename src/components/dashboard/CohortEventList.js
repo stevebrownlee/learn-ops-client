@@ -14,15 +14,14 @@ export const CohortEventList = () => {
         // Fetch events for the active cohort
         fetchIt(`${Settings.apiHost}/events?cohort=${cohortId}`)
             .then(data => {
-                // Filter out events from today to 7 days in the future
-                const today = new Date("2022-11-01")
-                // const today = new Date()
-                const sevenDaysFromNow = new Date()
-                sevenDaysFromNow.setDate(today.getDate() + 70)
-                // sevenDaysFromNow.setDate(today.getDate() + 7)
+                // Filter out events from today to 14 days in the future
+                // const today = new Date("2022-11-01")
+                const today = new Date()
+                const fourteenDaysFromNow = new Date()
+                fourteenDaysFromNow.setDate(today.getDate() + 14)
                 const filteredEvents = data.filter(event => {
                     const eventDate = new Date(event.event_datetime)
-                    return eventDate >= today && eventDate <= sevenDaysFromNow
+                    return eventDate >= today && eventDate <= fourteenDaysFromNow
                 })
                 setEvents(filteredEvents)
             })
