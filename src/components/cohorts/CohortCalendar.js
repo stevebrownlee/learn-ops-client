@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
-import { Dialog, Button, TextField, TextArea, Text, Flex, Card, DropdownMenu } from '@radix-ui/themes'
+import { Dialog, Button, TextField, TextArea, Text, Flex, Card, DropdownMenu, HoverCard, Link, Avatar, Box, Heading } from '@radix-ui/themes'
 import Settings from '../Settings.js'
 import simpleAuth from '../auth/simpleAuth.js'
 import { CohortContext } from './CohortProvider'
@@ -62,7 +62,7 @@ export const CohortCalendar = () => {
           eventsByDate[dateKey].push({
             id: event.id,
             name: event.event_name,
-            time: new Date(event.event_datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            time: new Date(event.event_datetime).toISOString().split('T')[1].slice(0, 5),
             description: event.description,
             color: event.event_type.color,
           })
@@ -120,7 +120,12 @@ export const CohortCalendar = () => {
       setCalendarMonths(months)
     }
     else {
-      getCohort(currentUser.profile.current_cohort.id)
+      try {
+        getCohort(currentUser.profile.current_cohort.id)
+      }
+      catch (error) {
+        getCohort(currentUser.profile.person.active_cohort)
+      }
     }
   }, [activeCohortDetails])
 
@@ -244,7 +249,7 @@ export const CohortCalendar = () => {
   }
 
   const deleteEvent = async (id) => {
-    const response = await fetchIt(`${Settings.apiHost}/events/${id}`, { method: "DELETE"})
+    const response = await fetchIt(`${Settings.apiHost}/events/${id}`, { method: "DELETE" })
 
     if (response.status === 204) {
       fetchCohortEvents()
@@ -323,25 +328,51 @@ export const CohortCalendar = () => {
                 ).map((day, i) => {
                   const dateEvents = getEventsForDate(day.date)
 
+                  if (dateEvents.length === 0) {
+                    return (
+                      <div key={`day-${day.date}`} className="calendar-day" style={{ backgroundColor: 'goldenrod', color: 'black' }} >
+                        <span className="day-number">{day.day}</span>
+                      </div>
+                    )
+                  }
+
                   return (
-                    <div
-                      key={`day-${day.date}`}
-                      className="calendar-day"
-                      style={{
-                        backgroundColor: dateEvents.length > 0 ? dateEvents[0].color : 'goldenrod',
-                        color: dateEvents.length > 0 ? 'white' : 'black'
-                      }}
-                      onClick={() => handleDayClick(day)}
-                      onDoubleClick={() => currentUser.profile.instructor ? handleDayDoubleClick(day) : null}
-                      onMouseDown={(e) => currentUser.profile.instructor ? handleDayMouseDown(day, e) : null}
-                      onMouseMove={() => currentUser.profile.instructor ? handleDayMouseMove(day) : null}
-                      onMouseUp={() => currentUser.profile.instructor ? handleDayMouseUp() : null}
-                    >
-                      <span className="day-number">{day.day}</span>
-                      {dateEvents.length > 0 && (
-                        <span className="event-indicator"></span>
-                      )}
-                    </div>
+                    <HoverCard.Root key={`hover-card-${day.date}`} openDelay={100} closeDelay={100}>
+                      <HoverCard.Trigger>
+                        <div
+                          key={`day-${day.date}`}
+                          className="calendar-day"
+                          style={{
+                            backgroundColor: dateEvents[0].color,
+                            color: 'white'
+                          }}
+                          onClick={() => handleDayClick(day)}
+                          onDoubleClick={() => currentUser.profile.instructor ? handleDayDoubleClick(day) : null}
+                          onMouseDown={(e) => currentUser.profile.instructor ? handleDayMouseDown(day, e) : null}
+                          onMouseMove={() => currentUser.profile.instructor ? handleDayMouseMove(day) : null}
+                          onMouseUp={() => currentUser.profile.instructor ? handleDayMouseUp() : null}
+                        >
+                          <span className="day-number">{day.day}</span>
+                          {dateEvents.length > 0 && (
+                            <span className="event-indicator"></span>
+                          )}
+                        </div>
+                      </HoverCard.Trigger>
+                      <HoverCard.Content style={{ maxWidth: '15rem', height: 'auto' }}>
+                        {
+                          dateEvents.map((cohortEvent, index) => {
+                            return (
+                              <Card key={`cohortEvent-${index}`}>
+                                <Flex direction="row" justify="start">
+                                    <Text size="1" mr="1">{cohortEvent.time}:</Text>
+                                    <Text size="1" weight="bold">{cohortEvent.name}</Text>
+                                </Flex>
+                              </Card>
+                            )
+                          })
+                        }
+                      </HoverCard.Content>
+                    </HoverCard.Root>
                   )
                 })}
 
@@ -383,6 +414,9 @@ export const CohortCalendar = () => {
           </Flex>
         </Dialog.Content>
       </Dialog.Root>
+
+
+
     </div>
   )
 }
