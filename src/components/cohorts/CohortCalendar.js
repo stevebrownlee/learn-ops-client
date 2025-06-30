@@ -330,7 +330,12 @@ export const CohortCalendar = () => {
 
                   if (dateEvents.length === 0) {
                     return (
-                      <div key={`day-${day.date}`} className="calendar-day" style={{ backgroundColor: 'goldenrod', color: 'black' }} >
+                      <div key={`day-${day.date}`} className="calendar-day" style={{ backgroundColor: 'goldenrod', color: 'black' }}
+                        onDoubleClick={() => currentUser.profile.instructor ? handleDayDoubleClick(day) : null}
+                        onMouseDown={(e) => currentUser.profile.instructor ? handleDayMouseDown(day, e) : null}
+                        onMouseMove={() => currentUser.profile.instructor ? handleDayMouseMove(day) : null}
+                        onMouseUp={() => currentUser.profile.instructor ? handleDayMouseUp() : null}
+                      >
                         <span className="day-number">{day.day}</span>
                       </div>
                     )
@@ -364,8 +369,8 @@ export const CohortCalendar = () => {
                             return (
                               <Card key={`cohortEvent-${index}`}>
                                 <Flex direction="row" justify="start">
-                                    <Text size="1" mr="1">{cohortEvent.time}:</Text>
-                                    <Text size="1" weight="bold">{cohortEvent.name}</Text>
+                                  <Text size="1" mr="1">{cohortEvent.time}:</Text>
+                                  <Text size="1" weight="bold">{cohortEvent.name}</Text>
                                 </Flex>
                               </Card>
                             )
