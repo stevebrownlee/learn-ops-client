@@ -155,7 +155,7 @@ export const CohortDetails = () => {
 
                     <div className="cohort__details">
                         <div style={{ flex: "4" }}>
-                            <div style={{ margin: "1rem 0", display: "flex", flexDirection: "column", gap: "2rem" }}>
+                            <div style={{ margin: "1rem 0", display: "flex", flexDirection: "column", gap: "1rem" }}>
                                 <div className="form-group--row">
                                     <label style={urlFieldLabelStyle} htmlFor="start_date">Starts: </label>
                                     <input onChange={updateState}
@@ -175,7 +175,7 @@ export const CohortDetails = () => {
                                 </div>
                             </div>
 
-                            <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+                            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                                 <div style={{ display: "flex" }}>
                                     <label style={urlFieldLabelStyle}>Active:</label>
                                     <Switch variant="surface" radius="full" style={toggleFieldStyle} onCheckedChange={toggleActive} color="crimson" checked={activeCohortDetails.active} />

@@ -31,7 +31,7 @@
 /* New grid layout for months - 6 columns */
 .months-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 1rem;
   width: 100%;
 }
@@ -42,7 +42,7 @@
 
 .month-header {
   font-weight: bold;
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
   text-align: center;
   font-size: 0.9rem;
 }
@@ -50,13 +50,13 @@
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0.1rem;
+  gap: 0.05rem;
 }
 
 .day-header {
   text-align: center;
   font-weight: bold;
-  padding: 0 0.7rem 0 0;
+  padding: 0 0.5rem 0 0;
   font-size: 0.7rem;
 }
 
