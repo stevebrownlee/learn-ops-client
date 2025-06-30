@@ -32,8 +32,12 @@ export const CohortEventList = () => {
         const user = getCurrentUser()
         let cohortId = 0
 
-        if (user && user.profile && user.profile.current_cohort) {
+        if (activeCohort && activeCohort > 0) {
+            cohortId = activeCohort
+        }
+        else if (user && user.profile && user.profile.current_cohort) {
             cohortId = user.profile.current_cohort.id
+            activateCohort(cohortId)
         }
         else if (!activeCohort) {
             cohortId = user.profile.person.active_cohort
@@ -41,7 +45,7 @@ export const CohortEventList = () => {
         }
         fetchCohortEvents(cohortId)
 
-    }, [])
+    }, [activeCohort])
 
 
 
