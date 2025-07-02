@@ -26,7 +26,7 @@ export const CohortEventList = () => {
                     const isWithinTwoWeeks = eventDate <= fourteenDaysFromNow
                     const isVisible = isFutureEvent && isWithinTwoWeeks
                     return isVisible
-                })
+                }).slice(0, 5)
                 setEvents(filteredEvents.sort((a, b) => new Date(a.event_datetime) - new Date(b.event_datetime)))
             })
             .catch(error => console.error('Error fetching events:', error))
@@ -62,10 +62,10 @@ export const CohortEventList = () => {
                         <Card size="2" key={index} onClick={() => { }} style={{ cursor: 'pointer', backgroundColor: `${event.event_type.color}` }}>
                             <Flex direction="column" gap="1">
                                 <Flex justify="between" align="center">
-                                    <Text weight="bold">{event.event_name}</Text>
-                                    <Text size="2" color="gray">{new Date(event.event_datetime).toLocaleDateString()}</Text>
+                                    <Text size="1"weight="bold">{event.event_name}</Text>
+                                    <Text size="1" color="gray">{new Date(event.event_datetime).toLocaleDateString()}</Text>
                                 </Flex>
-                                <Text size="2">{event.description}</Text>
+                                <Text size="1">{event.description}</Text>
                             </Flex>
                         </Card>
                     ))}
