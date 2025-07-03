@@ -103,6 +103,12 @@ dialog {
     margin: 1rem 3rem;
 }
 
+.view--horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
 @media (min-width: 768px) {
     .view {
         margin: 1rem 5rem;

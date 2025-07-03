@@ -39,33 +39,27 @@ export const SlackMemberId = () => {
             .then(() => history.push("/"))
     }
 
-    return <article className="view slack">
-        {
-            "profile" in user
-                ? <>
-                    <div>
-                        <img src={MemberId} alt="Animation showing how to get Slack member ID" width="300px" />
-                    </div>
-                    <div>
-                        Watch the animation to the left to see how to copy your Slack member ID.
+    return <article className="view view--horizontal">
+        <div style={{ flex: 1 }}>
+            <img style={{ maxWidth: "100%", height: "auto" }}
+                src={MemberId} alt="Animation showing how to get Slack member ID" />
+        </div>
+        <div style={{ flex: 1 }}>
+            Watch the animation to the left to see how to copy your Slack member ID.
 
-                        <div style={{ marginTop: "1rem" }}>
-                            <TextField.Root>
-                                <TextField.Slot>
-                                    <FrameIcon height="16" width="16" />
-                                </TextField.Slot>
-                                <TextField.Input className="slack__input"
-                                    value={slackId}
-                                    onChange={(e) => setId(e.target.value ?? "")}
-                                    placeholder="Enter Member ID…" />
-                            </TextField.Root>
+            <div style={{ marginTop: "1rem" }}>
+                <TextField.Root>
+                    <TextField.Slot>
+                        <FrameIcon height="16" width="16" />
+                    </TextField.Slot>
+                    <TextField.Input className="slack__input"
+                        value={slackId}
+                        onChange={(e) => setId(e.target.value ?? "")}
+                        placeholder="Enter Member ID…" />
+                </TextField.Root>
 
-                            <Button style={{ marginTop: "1rem" }} onClick={updateSlackId}>Save</Button>
-                        </div>
-                    </div>
-                </>
-                : <Loading />
-        }
-
+                <Button style={{ marginTop: "1rem" }} onClick={updateSlackId}>Save</Button>
+            </div>
+        </div>
     </article>
 }
