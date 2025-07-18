@@ -129,8 +129,6 @@ export const CohortCalendar = () => {
     }
   }, [activeCohortDetails])
 
-
-
   // Get dates between two dates (inclusive)
   const getDatesBetween = (startDate, endDate) => {
     const dates = []
@@ -285,7 +283,6 @@ export const CohortCalendar = () => {
     }
   }
 
-
   return (
     <div className="cohort-calendar">
       <div className="calendar-container" onMouseLeave={handleCalendarMouseLeave}>
@@ -419,9 +416,6 @@ export const CohortCalendar = () => {
           </Flex>
         </Dialog.Content>
       </Dialog.Root>
-
-
-
     </div>
   )
 }

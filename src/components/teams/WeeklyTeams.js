@@ -28,6 +28,7 @@ export const WeeklyTeams = () => {
     const [teamCount, changeCount] = useState(0)
     const [teams, setTeams] = useState(new Map())
     const [unassignedStudents, setUnassigned] = useState([])
+    const [teamIds, setTeamIds] = useState(new Map()) // Store team IDs for API calls
 
     const [feedback, setFeedback] = useState("")
     const [weeklyPrefix, setWeeklyPrefix] = useState("")
@@ -97,12 +98,15 @@ export const WeeklyTeams = () => {
 
         if (teams.length) {
             const teamMap = new Map()
+            const teamIdMap = new Map()
 
             teams.forEach((team, index) => {
                 teamMap.set(index + 1, new Set(team.students.map(s => JSON.stringify(s))))
+                teamIdMap.set(index + 1, team.id) // Store the team ID with its index
             })
 
             setTeams(teamMap)
+            setTeamIds(teamIdMap)
             setLoading(false)
             setActiveTeams(true)
             changeCount(teams.length)
@@ -127,6 +131,21 @@ export const WeeklyTeams = () => {
             draggable={true} className="student--badge">
             {student.name}
         </div>
+    }
+
+    // Function to handle migrating tickets for a team
+    const migrateTickets = async (teamId) => {
+        try {
+            await setLoading(true)
+            await fetchIt(`${Settings.apiHost}/teams/${teamId}/migrate`, {
+                method: "POST"
+            })
+            setFeedback("Tickets migration initiated")
+            setTimeout(() => setLoading(false), 500)
+        } catch (error) {
+            setFeedback(`Error: ${error.message}`)
+            setLoading(false)
+        }
     }
 
     const makeTeamBoxes = () => {
@@ -170,6 +189,17 @@ export const WeeklyTeams = () => {
                                 }
                             )
                         }
+                        {/* Add Migrate tickets button when teams are active */}
+                        {activeTeams && teamIds.has(teamNumber) && (
+                            <div className="team__actions">
+                                <Button
+                                    color="green"
+                                    onClick={() => migrateTickets(teamIds.get(teamNumber))}
+                                >
+                                    Migrate tickets
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 )
             }
