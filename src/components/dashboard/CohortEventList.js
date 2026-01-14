@@ -65,18 +65,32 @@ export const CohortEventList = () => {
             <Heading size="4" mb="2">⏰ Upcoming Events</Heading>
             {cohortEvents.length > 0 ? (<>
                 <Flex direction="column" gap="2">
-                    {cohortEvents.map((event, index) => (
-                        <Card size="2" key={index} onClick={() => { }} style={{ cursor: 'pointer', backgroundColor: `${event.event_type.color}` }}>
-                            <Flex direction="column" gap="1">
-                                <Flex justify="between" align="center">
-                                    <Text size="1" weight="bold">{event.event_name}</Text>
+                    {cohortEvents.map((event, index) => {
+                        // Parse the event datetime as local time (no timezone offset)
+                        const eventDateObj = new Date(event.event_datetime.replace('T', ' ').replace(/-/g, '/'));
+                        const monthDay = eventDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
-                                    <Text size="1" color="gray">{new Date(event.event_datetime).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} at {new Date(event.event_datetime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
+                        // Format time as hh:mm am/pm without timezone offset
+                        let hours = eventDateObj.getHours();
+                        const minutes = eventDateObj.getMinutes();
+                        const ampm = hours >= 12 ? 'pm' : 'am';
+                        hours = hours % 12;
+                        hours = hours ? hours : 12; // the hour '0' should be '12'
+                        const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+                        const timeStr = `${hours}:${minutesStr} ${ampm}`;
+
+                        return (
+                            <Card size="2" key={index} onClick={() => { }} style={{ cursor: 'pointer', backgroundColor: `${event.event_type.color}` }}>
+                                <Flex direction="column" gap="1">
+                                    <Flex justify="between" align="center">
+                                        <Text size="1" weight="bold">{event.event_name}</Text>
+                                        <Text size="1" color="gray">{monthDay} at {timeStr}</Text>
+                                    </Flex>
+                                    <Text size="1">{event.description}</Text>
                                 </Flex>
-                                <Text size="1">{event.description}</Text>
-                            </Flex>
-                        </Card>
-                    ))}
+                            </Card>
+                        );
+                    })}
                 </Flex>
             </>) : (
                 <Text>No upcoming events.</Text>
