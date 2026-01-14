@@ -69,9 +69,9 @@ export const CohortEventList = () => {
                         <Card size="2" key={index} onClick={() => { }} style={{ cursor: 'pointer', backgroundColor: `${event.event_type.color}` }}>
                             <Flex direction="column" gap="1">
                                 <Flex justify="between" align="center">
-                                    <Text size="1"weight="bold">{event.event_name}</Text>
+                                    <Text size="1" weight="bold">{event.event_name}</Text>
 
-                                    <Text size="1" color="gray">{new Date(event.event_datetime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
+                                    <Text size="1" color="gray">{new Date(event.event_datetime).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} at {new Date(event.event_datetime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
                                 </Flex>
                                 <Text size="1">{event.description}</Text>
                             </Flex>
