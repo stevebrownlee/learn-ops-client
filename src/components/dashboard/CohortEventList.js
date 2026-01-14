@@ -66,18 +66,21 @@ export const CohortEventList = () => {
             {cohortEvents.length > 0 ? (<>
                 <Flex direction="column" gap="2">
                     {cohortEvents.map((event, index) => {
-                        // Parse the event datetime as local time (no timezone offset)
-                        const eventDateObj = new Date(event.event_datetime.replace('T', ' ').replace(/-/g, '/'));
+                        // Extract date and time parts from event.event_datetime (assumed format: "YYYY-MM-DDTHH:mm:ss")
+                        const [datePart, timePart] = event.event_datetime.split('T');
+                        const [year, month, day] = datePart.split('-');
+                        const [hourStr, minuteStr] = timePart.split(':');
+                        const eventDateObj = new Date(`${year}/${month}/${day}`);
                         const monthDay = eventDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
-                        // Format time as hh:mm am/pm without timezone offset
-                        let hours = eventDateObj.getHours();
-                        const minutes = eventDateObj.getMinutes();
+                        // Format time as hh:mm am/pm using extracted hour/minute (no timezone conversion)
+                        let hours = parseInt(hourStr, 10);
+                        const minutes = parseInt(minuteStr, 10);
                         const ampm = hours >= 12 ? 'pm' : 'am';
                         hours = hours % 12;
-                        hours = hours ? hours : 12; // the hour '0' should be '12'
-                        const minutesStr = minutes < 10 ? '0' + minutes : minutes;
-                        const timeStr = `${hours}:${minutesStr} ${ampm}`;
+                        hours = hours ? hours : 12;
+                        const minutesDisplay = minutes < 10 ? '0' + minutes : minutes;
+                        const timeStr = `${hours}:${minutesDisplay} ${ampm}`;
 
                         return (
                             <Card size="2" key={index} onClick={() => { }} style={{ cursor: 'pointer', backgroundColor: `${event.event_type.color}` }}>
