@@ -34,7 +34,7 @@ export const CohortEventList = () => {
                     const isVisible = isFutureEvent && isWithinTwoWeeks
                     return isVisible
                 }).slice(0, 8)
-                setEvents(filteredEvents.sort((a, b) => new Date(a.event_datetime) - new Date(b.event_datetime)))
+                setEvents(filteredEvents.sort((a, b) => new Date(b.event_datetime) - new Date(a.event_datetime)))
             })
             .catch(error => console.error('Error fetching events:', error))
     }
