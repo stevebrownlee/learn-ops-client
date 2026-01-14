@@ -16,12 +16,19 @@ export const CohortEventList = () => {
             .then(data => {
                 // Filter out events from today to 14 days in the future
                 const today = new Date()
+                // normalize today's time to 00:00:00
+                today.setHours(0, 0, 0, 0)
+
                 // const today = new Date("2022-07-05")
                 const fourteenDaysFromNow = new Date(today)
-                fourteenDaysFromNow.setDate(today.getDate() + 14)
+                fourteenDaysFromNow.setDate(fourteenDaysFromNow.getDate() + 14)
+                fourteenDaysFromNow.setHours(0, 0, 0, 0)
 
                 const filteredEvents = data.filter(event => {
                     const eventDate = new Date(event.event_datetime)
+                    // normalize event time to 00:00:00 so only the date is compared
+                    eventDate.setHours(0, 0, 0, 0)
+
                     const isFutureEvent = eventDate >= today
                     const isWithinTwoWeeks = eventDate <= fourteenDaysFromNow
                     const isVisible = isFutureEvent && isWithinTwoWeeks
