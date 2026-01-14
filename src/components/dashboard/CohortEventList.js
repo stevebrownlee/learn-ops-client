@@ -34,7 +34,7 @@ export const CohortEventList = () => {
                     const isVisible = isFutureEvent && isWithinTwoWeeks
                     return isVisible
                 }).slice(0, 8)
-                setEvents(filteredEvents.sort((a, b) => new Date(b.event_datetime) - new Date(a.event_datetime)))
+                setEvents(filteredEvents.sort((a, b) => new Date(a.event_datetime) - new Date(b.event_datetime)))
             })
             .catch(error => console.error('Error fetching events:', error))
     }
@@ -70,7 +70,8 @@ export const CohortEventList = () => {
                             <Flex direction="column" gap="1">
                                 <Flex justify="between" align="center">
                                     <Text size="1"weight="bold">{event.event_name}</Text>
-                                    <Text size="1" color="gray">{new Date(event.event_datetime).toLocaleDateString()}</Text>
+
+                                    <Text size="1" color="gray">{new Date(event.event_datetime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}</Text>
                                 </Flex>
                                 <Text size="1">{event.description}</Text>
                             </Flex>
